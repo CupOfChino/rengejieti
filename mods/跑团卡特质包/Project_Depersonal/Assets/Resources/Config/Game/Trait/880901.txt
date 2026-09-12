@@ -18,7 +18,7 @@
 			"Localization_Des" : {
 				"TarKey" : "",
 				"SheetKey" : "",
-				"InputText" : "心灵力量具象化的体现之一。直面罪孽，拥抱自我。（来源：莫离 / 瑞恩 的角色卡「心（shin）与望」）",
+				"InputText" : "「心」和「望」并不是什么高端货，只要受到合适的指点，谁都可以学会。\n直面罪孽，拥抱自我。\n\n<i>—— 来源：莫离 / 瑞恩 的角色卡「心（shin）与望」</i>",
 				"Characteristic" : null
 			},
 			"BuffsLink" : [
@@ -32,7 +32,7 @@
 				"Localization_Functin" : {
 					"TarKey" : "",
 					"SheetKey" : "",
-					"InputText" : "进入战斗时获得【心】：伤害+2，速度+20，受到的伤害-1\n每回合开始消耗1点精神值；精神值陷入衰弱时自动解除并恢复5点精神值；战斗结束时解除",
+					"InputText" : "进入战斗时获得【心】状态。\n伤害+2，速度+20，受到的伤害-1\n每回合开始时消耗1点精神值。\n精神值陷入衰弱或衰竭时解除，解除时恢复5点精神值。\n战斗结束时解除。",
 					"Characteristic" : null
 				},
 				"Inherent" : [

@@ -14,7 +14,7 @@
 			"Des" : {
 				"TarKey" : "",
 				"SheetKey" : "",
-				"InputText" : "心灵力量具象化的体现之一，金黄色的光芒从人的身体中绽放而出。\n伤害+2，速度+20，受到的伤害-1\n每回合开始时消耗1点精神值；精神值陷入衰弱时自动解除，解除时恢复5点精神值；战斗结束时解除",
+				"InputText" : "伤害+2，速度+20，受到的伤害-1\n每回合开始时消耗1点精神值\n精神值陷入衰弱或衰竭时解除，解除时恢复5点精神值\n战斗结束时解除\n\n<i>心灵力量具象化的体现之一。\n金黄色的光芒从人的身体中绽放而出。</i>",
 				"Characteristic" : null
 			},
 			"IconPathReference" : {
@@ -206,7 +206,7 @@
 					],
 					"CanBeDisabled" : false
 				},{
-					"EBuffTrigger" : 2,
+					"EBuffTrigger" : 15,
 					"DiceCheckElements" : [
 						
 					],

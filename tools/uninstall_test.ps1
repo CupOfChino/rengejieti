@@ -1,4 +1,4 @@
-# 卸载本地测试挂载：删掉宿主 mod 下的 Project_Depersonal，恢复宿主 mod 原样。
+﻿# 卸载本地测试挂载：删掉宿主 mod 下的 Project_Depersonal，恢复宿主 mod 原样。
 # 只动 <宿主mod>\Project_Depersonal，不碰宿主 mod 原有的其他文件。
 
 param(

@@ -1,4 +1,4 @@
-# 跑团卡特质包 —— 特质文件生成脚本
+﻿# 跑团卡特质包 —— 特质文件生成脚本
 # 作用：按下面的 $traits 定义表，生成游戏能读取的 Trait 数据文件
 # 输出：<模组根>\Project_Depersonal\Assets\Resources\Config\Game\Trait\<Id>.txt
 # 注意：生成出来的 txt 就是游戏真正读取的文件。要改内容请改本脚本再重跑，避免手改被下次覆盖。

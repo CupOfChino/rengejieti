@@ -174,3 +174,61 @@ $dll = "E:\SteamLibrary\steamapps\workshop\content\1477070\2925170762\BepInEx\Du
 - [ ] 想做"副本结束才获得的特质"要配 `Game\InterludeVacat\`，参考 `3490801895`
 - [ ] 实测"放进编辑模组工程目录"这条本地测试路径
 - [ ] 把跑团卡特质包正式上传工坊，摆脱临时挂载
+
+## 9. 边狱巴士素材提取（另一条线，和做 mod 无关，但同一套工程习惯）
+
+角色卡灵感来源是《Limbus Company》，要建自己的素材库。
+
+**结论：能提，而且是标准 Unity 包，没加密。**
+
+| 项 | 值 |
+| --- | --- |
+| 游戏位置 | `E:\SteamLibrary\steamapps\common\Limbus Company` |
+| Unity 版本 | `6000.3.12f1`（**必须手动指定**，游戏把版本号抹成 0.0.0 了） |
+| 资源缓存 | `%USERPROFILE%\AppData\LocalLow\Unity\ProjectMoon_LimbusCompany`（**是个 Junction**，真身在 `D:\limbus_Data\ProjectMoon_LimbusCompany`） |
+| 规模 | 1460 个 `__data` 包，约 14.7 GB |
+| 包格式 | 标准 `UnityFS`，未加密；单个包内是 `<hash>\<hash>\__data` + `__info` |
+| 资源清单 | `%USERPROFILE%\AppData\LocalLow\ProjectMoon\LimbusCompany\com.unity.addressables\catalog_S1.json`（8MB，**里面直接有 1.5 万条 png 路径，不用解包就能查分类**） |
+
+**工具**：`tools-external\AssetStudioCLI\AssetStudioModCLI_net472_win32_64\AssetStudioModCLI.exe`
+（v0.19.0，从 aelurum/AssetStudio 下载，是少数支持 Unity 6 的版本）
+
+**两条铁律（踩过才知道）**
+
+1. `--filter-by-container` 是**精确匹配**，要按路径片段筛选得用 **`--filter-by-text`**，多个条件用 `|` 连成正则再加 `--filter-with-regex`。
+2. 不加 `--unity-version 6000.3.12f1` 会直接报 "The asset's Unity version has been stripped"，一个资源都读不出来。
+
+**内存**：这台机器只有 16GB。一次性跑大批量时峰值到过 5.2GB，很危险。
+有效组合是：**小批量（每批 10 个包）+ `--decompress-to-disk` + `--max-export-tasks 1`**，
+峰值直接降到 **240MB**。批量脚本里还加了内存闸门（可用内存低于 1.5GB 就等）。
+
+**资源分类（前端目录名）**
+
+| 前缀 | 内容 |
+| --- | --- |
+| `Prefab/SD/...` | SD 小人（**角色文件夹里同时含该角色的 `FX_Tex_*` 特效**） |
+| `Prefab/Battle/...` | 战斗特效、技能特效（`SkillViewEGO_<7位ID>`） |
+| `Buf/<buff名>/` | 状态（buff）图标 |
+| `Sprite/SkillIcon` `Sprite/EgoGiftIcon` `Sprite/UI` `DUI/` | 各类小图标 / UI 图集 |
+| `Story/` `Sprite/Unit/Portrait|CG` `Gacha/` `Notice/` | 立绘、背景、抽卡图 —— **不要** |
+
+**角色编号规则**（用来把特效归到人）
+
+`10409_Ryoshu_Yuro` → 身份 ID = `1` + 角色(2位) + 身份(2位)；
+`SkillViewEGO_2110721` / `20606_Honglu_CryToad` → EGO ID = `2` + 角色(2位) + …
+角色(2位)：01 李箱、02 浮士德、03 堂吉诃德、04 良秀、05 默尔索、06 鸿路、
+07 希斯克利夫、08 以实玛利、09 罗佳、10 辛克莱、11 奥提斯、12 格里高尔。
+`8105` `90046` `400038` 这类是敌人/NPC，别当角色。
+
+**脚本**
+
+```powershell
+powershell -File "tools\extract_limbus.ps1" -BatchSize 10   # 分批提取，可断点续跑
+powershell -File "tools\organize_limbus.ps1" -DryRun        # 先看分类报表
+powershell -File "tools\organize_limbus.ps1"                # 按角色归组到 素材库\
+```
+
+输出：原始提取 `E:\lim\_save\_raw\`，整理后 `E:\lim\_save\素材库\<角色>\SD|特效\`。
+
+**注意**：这些图是 Project Moon 的美术资源，自用参考没问题；
+如果要放进要公开发布的 mod 里，版权上是另一码事，得自己权衡。

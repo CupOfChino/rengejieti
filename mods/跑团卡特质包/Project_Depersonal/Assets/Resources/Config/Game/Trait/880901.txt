@@ -1,0 +1,81 @@
+{
+	"Data" : {
+		"__type" : "BaseSheetData,Assembly-CSharp",
+		"value" : {
+			"__type" : "MOD.TraitData,Assembly-CSharp",
+			"Id" : 880901,
+			"IsCanCreateGet" : true,
+			"IsCloseInherit" : false,
+			"Type" : 4,
+			"CanRepeate" : false,
+			"TriggerLimit" : 0,
+			"Localization_Name" : {
+				"TarKey" : "",
+				"SheetKey" : "",
+				"InputText" : "心",
+				"Characteristic" : null
+			},
+			"Localization_Des" : {
+				"TarKey" : "",
+				"SheetKey" : "",
+				"InputText" : "心灵力量具象化的体现之一。直面罪孽，拥抱自我。（来源：莫离 / 瑞恩 的角色卡「心（shin）与望」）",
+				"Characteristic" : null
+			},
+			"BuffsLink" : [
+				880901
+			],
+			"Terms" : [
+				
+			],
+			"CreateEvent" : null,
+			"WakeEvent" : {
+				"Localization_Functin" : {
+					"TarKey" : "",
+					"SheetKey" : "",
+					"InputText" : "获得【心】状态：伤害+2，速度+20，受到的伤害-1",
+					"Characteristic" : null
+				},
+				"Inherent" : [
+					{
+						"__type" : "MOD.TraitEvent.ActiveBuffOption,Assembly-CSharp",
+						"BuffId" : 880901
+					}
+				],
+				"Triggers" : [
+					
+				]
+			},
+			"SleepyEvent" : {
+				"Localization_Functin" : {
+					"TarKey" : "",
+					"SheetKey" : "",
+					"InputText" : "失去【心】状态",
+					"Characteristic" : null
+				},
+				"Inherent" : [
+					
+				],
+				"Triggers" : [
+					
+				]
+			},
+			"ConceptTraitTriggerDatas" : [
+				
+			],
+			"CrazyTraitTriggerDatas" : [
+				
+			],
+			"ActiveToHideCustom" : {
+				"Gold" : 0,
+				"InterludeTime" : 0,
+				"SpaceTimePoint" : 0
+			},
+			"HideToActiveCustom" : {
+				"Gold" : 0,
+				"InterludeTime" : 0,
+				"SpaceTimePoint" : 0
+			},
+			"EditorSheetKey" : null
+		}
+	}
+}

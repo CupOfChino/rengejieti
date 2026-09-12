@@ -1,0 +1,102 @@
+{
+	"ResourceReferenceConfigure" : {
+		"__type" : "ResourceReferenceConfigure,Assembly-CSharp",
+		"value" : {
+			"BgmResUnitDatas" : [
+				
+			],
+			"SoundResUnitDatas" : [
+				
+			],
+			"VoiceResUnitDatas" : [
+				
+			],
+			"HeadIconResUnitDatas" : [
+				
+			],
+			"CGResUnitDatas" : [
+				
+			],
+			"CloseUpResUnitDatas" : [
+				
+			],
+			"ItemIconResUnitDaras" : [
+				
+			],
+			"MythologicalResUnitDatas" : [
+				
+			],
+			"SkillIconResUnitDatas" : [
+				
+			],
+			"BuffIconResUnitDatas" : [
+				
+			],
+			"MagicIconResUnitDatas" : [
+				
+			],
+			"ModuleCoverResUnitDatas" : [
+				
+			],
+			"RelationSkillIconDatas" : [
+				
+			],
+			"CharaSprUnitDatas" : [
+				
+			],
+			"EffectResUnitDatas" : [
+				
+			],
+			"RoleModelUnitDatas" : [
+				
+			],
+			"SpecUnitDatas" : [
+				
+			],
+			"MeshMapNodeIconResUnitDatas" : [
+				
+			],
+			"TextModSceneDatas" : [
+				
+			],
+			"ExploreSkillDatas" : [
+				
+			],
+			"LogoDatas" : [
+				
+			],
+			"OptionTipDatas" : [
+				
+			],
+			"GameAchievementDatas" : [
+				
+			],
+			"RoleModelAnimDatas" : [
+				
+			],
+			"ShopRoleTextureDatas" : [
+				
+			],
+			"MapBgDatas" : [
+				
+			],
+			"SceneTextureDatas" : [
+				
+			],
+			"ScenePreviewDatas" : [
+				
+			],
+			"ExtraAndEffectDatas" : [
+				
+			],
+			"ResourceMap" : {1007:[
+					{
+						"Key" : "xin_icon",
+						"Path" : "Resources\/Texture\/BuffIcon\/xin_icon",
+						"Ext" : ".png"
+					}
+				]
+			}
+		}
+	}
+}

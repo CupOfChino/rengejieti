@@ -1,0 +1,212 @@
+{
+	"Data" : {
+		"__type" : "BaseSheetData,Assembly-CSharp",
+		"value" : {
+			"__type" : "MOD.BuffTableData,Assembly-CSharp",
+			"IconPath" : null,
+			"Id" : 880901,
+			"Name" : {
+				"TarKey" : "",
+				"SheetKey" : "",
+				"InputText" : "心",
+				"Characteristic" : null
+			},
+			"Des" : {
+				"TarKey" : "",
+				"SheetKey" : "",
+				"InputText" : "心灵力量具象化的体现之一，金黄色的光芒从人的身体中绽放而出。\n伤害+2，速度+20，受到的伤害-1",
+				"Characteristic" : null
+			},
+			"IconPathReference" : {
+				"ReferenceType" : 1007,
+				"Key" : "xin_icon"
+			},
+			"Comment" : "跑团卡特质包：心（shin）",
+			"BuffType" : 4,
+			"BuffEffectType" : 1,
+			"OverlayType" : 0,
+			"LayerCount" : {
+				"Value" : null
+			},
+			"OverrideInitLayer" : false,
+			"InitLayer" : 0,
+			"MaxLayer" : 0,
+			"FxPlayType" : 1,
+			"UseFxPrefab" : {
+				"FxPath" : null,
+				"UseFrameEffect" : false,
+				"FxRes" : {
+					"ReferenceType" : 10001,
+					"Key" : "LightGather_01"
+				},
+				"EffectName" : null,
+				"EffectAnimName" : null,
+				"PlayPoint" : 2
+			},
+			"PlayFxInBattle" : true,
+			"PlayFxInExplore" : false,
+			"DelayTime" : 0,
+			"EffectClip" : {
+				"AudioRes" : null,
+				"AudioReference" : {
+					"ReferenceType" : 0,
+					"Key" : null
+				},
+				"Volume" : 1,
+				"FadeTime" : 1
+			},
+			"EndClip" : {
+				"AudioRes" : null,
+				"AudioReference" : {
+					"ReferenceType" : 0,
+					"Key" : null
+				},
+				"Volume" : 1,
+				"FadeTime" : 1
+			},
+			"IsClipLoop" : false,
+			"Duration" : 0,
+			"Priority" : 0,
+			"IsDeathClear" : true,
+			"IsShowUI" : true,
+			"Arrts" : [
+				{
+					"IsTrackSource" : false,
+					"RoleAttr" : {
+						"Type" : 0,
+						"Value" : null,
+						"IsRatio" : false,
+						"Ratio" : 0
+					},
+					"RoleExAttr" : {
+						"Type" : 104,
+						"Value" : "2",
+						"IsRatio" : false,
+						"Ratio" : 0
+					},
+					"RoleSkill" : {
+						"Type" : 0,
+						"Value" : null,
+						"IsRatio" : false,
+						"Ratio" : 0
+					},
+					"RoleSystemAttr" : {
+						"Type" : 0,
+						"Value" : null,
+						"IsRatio" : false,
+						"Ratio" : 0
+					},
+					"ExDiceData" : {
+						"ExploreSkill" : {
+							"Type" : 0,
+							"ChangeAll" : false,
+							"IsTemp" : false,
+							"Value" : 0
+						},
+						"HeroAttribute" : {
+							"Type" : 0,
+							"ChangeAll" : false,
+							"IsTemp" : false,
+							"Value" : 0
+						},
+						"ExtraAttribute" : {
+							"Type" : 0,
+							"ChangeAll" : false,
+							"IsTemp" : false,
+							"Value" : 0
+						}
+					}
+				},{ 
+					"IsTrackSource" : false,
+					"RoleAttr" : {
+						"Type" : 0,
+						"Value" : null,
+						"IsRatio" : false,
+						"Ratio" : 0
+					},
+					"RoleExAttr" : {
+						"Type" : 119,
+						"Value" : "20",
+						"IsRatio" : false,
+						"Ratio" : 0
+					},
+					"RoleSkill" : {
+						"Type" : 0,
+						"Value" : null,
+						"IsRatio" : false,
+						"Ratio" : 0
+					},
+					"RoleSystemAttr" : {
+						"Type" : 0,
+						"Value" : null,
+						"IsRatio" : false,
+						"Ratio" : 0
+					},
+					"ExDiceData" : {
+						"ExploreSkill" : {
+							"Type" : 0,
+							"ChangeAll" : false,
+							"IsTemp" : false,
+							"Value" : 0
+						},
+						"HeroAttribute" : {
+							"Type" : 0,
+							"ChangeAll" : false,
+							"IsTemp" : false,
+							"Value" : 0
+						},
+						"ExtraAttribute" : {
+							"Type" : 0,
+							"ChangeAll" : false,
+							"IsTemp" : false,
+							"Value" : 0
+						}
+					}
+				}
+			],
+			"Events" : [
+				{
+					"EBuffTrigger" : 1,
+					"DiceCheckElements" : [
+						
+					],
+					"Checks" : [
+						
+					],
+					"SatisfyAny" : false,
+					"Funcs" : [
+						{
+							"__type" : "MOD.Buff_ImmuneDamageOption,Assembly-CSharp",
+							"Data" : {
+								"IsOpen" : true,
+								"ImmuMaxDamage" : false,
+								"ImmuFall" : false,
+								"OnlyImmuEnemyDamage" : false,
+								"DamageTypeList" : [
+									
+								],
+								"ReductionList" : [
+									{
+										"Type" : 0,
+										"ReduceValue" : 1
+									},{
+										"Type" : 1,
+										"ReduceValue" : 1
+									},{
+										"Type" : 2,
+										"ReduceValue" : 1
+									}
+								],
+								"RoleReductionList" : [
+									
+								]
+							},
+							"SourceKey" : null
+						}
+					]
+				}
+			],
+			"EditorSheetKey" : null
+		}
+	}
+}

@@ -18,6 +18,13 @@
 | 880010 | 时空旅行者——异世界综合征 | 莫离 |
 | 880011 | 那一日的记忆 | 夜柳 |
 
+另外还有一个不是建卡特质、而是走数据包本体的东西：
+
+| ID | 内容 | 说明 |
+| --- | --- | --- |
+| `Trait/Buff 880901` | 【心】特质 + 默认心状态 | 进战斗时挂上：伤害+2、速度+20、受到伤害-1、每回合-1精神值，衰弱/衰竭或战斗结束解除。带【心】特质但没做自定义心的角色走它（自定义心插件在 `mods\自定义心\`） |
+| `Buff 图标 xin_icon` | 心的图标 | 放在 `Assets\Resources\Texture\BuffIcon\xin_icon.png`，通过 `InternalConfigure.txt` 的 ResourceMap 注册 |
+
 ## 效果实现口径
 
 - **数值类**（属性/技能/幸运/速度增减）写在 `CreateEvent`，获得特质时一次性生效。
@@ -45,5 +52,4 @@ powershell -File "..\..\tools\uninstall_test.ps1" -ModName 跑团卡特质包
 上传：游戏内「众创/编辑模组」导入 `Project_Depersonal` 工程。上传成功后 `Uploader` 里的 `FileId`
 会被游戏写成真实工坊 ID，记得回 `docs\模组清单.md` 登记。
 
-原始角色卡：`D:\HuaweiMoveData\Users\huawei\Desktop\111]\*.md`
-
+原始角色卡：桌面上那个 `111]` 文件夹里的 `*.md`（本地资料，不进仓库）

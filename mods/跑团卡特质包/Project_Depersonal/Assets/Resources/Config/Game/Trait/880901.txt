@@ -32,7 +32,7 @@
 				"Localization_Functin" : {
 					"TarKey" : "",
 					"SheetKey" : "",
-					"InputText" : "进入战斗时获得【心】状态。\n伤害+2，速度+20，受到的伤害-1\n每回合开始时消耗1点精神值。\n精神值陷入衰弱或衰竭时解除，解除时恢复5点精神值。\n战斗结束时解除。",
+					"InputText" : "进入战斗时，获得【心】；回合开始时，尝试消耗1点san维持【心】",
 					"Characteristic" : null
 				},
 				"Inherent" : [

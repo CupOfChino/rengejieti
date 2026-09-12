@@ -170,6 +170,8 @@ $dll = "E:\SteamLibrary\steamapps\workshop\content\1477070\2925170762\BepInEx\Du
 ## 8. 待办
 
 - [ ] 条件类效果（"数值≥50 时 +5、否则 -5"）需要靠 Buff 实现，待做
+- [ ] **自定义心第二步**：幕间加「修改当前角色【心】」入口 + 编辑窗口（含"当前已有的心"列表与删除按钮），
+      做法见第 10 节
 - [ ] 角色卡的**装备**（护符/药剂/特殊武器）搬到 `Game\Item\`
 - [ ] 想做"副本结束才获得的特质"要配 `Game\InterludeVacat\`，参考 `3490801895`
 - [ ] 实测"放进编辑模组工程目录"这条本地测试路径
@@ -232,3 +234,54 @@ powershell -File "tools\organize_limbus.ps1"                # 按角色归组到
 
 **注意**：这些图是 Project Moon 的美术资源，自用参考没问题；
 如果要放进要公开发布的 mod 里，版权上是另一码事，得自己权衡。
+
+## 10. 写 BepInEx 插件（改逻辑、加界面）
+
+数据表改不了的事——加界面、运行时造数据、按存档记东西——只能写插件。
+本仓库第一个插件是 `mods\自定义心\`，照着它抄骨架就行。
+
+**加载方式**：插件放 `<mod 根>\plugins\*.dll`，由框架 mod 里的 `BepInEx.Workshop.dll` 这个 patcher 扫描加载。
+哪个 mod 不加载看游戏根目录的 `DontLoadModsList.txt`（里面是 mod id）。
+
+**编译**：不用 csproj，直接拿 SDK 里的 Roslyn 编译器 + 显式引用游戏程序集，不联网、不用拉包。
+现成脚本 `mods\自定义心\tools\build.ps1`，`-InstallHost <mod id>` 会顺带挂到宿主 mod 上做本地测试。
+
+```powershell
+$csc  = "tools-external\dotnet\sdk\8.0.425\Roslyn\bincore\csc.dll"
+$game = "E:\SteamLibrary\steamapps\common\Depersonalization\Depersonalization-Release_Data\Managed"
+$bep  = "E:\SteamLibrary\steamapps\workshop\content\1477070\2925170762\BepInEx\core"
+# 用 dotnet exec 跑 $csc，-target:library -nostdlib+ -noconfig，再把上面两个目录里的 dll 逐个 -r: 进去
+```
+
+**坑**
+
+1. `.ps1` 里有中文必须存成 **UTF-8 带 BOM**，否则 Windows PowerShell 按 GBK 读，直接语法报错
+   （apply_patch 写出来的是无 BOM，改完记得转一次）。
+2. 编译时 `0Harmony20.dll` 和 `0Harmony.dll` 类型完全重名，两个都引用会报 CS0433，排掉旧的。
+3. 插件 `Config.Bind` 落在 `BepInEx\config\<插件GUID>.cfg`——那是宿主 mod 的目录，不是自己 mod 的。
+4. **自己搭界面要用对字体**：别随手取界面上第一个 `Text` 的字体——可能是别的插件或某个数字专用字体，
+   没有中文字形，结果就是**数字能显示、中文整片空白**（这个坑已经踩过一次）。
+   正解是 `MODToolConfig.Instance.LocalizationFonts`（游戏各语言字体表）里挑能画中文的，
+   或者退一步挑界面上正在显示中文的 `Text` 的字体；都没有再用
+   `Font.CreateDynamicFontFromOSFont("Microsoft YaHei", …)` 兜底。
+
+**几处关键 API**（都在 `temp\decompiled\Assembly-CSharp.decompiled.cs` 里搜得到）
+
+| 想干的事 | 位置 |
+| --- | --- |
+| 数据表在内存里的存放 | `Singleton<ResManager>.Instance.BuffFactory` 等，都是 `BaseFactory<T>`：公开的 `RTE/UGC/CloudStorage/BuildIn` 列表 + 私有 `_cacheList` 缓存 |
+| 按编号取一条数据 | `BaseFactory<T>.GetConfig(id)`，比的是 `GetConfigName()`（Buff 就是 `Id.ToString()`） |
+| 运行时新增数据 | 往 `UGC` 里 Add 自己 new 出来的对象，再反射清 `_cacheList` |
+| 特质挂/摘状态 | `MOD.TraitEvent.ActiveBuffOption.Active/UnActive(RoleData role, MOD_Dynamic_Trait, …)`，Prefix 返回 false 可整段替掉 |
+| 调查员身份（存数据用） | `RoleData.RoleLibraryKey`，建角色时生成的 GUID，跨存档稳定 |
+| 当前存档的调查员名单 | `Singleton<HallWorld>.Instance.HallData.HallLibrary.LibraryRoles`（每项 `.Key` + `.BaseData`） |
+| 幕间列表怎么来的 | `UIInterludePanel.UpdateVacationInfo()` 遍历 `InterludeVacationFactory.Datas` 建元素；点确认走 `_onClickVacationMode(vacatConfig, tarRole)` |
+| 角色有没有某个特质 | `RoleData.GetTraitData(id)`，`CurrentState == ETraitState.Wake` 表示激活中 |
+| 屏蔽游戏快捷键（自己开窗时必做） | 游戏按键都走 `KeyboardEventManager.ResponseList`，每一项是 `InputResponseData`，最终在 `InputResponseData.Run()` 里分发；窗口打开时给 `Run()` 挂个返回 false 的 Prefix 就不响应了。WASD 移动方向在 `KeyboardEventManager._UpdateRoleMoveDir()`，要一起停 |
+| 自己搭界面的字体 | 用 `MODToolConfig.Instance.LocalizationFonts` 里能画中文的那套（见上面第 4 条坑） |
+
+**命名空间坑**（写代码时最费时间的地方）：同名枚举散在不同命名空间——
+`EHeroAttribute`/`ERoleExtraAttribute`/`ESanState`/`EBuffTriggerType` 在**全局**，
+`EExploreSkill` 在 `GamePlayEvent`，`EDamageType` 在 `Game.SkillData`，
+Buff 与特质相关的数据类在 `MOD`（`MOD.TraitEvent` 放的是特质效果选项）。
+拿不准就 `ilspycmd -t <类名> Assembly-CSharp.dll` 看一眼，比猜快。

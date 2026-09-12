@@ -1,0 +1,28 @@
+{
+	"Data" : {
+		"__type" : "MOD.InterludeVacationConfig,Assembly-CSharp",
+		"value" : {
+			"VacatId" : 880902,
+			"TitleTxt" : {
+				"TarKey" : "",
+				"InputText" : "添加心特质"
+			},
+			"DecTxt" : {
+				"TarKey" : "",
+				"InputText" : "让这个调查员获得【心】。先有心，才能有自己的那一颗。"
+			},
+			"EffectTxt" : {
+				"TarKey" : "",
+				"InputText" : "获得【心】特质"
+			},
+			"Consume" : {
+				"Gold" : 0,
+				"InterludeTime" : 0,
+				"SpaceTimePoint" : 0
+			},
+			"Checks" : [],
+			"Opts" : [],
+			"EnableSeriousCheck" : false
+		}
+	}
+}

@@ -141,13 +141,24 @@ if ($DryRun) {
   exit 0
 }
 
-$moved = 0; $skipped = 0
+$moved = 0; $skipped = 0; $failed = 0
+$failList = New-Object System.Collections.Generic.List[string]
 foreach ($item in $plan) {
   if (-not (Test-Path -LiteralPath $item.Src)) { $skipped++; continue }
   New-Item -ItemType Directory -Force -Path $item.DstFolder | Out-Null
   $target = Join-Path $item.DstFolder (Split-Path -Leaf $item.Src)
   if (Test-Path -LiteralPath $target) { $target = $target + '_' + (Get-Random -Maximum 9999) }
-  Move-Item -LiteralPath $item.Src -Destination $target -Force
-  $moved++
+  try {
+    Move-Item -LiteralPath $item.Src -Destination $target -Force -ErrorAction Stop
+    $moved++
+  } catch {
+    # 单个搬不动不要拖垮整轮，记下来最后一并报告
+    $failed++
+    $failList.Add(('{0}  =>  {1}  :  {2}' -f $item.Src, $item.DstFolder, $_.Exception.Message))
+  }
 }
-Write-Output ("整理完成：移动 {0} 个文件夹，跳过 {1} 个。素材库：{2}" -f $moved, $skipped, $LibDir)
+Write-Output ("整理完成：移动 {0} 个，跳过 {1} 个，失败 {2} 个。素材库：{3}" -f $moved, $skipped, $failed, $LibDir)
+if ($failed -gt 0) {
+  Write-Output '=== 搬不动的（前 20 条）==='
+  $failList | Select-Object -First 20 | ForEach-Object { Write-Output ('  ' + $_) }
+}

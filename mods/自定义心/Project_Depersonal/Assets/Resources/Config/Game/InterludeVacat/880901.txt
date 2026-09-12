@@ -1,0 +1,28 @@
+{
+	"Data" : {
+		"__type" : "MOD.InterludeVacationConfig,Assembly-CSharp",
+		"value" : {
+			"VacatId" : 880901,
+			"TitleTxt" : {
+				"TarKey" : "",
+				"InputText" : "修改当前角色【心】"
+			},
+			"DecTxt" : {
+				"TarKey" : "",
+				"InputText" : "给这个调查员单独调整他自己的那颗「心」：名字后缀、速度，以及最多三项额外加成。"
+			},
+			"EffectTxt" : {
+				"TarKey" : "",
+				"InputText" : "打开【心】的编辑界面"
+			},
+			"Consume" : {
+				"Gold" : 0,
+				"InterludeTime" : 0,
+				"SpaceTimePoint" : 0
+			},
+			"Checks" : [],
+			"Opts" : [],
+			"EnableSeriousCheck" : false
+		}
+	}
+}

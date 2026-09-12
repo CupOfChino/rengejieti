@@ -32,7 +32,7 @@
 				"Localization_Functin" : {
 					"TarKey" : "",
 					"SheetKey" : "",
-					"InputText" : "获得【心】状态：伤害+2，速度+20，受到的伤害-1",
+					"InputText" : "进入战斗时获得【心】：伤害+2，速度+20，受到的伤害-1\n每回合开始消耗1点精神值；精神值陷入衰弱时自动解除并恢复5点精神值；战斗结束时解除",
 					"Characteristic" : null
 				},
 				"Inherent" : [
@@ -42,7 +42,18 @@
 					}
 				],
 				"Triggers" : [
-					
+					{
+						"TriggerType" : 211,
+						"RoleTriggerType" : 0,
+						"TimeTriggerType" : 0,
+						"Options" : [
+							{
+								"__type" : "MOD.TraitEvent.ActiveBuffOption,Assembly-CSharp",
+								"BuffId" : 880901
+							}
+						],
+						"NotTriggerCountAdd" : false
+					}
 				]
 			},
 			"SleepyEvent" : {

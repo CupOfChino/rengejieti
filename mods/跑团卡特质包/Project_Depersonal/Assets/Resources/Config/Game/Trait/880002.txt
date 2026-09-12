@@ -1,0 +1,118 @@
+{
+	"Data" : {
+		"__type" : "BaseSheetData,Assembly-CSharp",
+		"value" : {
+			"__type" : "MOD.TraitData,Assembly-CSharp",
+			"Id" : 880002,
+			"IsCanCreateGet" : true,
+			"IsCloseInherit" : false,
+			"Type" : 4,
+			"CanRepeate" : false,
+			"TriggerLimit" : 0,
+			"Localization_Name" : {
+				"TarKey" : "",
+				"SheetKey" : "",
+				"InputText" : "老兵的射击技巧",
+				"Characteristic" : null
+			},
+			"Localization_Des" : {
+				"TarKey" : "",
+				"SheetKey" : "",
+				"InputText" : "女士，虽然这是大后方，治安也不错。但毕竟这是个兵荒马乱的年代，您最好学会一点防身技巧。（来源：洁黛蒂）",
+				"Characteristic" : null
+			},
+			"BuffsLink" : [
+				
+			],
+			"Terms" : [
+				
+			],
+			"CreateEvent" : {
+				"Localization_Functin" : {
+					"TarKey" : "",
+					"SheetKey" : "",
+					"InputText" : "射击+10",
+					"Characteristic" : null
+				},
+				"Inherent" : [
+					{
+						"__type" : "MOD.TraitEvent.ChangeRoleValueDataOption,Assembly-CSharp",
+						"TargetType" : 1,
+						"Datas" : [
+							{
+								"IsTrackSource" : true,
+								"RoleAttr" : {
+									"Type" : 0,
+									"Value" : null,
+									"IsRatio" : false,
+									"Ratio" : 0
+								},
+								"RoleExAttr" : {
+									"Type" : 0,
+									"Value" : null,
+									"IsRatio" : false,
+									"Ratio" : 0
+								},
+								"RoleSkill" : {
+									"Type" : 102,
+									"Value" : "10",
+									"IsRatio" : false,
+									"Ratio" : 0
+								},
+								"RoleSystemAttr" : {
+									"Type" : 0,
+									"Value" : null,
+									"IsRatio" : false,
+									"Ratio" : 0
+								},
+								"ExDiceData" : {
+									"ExploreSkill" : {
+										"Type" : 0,
+										"ChangeAll" : false,
+										"IsTemp" : false,
+										"Value" : 0
+									},
+									"HeroAttribute" : {
+										"Type" : 0,
+										"ChangeAll" : false,
+										"IsTemp" : false,
+										"Value" : 0
+									},
+									"ExtraAttribute" : {
+										"Type" : 0,
+										"ChangeAll" : false,
+										"IsTemp" : false,
+										"Value" : 0
+									}
+								}
+							}
+						],
+						"IsRemove" : false
+					}
+				],
+				"Triggers" : [
+					
+				]
+			},
+			"WakeEvent" : null,
+			"SleepyEvent" : null,
+			"ConceptTraitTriggerDatas" : [
+				
+			],
+			"CrazyTraitTriggerDatas" : [
+				
+			],
+			"ActiveToHideCustom" : {
+				"Gold" : 0,
+				"InterludeTime" : 0,
+				"SpaceTimePoint" : 0
+			},
+			"HideToActiveCustom" : {
+				"Gold" : 0,
+				"InterludeTime" : 0,
+				"SpaceTimePoint" : 0
+			},
+			"EditorSheetKey" : null
+		}
+	}
+}

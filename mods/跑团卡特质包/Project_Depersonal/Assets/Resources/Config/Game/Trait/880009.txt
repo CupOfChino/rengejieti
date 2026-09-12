@@ -1,0 +1,212 @@
+{
+	"Data" : {
+		"__type" : "BaseSheetData,Assembly-CSharp",
+		"value" : {
+			"__type" : "MOD.TraitData,Assembly-CSharp",
+			"Id" : 880009,
+			"IsCanCreateGet" : true,
+			"IsCloseInherit" : false,
+			"Type" : 4,
+			"CanRepeate" : false,
+			"TriggerLimit" : 0,
+			"Localization_Name" : {
+				"TarKey" : "",
+				"SheetKey" : "",
+				"InputText" : "岁月不饶人",
+				"Characteristic" : null
+			},
+			"Localization_Des" : {
+				"TarKey" : "",
+				"SheetKey" : "",
+				"InputText" : "移动力-2，但长期劳作使力量与体质得以保持。（来源：本·司机兼搬运工）",
+				"Characteristic" : null
+			},
+			"BuffsLink" : [
+				
+			],
+			"Terms" : [
+				
+			],
+			"CreateEvent" : {
+				"Localization_Functin" : {
+					"TarKey" : "",
+					"SheetKey" : "",
+					"InputText" : "速度-2，力量+5，体质+5",
+					"Characteristic" : null
+				},
+				"Inherent" : [
+					{
+						"__type" : "MOD.TraitEvent.ChangeRoleValueDataOption,Assembly-CSharp",
+						"TargetType" : 1,
+						"Datas" : [
+							{
+								"IsTrackSource" : true,
+								"RoleAttr" : {
+									"Type" : 0,
+									"Value" : null,
+									"IsRatio" : false,
+									"Ratio" : 0
+								},
+								"RoleExAttr" : {
+									"Type" : 119,
+									"Value" : "-2",
+									"IsRatio" : false,
+									"Ratio" : 0
+								},
+								"RoleSkill" : {
+									"Type" : 0,
+									"Value" : null,
+									"IsRatio" : false,
+									"Ratio" : 0
+								},
+								"RoleSystemAttr" : {
+									"Type" : 0,
+									"Value" : null,
+									"IsRatio" : false,
+									"Ratio" : 0
+								},
+								"ExDiceData" : {
+									"ExploreSkill" : {
+										"Type" : 0,
+										"ChangeAll" : false,
+										"IsTemp" : false,
+										"Value" : 0
+									},
+									"HeroAttribute" : {
+										"Type" : 0,
+										"ChangeAll" : false,
+										"IsTemp" : false,
+										"Value" : 0
+									},
+									"ExtraAttribute" : {
+										"Type" : 0,
+										"ChangeAll" : false,
+										"IsTemp" : false,
+										"Value" : 0
+									}
+								}
+							},
+							{
+								"IsTrackSource" : true,
+								"RoleAttr" : {
+									"Type" : 1,
+									"Value" : "5",
+									"IsRatio" : false,
+									"Ratio" : 0
+								},
+								"RoleExAttr" : {
+									"Type" : 0,
+									"Value" : null,
+									"IsRatio" : false,
+									"Ratio" : 0
+								},
+								"RoleSkill" : {
+									"Type" : 0,
+									"Value" : null,
+									"IsRatio" : false,
+									"Ratio" : 0
+								},
+								"RoleSystemAttr" : {
+									"Type" : 0,
+									"Value" : null,
+									"IsRatio" : false,
+									"Ratio" : 0
+								},
+								"ExDiceData" : {
+									"ExploreSkill" : {
+										"Type" : 0,
+										"ChangeAll" : false,
+										"IsTemp" : false,
+										"Value" : 0
+									},
+									"HeroAttribute" : {
+										"Type" : 0,
+										"ChangeAll" : false,
+										"IsTemp" : false,
+										"Value" : 0
+									},
+									"ExtraAttribute" : {
+										"Type" : 0,
+										"ChangeAll" : false,
+										"IsTemp" : false,
+										"Value" : 0
+									}
+								}
+							},
+							{
+								"IsTrackSource" : true,
+								"RoleAttr" : {
+									"Type" : 6,
+									"Value" : "5",
+									"IsRatio" : false,
+									"Ratio" : 0
+								},
+								"RoleExAttr" : {
+									"Type" : 0,
+									"Value" : null,
+									"IsRatio" : false,
+									"Ratio" : 0
+								},
+								"RoleSkill" : {
+									"Type" : 0,
+									"Value" : null,
+									"IsRatio" : false,
+									"Ratio" : 0
+								},
+								"RoleSystemAttr" : {
+									"Type" : 0,
+									"Value" : null,
+									"IsRatio" : false,
+									"Ratio" : 0
+								},
+								"ExDiceData" : {
+									"ExploreSkill" : {
+										"Type" : 0,
+										"ChangeAll" : false,
+										"IsTemp" : false,
+										"Value" : 0
+									},
+									"HeroAttribute" : {
+										"Type" : 0,
+										"ChangeAll" : false,
+										"IsTemp" : false,
+										"Value" : 0
+									},
+									"ExtraAttribute" : {
+										"Type" : 0,
+										"ChangeAll" : false,
+										"IsTemp" : false,
+										"Value" : 0
+									}
+								}
+							}
+						],
+						"IsRemove" : false
+					}
+				],
+				"Triggers" : [
+					
+				]
+			},
+			"WakeEvent" : null,
+			"SleepyEvent" : null,
+			"ConceptTraitTriggerDatas" : [
+				
+			],
+			"CrazyTraitTriggerDatas" : [
+				
+			],
+			"ActiveToHideCustom" : {
+				"Gold" : 0,
+				"InterludeTime" : 0,
+				"SpaceTimePoint" : 0
+			},
+			"HideToActiveCustom" : {
+				"Gold" : 0,
+				"InterludeTime" : 0,
+				"SpaceTimePoint" : 0
+			},
+			"EditorSheetKey" : null
+		}
+	}
+}

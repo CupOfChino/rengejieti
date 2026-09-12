@@ -1,0 +1,447 @@
+{
+	"Data" : {
+		"__type" : "BaseSheetData,Assembly-CSharp",
+		"value" : {
+			"__type" : "MOD.TraitData,Assembly-CSharp",
+			"Id" : 880010,
+			"IsCanCreateGet" : true,
+			"IsCloseInherit" : false,
+			"Type" : 4,
+			"CanRepeate" : false,
+			"TriggerLimit" : 0,
+			"Localization_Name" : {
+				"TarKey" : "",
+				"SheetKey" : "",
+				"InputText" : "时空旅行者——异世界综合征",
+				"Characteristic" : null
+			},
+			"Localization_Des" : {
+				"TarKey" : "",
+				"SheetKey" : "",
+				"InputText" : "每到一个新的世界，身体都需要很长一段时间重新适应，习得的力量也大多处于封印状态。（来源：莫离/茉莉·时空旅者）",
+				"Characteristic" : null
+			},
+			"BuffsLink" : [
+				
+			],
+			"Terms" : [
+				
+			],
+			"CreateEvent" : {
+				"Localization_Functin" : {
+					"TarKey" : "",
+					"SheetKey" : "",
+					"InputText" : "斗殴-15、射击-15、力量-10、体质-10、敏捷-10、感知-5、观察-5、运动-5",
+					"Characteristic" : null
+				},
+				"Inherent" : [
+					{
+						"__type" : "MOD.TraitEvent.ChangeRoleValueDataOption,Assembly-CSharp",
+						"TargetType" : 1,
+						"Datas" : [
+							{
+								"IsTrackSource" : true,
+								"RoleAttr" : {
+									"Type" : 0,
+									"Value" : null,
+									"IsRatio" : false,
+									"Ratio" : 0
+								},
+								"RoleExAttr" : {
+									"Type" : 0,
+									"Value" : null,
+									"IsRatio" : false,
+									"Ratio" : 0
+								},
+								"RoleSkill" : {
+									"Type" : 101,
+									"Value" : "-15",
+									"IsRatio" : false,
+									"Ratio" : 0
+								},
+								"RoleSystemAttr" : {
+									"Type" : 0,
+									"Value" : null,
+									"IsRatio" : false,
+									"Ratio" : 0
+								},
+								"ExDiceData" : {
+									"ExploreSkill" : {
+										"Type" : 0,
+										"ChangeAll" : false,
+										"IsTemp" : false,
+										"Value" : 0
+									},
+									"HeroAttribute" : {
+										"Type" : 0,
+										"ChangeAll" : false,
+										"IsTemp" : false,
+										"Value" : 0
+									},
+									"ExtraAttribute" : {
+										"Type" : 0,
+										"ChangeAll" : false,
+										"IsTemp" : false,
+										"Value" : 0
+									}
+								}
+							},
+							{
+								"IsTrackSource" : true,
+								"RoleAttr" : {
+									"Type" : 0,
+									"Value" : null,
+									"IsRatio" : false,
+									"Ratio" : 0
+								},
+								"RoleExAttr" : {
+									"Type" : 0,
+									"Value" : null,
+									"IsRatio" : false,
+									"Ratio" : 0
+								},
+								"RoleSkill" : {
+									"Type" : 102,
+									"Value" : "-15",
+									"IsRatio" : false,
+									"Ratio" : 0
+								},
+								"RoleSystemAttr" : {
+									"Type" : 0,
+									"Value" : null,
+									"IsRatio" : false,
+									"Ratio" : 0
+								},
+								"ExDiceData" : {
+									"ExploreSkill" : {
+										"Type" : 0,
+										"ChangeAll" : false,
+										"IsTemp" : false,
+										"Value" : 0
+									},
+									"HeroAttribute" : {
+										"Type" : 0,
+										"ChangeAll" : false,
+										"IsTemp" : false,
+										"Value" : 0
+									},
+									"ExtraAttribute" : {
+										"Type" : 0,
+										"ChangeAll" : false,
+										"IsTemp" : false,
+										"Value" : 0
+									}
+								}
+							},
+							{
+								"IsTrackSource" : true,
+								"RoleAttr" : {
+									"Type" : 1,
+									"Value" : "-10",
+									"IsRatio" : false,
+									"Ratio" : 0
+								},
+								"RoleExAttr" : {
+									"Type" : 0,
+									"Value" : null,
+									"IsRatio" : false,
+									"Ratio" : 0
+								},
+								"RoleSkill" : {
+									"Type" : 0,
+									"Value" : null,
+									"IsRatio" : false,
+									"Ratio" : 0
+								},
+								"RoleSystemAttr" : {
+									"Type" : 0,
+									"Value" : null,
+									"IsRatio" : false,
+									"Ratio" : 0
+								},
+								"ExDiceData" : {
+									"ExploreSkill" : {
+										"Type" : 0,
+										"ChangeAll" : false,
+										"IsTemp" : false,
+										"Value" : 0
+									},
+									"HeroAttribute" : {
+										"Type" : 0,
+										"ChangeAll" : false,
+										"IsTemp" : false,
+										"Value" : 0
+									},
+									"ExtraAttribute" : {
+										"Type" : 0,
+										"ChangeAll" : false,
+										"IsTemp" : false,
+										"Value" : 0
+									}
+								}
+							},
+							{
+								"IsTrackSource" : true,
+								"RoleAttr" : {
+									"Type" : 6,
+									"Value" : "-10",
+									"IsRatio" : false,
+									"Ratio" : 0
+								},
+								"RoleExAttr" : {
+									"Type" : 0,
+									"Value" : null,
+									"IsRatio" : false,
+									"Ratio" : 0
+								},
+								"RoleSkill" : {
+									"Type" : 0,
+									"Value" : null,
+									"IsRatio" : false,
+									"Ratio" : 0
+								},
+								"RoleSystemAttr" : {
+									"Type" : 0,
+									"Value" : null,
+									"IsRatio" : false,
+									"Ratio" : 0
+								},
+								"ExDiceData" : {
+									"ExploreSkill" : {
+										"Type" : 0,
+										"ChangeAll" : false,
+										"IsTemp" : false,
+										"Value" : 0
+									},
+									"HeroAttribute" : {
+										"Type" : 0,
+										"ChangeAll" : false,
+										"IsTemp" : false,
+										"Value" : 0
+									},
+									"ExtraAttribute" : {
+										"Type" : 0,
+										"ChangeAll" : false,
+										"IsTemp" : false,
+										"Value" : 0
+									}
+								}
+							},
+							{
+								"IsTrackSource" : true,
+								"RoleAttr" : {
+									"Type" : 2,
+									"Value" : "-10",
+									"IsRatio" : false,
+									"Ratio" : 0
+								},
+								"RoleExAttr" : {
+									"Type" : 0,
+									"Value" : null,
+									"IsRatio" : false,
+									"Ratio" : 0
+								},
+								"RoleSkill" : {
+									"Type" : 0,
+									"Value" : null,
+									"IsRatio" : false,
+									"Ratio" : 0
+								},
+								"RoleSystemAttr" : {
+									"Type" : 0,
+									"Value" : null,
+									"IsRatio" : false,
+									"Ratio" : 0
+								},
+								"ExDiceData" : {
+									"ExploreSkill" : {
+										"Type" : 0,
+										"ChangeAll" : false,
+										"IsTemp" : false,
+										"Value" : 0
+									},
+									"HeroAttribute" : {
+										"Type" : 0,
+										"ChangeAll" : false,
+										"IsTemp" : false,
+										"Value" : 0
+									},
+									"ExtraAttribute" : {
+										"Type" : 0,
+										"ChangeAll" : false,
+										"IsTemp" : false,
+										"Value" : 0
+									}
+								}
+							},
+							{
+								"IsTrackSource" : true,
+								"RoleAttr" : {
+									"Type" : 0,
+									"Value" : null,
+									"IsRatio" : false,
+									"Ratio" : 0
+								},
+								"RoleExAttr" : {
+									"Type" : 0,
+									"Value" : null,
+									"IsRatio" : false,
+									"Ratio" : 0
+								},
+								"RoleSkill" : {
+									"Type" : 301,
+									"Value" : "-5",
+									"IsRatio" : false,
+									"Ratio" : 0
+								},
+								"RoleSystemAttr" : {
+									"Type" : 0,
+									"Value" : null,
+									"IsRatio" : false,
+									"Ratio" : 0
+								},
+								"ExDiceData" : {
+									"ExploreSkill" : {
+										"Type" : 0,
+										"ChangeAll" : false,
+										"IsTemp" : false,
+										"Value" : 0
+									},
+									"HeroAttribute" : {
+										"Type" : 0,
+										"ChangeAll" : false,
+										"IsTemp" : false,
+										"Value" : 0
+									},
+									"ExtraAttribute" : {
+										"Type" : 0,
+										"ChangeAll" : false,
+										"IsTemp" : false,
+										"Value" : 0
+									}
+								}
+							},
+							{
+								"IsTrackSource" : true,
+								"RoleAttr" : {
+									"Type" : 0,
+									"Value" : null,
+									"IsRatio" : false,
+									"Ratio" : 0
+								},
+								"RoleExAttr" : {
+									"Type" : 0,
+									"Value" : null,
+									"IsRatio" : false,
+									"Ratio" : 0
+								},
+								"RoleSkill" : {
+									"Type" : 302,
+									"Value" : "-5",
+									"IsRatio" : false,
+									"Ratio" : 0
+								},
+								"RoleSystemAttr" : {
+									"Type" : 0,
+									"Value" : null,
+									"IsRatio" : false,
+									"Ratio" : 0
+								},
+								"ExDiceData" : {
+									"ExploreSkill" : {
+										"Type" : 0,
+										"ChangeAll" : false,
+										"IsTemp" : false,
+										"Value" : 0
+									},
+									"HeroAttribute" : {
+										"Type" : 0,
+										"ChangeAll" : false,
+										"IsTemp" : false,
+										"Value" : 0
+									},
+									"ExtraAttribute" : {
+										"Type" : 0,
+										"ChangeAll" : false,
+										"IsTemp" : false,
+										"Value" : 0
+									}
+								}
+							},
+							{
+								"IsTrackSource" : true,
+								"RoleAttr" : {
+									"Type" : 0,
+									"Value" : null,
+									"IsRatio" : false,
+									"Ratio" : 0
+								},
+								"RoleExAttr" : {
+									"Type" : 0,
+									"Value" : null,
+									"IsRatio" : false,
+									"Ratio" : 0
+								},
+								"RoleSkill" : {
+									"Type" : 201,
+									"Value" : "-5",
+									"IsRatio" : false,
+									"Ratio" : 0
+								},
+								"RoleSystemAttr" : {
+									"Type" : 0,
+									"Value" : null,
+									"IsRatio" : false,
+									"Ratio" : 0
+								},
+								"ExDiceData" : {
+									"ExploreSkill" : {
+										"Type" : 0,
+										"ChangeAll" : false,
+										"IsTemp" : false,
+										"Value" : 0
+									},
+									"HeroAttribute" : {
+										"Type" : 0,
+										"ChangeAll" : false,
+										"IsTemp" : false,
+										"Value" : 0
+									},
+									"ExtraAttribute" : {
+										"Type" : 0,
+										"ChangeAll" : false,
+										"IsTemp" : false,
+										"Value" : 0
+									}
+								}
+							}
+						],
+						"IsRemove" : false
+					}
+				],
+				"Triggers" : [
+					
+				]
+			},
+			"WakeEvent" : null,
+			"SleepyEvent" : null,
+			"ConceptTraitTriggerDatas" : [
+				
+			],
+			"CrazyTraitTriggerDatas" : [
+				
+			],
+			"ActiveToHideCustom" : {
+				"Gold" : 0,
+				"InterludeTime" : 0,
+				"SpaceTimePoint" : 0
+			},
+			"HideToActiveCustom" : {
+				"Gold" : 0,
+				"InterludeTime" : 0,
+				"SpaceTimePoint" : 0
+			},
+			"EditorSheetKey" : null
+		}
+	}
+}

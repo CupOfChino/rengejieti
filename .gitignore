@@ -1,0 +1,12 @@
+# 临时文件与备份
+temp/
+
+# 第三方工具（ILSpy 等），体积大且可重新下载
+tools-external/
+
+# 系统垃圾
+desktop.ini
+Thumbs.db
+*.tmp
+*.log
+

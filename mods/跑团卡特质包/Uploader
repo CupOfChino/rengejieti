@@ -1,0 +1,20 @@
+{
+	"Uploader" : {
+		"__type" : "UGCUploaderData,Assembly-CSharp",
+		"value" : {
+			"FileId" : 0,
+			"Title" : "【特质包】我们的跑团卡特质",
+			"PreviewPath" : "",
+			"Description" : "把我跑团时写的角色卡里的特质搬进人格解体，作为可创建的特质使用。\n本包共 11 个特质，来源卡：洁黛蒂、可可、马斯、安格斯、艾玛、卢浮、本、莫离、夜柳。\n[h3]说明[/h3]\n数值类效果（属性/技能/幸运/速度增减）在获得特质时一次性生效；奖惩骰类效果在特质激活期间生效、沉睡时收回。",
+			"ContentPath" : "",
+			"Visibility" : 0,
+			"Tags" : [
+				"Trait","Chinese"
+			],
+			"KeyValueTags" : {
+			},
+			"MetaData" : null,
+			"ChangeNote" : "首个测试版本"
+		}
+	}
+}

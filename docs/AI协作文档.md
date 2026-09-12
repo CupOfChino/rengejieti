@@ -91,9 +91,25 @@
 
 ## 4. 必踩的坑
 
-1. **游戏只加载"已订阅且启用"的 mod 内容。** 没上传的本地内容直接丢进创意工坊目录不生效
-   （Steam 没订阅它）。本地测新内容 → 用 `tools\install_test.ps1` 临时挂到正在启用的 mod 上。
-   证据：`Player.log` 的"无效文件"只报启用的 mod；`UGCRecord` 里 `IsActive:false` 的 mod 有同样文件却没被扫到。
+1. **游戏只加载"已订阅且启用"的 mod 内容，往创意工坊目录丢新文件夹没用。**
+   源码依据（`ConfigManager.GetConfigDatas<T>` / `UGCManager`）：mod 数据目录取自
+   `UGCManager.AllItems[i].SaveFolderPath`，而这个值来自 `SteamUGC.GetItemInstallInfo(...)`
+   —— **只有 Steam 认账的已订阅物品才会被枚举**，目录扫不到就是扫不到。
+   日志旁证：`Player.log` 的"无效文件"只报启用的 mod；`UGCRecord` 里 `IsActive:false` 的 mod 有同样文件却没被扫到。
+
+   数据表加载顺序（优先级从高到低）：
+   1. 当前"编辑模组"工程（`CreatorHelper.ConfigPath`，即 `%LocalLow%\MeowNature\Depersonalization-Release\Project_Depersonal\Assets\Resources\Config`）—— 仅当 `CreatorProjectManager` 存在时
+   2. 已订阅且启用的 UGC mod（列表**倒序**，后加载的覆盖先加载的）
+   3. 游戏本体 `StreamingAssets`
+
+   所以本地 mod 的测试办法，按推荐度：
+
+   | 办法 | 说明 | 状态 |
+   | --- | --- | --- |
+   | 临时挂到已启用的 mod 上 | `tools\install_test.ps1`，零风险、立刻见效 | ✅ 已验证 |
+   | 上传工坊后订阅自己（可设不公开） | 最干净，每个 mod 能独立启停 | 未做 |
+   | 放进"编辑模组"工程目录 | 理论上会被第 1 条命中，需开编辑器 | 待实测 |
+   | 丢进 `StreamingAssets\ExtraUGCProject\` | 开关 `EnableLoadUGCItem` 是**内嵌 ScriptableObject**，改不了 | ❌ 走不通 |
 2. `DontLoadModsList.txt` 与 `UGCRecord` 的 `IsActive` 同步，只影响 BepInEx 插件加载。
 3. `StreamingAssets\ExtraUGCProject\<id>\`、`DLCUGCProject\<名>\` 是游戏自己下发的 UGC 工程，别手塞。
 4. 数据 txt 不需要 `.rtmeta` / `.rtview`（那是图片音频才配的）。`Project.rtmeta` 固定 9 字节，
@@ -128,10 +144,33 @@ powershell -File "tools\uninstall_test.ps1" -ModName 跑团卡特质包
 5. 反编译参考 `workshop\...\2925170762\BepInEx\DumpedAssemblies\Depersonalization-Release\Assembly-CSharp.dll`
    （字符串里能挖路径常量，如 `\Project_Depersonal/Assets\`、`Game/Trait`）
 
-## 7. 待办
+## 7. 工具
+
+装在 `tools-external\`（不进 git，可重装）：
+
+| 工具 | 位置 | 用途 |
+| --- | --- | --- |
+| .NET 8 SDK | `tools-external\dotnet\dotnet.exe` | 跑 `ilspycmd`；将来写 BepInEx 插件也用它 |
+| ilspycmd 9.1.0 | `tools-external\ilspycmd\ilspycmd.exe` | 反编译读游戏代码 |
+
+反编译产物：`temp\decompiled\Assembly-CSharp.decompiled.cs`（约 54 万行，18MB，单一文件，直接搜就行）
+
+```powershell
+$exe = "tools-external\ilspycmd\ilspycmd.exe"
+$dll = "E:\SteamLibrary\steamapps\workshop\content\1477070\2925170762\BepInEx\DumpedAssemblies\Depersonalization-Release\Assembly-CSharp.dll"
+& $exe -t MOD.TraitData $dll                      # 看单个类，最常用
+& $exe -o temp\decompiled $dll                    # 全量导出（约 45 秒）
+```
+
+**这套工具最值钱的地方**：游戏自己的数据类上带 `[LabelText("中文说明")]`，等于官方注释。
+想知道某个字段是什么意思，直接 `-t` 看那个类，比猜快得多。
+
+注意：`ilspycmd` 最新版（11.x）在当前 SDK 上装不上（缺 `DotnetToolSettings.xml`），用 9.1.0.7988。
+
+## 8. 待办
 
 - [ ] 条件类效果（"数值≥50 时 +5、否则 -5"）需要靠 Buff 实现，待做
 - [ ] 角色卡的**装备**（护符/药剂/特殊武器）搬到 `Game\Item\`
 - [ ] 想做"副本结束才获得的特质"要配 `Game\InterludeVacat\`，参考 `3490801895`
-- [ ] 确认本地 mod 是否有"不挂别人 mod"的正规测试路径（备选：`StreamingAssets\ExtraUGCProject\`，待实测）
-
+- [ ] 实测"放进编辑模组工程目录"这条本地测试路径
+- [ ] 把跑团卡特质包正式上传工坊，摆脱临时挂载

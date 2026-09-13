@@ -1,0 +1,45 @@
+{
+	"Data" : {
+		"__type" : "BaseSheetData,Assembly-CSharp",
+		"value" : {
+			"__type" : "CustomSpriteConfigData,Assembly-CSharp",
+			"EffectName" : "xin_shine",
+			"AnimationList" : [
+				{
+					"AnimName" : "idle",
+					"IsLoop" : true,
+					"ExtraAnims" : [
+						{ "AnimSprite" : { "ReferenceType" : 1023, "Key" : "xin_shine_01" }, "IsInternal" : false, "ResLoadPath" : null, "UseAtals" : false, "SpriteName" : null, "ShowCount" : 0.5 },
+						{ "AnimSprite" : { "ReferenceType" : 1023, "Key" : "xin_shine_02" }, "IsInternal" : false, "ResLoadPath" : null, "UseAtals" : false, "SpriteName" : null, "ShowCount" : 0.5 },
+						{ "AnimSprite" : { "ReferenceType" : 1023, "Key" : "xin_shine_03" }, "IsInternal" : false, "ResLoadPath" : null, "UseAtals" : false, "SpriteName" : null, "ShowCount" : 0.5 },
+						{ "AnimSprite" : { "ReferenceType" : 1023, "Key" : "xin_shine_04" }, "IsInternal" : false, "ResLoadPath" : null, "UseAtals" : false, "SpriteName" : null, "ShowCount" : 0.5 },
+						{ "AnimSprite" : { "ReferenceType" : 1023, "Key" : "xin_shine_05" }, "IsInternal" : false, "ResLoadPath" : null, "UseAtals" : false, "SpriteName" : null, "ShowCount" : 0.5 },
+						{ "AnimSprite" : { "ReferenceType" : 1023, "Key" : "xin_shine_06" }, "IsInternal" : false, "ResLoadPath" : null, "UseAtals" : false, "SpriteName" : null, "ShowCount" : 0.5 },
+						{ "AnimSprite" : { "ReferenceType" : 1023, "Key" : "xin_shine_07" }, "IsInternal" : false, "ResLoadPath" : null, "UseAtals" : false, "SpriteName" : null, "ShowCount" : 0.5 },
+						{ "AnimSprite" : { "ReferenceType" : 1023, "Key" : "xin_shine_08" }, "IsInternal" : false, "ResLoadPath" : null, "UseAtals" : false, "SpriteName" : null, "ShowCount" : 0.5 },
+						{ "AnimSprite" : { "ReferenceType" : 1023, "Key" : "xin_shine_09" }, "IsInternal" : false, "ResLoadPath" : null, "UseAtals" : false, "SpriteName" : null, "ShowCount" : 0.5 },
+						{ "AnimSprite" : { "ReferenceType" : 1023, "Key" : "xin_shine_10" }, "IsInternal" : false, "ResLoadPath" : null, "UseAtals" : false, "SpriteName" : null, "ShowCount" : 0.5 },
+						{ "AnimSprite" : { "ReferenceType" : 1023, "Key" : "xin_shine_11" }, "IsInternal" : false, "ResLoadPath" : null, "UseAtals" : false, "SpriteName" : null, "ShowCount" : 0.5 },
+						{ "AnimSprite" : { "ReferenceType" : 1023, "Key" : "xin_shine_12" }, "IsInternal" : false, "ResLoadPath" : null, "UseAtals" : false, "SpriteName" : null, "ShowCount" : 0.5 },
+						{ "AnimSprite" : { "ReferenceType" : 1023, "Key" : "xin_shine_13" }, "IsInternal" : false, "ResLoadPath" : null, "UseAtals" : false, "SpriteName" : null, "ShowCount" : 0.5 },
+						{ "AnimSprite" : { "ReferenceType" : 1023, "Key" : "xin_shine_14" }, "IsInternal" : false, "ResLoadPath" : null, "UseAtals" : false, "SpriteName" : null, "ShowCount" : 0.5 },
+						{ "AnimSprite" : { "ReferenceType" : 1023, "Key" : "xin_shine_15" }, "IsInternal" : false, "ResLoadPath" : null, "UseAtals" : false, "SpriteName" : null, "ShowCount" : 0.5 },
+						{ "AnimSprite" : { "ReferenceType" : 1023, "Key" : "xin_shine_16" }, "IsInternal" : false, "ResLoadPath" : null, "UseAtals" : false, "SpriteName" : null, "ShowCount" : 0.5 },
+						{ "AnimSprite" : { "ReferenceType" : 1023, "Key" : "xin_shine_17" }, "IsInternal" : false, "ResLoadPath" : null, "UseAtals" : false, "SpriteName" : null, "ShowCount" : 0.5 },
+						{ "AnimSprite" : { "ReferenceType" : 1023, "Key" : "xin_shine_18" }, "IsInternal" : false, "ResLoadPath" : null, "UseAtals" : false, "SpriteName" : null, "ShowCount" : 0.5 },
+						{ "AnimSprite" : { "ReferenceType" : 1023, "Key" : "xin_shine_19" }, "IsInternal" : false, "ResLoadPath" : null, "UseAtals" : false, "SpriteName" : null, "ShowCount" : 0.5 }
+					]
+				}
+			],
+			"AnimSpeed" : 1,
+			"AnimSize" : {
+				"x" : 0.302,
+				"y" : 0.302
+			},
+			"SortName" : "Chara",
+			"SortOrder" : -100,
+			"DefaultPlayAnim" : "idle",
+			"UseLightEffect" : false
+		}
+	}
+}

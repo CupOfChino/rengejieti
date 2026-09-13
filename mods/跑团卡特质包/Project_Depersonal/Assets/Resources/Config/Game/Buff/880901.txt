@@ -34,13 +34,13 @@
 			"FxPlayType" : 1,
 			"UseFxPrefab" : {
 				"FxPath" : null,
-				"UseFrameEffect" : false,
+				"UseFrameEffect" : true,
 				"FxRes" : {
-					"ReferenceType" : 10001,
-					"Key" : "LightGather_01"
+					"ReferenceType" : 0,
+					"Key" : null
 				},
-				"EffectName" : null,
-				"EffectAnimName" : null,
+				"EffectName" : "xin_glow",
+				"EffectAnimName" : "idle",
 				"PlayPoint" : 2
 			},
 			"PlayFxInBattle" : true,

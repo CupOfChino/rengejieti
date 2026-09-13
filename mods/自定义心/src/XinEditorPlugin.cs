@@ -26,6 +26,11 @@ namespace XinEditor
         internal static ManualLogSource Log;
         internal static HeartStore Store;
 
+        /// <summary>心用的帧动画特效（数据包里 Game/ExtraAnim/&lt;名字&gt;.txt）。</summary>
+        internal static string FrameEffectName = "xin_glow";
+        internal static string FrameEffectAnim = "idle";
+        internal static int FrameEffectPoint = 2;   // 2 = 身体正中（图层由特效配置里的 SortOrder 压到角色下面）
+
         private ConfigEntry<bool> _debugAutoHeart;
         private float _timer;
         private bool _startupDone;
@@ -45,6 +50,12 @@ namespace XinEditor
 
             _debugAutoHeart = Config.Bind("调试", "自动生成测试心", false,
                 "开发期开关：开启后，如果一条自定义心都没有，会自动给大厅第一个调查员生成一颗测试心。平时保持关闭。");
+
+            FrameEffectName = Config.Bind("特效", "帧特效名", "xin_glow",
+                "心用的帧动画特效名，对应数据包里 Game/ExtraAnim/<名字>.txt").Value;
+            FrameEffectAnim = Config.Bind("特效", "帧动画名", "idle", "帧动画里的动画名").Value;
+            FrameEffectPoint = Config.Bind("特效", "播放位置", 2,
+                "0 无 / 1 头顶 / 2 正中 / 3 底部 / 4 身前 / 5 身后").Value;
 
             LogInfo("插件已加载，现有自定义心 " + Store.Hearts.Count + " 条");
             LogInfo("数据文件：" + Store.FilePath);

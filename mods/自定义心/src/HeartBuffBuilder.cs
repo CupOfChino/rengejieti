@@ -173,9 +173,12 @@ namespace XinEditor
             cfg.FxPlayType = EBuffFXPlayType.Stable;
             cfg.UseFxPrefab = new ItemFxInfoData();
             cfg.UseFxPrefab.FxRes = new PrefabResoureReference();
-            cfg.UseFxPrefab.FxRes.ReferenceType = EPrefabReferenceType.Effect;
-            cfg.UseFxPrefab.FxRes.Key = HeartConstants.HeartEffectKey;
-            cfg.UseFxPrefab.PlayPoint = ERolePointType.Center;
+            // 用数据包里那份帧动画特效（Game/ExtraAnim/xin_shine.txt）：
+            // 帧序、循环、大小都在那份配置里调，这里只负责指过去
+            cfg.UseFxPrefab.UseFrameEffect = true;
+            cfg.UseFxPrefab.EffectName = XinEditorPlugin.FrameEffectName;
+            cfg.UseFxPrefab.EffectAnimName = XinEditorPlugin.FrameEffectAnim;
+            cfg.UseFxPrefab.PlayPoint = (ERolePointType)XinEditorPlugin.FrameEffectPoint;
             cfg.PlayFxInBattle = true;
             cfg.PlayFxInExplore = false;
             cfg.IsDeathClear = true;

@@ -403,6 +403,18 @@ namespace XinEditor
                 _def.Suffix = suffix;
                 _def.Speed = speed;
                 _def.Stats = stats;
+                // 编号空着的话（旧数据或没取到），保存时按名字补上，保证下次进游戏能认出来
+                if (string.IsNullOrEmpty(_def.RoleKey))
+                {
+                    if (_role != null && !string.IsNullOrEmpty(_role.RoleLibraryKey))
+                    {
+                        _def.RoleKey = _role.RoleLibraryKey;
+                    }
+                    else
+                    {
+                        _def.RoleKey = HeartStore.LookupRoleKey(_def.RoleName);
+                    }
+                }
                 if (string.IsNullOrEmpty(_def.Section))
                 {
                     _def.Section = XinEditorPlugin.Store.NextSection();

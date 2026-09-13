@@ -11,6 +11,8 @@
 param(
   [int]$BatchSize = 10,
   [switch]$Reset,
+  [string]$Filter = '',
+  [string]$LogName = 'extract.log',
   [string]$CacheDir = 'D:\limbus_Data\ProjectMoon_LimbusCompany',
   [string]$OutDir   = 'E:\lim\_save\_raw',
   [string]$StageDir = 'D:\limbus_Data\_codex_stage',
@@ -24,15 +26,16 @@ $ErrorActionPreference = 'Stop'
 # ---- 配置 ----
 $RepoRoot = Split-Path -Parent $PSScriptRoot
 $Exe      = Join-Path $RepoRoot 'tools-external\AssetStudioCLI\AssetStudioModCLI_net472_win32_64\AssetStudioModCLI.exe'
-$LogFile  = Join-Path (Split-Path -Parent $LogDir) 'extract.log'
+$LogFile  = Join-Path (Split-Path -Parent $LogDir) $LogName
 $UnityVer = '6000.3.12f1'
 
 # 只要这几类：SD 小人 / 战斗特效 / 状态图标(buff) / 各类小图标 / UI 图集
 # 不含：Story(CG、背景、立绘)、Sprite/Unit 立绘、Gacha、Notice
-$Filter = 'Prefab/SD|Prefab/Battle|Prefab/UserInfoEffect|Buf/|Assets/FXv2|' +
+$DefaultFilter = 'Prefab/SD|Prefab/Battle|Prefab/UserInfoEffect|Buf/|Assets/FXv2|' +
           'Sprite/SkillIcon|Sprite/EgoGiftIcon|Sprite/PanicType|Sprite/UI|' +
           'Sprite/BattleAnnouncer|Sprite/Chapter|Sprite/Unit/PassiveBanner|' +
           'DUI/|Sprite/ChoiceEvent'
+if ([string]::IsNullOrEmpty($Filter)) { $Filter = $DefaultFilter }
 
 function Write-Log([string]$msg) {
   $line = ('[{0}] {1}' -f (Get-Date -Format 'MM-dd HH:mm:ss'), $msg)

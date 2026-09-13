@@ -35,12 +35,7 @@
 					"InputText" : "进入战斗时，获得【心】；回合开始时，尝试消耗1点san维持【心】",
 					"Characteristic" : null
 				},
-				"Inherent" : [
-					{
-						"__type" : "MOD.TraitEvent.ActiveBuffOption,Assembly-CSharp",
-						"BuffId" : 880901
-					}
-				],
+				"Inherent" : [],
 				"Triggers" : [
 					{
 						"TriggerType" : 211,

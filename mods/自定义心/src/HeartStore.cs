@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Text;
 using BepInEx.Configuration;
 using UnityEngine;
 
@@ -38,12 +39,24 @@ namespace XinEditor
             _file = new ConfigFile(FilePath, true);
             _hearts.Clear();
 
+            // 注意：BepInEx 的 ConfigFile.Keys 只包含"本次会话里 Bind 过"的条目，
+            // 刚启动时文件里的内容还在它的"孤儿条目"里，所以必须自己扫一遍小节点名，
+            // 否则重启后一条都读不出来（踩过）。
             List<string> sections = new List<string>();
-            foreach (ConfigDefinition def in _file.Keys)
+            if (File.Exists(FilePath))
             {
-                if (def.Section != null && def.Section.StartsWith(SectionPrefix) && !sections.Contains(def.Section))
+                string[] lines = File.ReadAllLines(FilePath, Encoding.UTF8);
+                for (int i = 0; i < lines.Length; i++)
                 {
-                    sections.Add(def.Section);
+                    string line = lines[i].Trim();
+                    if (line.Length > 2 && line[0] == '[' && line[line.Length - 1] == ']')
+                    {
+                        string name = line.Substring(1, line.Length - 2).Trim();
+                        if (name.StartsWith(SectionPrefix) && !sections.Contains(name))
+                        {
+                            sections.Add(name);
+                        }
+                    }
                 }
             }
             sections.Sort();
@@ -220,12 +233,25 @@ namespace XinEditor
             string name = SafeRoleName(role);
             if (!string.IsNullOrEmpty(name))
             {
+                HeartDefinition byName = null;
+                int sameName = 0;
                 for (int i = 0; i < _hearts.Count; i++)
                 {
-                    if (string.IsNullOrEmpty(_hearts[i].RoleKey) && _hearts[i].RoleName == name)
+                    if (_hearts[i].RoleName != name)
+                    {
+                        continue;
+                    }
+                    sameName++;
+                    byName = _hearts[i];
+                    if (string.IsNullOrEmpty(_hearts[i].RoleKey))
                     {
                         return _hearts[i];
                     }
+                }
+                // 编号对不上时按名字兜底；同名只有一个才认，免得张冠李戴
+                if (sameName == 1)
+                {
+                    return byName;
                 }
             }
             return null;
@@ -246,6 +272,36 @@ namespace XinEditor
                 }
             }
             return false;
+        }
+
+        /// <summary>按名字去大厅的角色库里查稳定编号（保存时补上空的编号）。</summary>
+        public static string LookupRoleKey(string roleName)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(roleName) || !Singleton<HallWorld>.HasInstance)
+                {
+                    return "";
+                }
+                HallWorld hall = Singleton<HallWorld>.Instance;
+                if (hall == null || hall.HallData == null)
+                {
+                    return "";
+                }
+                List<RoleLibraryData> roles = hall.HallData.HallLibrary.LibraryRoles;
+                for (int i = 0; i < roles.Count; i++)
+                {
+                    HeroRoleData baseData = roles[i].BaseData;
+                    if (baseData != null && SafeRoleName(baseData) == roleName)
+                    {
+                        return roles[i].Key;
+                    }
+                }
+            }
+            catch (Exception)
+            {
+            }
+            return "";
         }
 
         internal static string SafeRoleName(RoleData role)

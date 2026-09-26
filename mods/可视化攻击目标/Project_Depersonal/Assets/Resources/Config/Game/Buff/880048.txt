@@ -1,0 +1,56 @@
+{
+	"Data" : {
+		"__type" : "MOD.BuffTableData,Assembly-CSharp",
+		"value" : {
+			"IconPath" : "",
+			"IconPathReference" : {
+				"ReferenceType" : 1007,
+				"Key" : "icon_buff_baihehuafangxiang"
+			},
+			"Id" : 880048,
+			"Name" : {
+				"TarKey" : "",
+				"InputText" : "百合花芳香"
+			},
+			"Des" : {
+				"TarKey" : "",
+				"InputText" : "一朵百合的香气。\n每个行动轮开始时，每层失去1点生命；层数达到5层时移除此效果，并失去等同于「层数%+层数」的生命值。\n受到火焰伤害时触发【粉尘爆炸】：同阵营全体各受到2×层数的爆炸伤害，并移除此效果。"
+			},
+			"Comment" : null,
+			"BuffType" : 1,
+			"BuffEffectType" : 2,
+			"OverlayType" : 1,
+			"LayerCount" : {
+				"Value" : "1"
+			},
+			"OverrideInitLayer" : false,
+			"InitLayer" : 0,
+			"MaxLayer" : 5,
+			"FxPlayType" : 1,
+			"UseFxPrefab" : {
+				"FxPath" : "Effect\/Prefabs\/Buff\/FX_Buff_102",
+				"PlayPoint" : 2
+			},
+			"EffectClip" : {
+				"AudioRes" : null,
+				"AudioReference" : {
+					"ReferenceType" : 0,
+					"Key" : null
+				},
+				"Volume" : 1,
+				"FadeTime" : 1
+			},
+			"IsClipLoop" : false,
+			"Duration" : 0,
+			"Priority" : 0,
+			"IsDeathClear" : true,
+			"IsShowUI" : true,
+			"Arrts" : [
+				
+			],
+			"Events" : [
+				
+			]
+		}
+	}
+}

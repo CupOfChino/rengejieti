@@ -1,0 +1,113 @@
+# 生成「剑痕」用到的状态数据：
+#   · 880040              剑痕本体（层数容器 + 图标 + 描述；回合结束的逻辑在插件里）
+#   · 880041 ~ 880045     按层数生效的隐藏状态（护甲 -x、闪避 -10x、运动 -10x）
+#
+# 为什么拆成"本体 + 5 个档位"：游戏 buff 的属性数值是**固定值**，不随层数缩放
+# （Arrts 里没有"每层"的系数），所以只能按层数挂对应档位的隐藏 buff，表现上完全一致。
+# "受到伤害 +15x%" 不在数据里做 —— 它挂在目标的 BeDamageChangePercentData 上，
+# 由插件按层数同步（`ZangHua.SyncMarkBeDamage`），比属性档位好控制。
+# 2026-09-27 用户口径：剑痕去掉速度削减（减速归荆棘的【束缚】），闪避 -5 → -10，新增运动 -10。
+#
+# 用法：powershell -File tools\make_zanghua_buffs.ps1
+
+param(
+  [string]$ModRoot = (Split-Path -Parent $PSScriptRoot)
+)
+
+$ErrorActionPreference = 'Stop'
+$outDir = Join-Path $ModRoot 'Project_Depersonal\Assets\Resources\Config\Game\Buff'
+New-Item -ItemType Directory -Force -Path $outDir | Out-Null
+
+function New-AttrEntry([int]$exType, [string]$value) {
+  [ordered]@{
+    IsTrackSource = $true
+    RoleAttr       = [ordered]@{ Type = 0; Value = $null; IsRatio = $false; Ratio = 0 }
+    RoleExAttr     = [ordered]@{ Type = $exType; Value = $value; IsRatio = $false; Ratio = 0 }
+    RoleSkill      = [ordered]@{ Type = 0; Value = $null; IsRatio = $false; Ratio = 0 }
+    RoleSystemAttr = [ordered]@{ Type = 0; Value = $null; IsRatio = $false; Ratio = 0 }
+    ExDiceData     = [ordered]@{
+      ExploreSkill   = [ordered]@{ Type = 0; ChangeAll = $false; IsTemp = $false; Value = 0 }
+      HeroAttribute  = [ordered]@{ Type = 0; ChangeAll = $false; IsTemp = $false; Value = 0 }
+      ExtraAttribute = [ordered]@{ Type = 0; ChangeAll = $false; IsTemp = $false; Value = 0 }
+    }
+  }
+}
+
+function Write-Buff($id, $name, $des, $comment, [int]$maxLayer, [bool]$showUI, $arrts, $iconKey) {
+  if ($iconKey) {
+    $iconRef = [ordered]@{ ReferenceType = 1007; Key = $iconKey }
+    $iconPath = "UI/Textures/Icon/Buff/$iconKey"
+  } else {
+    $iconRef = [ordered]@{ ReferenceType = 0; Key = $null }
+    $iconPath = $null
+  }
+  $buff = [ordered]@{
+    Data = [ordered]@{
+      __type = "BaseSheetData,Assembly-CSharp"
+      value  = [ordered]@{
+        __type            = "MOD.BuffTableData,Assembly-CSharp"
+        IconPath          = $iconPath
+        Id                = $id
+        Name              = [ordered]@{ TarKey = ""; SheetKey = ""; InputText = $name; Characteristic = $null }
+        Des               = [ordered]@{ TarKey = ""; SheetKey = ""; InputText = $des; Characteristic = $null }
+        IconPathReference = $iconRef
+        Comment           = $comment
+        BuffType          = 4
+        BuffEffectType    = 2
+        OverlayType       = 2
+        LayerCount        = [ordered]@{ Value = "1" }
+        OverrideInitLayer = $false
+        InitLayer         = 0
+        MaxLayer          = $maxLayer
+        FxPlayType        = 1
+        UseFxPrefab       = [ordered]@{
+          FxPath         = $null
+          UseFrameEffect = $false
+          FxRes          = [ordered]@{ ReferenceType = 0; Key = $null }
+          EffectName     = $null
+          EffectAnimName = $null
+          PlayPoint      = 0
+        }
+        PlayFxInBattle    = $false
+        PlayFxInExplore   = $false
+        DelayTime         = 0
+        EffectClip        = [ordered]@{ AudioRes = $null; AudioReference = [ordered]@{ ReferenceType = 0; Key = $null }; Volume = 1; FadeTime = 1 }
+        EndClip           = [ordered]@{ AudioRes = $null; AudioReference = [ordered]@{ ReferenceType = 0; Key = $null }; Volume = 1; FadeTime = 1 }
+        IsClipLoop        = $false
+        Duration          = 0
+        Priority          = 0
+        IsDeathClear      = $true
+        IsShowUI          = $showUI
+        Arrts             = $arrts
+        Events            = @()
+        EditorSheetKey    = $null
+      }
+    }
+  }
+  $file = Join-Path $outDir ("$id.txt")
+  [System.IO.File]::WriteAllText($file, ($buff | ConvertTo-Json -Depth 100), (New-Object System.Text.UTF8Encoding($false)))
+  Write-Output ("  {0}  {1}" -f $id, $name)
+}
+
+Write-Output "生成剑痕系列状态："
+
+# ---- 880040 剑痕本体：只当"层数容器 + 显示"，数值交给下面 5 个档位 ----
+Write-Buff 880040 "剑痕" `
+  "空间被斩击后留下的痕迹，无需触碰便能感受到它的锋利。`n每层：护甲-1、受到伤害+15%、闪避-10、运动-10。`n回合结束时层数减半（向下取整），并按减少的层数获得等量【流血】。`n最高5层，不可驱散。" `
+  "私货武器「葬花」的核心负面状态。层数容器：数值效果由 880041~880045 这五个隐藏档位承载（游戏 buff 属性不随层数缩放）；回合结束减半、补流血、不可驱散都在插件里做。" `
+  5 $true @() "icon_buff_shanghenleilei"
+
+# ---- 880041~880045：按层数生效的隐藏档位 ----
+for ($layer = 1; $layer -le 5; $layer++) {
+  $arrts = @(
+    (New-AttrEntry 112 ("-" + $layer)),        # 护甲 -x
+    (New-AttrEntry 118 ("-" + (10 * $layer))), # 闪避 -10x
+    (New-AttrEntry 201 ("-" + (10 * $layer)))  # 运动 -10x（EExploreSkill.Motion = 201）
+  )
+  Write-Buff (880040 + $layer) ("剑痕·" + $layer + "层（隐藏数值）") `
+    ("护甲-" + $layer + "、闪避-" + (10 * $layer) + "、运动-" + (10 * $layer) + "。") `
+    "私货武器「葬花」的隐藏档位状态：由插件按敌人身上的剑痕层数挂/摘，玩家看不到（IsShowUI=false）。" `
+    0 $false $arrts $null
+}
+
+Write-Output "完成。"

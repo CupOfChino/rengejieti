@@ -1,0 +1,58 @@
+{
+  "Data": {
+    "__type": "BaseSheetData,Assembly-CSharp",
+    "value": {
+      "__type": "MOD.BuffTableData,Assembly-CSharp",
+      "IconPath": "",
+      "IconPathReference": {
+        "ReferenceType": 1007,
+        "Key": "icon_buff_shufu"
+      },
+      "Id": 880050,
+      "Name": {
+        "TarKey": "",
+        "InputText": "束缚"
+      },
+      "Des": {
+        "TarKey": "",
+        "InputText": "被缠住的地方又紧了一分，连抬手都慢半拍。\n每一层使自身速度-10（最低降到10点）。回合结束后（所有人行动完成时）移除。"
+      },
+      "Comment": "私货武器「荆棘」的束缚状态：命中后下个行动轮开始挂上，回合结束移除。速度削减由插件按层数同步。",
+      "BuffType": 1,
+      "BuffEffectType": 2,
+      "OverlayType": 1,
+      "LayerCount": {
+        "Value": "1"
+      },
+      "OverrideInitLayer": false,
+      "InitLayer": 0,
+      "MaxLayer": 0,
+      "FxPlayType": 1,
+      "UseFxPrefab": {
+        "FxPath": null,
+        "FxRes": {
+          "ReferenceType": 0,
+          "Key": null
+        },
+        "PlayPoint": 0
+      },
+      "EffectClip": {
+        "AudioRes": null,
+        "AudioReference": {
+          "ReferenceType": 0,
+          "Key": null
+        },
+        "Volume": 1,
+        "FadeTime": 1
+      },
+      "IsClipLoop": false,
+      "Duration": 0,
+      "Priority": 0,
+      "IsDeathClear": true,
+      "IsShowUI": true,
+      "Arrts": [],
+      "Events": [],
+      "EditorSheetKey": null
+    }
+  }
+}

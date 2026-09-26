@@ -1,0 +1,84 @@
+{
+	"Data" : {
+		"__type" : "BaseSheetData,Assembly-CSharp",
+		"value" : {
+			"__type" : "MOD.TraitData,Assembly-CSharp",
+			"Id" : 880023,
+			"IsCanCreateGet" : false,
+			"IsCloseInherit" : false,
+			"Type" : 6,
+			"CanRepeate" : false,
+			"TriggerLimit" : 0,
+			"Localization_Name" : {
+				"TarKey" : "",
+				"SheetKey" : "",
+				"InputText" : "灰暗孤影",
+				"Characteristic" : null
+			},
+			"Localization_Des" : {
+				"TarKey" : "",
+				"SheetKey" : "",
+				"InputText" : "作为传奇调查员，总是独来独往的她因一袭白发，被世人称为：灰暗孤影",
+				"Characteristic" : null
+			},
+			"BuffsLink" : [
+				880026
+			],
+			"Terms" : [
+				
+			],
+			"CreateEvent" : null,
+			"WakeEvent" : {
+				"Localization_Functin" : {
+					"TarKey" : "",
+					"SheetKey" : "",
+        "InputText" : "近战武器攻击后追加一次攻击\n受到攻击闪避成功时，立刻用武器回击一次\n独行加成（除自己外每有1名友方存活，效果减半）：闪避+20、速度+20、物理伤害+50%\n常驻：敏捷+20",
+					"Characteristic" : null
+				},
+				"Inherent" : [
+					{
+						"__type" : "MOD.TraitEvent.ActiveBuffOption,Assembly-CSharp",
+						"BuffId" : 880026
+					}
+				],
+				"Triggers" : [
+					
+				]
+			},
+			"SleepyEvent" : {
+				"Localization_Functin" : {
+					"TarKey" : "",
+					"SheetKey" : "",
+					"InputText" : "收回「灰暗孤影」状态",
+					"Characteristic" : null
+				},
+				"Inherent" : [
+					{
+						"__type" : "MOD.TraitEvent.RemoveBuffOption,Assembly-CSharp",
+						"BuffId" : 880026
+					}
+				],
+				"Triggers" : [
+					
+				]
+			},
+			"ConceptTraitTriggerDatas" : [
+				
+			],
+			"CrazyTraitTriggerDatas" : [
+				
+			],
+			"ActiveToHideCustom" : {
+				"Gold" : 0,
+				"InterludeTime" : 0,
+				"SpaceTimePoint" : 999
+			},
+			"HideToActiveCustom" : {
+				"Gold" : 0,
+				"InterludeTime" : 0,
+				"SpaceTimePoint" : 999
+			},
+			"EditorSheetKey" : null
+		}
+	}
+}

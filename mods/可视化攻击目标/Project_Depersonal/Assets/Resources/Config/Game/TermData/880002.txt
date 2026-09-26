@@ -1,0 +1,22 @@
+{
+  "Data": {
+    "__type": "BaseSheetData,Assembly-CSharp",
+    "value": {
+      "__type": "TermData,Assembly-CSharp",
+      "Id": 880002,
+      "Name": {
+        "TarKey": "",
+        "SheetKey": "",
+        "InputText": "先发",
+        "Characteristic": null
+      },
+      "Des": {
+        "TarKey": "",
+        "SheetKey": "",
+        "InputText": "进入战斗时判定一次：副手装备荆棘（或视为双手）才获得先发资格。战斗中会持续跟踪，一旦不再满足条件就失去资格（本场不再恢复）；中途才换上荆棘也不会补发资格。\n每个行动轮：轮开始前给随机一名敌人挂【目标锁定】，回合开始时用武器对它打一次。\n该次攻击无需检定（按普通成功结算），敌人无法闪避；伤害固定为武器基础伤害，只受目标护甲/减伤等影响（自己身上的加成一律不算），命中给目标叠1~2层【荆棘】。",
+        "Characteristic": null
+      },
+      "EditorSheetKey": null
+    }
+  }
+}

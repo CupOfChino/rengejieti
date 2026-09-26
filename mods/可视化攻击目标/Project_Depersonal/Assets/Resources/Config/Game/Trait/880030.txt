@@ -1,0 +1,84 @@
+{
+	"Data" : {
+		"__type" : "BaseSheetData,Assembly-CSharp",
+		"value" : {
+			"__type" : "MOD.TraitData,Assembly-CSharp",
+			"Id" : 880030,
+			"IsCanCreateGet" : false,
+			"IsCloseInherit" : false,
+			"Type" : 6,
+			"CanRepeate" : false,
+			"TriggerLimit" : 0,
+			"Localization_Name" : {
+				"TarKey" : "",
+				"SheetKey" : "",
+				"InputText" : "记忆的双剑",
+				"Characteristic" : null
+			},
+			"Localization_Des" : {
+				"TarKey" : "",
+				"SheetKey" : "",
+				"InputText" : "那些刻在骨子里的记忆，可从来不会被遗忘",
+				"Characteristic" : null
+			},
+			"BuffsLink" : [
+				880031
+			],
+			"Terms" : [
+				
+			],
+			"CreateEvent" : null,
+			"WakeEvent" : {
+				"Localization_Functin" : {
+					"TarKey" : "",
+					"SheetKey" : "",
+					"InputText" : "近战伤害+3；近战攻击命中时施加1层流血；受到近战攻击时伤害-1；副手近战武器不受惩罚骰；可以单手装备双手近战武器（双手近战武器只占1个装备槽）",
+					"Characteristic" : null
+				},
+				"Inherent" : [
+					{
+						"__type" : "MOD.TraitEvent.ActiveBuffOption,Assembly-CSharp",
+						"BuffId" : 880031
+					}
+				],
+				"Triggers" : [
+					
+				]
+			},
+			"SleepyEvent" : {
+				"Localization_Functin" : {
+					"TarKey" : "",
+					"SheetKey" : "",
+					"InputText" : "收回「记忆的双剑」状态",
+					"Characteristic" : null
+				},
+				"Inherent" : [
+					{
+						"__type" : "MOD.TraitEvent.RemoveBuffOption,Assembly-CSharp",
+						"BuffId" : 880031
+					}
+				],
+				"Triggers" : [
+					
+				]
+			},
+			"ConceptTraitTriggerDatas" : [
+				
+			],
+			"CrazyTraitTriggerDatas" : [
+				
+			],
+			"ActiveToHideCustom" : {
+				"Gold" : 0,
+				"InterludeTime" : 0,
+				"SpaceTimePoint" : 999
+			},
+			"HideToActiveCustom" : {
+				"Gold" : 0,
+				"InterludeTime" : 0,
+				"SpaceTimePoint" : 999
+			},
+			"EditorSheetKey" : null
+		}
+	}
+}

@@ -1,0 +1,20 @@
+{
+	"Uploader" : {
+		"__type" : "UGCUploaderData,Assembly-CSharp",
+		"value" : {
+			"FileId" : 3801731500,
+			"Title" : "可视化攻击目标",
+			"PreviewPath" : "D:\\HuaweiMoveData\\Users\\huawei\\Desktop\\钢丝\\人格解体本地存档\\mods\\可视化攻击目标\\创意工坊图\\1.jpg",
+			"Description" : "[h2]这是什么[\/h2]\n将攻击目标用指向箭头进行可视化。\n\n[h2]箭头怎么看[\/h2]\n[list]\n[*] 虚线：AOE\n[*] 实线：单个目标\n[*] 红色：指向敌人（投掷类固定红色）\n[*] 绿色：指向队友\n[*] 蓝色：干扰类行动（原版那些非伤害、指向敌人的技艺）\n[*] 黄色：对抗行为\n[\/list]\n\n[h2]说明[\/h2]\n[list]\n[*] 需要 BepInEx 框架 mod\n[*] 只在「选行动」阶段显示，开始出手（结算演出）时自动清空\n[*] 箭头是预告：目标在执行前倒下、被拦截掩护或被擒抱时，实际打的人可能会变\n[\/list]\n\n当前版本仅作为可视化展示，后续还会进行多轮迭代，尽请期待",
+			"ContentPath" : "",
+			"Visibility" : 0,
+			"Tags" : [
+				"Plugin","Tools","Chinese","English"
+			],
+			"KeyValueTags" : {
+			},
+			"MetaData" : null,
+			"ChangeNote" : ""
+		}
+	}
+}

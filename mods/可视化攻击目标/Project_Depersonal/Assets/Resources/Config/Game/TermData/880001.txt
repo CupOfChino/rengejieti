@@ -1,0 +1,22 @@
+{
+  "Data": {
+    "__type": "BaseSheetData,Assembly-CSharp",
+    "value": {
+      "__type": "TermData,Assembly-CSharp",
+      "Id": 880001,
+      "Name": {
+        "TarKey": "",
+        "SheetKey": "",
+        "InputText": "剑痕",
+        "Characteristic": null
+      },
+      "Des": {
+        "TarKey": "",
+        "SheetKey": "",
+        "InputText": "葬花命中时叠加的负面状态。每层：护甲-1、受到伤害+15%、闪避-10、运动-10。回合结束时层数减半（向下取整），并按减少的层数获得等量【流血】；最高5层，不可驱散。",
+        "Characteristic": null
+      },
+      "EditorSheetKey": null
+    }
+  }
+}

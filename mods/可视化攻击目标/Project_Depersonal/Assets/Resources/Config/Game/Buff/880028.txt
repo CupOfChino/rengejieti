@@ -1,0 +1,214 @@
+{
+	"Data" : {
+		"__type" : "BaseSheetData,Assembly-CSharp",
+		"value" : {
+			"__type" : "MOD.BuffTableData,Assembly-CSharp",
+			"IconPath" : null,
+			"Id" : 880028,
+			"Name" : {
+				"TarKey" : "",
+				"SheetKey" : "",
+				"InputText" : "灰暗孤影·独行",
+				"Characteristic" : null
+			},
+			"Des" : {
+				"TarKey" : "",
+				"SheetKey" : "",
+				"InputText" : "没有其他能行动的队友时：闪避+20、速度+20、造成物理伤害+50%。",
+				"Characteristic" : null
+			},
+			"IconPathReference" : {
+				"ReferenceType" : 0,
+				"Key" : null
+			},
+			"Comment" : "私货特质「灰暗孤影」的隐藏辅助状态：独行条件的数值加成，由插件按条件挂/摘。摘掉时必须能完整退回，所以 Arrts 的 IsTrackSource 一律 true。",
+			"BuffType" : 4,
+			"BuffEffectType" : 3,
+			"OverlayType" : 2,
+			"LayerCount" : {
+				"Value" : null
+			},
+			"OverrideInitLayer" : false,
+			"InitLayer" : 0,
+			"MaxLayer" : 0,
+			"FxPlayType" : 1,
+			"UseFxPrefab" : {
+				"FxPath" : null,
+				"UseFrameEffect" : false,
+				"FxRes" : {
+					"ReferenceType" : 0,
+					"Key" : null
+				},
+				"EffectName" : null,
+				"EffectAnimName" : null,
+				"PlayPoint" : 0
+			},
+			"PlayFxInBattle" : false,
+			"PlayFxInExplore" : false,
+			"DelayTime" : 0,
+			"EffectClip" : {
+				"AudioRes" : null,
+				"AudioReference" : {
+					"ReferenceType" : 0,
+					"Key" : null
+				},
+				"Volume" : 1,
+				"FadeTime" : 1
+			},
+			"EndClip" : {
+				"AudioRes" : null,
+				"AudioReference" : {
+					"ReferenceType" : 0,
+					"Key" : null
+				},
+				"Volume" : 1,
+				"FadeTime" : 1
+			},
+			"IsClipLoop" : false,
+			"Duration" : 0,
+			"Priority" : 0,
+			"IsDeathClear" : false,
+			"IsShowUI" : false,
+			"Arrts" : [
+				{
+					"IsTrackSource" : true,
+					"RoleAttr" : {
+						"Type" : 0,
+						"Value" : null,
+						"IsRatio" : false,
+						"Ratio" : 0
+					},
+					"RoleExAttr" : {
+						"Type" : 118,
+						"Value" : "20",
+						"IsRatio" : false,
+						"Ratio" : 0
+					},
+					"RoleSkill" : {
+						"Type" : 0,
+						"Value" : null,
+						"IsRatio" : false,
+						"Ratio" : 0
+					},
+					"RoleSystemAttr" : {
+						"Type" : 0,
+						"Value" : null,
+						"IsRatio" : false,
+						"Ratio" : 0
+					},
+					"ExDiceData" : {
+						"ExploreSkill" : {
+							"Type" : 0,
+							"ChangeAll" : false,
+							"IsTemp" : false,
+							"Value" : 0
+						},
+						"HeroAttribute" : {
+							"Type" : 0,
+							"ChangeAll" : false,
+							"IsTemp" : false,
+							"Value" : 0
+						},
+						"ExtraAttribute" : {
+							"Type" : 0,
+							"ChangeAll" : false,
+							"IsTemp" : false,
+							"Value" : 0
+						}
+					}
+				},{
+					"IsTrackSource" : true,
+					"RoleAttr" : {
+						"Type" : 0,
+						"Value" : null,
+						"IsRatio" : false,
+						"Ratio" : 0
+					},
+					"RoleExAttr" : {
+						"Type" : 119,
+						"Value" : "20",
+						"IsRatio" : false,
+						"Ratio" : 0
+					},
+					"RoleSkill" : {
+						"Type" : 0,
+						"Value" : null,
+						"IsRatio" : false,
+						"Ratio" : 0
+					},
+					"RoleSystemAttr" : {
+						"Type" : 0,
+						"Value" : null,
+						"IsRatio" : false,
+						"Ratio" : 0
+					},
+					"ExDiceData" : {
+						"ExploreSkill" : {
+							"Type" : 0,
+							"ChangeAll" : false,
+							"IsTemp" : false,
+							"Value" : 0
+						},
+						"HeroAttribute" : {
+							"Type" : 0,
+							"ChangeAll" : false,
+							"IsTemp" : false,
+							"Value" : 0
+						},
+						"ExtraAttribute" : {
+							"Type" : 0,
+							"ChangeAll" : false,
+							"IsTemp" : false,
+							"Value" : 0
+						}
+					}
+				}
+			],
+			"Events" : [
+				{
+					"EBuffTrigger" : 1,
+					"DiceCheckElements" : [
+						
+					],
+					"Checks" : [
+						
+					],
+					"SatisfyAny" : false,
+					"Funcs" : [
+						{
+							"__type" : "MOD.Buff_ChangeAddOrReducePercentOption,Assembly-CSharp",
+							"TargetType" : 0,
+							"TargetAddData" : {
+								"SpecificTagData" : {
+									"Tags" : [
+										
+									],
+									"Not" : false
+								},
+								"CharacterIds" : [
+									
+								],
+								"IncludeDeath" : false,
+								"BuffId" : 0
+							},
+							"ChangeByValue" : false,
+							"ChangeByBuff" : false,
+							"BuffId" : 0,
+							"Percent" : 0.5,
+							"FloorValue" : 0,
+							"ChangeValue" : 0,
+							"DamageTypes" : [
+								0
+							],
+							"ChangeType" : 0,
+							"IsRemove" : false,
+							"SourceKey" : null
+						}
+					],
+					"CanBeDisabled" : false
+				}
+			],
+			"EditorSheetKey" : null
+		}
+	}
+}

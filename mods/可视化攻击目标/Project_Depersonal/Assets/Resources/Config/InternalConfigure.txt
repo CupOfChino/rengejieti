@@ -1,0 +1,120 @@
+{
+	"ResourceReferenceConfigure" : {
+		"__type" : "ResourceReferenceConfigure,Assembly-CSharp",
+		"value" : {
+			"BgmResUnitDatas" : [
+				
+			],
+			"SoundResUnitDatas" : [
+				
+			],
+			"VoiceResUnitDatas" : [
+				
+			],
+			"HeadIconResUnitDatas" : [
+				
+			],
+			"CGResUnitDatas" : [
+				
+			],
+			"CloseUpResUnitDatas" : [
+				
+			],
+			"ItemIconResUnitDaras" : [
+				
+			],
+			"MythologicalResUnitDatas" : [
+				
+			],
+			"SkillIconResUnitDatas" : [
+				
+			],
+			"BuffIconResUnitDatas" : [
+				
+			],
+			"MagicIconResUnitDatas" : [
+				
+			],
+			"ModuleCoverResUnitDatas" : [
+				
+			],
+			"RelationSkillIconDatas" : [
+				
+			],
+			"CharaSprUnitDatas" : [
+				
+			],
+			"EffectResUnitDatas" : [
+				
+			],
+			"RoleModelUnitDatas" : [
+				
+			],
+			"SpecUnitDatas" : [
+				
+			],
+			"MeshMapNodeIconResUnitDatas" : [
+				
+			],
+			"TextModSceneDatas" : [
+				
+			],
+			"ExploreSkillDatas" : [
+				
+			],
+			"LogoDatas" : [
+				
+			],
+			"OptionTipDatas" : [
+				
+			],
+			"GameAchievementDatas" : [
+				
+			],
+			"RoleModelAnimDatas" : [
+				
+			],
+			"ShopRoleTextureDatas" : [
+				
+			],
+			"MapBgDatas" : [
+				
+			],
+			"SceneTextureDatas" : [
+				
+			],
+			"ScenePreviewDatas" : [
+				
+			],
+			"ExtraAndEffectDatas" : [
+				
+			],
+			"ResourceMap" : {1004:[
+					{ "Key" : "icon_item_moli_jian", "Path" : "Resources\/Texture\/Item\/icon_item_moli_jian", "Ext" : ".png" },
+					{ "Key" : "icon_item_moli_fushoujian", "Path" : "Resources\/Texture\/Item\/icon_item_moli_fushoujian", "Ext" : ".png" },
+					{ "Key" : "icon_item_molifuwen", "Path" : "Resources\/Texture\/Item\/icon_item_molifuwen", "Ext" : ".png" },
+					{ "Key" : "icon_item_moliguan", "Path" : "Resources\/Texture\/Item\/icon_item_moliguan", "Ext" : ".png" },
+					{ "Key" : "icon_item_molihuifuji", "Path" : "Resources\/Texture\/Item\/icon_item_molihuifuji", "Ext" : ".png" },
+					{ "Key" : "icon_item_baihehua", "Path" : "Resources\/Texture\/Item\/icon_item_baihehua", "Ext" : ".png" },
+					{ "Key" : "icon_item_baihehualian", "Path" : "Resources\/Texture\/Item\/icon_item_baihehualian", "Ext" : ".png" },
+					{ "Key" : "icon_item_baihehuajiezhi", "Path" : "Resources\/Texture\/Item\/icon_item_baihehuajiezhi", "Ext" : ".png" },
+					{ "Key" : "icon_item_baihehuahuan", "Path" : "Resources\/Texture\/Item\/icon_item_baihehuahuan", "Ext" : ".png" }
+				],1007:[
+					{ "Key" : "icon_buff_zanghua_hen", "Path" : "Resources\/Texture\/Buff\/icon_buff_zanghua_hen", "Ext" : ".png" },
+					{ "Key" : "icon_buff_shufu", "Path" : "Resources\/Texture\/Buff\/icon_buff_shufu", "Ext" : ".png" },
+					{ "Key" : "icon_buff_jingji", "Path" : "Resources\/Texture\/Buff\/icon_buff_jingji", "Ext" : ".png" },
+					{ "Key" : "icon_buff_ruodianbaolu", "Path" : "Resources\/Texture\/Buff\/icon_buff_ruodianbaolu", "Ext" : ".png" },
+					{ "Key" : "secret_shuangjian_icon", "Path" : "Resources\/Texture\/BuffIcon\/secret_shuangjian_icon", "Ext" : ".png" },
+					{ "Key" : "icon_buff_baihehuafangxiang", "Path" : "Resources\/Texture\/Buff\/icon_buff_baihehuafangxiang", "Ext" : ".png" },
+					{ "Key" : "icon_buff_huaxiang", "Path" : "Resources\/Texture\/Buff\/icon_buff_huaxiang", "Ext" : ".png" }
+				],1023:[
+					{ "Key" : "zanghua_hen_01", "Path" : "Resources\/Texture\/ExtraAnim\/zanghua_hen_01", "Ext" : ".png" },
+					{ "Key" : "ruodian_baolu", "Path" : "Resources\/Texture\/ExtraAnim\/ruodian_baolu", "Ext" : ".png" },
+					{ "Key" : "secret_heart_01", "Path" : "Resources\/Texture\/ExtraAnim\/secret_heart_01", "Ext" : ".png" },
+					{ "Key" : "secret_heart_02", "Path" : "Resources\/Texture\/ExtraAnim\/secret_heart_02", "Ext" : ".png" },
+					{ "Key" : "secret_heart_03", "Path" : "Resources\/Texture\/ExtraAnim\/secret_heart_03", "Ext" : ".png" }
+				]
+			}
+		}
+	}
+}

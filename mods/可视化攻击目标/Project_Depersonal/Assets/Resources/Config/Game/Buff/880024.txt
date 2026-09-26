@@ -1,0 +1,220 @@
+{
+	"Data" : {
+		"__type" : "BaseSheetData,Assembly-CSharp",
+		"value" : {
+			"__type" : "MOD.BuffTableData,Assembly-CSharp",
+			"IconPath" : "UI\/Textures\/Icon\/Buff\/icon_buff_meihuo",
+			"Id" : 880024,
+			"Name" : {
+				"TarKey" : "",
+				"SheetKey" : "",
+				"InputText" : "百合花",
+				"Characteristic" : null
+			},
+			"Des" : {
+				"TarKey" : "",
+				"SheetKey" : "",
+      "InputText" : "美丽的百合花。\n意志-30、体质-20、力量-10、闪避-15；【恍惚】处于魅惑状态时，意志-25、造成的伤害-50%；敌方对持有者的魅惑行动获得1颗奖励骰；对魅惑行动的对抗获得1颗惩罚骰；敌人带魅惑的行动会首先指向持有者；处于魅惑状态时，意志检定与意志对抗获得1颗惩罚骰。\n进入副本时自动装备「百合花」：每场战斗限1次免死、每2回合免疫1次法术伤害。",
+				"Characteristic" : null
+			},
+			"IconPathReference" : {
+				"ReferenceType" : 1007,
+				"Key" : "icon_buff_meihuo"
+			},
+			"Comment" : "私货特质「百合花（880021）」的状态。意志-30 / 体质-20 / 力量-10 / 闪避-15 走 Arrts（会随状态退回去），其余效果都在插件里（SecretTraits.cs）；身上循环播放爱心帧特效 secret_heart。2026-09-24 用户口径：原来的「意志减半」太重，改成固定 -30 并补一条闪避 -15。",
+			"BuffType" : 4,
+			"BuffEffectType" : 3,
+			"OverlayType" : 2,
+			"LayerCount" : {
+				"Value" : null
+			},
+			"OverrideInitLayer" : false,
+			"InitLayer" : 0,
+			"MaxLayer" : 0,
+			"FxPlayType" : 1,
+			"UseFxPrefab" : {
+				"FxPath" : null,
+				"UseFrameEffect" : false,
+				"FxRes" : {
+					"ReferenceType" : 0,
+					"Key" : null
+				},
+				"EffectName" : null,
+				"EffectAnimName" : null,
+				"PlayPoint" : 0
+			},
+			"PlayFxInBattle" : false,
+			"PlayFxInExplore" : false,
+			"DelayTime" : 0,
+			"EffectClip" : {
+				"AudioRes" : null,
+				"AudioReference" : {
+					"ReferenceType" : 0,
+					"Key" : null
+				},
+				"Volume" : 1,
+				"FadeTime" : 1
+			},
+			"EndClip" : {
+				"AudioRes" : null,
+				"AudioReference" : {
+					"ReferenceType" : 0,
+					"Key" : null
+				},
+				"Volume" : 1,
+				"FadeTime" : 1
+			},
+			"IsClipLoop" : false,
+			"Duration" : 0,
+			"Priority" : 0,
+			"IsDeathClear" : false,
+			"IsShowUI" : true,
+			"Arrts" : [
+				{
+					"IsTrackSource" : true,
+					"RoleAttr" : {
+						"Type" : 6,
+						"Value" : "-20",
+						"IsRatio" : false,
+						"Ratio" : 0
+					},
+					"RoleExAttr" : {
+						"Type" : 0,
+						"Value" : null,
+						"IsRatio" : false,
+						"Ratio" : 0
+					},
+					"RoleSkill" : {
+						"Type" : 0,
+						"Value" : null,
+						"IsRatio" : false,
+						"Ratio" : 0
+					},
+					"RoleSystemAttr" : {
+						"Type" : 0,
+						"Value" : null,
+						"IsRatio" : false,
+						"Ratio" : 0
+					},
+					"ExDiceData" : {
+						"ExploreSkill" : {
+							"Type" : 0,
+							"ChangeAll" : false,
+							"IsTemp" : false,
+							"Value" : 0
+						},
+						"HeroAttribute" : {
+							"Type" : 0,
+							"ChangeAll" : false,
+							"IsTemp" : false,
+							"Value" : 0
+						},
+						"ExtraAttribute" : {
+							"Type" : 0,
+							"ChangeAll" : false,
+							"IsTemp" : false,
+							"Value" : 0
+						}
+					}
+				},{ 
+					"IsTrackSource" : true,
+					"RoleAttr" : {
+						"Type" : 4,
+						"Value" : "-30",
+						"IsRatio" : false,
+						"Ratio" : 0
+					},
+					"RoleExAttr" : {
+						"Type" : 0,
+						"Value" : null,
+						"IsRatio" : false,
+						"Ratio" : 0
+					},
+					"RoleSkill" : {
+						"Type" : 0,
+						"Value" : null,
+						"IsRatio" : false,
+						"Ratio" : 0
+					},
+					"RoleSystemAttr" : {
+						"Type" : 0,
+						"Value" : null,
+						"IsRatio" : false,
+						"Ratio" : 0
+					},
+					"ExDiceData" : {
+						"ExploreSkill" : { "Type" : 0, "ChangeAll" : false, "IsTemp" : false, "Value" : 0 },
+						"HeroAttribute" : { "Type" : 0, "ChangeAll" : false, "IsTemp" : false, "Value" : 0 },
+						"ExtraAttribute" : { "Type" : 0, "ChangeAll" : false, "IsTemp" : false, "Value" : 0 }
+					}
+				},{ 
+					"IsTrackSource" : true,
+					"RoleAttr" : {
+						"Type" : 1,
+						"Value" : "-10",
+						"IsRatio" : false,
+						"Ratio" : 0
+					},
+					"RoleExAttr" : {
+						"Type" : 0,
+						"Value" : null,
+						"IsRatio" : false,
+						"Ratio" : 0
+					},
+					"RoleSkill" : {
+						"Type" : 0,
+						"Value" : null,
+						"IsRatio" : false,
+						"Ratio" : 0
+					},
+					"RoleSystemAttr" : {
+						"Type" : 0,
+						"Value" : null,
+						"IsRatio" : false,
+						"Ratio" : 0
+					},
+					"ExDiceData" : {
+						"ExploreSkill" : { "Type" : 0, "ChangeAll" : false, "IsTemp" : false, "Value" : 0 },
+						"HeroAttribute" : { "Type" : 0, "ChangeAll" : false, "IsTemp" : false, "Value" : 0 },
+						"ExtraAttribute" : { "Type" : 0, "ChangeAll" : false, "IsTemp" : false, "Value" : 0 }
+					}
+				},{ 
+					"IsTrackSource" : true,
+					"RoleAttr" : {
+						"Type" : 0,
+						"Value" : null,
+						"IsRatio" : false,
+						"Ratio" : 0
+					},
+					"RoleExAttr" : {
+						"Type" : 118,
+						"Value" : "-15",
+						"IsRatio" : false,
+						"Ratio" : 0
+					},
+					"RoleSkill" : {
+						"Type" : 0,
+						"Value" : null,
+						"IsRatio" : false,
+						"Ratio" : 0
+					},
+					"RoleSystemAttr" : {
+						"Type" : 0,
+						"Value" : null,
+						"IsRatio" : false,
+						"Ratio" : 0
+					},
+					"ExDiceData" : {
+						"ExploreSkill" : { "Type" : 0, "ChangeAll" : false, "IsTemp" : false, "Value" : 0 },
+						"HeroAttribute" : { "Type" : 0, "ChangeAll" : false, "IsTemp" : false, "Value" : 0 },
+						"ExtraAttribute" : { "Type" : 0, "ChangeAll" : false, "IsTemp" : false, "Value" : 0 }
+					}
+				}
+			],
+			"Events" : [
+				
+			],
+			"EditorSheetKey" : null
+		}
+	}
+}

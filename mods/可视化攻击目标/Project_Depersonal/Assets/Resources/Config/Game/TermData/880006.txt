@@ -1,0 +1,22 @@
+{
+  "Data": {
+    "__type": "BaseSheetData,Assembly-CSharp",
+    "value": {
+      "__type": "TermData,Assembly-CSharp",
+      "Id": 880006,
+      "Name": {
+        "TarKey": "",
+        "SheetKey": "",
+        "InputText": "目标锁定",
+        "Characteristic": null
+      },
+      "Des": {
+        "TarKey": "",
+        "SheetKey": "",
+        "InputText": "荆棘先发用的标记：轮开始前挂给随机一名敌人，回合开始时用武器对它打一次；回合结束、目标死亡或战斗结束时解除。",
+        "Characteristic": null
+      },
+      "EditorSheetKey": null
+    }
+  }
+}

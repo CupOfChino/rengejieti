@@ -1,0 +1,22 @@
+{
+  "Data": {
+    "__type": "BaseSheetData,Assembly-CSharp",
+    "value": {
+      "__type": "TermData,Assembly-CSharp",
+      "Id": 880004,
+      "Name": {
+        "TarKey": "",
+        "SheetKey": "",
+        "InputText": "持握·荆棘",
+        "Characteristic": null
+      },
+      "Des": {
+        "TarKey": "",
+        "SheetKey": "",
+        "InputText": "装备在主手：此武器伤害+3。\n装备在副手：【先发】进入战斗时判定资格；之后每轮先给随机敌人挂【目标锁定】，再对它打一次。\n主/副手未装备其他武器时视为双手：同时触发主手与副手效果。\n速度差：每高于目标100点，此武器伤害+10%；双手持握时每50点一档。",
+        "Characteristic": null
+      },
+      "EditorSheetKey": null
+    }
+  }
+}

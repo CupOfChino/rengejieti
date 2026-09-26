@@ -1,0 +1,495 @@
+{
+  "Data": {
+    "__type": "MOD.ItemData,Assembly-CSharp",
+    "value": {
+      "IconPath": "UI/Textures/Icon/Item/icon_item_moli_fushoujian",
+      "ItemId": 880006,
+      "UniqueKey": null,
+      "ItemName": {
+        "TarKey": "",
+        "SheetKey": "",
+        "InputText": "荆棘",
+        "Characteristic": null
+      },
+      "ItemDes": {
+        "TarKey": "",
+        "SheetKey": "",
+        "InputText": "荆棘缠于刃上，旧日的记忆再不放手。",
+        "Characteristic": null
+      },
+      "ItemEffectDes": {
+        "TarKey": "",
+        "SheetKey": "",
+        "InputText": "荆棘：攻击时以「斗殴+敏捷」联合检定；1 次命中造成3次伤害（每次都单独计算护甲），每 1 次伤害给目标叠 1~2 层【荆棘】。\n普通成功：每段伤害减半（合计150%）。\n困难成功：每段不减伤害（合计300%）。\n大成功：每段不减伤害、武器基础伤害+2，且施加的【荆棘】层数翻倍。\n装备时：敏捷+5、斗殴+5、速度+20。\n速度差：每高于目标100点，此武器伤害+10%（双手持握时每50点一档）。\n【持握·荆棘】",
+        "Characteristic": null
+      },
+      "IconPathReference": {
+        "ReferenceType": 1004,
+        "Key": "icon_item_moli_fushoujian"
+      },
+      "Price": 0,
+      "ChargingCount": 0,
+      "ReplaceChargingConfig": [],
+      "AutoDestruct": false,
+      "Disassemble": {
+        "Items": {
+          "Type": 7,
+          "Ids": []
+        },
+        "PartsCount": 0
+      },
+      "IsCantDisboard": false,
+      "DesignTag": 1,
+      "TagList": [],
+      "ItemAttrValue": [
+        3,
+        6
+      ],
+      "MythicalId": 26,
+      "ItemType": 2,
+      "ItemStaticAffixList": [],
+      "ItemDynamicAffixList": [],
+      "IsBindCharacter": true,
+      "BuffsLink": [],
+      "Terms": [
+        880002,
+        880004,
+        880005,
+        880006
+      ],
+      "ConfigData": [],
+      "EquipmentConfigData": {
+        "__type": "MOD.WeaponConfigData,Assembly-CSharp",
+        "WeaponTypes": [
+          2,
+          3
+        ],
+        "CheckSkill": 101,
+        "UniteCheckSkill": 0,
+        "DiceCheckType": 1,
+        "ResultCheckType": 1,
+        "DoubleWeapon": false,
+        "TargetSelect": 2,
+        "AttackType": 1,
+        "DifferentRondom": false,
+        "RandomCount": 0,
+        "AttackCount": 1,
+        "ContinuousAttackCount": 1,
+        "Damage": {
+          "DamageType": 0,
+          "AttackType": 0,
+          "AddAttrs": [],
+          "Value": "1D4+2",
+          "DB_Bonus": 1,
+          "WithSuckBlood": false,
+          "SuckBloodRatio": 0,
+          "UseCommonEffect": false,
+          "CommonEffectId": 1,
+          "EffectShow": {
+            "Duration": 0,
+            "EffectShows": []
+          },
+          "IsDirectDeath": false,
+          "IsNotBlock": false
+        },
+        "NeedReloadEffect": false,
+        "ReloadEffect": 3,
+        "ShowConfirmEquipPopup": false,
+        "ConfirmEquipDesc": {
+          "TarKey": "",
+          "SheetKey": "",
+          "InputText": null,
+          "Characteristic": null
+        },
+        "InfoDatas": [
+          {
+            "DisableTrigger": false,
+            "TriggerType": 2,
+            "ItemCheckList": [],
+            "BaseOptions": [
+              {
+                "__type": "MOD.Item_RoleAttrOption,Assembly-CSharp",
+                "IsConversionBuff": false,
+                "Datas": [
+                  {
+                    "IsTrackSource": true,
+                    "RoleAttr": {
+                      "Type": 2,
+                      "Value": "5",
+                      "IsRatio": false,
+                      "Ratio": 0
+                    },
+                    "RoleExAttr": {
+                      "Type": 0,
+                      "Value": null,
+                      "IsRatio": false,
+                      "Ratio": 0
+                    },
+                    "RoleSkill": {
+                      "Type": 0,
+                      "Value": null,
+                      "IsRatio": false,
+                      "Ratio": 0
+                    },
+                    "RoleSystemAttr": {
+                      "Type": 0,
+                      "Value": null,
+                      "IsRatio": false,
+                      "Ratio": 0
+                    },
+                    "ExDiceData": {
+                      "ExploreSkill": {
+                        "Type": 0,
+                        "ChangeAll": false,
+                        "IsTemp": false,
+                        "Value": 0
+                      },
+                      "HeroAttribute": {
+                        "Type": 0,
+                        "ChangeAll": false,
+                        "IsTemp": false,
+                        "Value": 0
+                      },
+                      "ExtraAttribute": {
+                        "Type": 0,
+                        "ChangeAll": false,
+                        "IsTemp": false,
+                        "Value": 0
+                      }
+                    }
+                  },
+                  {
+                    "IsTrackSource": true,
+                    "RoleAttr": {
+                      "Type": 0,
+                      "Value": null,
+                      "IsRatio": false,
+                      "Ratio": 0
+                    },
+                    "RoleExAttr": {
+                      "Type": 0,
+                      "Value": null,
+                      "IsRatio": false,
+                      "Ratio": 0
+                    },
+                    "RoleSkill": {
+                      "Type": 101,
+                      "Value": "5",
+                      "IsRatio": false,
+                      "Ratio": 0
+                    },
+                    "RoleSystemAttr": {
+                      "Type": 0,
+                      "Value": null,
+                      "IsRatio": false,
+                      "Ratio": 0
+                    },
+                    "ExDiceData": {
+                      "ExploreSkill": {
+                        "Type": 0,
+                        "ChangeAll": false,
+                        "IsTemp": false,
+                        "Value": 0
+                      },
+                      "HeroAttribute": {
+                        "Type": 0,
+                        "ChangeAll": false,
+                        "IsTemp": false,
+                        "Value": 0
+                      },
+                      "ExtraAttribute": {
+                        "Type": 0,
+                        "ChangeAll": false,
+                        "IsTemp": false,
+                        "Value": 0
+                      }
+                    }
+                  },
+                  {
+                    "IsTrackSource": true,
+                    "RoleAttr": {
+                      "Type": 0,
+                      "Value": null,
+                      "IsRatio": false,
+                      "Ratio": 0
+                    },
+                    "RoleExAttr": {
+                      "Type": 119,
+                      "Value": "20",
+                      "IsRatio": false,
+                      "Ratio": 0
+                    },
+                    "RoleSkill": {
+                      "Type": 0,
+                      "Value": null,
+                      "IsRatio": false,
+                      "Ratio": 0
+                    },
+                    "RoleSystemAttr": {
+                      "Type": 0,
+                      "Value": null,
+                      "IsRatio": false,
+                      "Ratio": 0
+                    },
+                    "ExDiceData": {
+                      "ExploreSkill": {
+                        "Type": 0,
+                        "ChangeAll": false,
+                        "IsTemp": false,
+                        "Value": 0
+                      },
+                      "HeroAttribute": {
+                        "Type": 0,
+                        "ChangeAll": false,
+                        "IsTemp": false,
+                        "Value": 0
+                      },
+                      "ExtraAttribute": {
+                        "Type": 0,
+                        "ChangeAll": false,
+                        "IsTemp": false,
+                        "Value": 0
+                      }
+                    }
+                  }
+                ],
+                "IsRemove": false,
+                "SourceKey": null
+              }
+            ]
+          },
+          {
+            "DisableTrigger": false,
+            "TriggerType": 7,
+            "ItemCheckList": [],
+            "BaseOptions": [
+              {
+                "__type": "MOD.Item_RoleAttrOption,Assembly-CSharp",
+                "IsConversionBuff": false,
+                "Datas": [
+                  {
+                    "IsTrackSource": true,
+                    "RoleAttr": {
+                      "Type": 2,
+                      "Value": "5",
+                      "IsRatio": false,
+                      "Ratio": 0
+                    },
+                    "RoleExAttr": {
+                      "Type": 0,
+                      "Value": null,
+                      "IsRatio": false,
+                      "Ratio": 0
+                    },
+                    "RoleSkill": {
+                      "Type": 0,
+                      "Value": null,
+                      "IsRatio": false,
+                      "Ratio": 0
+                    },
+                    "RoleSystemAttr": {
+                      "Type": 0,
+                      "Value": null,
+                      "IsRatio": false,
+                      "Ratio": 0
+                    },
+                    "ExDiceData": {
+                      "ExploreSkill": {
+                        "Type": 0,
+                        "ChangeAll": false,
+                        "IsTemp": false,
+                        "Value": 0
+                      },
+                      "HeroAttribute": {
+                        "Type": 0,
+                        "ChangeAll": false,
+                        "IsTemp": false,
+                        "Value": 0
+                      },
+                      "ExtraAttribute": {
+                        "Type": 0,
+                        "ChangeAll": false,
+                        "IsTemp": false,
+                        "Value": 0
+                      }
+                    }
+                  },
+                  {
+                    "IsTrackSource": true,
+                    "RoleAttr": {
+                      "Type": 0,
+                      "Value": null,
+                      "IsRatio": false,
+                      "Ratio": 0
+                    },
+                    "RoleExAttr": {
+                      "Type": 0,
+                      "Value": null,
+                      "IsRatio": false,
+                      "Ratio": 0
+                    },
+                    "RoleSkill": {
+                      "Type": 101,
+                      "Value": "5",
+                      "IsRatio": false,
+                      "Ratio": 0
+                    },
+                    "RoleSystemAttr": {
+                      "Type": 0,
+                      "Value": null,
+                      "IsRatio": false,
+                      "Ratio": 0
+                    },
+                    "ExDiceData": {
+                      "ExploreSkill": {
+                        "Type": 0,
+                        "ChangeAll": false,
+                        "IsTemp": false,
+                        "Value": 0
+                      },
+                      "HeroAttribute": {
+                        "Type": 0,
+                        "ChangeAll": false,
+                        "IsTemp": false,
+                        "Value": 0
+                      },
+                      "ExtraAttribute": {
+                        "Type": 0,
+                        "ChangeAll": false,
+                        "IsTemp": false,
+                        "Value": 0
+                      }
+                    }
+                  },
+                  {
+                    "IsTrackSource": true,
+                    "RoleAttr": {
+                      "Type": 0,
+                      "Value": null,
+                      "IsRatio": false,
+                      "Ratio": 0
+                    },
+                    "RoleExAttr": {
+                      "Type": 119,
+                      "Value": "20",
+                      "IsRatio": false,
+                      "Ratio": 0
+                    },
+                    "RoleSkill": {
+                      "Type": 0,
+                      "Value": null,
+                      "IsRatio": false,
+                      "Ratio": 0
+                    },
+                    "RoleSystemAttr": {
+                      "Type": 0,
+                      "Value": null,
+                      "IsRatio": false,
+                      "Ratio": 0
+                    },
+                    "ExDiceData": {
+                      "ExploreSkill": {
+                        "Type": 0,
+                        "ChangeAll": false,
+                        "IsTemp": false,
+                        "Value": 0
+                      },
+                      "HeroAttribute": {
+                        "Type": 0,
+                        "ChangeAll": false,
+                        "IsTemp": false,
+                        "Value": 0
+                      },
+                      "ExtraAttribute": {
+                        "Type": 0,
+                        "ChangeAll": false,
+                        "IsTemp": false,
+                        "Value": 0
+                      }
+                    }
+                  }
+                ],
+                "IsRemove": true,
+                "SourceKey": null
+              }
+            ]
+          }
+        ],
+        "EnableOverrideDesc": true,
+        "OverrideDesc": {
+          "TarKey": "",
+          "SheetKey": "",
+          "InputText": "荆棘：攻击时以「斗殴+敏捷」联合检定；1 次命中造成3次伤害（每次都单独计算护甲），每 1 次伤害给目标叠 1~2 层【荆棘】。\n普通成功：每段伤害减半（合计150%）。\n困难成功：每段不减伤害（合计300%）。\n大成功：每段不减伤害、武器基础伤害+2，且施加的【荆棘】层数翻倍。\n装备时：敏捷+5、斗殴+5、速度+20。\n速度差：每高于目标100点，此武器伤害+10%（双手持握时每50点一档）。\n【持握·荆棘】",
+          "Characteristic": null
+        },
+        "Arrts": [],
+        "Skills": [],
+        "Def": {
+          "FxPath": null,
+          "PointType": 0,
+          "AudioClip": {
+            "AudioRes": null,
+            "AudioReference": {
+              "ReferenceType": 0,
+              "Key": null
+            },
+            "Volume": 1,
+            "FadeTime": 1
+          },
+          "ArmorValue": 0
+        }
+      },
+      "ThrowConfigData": {
+        "CanThrowOnNoCharge": false,
+        "PlayThrowAnim": false,
+        "ThrowAnimtorName": null,
+        "ThrowSpriteAnimName": null,
+        "DiceCheckType": 1,
+        "ResultCheckType": 1,
+        "ExploreSkill": 201,
+        "UseTag": 1002,
+        "LimitType": 1,
+        "TargetSelect": 0,
+        "CanSelectDeathRole": false,
+        "TargetFilter": {
+          "RoleFilter": [],
+          "EnableMaxMinFilter": false,
+          "Attribute": 0,
+          "Skill": 0,
+          "ExtraAttr": 0,
+          "MaxMinType": 0,
+          "EnableDistanceFilter": false,
+          "DistanceFilterType": 0,
+          "EnableBuffLayerFilter": false,
+          "BuffId": 0,
+          "BuffLayerMaxMinType": 0
+        },
+        "FxPath": null,
+        "PointType": 0,
+        "AudioClip": {
+          "AudioRes": null,
+          "AudioReference": {
+            "ReferenceType": 0,
+            "Key": null
+          },
+          "Volume": 1,
+          "FadeTime": 1
+        },
+        "UsageCheck": [],
+        "ConfigResultFuncs": null,
+        "ResultFuncs": {},
+        "EnableOverrideDesc": false,
+        "OverrideDesc": {
+          "TarKey": "",
+          "SheetKey": "",
+          "InputText": null,
+          "Characteristic": null
+        },
+        "IgnoreInfoDesc": false
+      },
+      "GetItemOpts": [],
+      "EndingOpts": [],
+      "EditorSheetKey": null
+    }
+  }
+}

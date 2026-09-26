@@ -1,0 +1,58 @@
+{
+  "Data": {
+    "__type": "BaseSheetData,Assembly-CSharp",
+    "value": {
+      "__type": "MOD.BuffTableData,Assembly-CSharp",
+      "IconPath": "",
+      "IconPathReference": {
+        "ReferenceType": 1007,
+        "Key": "icon_buff_jingji"
+      },
+      "Id": 880051,
+      "Name": {
+        "TarKey": "",
+        "InputText": "荆棘"
+      },
+      "Des": {
+        "TarKey": "",
+        "InputText": "缠上伤口的尖刺无声收紧，越是挣扎，扎得越深。\n行动轮开始时移除此效果，并对自身施加等量的【束缚】。"
+      },
+      "Comment": "私货武器「荆棘」的预告状态：命中时挂上，行动轮开始时整颗换成等量的束缚（880050）。本身不带任何数值效果。",
+      "BuffType": 1,
+      "BuffEffectType": 2,
+      "OverlayType": 1,
+      "LayerCount": {
+        "Value": "1"
+      },
+      "OverrideInitLayer": false,
+      "InitLayer": 0,
+      "MaxLayer": 0,
+      "FxPlayType": 1,
+      "UseFxPrefab": {
+        "FxPath": null,
+        "FxRes": {
+          "ReferenceType": 0,
+          "Key": null
+        },
+        "PlayPoint": 0
+      },
+      "EffectClip": {
+        "AudioRes": null,
+        "AudioReference": {
+          "ReferenceType": 0,
+          "Key": null
+        },
+        "Volume": 1,
+        "FadeTime": 1
+      },
+      "IsClipLoop": false,
+      "Duration": 0,
+      "Priority": 0,
+      "IsDeathClear": true,
+      "IsShowUI": true,
+      "Arrts": [],
+      "Events": [],
+      "EditorSheetKey": null
+    }
+  }
+}

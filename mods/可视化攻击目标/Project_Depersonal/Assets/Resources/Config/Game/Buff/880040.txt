@@ -1,0 +1,77 @@
+{
+  "Data": {
+    "__type": "BaseSheetData,Assembly-CSharp",
+    "value": {
+      "__type": "MOD.BuffTableData,Assembly-CSharp",
+      "IconPath": "UI/Textures/Icon/Buff/icon_buff_shanghenleilei",
+      "Id": 880040,
+      "Name": {
+        "TarKey": "",
+        "SheetKey": "",
+        "InputText": "剑痕",
+        "Characteristic": null
+      },
+      "Des": {
+        "TarKey": "",
+        "SheetKey": "",
+        "InputText": "空间被斩击后留下的痕迹，无需触碰便能感受到它的锋利。\n每层：护甲-1、受到伤害+15%、闪避-10、运动-10。\n回合结束时层数减半（向下取整），并按减少的层数获得等量【流血】。\n最高5层，不可驱散。",
+        "Characteristic": null
+      },
+      "IconPathReference": {
+        "ReferenceType": 1007,
+        "Key": "icon_buff_shanghenleilei"
+      },
+      "Comment": "私货武器「葬花」的核心负面状态。层数容器：数值效果由 880041~880045 这五个隐藏档位承载（游戏 buff 属性不随层数缩放）；回合结束减半、补流血、不可驱散都在插件里做。",
+      "BuffType": 4,
+      "BuffEffectType": 2,
+      "OverlayType": 2,
+      "LayerCount": {
+        "Value": "1"
+      },
+      "OverrideInitLayer": false,
+      "InitLayer": 0,
+      "MaxLayer": 5,
+      "FxPlayType": 1,
+      "UseFxPrefab": {
+        "FxPath": null,
+        "UseFrameEffect": false,
+        "FxRes": {
+          "ReferenceType": 0,
+          "Key": null
+        },
+        "EffectName": null,
+        "EffectAnimName": null,
+        "PlayPoint": 0
+      },
+      "PlayFxInBattle": false,
+      "PlayFxInExplore": false,
+      "DelayTime": 0,
+      "EffectClip": {
+        "AudioRes": null,
+        "AudioReference": {
+          "ReferenceType": 0,
+          "Key": null
+        },
+        "Volume": 1,
+        "FadeTime": 1
+      },
+      "EndClip": {
+        "AudioRes": null,
+        "AudioReference": {
+          "ReferenceType": 0,
+          "Key": null
+        },
+        "Volume": 1,
+        "FadeTime": 1
+      },
+      "IsClipLoop": false,
+      "Duration": 0,
+      "Priority": 0,
+      "IsDeathClear": true,
+      "IsShowUI": true,
+      "Arrts": [],
+      "Events": [],
+      "EditorSheetKey": null
+    }
+  }
+}

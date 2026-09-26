@@ -1,0 +1,38 @@
+{
+  "Data": {
+    "__type": "BaseSheetData,Assembly-CSharp",
+    "value": {
+      "__type": "CustomSpriteConfigData,Assembly-CSharp",
+      "EffectName": "ruodian_baolu",
+      "AnimationList": [
+        {
+          "AnimName": "idle",
+          "IsLoop": true,
+          "ExtraAnims": [
+            {
+              "AnimSprite": {
+                "ReferenceType": 1023,
+                "Key": "ruodian_baolu"
+              },
+              "IsInternal": false,
+              "ResLoadPath": null,
+              "UseAtals": false,
+              "SpriteName": null,
+              "ShowCount": 0.5
+            }
+          ]
+        }
+      ],
+      "AnimSpeed": 0.2,
+      "AnimSize": {
+        "x": 1,
+        "y": 1
+      },
+      "SortName": "Chara",
+      "SortOrder": 50,
+      "DefaultPlayAnim": "idle",
+      "UseLightEffect": false,
+      "EditorSheetKey": null
+    }
+  }
+}

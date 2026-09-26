@@ -1,0 +1,219 @@
+{
+  "Data": {
+    "__type": "BaseSheetData,Assembly-CSharp",
+    "value": {
+      "__type": "MOD.BuffTableData,Assembly-CSharp",
+      "IconPath": null,
+      "Id": 880042,
+      "Name": {
+        "TarKey": "",
+        "SheetKey": "",
+        "InputText": "剑痕·2层（隐藏数值）",
+        "Characteristic": null
+      },
+      "Des": {
+        "TarKey": "",
+        "SheetKey": "",
+        "InputText": "护甲-2、闪避-20、运动-20。",
+        "Characteristic": null
+      },
+      "IconPathReference": {
+        "ReferenceType": 0,
+        "Key": null
+      },
+      "Comment": "私货武器「葬花」的隐藏档位状态：由插件按敌人身上的剑痕层数挂/摘，玩家看不到（IsShowUI=false）。",
+      "BuffType": 4,
+      "BuffEffectType": 2,
+      "OverlayType": 2,
+      "LayerCount": {
+        "Value": "1"
+      },
+      "OverrideInitLayer": false,
+      "InitLayer": 0,
+      "MaxLayer": 0,
+      "FxPlayType": 1,
+      "UseFxPrefab": {
+        "FxPath": null,
+        "UseFrameEffect": false,
+        "FxRes": {
+          "ReferenceType": 0,
+          "Key": null
+        },
+        "EffectName": null,
+        "EffectAnimName": null,
+        "PlayPoint": 0
+      },
+      "PlayFxInBattle": false,
+      "PlayFxInExplore": false,
+      "DelayTime": 0,
+      "EffectClip": {
+        "AudioRes": null,
+        "AudioReference": {
+          "ReferenceType": 0,
+          "Key": null
+        },
+        "Volume": 1,
+        "FadeTime": 1
+      },
+      "EndClip": {
+        "AudioRes": null,
+        "AudioReference": {
+          "ReferenceType": 0,
+          "Key": null
+        },
+        "Volume": 1,
+        "FadeTime": 1
+      },
+      "IsClipLoop": false,
+      "Duration": 0,
+      "Priority": 0,
+      "IsDeathClear": true,
+      "IsShowUI": false,
+      "Arrts": [
+        {
+          "IsTrackSource": true,
+          "RoleAttr": {
+            "Type": 0,
+            "Value": null,
+            "IsRatio": false,
+            "Ratio": 0
+          },
+          "RoleExAttr": {
+            "Type": 112,
+            "Value": "-2",
+            "IsRatio": false,
+            "Ratio": 0
+          },
+          "RoleSkill": {
+            "Type": 0,
+            "Value": null,
+            "IsRatio": false,
+            "Ratio": 0
+          },
+          "RoleSystemAttr": {
+            "Type": 0,
+            "Value": null,
+            "IsRatio": false,
+            "Ratio": 0
+          },
+          "ExDiceData": {
+            "ExploreSkill": {
+              "Type": 0,
+              "ChangeAll": false,
+              "IsTemp": false,
+              "Value": 0
+            },
+            "HeroAttribute": {
+              "Type": 0,
+              "ChangeAll": false,
+              "IsTemp": false,
+              "Value": 0
+            },
+            "ExtraAttribute": {
+              "Type": 0,
+              "ChangeAll": false,
+              "IsTemp": false,
+              "Value": 0
+            }
+          }
+        },
+        {
+          "IsTrackSource": true,
+          "RoleAttr": {
+            "Type": 0,
+            "Value": null,
+            "IsRatio": false,
+            "Ratio": 0
+          },
+          "RoleExAttr": {
+            "Type": 118,
+            "Value": "-20",
+            "IsRatio": false,
+            "Ratio": 0
+          },
+          "RoleSkill": {
+            "Type": 0,
+            "Value": null,
+            "IsRatio": false,
+            "Ratio": 0
+          },
+          "RoleSystemAttr": {
+            "Type": 0,
+            "Value": null,
+            "IsRatio": false,
+            "Ratio": 0
+          },
+          "ExDiceData": {
+            "ExploreSkill": {
+              "Type": 0,
+              "ChangeAll": false,
+              "IsTemp": false,
+              "Value": 0
+            },
+            "HeroAttribute": {
+              "Type": 0,
+              "ChangeAll": false,
+              "IsTemp": false,
+              "Value": 0
+            },
+            "ExtraAttribute": {
+              "Type": 0,
+              "ChangeAll": false,
+              "IsTemp": false,
+              "Value": 0
+            }
+          }
+        },
+        {
+          "IsTrackSource": true,
+          "RoleAttr": {
+            "Type": 0,
+            "Value": null,
+            "IsRatio": false,
+            "Ratio": 0
+          },
+          "RoleExAttr": {
+            "Type": 201,
+            "Value": "-20",
+            "IsRatio": false,
+            "Ratio": 0
+          },
+          "RoleSkill": {
+            "Type": 0,
+            "Value": null,
+            "IsRatio": false,
+            "Ratio": 0
+          },
+          "RoleSystemAttr": {
+            "Type": 0,
+            "Value": null,
+            "IsRatio": false,
+            "Ratio": 0
+          },
+          "ExDiceData": {
+            "ExploreSkill": {
+              "Type": 0,
+              "ChangeAll": false,
+              "IsTemp": false,
+              "Value": 0
+            },
+            "HeroAttribute": {
+              "Type": 0,
+              "ChangeAll": false,
+              "IsTemp": false,
+              "Value": 0
+            },
+            "ExtraAttribute": {
+              "Type": 0,
+              "ChangeAll": false,
+              "IsTemp": false,
+              "Value": 0
+            }
+          }
+        }
+      ],
+      "Events": [],
+      "EditorSheetKey": null
+    }
+  }
+}

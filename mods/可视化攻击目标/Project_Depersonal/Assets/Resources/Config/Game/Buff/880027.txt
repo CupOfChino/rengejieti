@@ -1,0 +1,225 @@
+{
+	"Data" : {
+		"__type" : "BaseSheetData,Assembly-CSharp",
+		"value" : {
+			"__type" : "MOD.BuffTableData,Assembly-CSharp",
+			"IconPath" : "UI\/Textures\/Icon\/Buff\/icon_buff_busibuxiu",
+			"Id" : 880027,
+			"Name" : {
+				"TarKey" : "",
+				"SheetKey" : "",
+				"InputText" : "百合未谢",
+				"Characteristic" : null
+			},
+			"Des" : {
+				"TarKey" : "",
+				"SheetKey" : "",
+				"InputText" : "花落之处，新芽已生。",
+				"Characteristic" : null
+			},
+			"IconPathReference" : {
+				"ReferenceType" : 1007,
+				"Key" : "icon_buff_busibuxiu"
+			},
+			"Comment" : "私货特质「灰暗孤影」的免死标记（正面，防止被清负面效果顺手清掉）。挂着它就不会再免死；进/出模组时由插件移除。",
+			"BuffType" : 4,
+			"BuffEffectType" : 1,
+			"OverlayType" : 2,
+			"LayerCount" : {
+				"Value" : null
+			},
+			"OverrideInitLayer" : false,
+			"InitLayer" : 0,
+			"MaxLayer" : 0,
+			"FxPlayType" : 1,
+			"UseFxPrefab" : {
+				"FxPath" : null,
+				"UseFrameEffect" : false,
+				"FxRes" : {
+					"ReferenceType" : 0,
+					"Key" : null
+				},
+				"EffectName" : null,
+				"EffectAnimName" : null,
+				"PlayPoint" : 0
+			},
+			"PlayFxInBattle" : false,
+			"PlayFxInExplore" : false,
+			"DelayTime" : 0,
+			"EffectClip" : {
+				"AudioRes" : null,
+				"AudioReference" : {
+					"ReferenceType" : 0,
+					"Key" : null
+				},
+				"Volume" : 1,
+				"FadeTime" : 1
+			},
+			"EndClip" : {
+				"AudioRes" : null,
+				"AudioReference" : {
+					"ReferenceType" : 0,
+					"Key" : null
+				},
+				"Volume" : 1,
+				"FadeTime" : 1
+			},
+			"IsClipLoop" : false,
+			"Duration" : 0,
+			"Priority" : 0,
+			"IsDeathClear" : false,
+			"IsShowUI" : true,
+			"Arrts" : [
+				
+			],
+			"Events" : [
+				{
+					"EBuffTrigger" : 1,
+					"DiceCheckElements" : [
+						
+					],
+					"Checks" : [
+						
+					],
+					"SatisfyAny" : false,
+					"Funcs" : [
+						{
+							"__type" : "MOD.Buff_RoleAttrOption,Assembly-CSharp",
+							"TargetType" : 0,
+							"TargetAddData" : {
+								"SpecificTagData" : {
+									"Tags" : [
+										
+									],
+									"Not" : false
+								},
+								"CharacterIds" : [
+									
+								],
+								"IncludeDeath" : false,
+								"BuffId" : 0
+							},
+							"IsBuffType" : false,
+							"ChangeToMax" : true,
+							"MaxRatio" : 0.5,
+							"Datas" : [
+								{
+									"IsTrackSource" : true,
+									"RoleAttr" : {
+										"Type" : 0,
+										"Value" : null,
+										"IsRatio" : false,
+										"Ratio" : 0
+									},
+									"RoleExAttr" : {
+										"Type" : 101,
+										"Value" : "0",
+										"IsRatio" : false,
+										"Ratio" : 0
+									},
+									"RoleSkill" : {
+										"Type" : 0,
+										"Value" : null,
+										"IsRatio" : false,
+										"Ratio" : 0
+									},
+									"RoleSystemAttr" : {
+										"Type" : 0,
+										"Value" : null,
+										"IsRatio" : false,
+										"Ratio" : 0
+									},
+									"ExDiceData" : {
+										"ExploreSkill" : {
+											"Type" : 0,
+											"ChangeAll" : false,
+											"IsTemp" : false,
+											"Value" : 0
+										},
+										"HeroAttribute" : {
+											"Type" : 0,
+											"ChangeAll" : false,
+											"IsTemp" : false,
+											"Value" : 0
+										},
+										"ExtraAttribute" : {
+											"Type" : 0,
+											"ChangeAll" : false,
+											"IsTemp" : false,
+											"Value" : 0
+										}
+									}
+								}
+							],
+							"CannnotRecoverOnRemove" : true,
+							"IsRemove" : false,
+							"SourceKey" : null
+						},{
+							"__type" : "MOD.Buff_BuffChangeOption,Assembly-CSharp",
+							"ChangeType" : 1,
+							"BuffId" : 880029,
+							"TargetType" : 0,
+							"TargetAddData" : {
+								"SpecificTagData" : {
+									"Tags" : [
+										
+									],
+									"Not" : false
+								},
+								"CharacterIds" : [
+									
+								],
+								"IncludeDeath" : false,
+								"BuffId" : 0
+							},
+							"IsSelf" : true,
+							"SourceKey" : null
+						},{
+							"__type" : "MOD.Buff_ShowDialogOption,Assembly-CSharp",
+							"DialogData" : {
+								"IsNarrator" : true,
+								"Target_Role" : {
+									"IsHero" : false,
+									"IsUseTriggerElement" : true,
+									"TargetNodeKey" : null,
+									"TargetNpcKey" : null,
+									"ShowType" : 2
+								},
+								"ShowType" : 0,
+								"ExpressionBox" : 0,
+								"Dir" : 0,
+								"CloseupReference" : {
+									"ReferenceType" : 1003,
+									"Key" : null
+								},
+								"Expression" : 0,
+								"HeadIconStr" : "",
+								"Type" : 0,
+								"Localization_DesKey" : {
+									"TarKey" : "",
+									"SheetKey" : "",
+									"InputText" : "花落之处，新芽已生。",
+									"Characteristic" : null
+								},
+								"Time" : 0,
+								"Override_Localization_Name" : null,
+								"OverrideHead" : null,
+								"IsCloseHead" : false,
+								"OverHeadReferenece" : {
+									"ReferenceType" : 1001,
+									"Key" : null
+								},
+								"IsCloseVoice" : false,
+								"OverrideSpeaker" : null
+							},
+							"IsCloseHead" : false,
+							"SourceKey" : null
+						}
+					],
+					"CanBeDisabled" : false
+				}
+			],
+			"EditorSheetKey" : null
+		}
+	}
+}

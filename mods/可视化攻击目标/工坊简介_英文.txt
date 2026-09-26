@@ -1,0 +1,29 @@
+==========================================================
+Title（工坊标题，复制这一行）
+==========================================================
+Attack Target Visualizer
+
+==========================================================
+Description（工坊简介正文，从这里往下整段复制）
+==========================================================
+[h2]What is this[/h2]
+Visualizes who is attacking whom: every action that has been locked in gets an arrow from that character's action slot to the target it will act on.
+
+[h2]How to read the arrows[/h2]
+[list]
+[*] Dashed line: AOE (area / random target)
+[*] Solid line: single target
+[*] Red: aimed at enemies (throw actions are always red)
+[*] Green: aimed at allies
+[*] Blue: interference actions (the vanilla non-damaging skills aimed at enemies)
+[*] Yellow: clash (two characters targeting each other)
+[/list]
+
+[h2]Notes[/h2]
+[list]
+[*] Requires the BepInEx framework mod
+[*] Arrows only appear during the action-selection phase, and are all cleared once the round starts resolving
+[*] Arrows are a forecast: if the target dies, gets intercepted or covered, or is grappled before the action resolves, the actual target may change
+[/list]
+
+This build is visualization only. More iterations are on the way — stay tuned.

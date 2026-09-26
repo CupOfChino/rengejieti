@@ -1,0 +1,84 @@
+{
+	"Data" : {
+		"__type" : "BaseSheetData,Assembly-CSharp",
+		"value" : {
+			"__type" : "MOD.TraitData,Assembly-CSharp",
+			"Id" : 880021,
+			"IsCanCreateGet" : false,
+			"IsCloseInherit" : false,
+			"Type" : 6,
+			"CanRepeate" : false,
+			"TriggerLimit" : 0,
+			"Localization_Name" : {
+				"TarKey" : "",
+				"SheetKey" : "",
+				"InputText" : "百合花",
+				"Characteristic" : null
+			},
+			"Localization_Des" : {
+				"TarKey" : "",
+				"SheetKey" : "",
+				"InputText" : "美丽的百合花，缺乏抵抗能力的同时还具有极强的吸引力",
+				"Characteristic" : null
+			},
+			"BuffsLink" : [
+				880024
+			],
+			"Terms" : [
+				
+			],
+			"CreateEvent" : null,
+			"WakeEvent" : {
+				"Localization_Functin" : {
+					"TarKey" : "",
+					"SheetKey" : "",
+        "InputText" : "【恍惚】处于魅惑状态时，意志-25、造成的伤害-50%；敌方对拥有者的魅惑行动获得1颗奖励骰；对魅惑行动的对抗获得1颗惩罚骰；敌人带魅惑的行动会首先指向她；意志-30、体质-20、力量-10、闪避-15；处于魅惑状态时，意志检定与意志对抗获得1颗惩罚骰；进入副本时自动装备「百合花」系列",
+					"Characteristic" : null
+				},
+				"Inherent" : [
+					{
+						"__type" : "MOD.TraitEvent.ActiveBuffOption,Assembly-CSharp",
+						"BuffId" : 880024
+					}
+				],
+				"Triggers" : [
+					
+				]
+			},
+			"SleepyEvent" : {
+				"Localization_Functin" : {
+					"TarKey" : "",
+					"SheetKey" : "",
+					"InputText" : "收回「百合花」状态",
+					"Characteristic" : null
+				},
+				"Inherent" : [
+					{
+						"__type" : "MOD.TraitEvent.RemoveBuffOption,Assembly-CSharp",
+						"BuffId" : 880024
+					}
+				],
+				"Triggers" : [
+					
+				]
+			},
+			"ConceptTraitTriggerDatas" : [
+				
+			],
+			"CrazyTraitTriggerDatas" : [
+				
+			],
+			"ActiveToHideCustom" : {
+				"Gold" : 0,
+				"InterludeTime" : 0,
+				"SpaceTimePoint" : 999
+			},
+			"HideToActiveCustom" : {
+				"Gold" : 0,
+				"InterludeTime" : 0,
+				"SpaceTimePoint" : 999
+			},
+			"EditorSheetKey" : null
+		}
+	}
+}

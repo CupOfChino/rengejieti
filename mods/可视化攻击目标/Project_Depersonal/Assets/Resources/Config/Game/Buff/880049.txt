@@ -1,0 +1,56 @@
+{
+	"Data" : {
+		"__type" : "MOD.BuffTableData,Assembly-CSharp",
+		"value" : {
+			"IconPath" : "",
+			"IconPathReference" : {
+				"ReferenceType" : 1007,
+				"Key" : "icon_buff_huaxiang"
+			},
+			"Id" : 880049,
+			"Name" : {
+				"TarKey" : "",
+				"InputText" : "花香"
+			},
+			"Des" : {
+				"TarKey" : "",
+				"InputText" : "沾在身上的花香。\n解除负面状态时获得，层数取被解除状态的层数（至少1层、至多5层，无上限的状态按5层算）。\n每层使造成的普通伤害+5%；回合结束时层数减半（向下取整），并按减少的层数回复生命。战斗开始时清空。"
+			},
+			"Comment" : null,
+			"BuffType" : 1,
+			"BuffEffectType" : 1,
+			"OverlayType" : 1,
+			"LayerCount" : {
+				"Value" : "1"
+			},
+			"OverrideInitLayer" : false,
+			"InitLayer" : 0,
+			"MaxLayer" : 5,
+			"FxPlayType" : 1,
+			"UseFxPrefab" : {
+				"FxPath" : "Effect\/Prefabs\/Buff\/FX_Buff_130",
+				"PlayPoint" : 2
+			},
+			"EffectClip" : {
+				"AudioRes" : null,
+				"AudioReference" : {
+					"ReferenceType" : 0,
+					"Key" : null
+				},
+				"Volume" : 1,
+				"FadeTime" : 1
+			},
+			"IsClipLoop" : false,
+			"Duration" : 0,
+			"Priority" : 0,
+			"IsDeathClear" : true,
+			"IsShowUI" : true,
+			"Arrts" : [
+				
+			],
+			"Events" : [
+				
+			]
+		}
+	}
+}

@@ -1,0 +1,61 @@
+{
+  "Data": {
+    "__type": "BaseSheetData,Assembly-CSharp",
+    "value": {
+      "__type": "MOD.BuffTableData,Assembly-CSharp",
+      "IconPath": "",
+      "IconPathReference": {
+        "ReferenceType": 1007,
+        "Key": "icon_buff_ruodianbaolu"
+      },
+      "Id": 880052,
+      "Name": {
+        "TarKey": "",
+        "InputText": "目标锁定"
+      },
+      "Des": {
+        "TarKey": "",
+        "InputText": "已经被荆棘盯上了。回合开始时，攻击者会用武器对它打一次；回合结束、目标死亡或战斗结束时解除。"
+      },
+      "Comment": "私货武器「荆棘」的先发标记：轮开始前挂上，回合开始时对中标记者打一次。本身无数值效果，特效复用原版弱点暴露的图标（ExtraAnim\\ruodian_baolu）。",
+      "BuffType": 1,
+      "BuffEffectType": 2,
+      "OverlayType": 2,
+      "LayerCount": {
+        "Value": "1"
+      },
+      "OverrideInitLayer": false,
+      "InitLayer": 0,
+      "MaxLayer": 1,
+      "FxPlayType": 1,
+      "UseFxPrefab": {
+        "FxPath": null,
+        "UseFrameEffect": true,
+        "FxRes": {
+          "ReferenceType": 0,
+          "Key": null
+        },
+        "EffectName": "ruodian_baolu",
+        "EffectAnimName": "idle",
+        "PlayPoint": 2
+      },
+      "EffectClip": {
+        "AudioRes": null,
+        "AudioReference": {
+          "ReferenceType": 0,
+          "Key": null
+        },
+        "Volume": 1,
+        "FadeTime": 1
+      },
+      "IsClipLoop": false,
+      "Duration": 0,
+      "Priority": 0,
+      "IsDeathClear": true,
+      "IsShowUI": true,
+      "Arrts": [],
+      "Events": [],
+      "EditorSheetKey": null
+    }
+  }
+}

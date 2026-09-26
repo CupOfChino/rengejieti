@@ -1,0 +1,22 @@
+{
+  "Data": {
+    "__type": "BaseSheetData,Assembly-CSharp",
+    "value": {
+      "__type": "TermData,Assembly-CSharp",
+      "Id": 880005,
+      "Name": {
+        "TarKey": "",
+        "SheetKey": "",
+        "InputText": "荆棘",
+        "Characteristic": null
+      },
+      "Des": {
+        "TarKey": "",
+        "SheetKey": "",
+        "InputText": "命中时给目标叠加的预告状态，本身没有任何效果。每1次伤害叠1~2层（大成功时翻倍）。行动轮开始时，它整颗转为等量的【束缚】；【束缚】每层使速度-10（最低降到10点），回合结束时移除。",
+        "Characteristic": null
+      },
+      "EditorSheetKey": null
+    }
+  }
+}

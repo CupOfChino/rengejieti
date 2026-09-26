@@ -1,0 +1,22 @@
+{
+  "Data": {
+    "__type": "BaseSheetData,Assembly-CSharp",
+    "value": {
+      "__type": "TermData,Assembly-CSharp",
+      "Id": 880003,
+      "Name": {
+        "TarKey": "",
+        "SheetKey": "",
+        "InputText": "持握·葬花",
+        "Characteristic": null
+      },
+      "Des": {
+        "TarKey": "",
+        "SheetKey": "",
+        "InputText": "装备在主手：此武器伤害+1，可施展二连斩与横扫。\n装备在副手：护甲+2，受到的魔法伤害-1。\n主/副手未装备其他武器时视为双手：同时触发主手与副手效果，且此武器施加的负面状态+1层。",
+        "Characteristic": null
+      },
+      "EditorSheetKey": null
+    }
+  }
+}

@@ -1,0 +1,112 @@
+{
+	"Data" : {
+		"__type" : "BaseSheetData,Assembly-CSharp",
+		"value" : {
+			"__type" : "MOD.BuffTableData,Assembly-CSharp",
+			"IconPath" : "UI\/Textures\/Icon\/Buff\/icon_buff_gedangjiashi",
+			"Id" : 880029,
+			"Name" : {
+				"TarKey" : "",
+				"SheetKey" : "",
+				"InputText" : "伤害免疫",
+				"Characteristic" : null
+			},
+			"Des" : {
+				"TarKey" : "",
+				"SheetKey" : "",
+				"InputText" : "1回合内免疫敌人造成的伤害。",
+				"Characteristic" : null
+			},
+			"IconPathReference" : {
+				"ReferenceType" : 1007,
+				"Key" : "icon_buff_gedangjiashi"
+			},
+			"Comment" : "私货特质「灰暗孤影」的隐藏辅助状态：免死之后 1 回合内免疫伤害。",
+			"BuffType" : 4,
+			"BuffEffectType" : 1,
+			"OverlayType" : 2,
+			"LayerCount" : {
+				"Value" : null
+			},
+			"OverrideInitLayer" : false,
+			"InitLayer" : 0,
+			"MaxLayer" : 0,
+			"FxPlayType" : 1,
+			"UseFxPrefab" : {
+				"FxPath" : null,
+				"UseFrameEffect" : false,
+				"FxRes" : {
+					"ReferenceType" : 0,
+					"Key" : null
+				},
+				"EffectName" : null,
+				"EffectAnimName" : null,
+				"PlayPoint" : 0
+			},
+			"PlayFxInBattle" : false,
+			"PlayFxInExplore" : false,
+			"DelayTime" : 0,
+			"EffectClip" : {
+				"AudioRes" : null,
+				"AudioReference" : {
+					"ReferenceType" : 0,
+					"Key" : null
+				},
+				"Volume" : 1,
+				"FadeTime" : 1
+			},
+			"EndClip" : {
+				"AudioRes" : null,
+				"AudioReference" : {
+					"ReferenceType" : 0,
+					"Key" : null
+				},
+				"Volume" : 1,
+				"FadeTime" : 1
+			},
+			"IsClipLoop" : false,
+			"Duration" : 1,
+			"Priority" : 0,
+			"IsDeathClear" : true,
+			"IsShowUI" : false,
+			"Arrts" : [
+				
+			],
+			"Events" : [
+				{
+					"EBuffTrigger" : 1,
+					"DiceCheckElements" : [
+						
+					],
+					"Checks" : [
+						
+					],
+					"SatisfyAny" : false,
+					"Funcs" : [
+						{
+							"__type" : "MOD.Buff_ImmuneDamageOption,Assembly-CSharp",
+							"Data" : {
+								"IsOpen" : true,
+								"ImmuMaxDamage" : false,
+								"ImmuFall" : false,
+								"OnlyImmuEnemyDamage" : true,
+								"DamageTypeList" : [
+									0,1,2
+								],
+								"ReductionList" : [
+									
+								],
+								"RoleReductionList" : [
+									
+								]
+							},
+							"SourceKey" : null
+						}
+					],
+					"CanBeDisabled" : false
+				}
+			],
+			"EditorSheetKey" : null
+		}
+	}
+}

@@ -1,0 +1,177 @@
+{
+	"Data" : {
+		"__type" : "BaseSheetData,Assembly-CSharp",
+		"value" : {
+			"__type" : "MOD.TraitData,Assembly-CSharp",
+			"Id" : 880022,
+			"IsCanCreateGet" : false,
+			"IsCloseInherit" : false,
+			"Type" : 6,
+			"CanRepeate" : false,
+			"TriggerLimit" : 0,
+			"Localization_Name" : {
+				"TarKey" : "",
+				"SheetKey" : "",
+				"InputText" : "白毛少女",
+				"Characteristic" : null
+			},
+			"Localization_Des" : {
+				"TarKey" : "",
+				"SheetKey" : "",
+				"InputText" : "柔弱的白毛少女",
+				"Characteristic" : null
+			},
+			"BuffsLink" : [
+				
+			],
+			"Terms" : [
+				
+			],
+			"CreateEvent" : null,
+			"WakeEvent" : {
+				"Localization_Functin" : {
+					"TarKey" : "",
+					"SheetKey" : "",
+					"InputText" : "战斗开始时，对每个有理智的敌人进行一次意志检定，失败则魅惑；无理智的敌人获得2层弱点暴露；交涉与心理学判定各获得1颗奖励骰",
+					"Characteristic" : null
+				},
+				"Inherent" : [
+					{
+						"__type" : "MOD.TraitEvent.ChangeRoleValueDataOption,Assembly-CSharp",
+						"TargetType" : 0,
+						"Datas" : [
+							{
+								"IsTrackSource" : true,
+								"RoleAttr" : {
+									"Type" : 0,
+									"Value" : null,
+									"IsRatio" : false,
+									"Ratio" : 0
+								},
+								"RoleExAttr" : {
+									"Type" : 0,
+									"Value" : null,
+									"IsRatio" : false,
+									"Ratio" : 0
+								},
+								"RoleSkill" : {
+									"Type" : 0,
+									"Value" : null,
+									"IsRatio" : false,
+									"Ratio" : 0
+								},
+								"RoleSystemAttr" : {
+									"Type" : 0,
+									"Value" : null,
+									"IsRatio" : false,
+									"Ratio" : 0
+								},
+								"ExDiceData" : {
+									"ExploreSkill" : {
+										"Type" : 403,
+										"ChangeAll" : false,
+										"IsTemp" : false,
+										"Value" : 1
+									},
+									"HeroAttribute" : {
+										"Type" : 0,
+										"ChangeAll" : false,
+										"IsTemp" : false,
+										"Value" : 0
+									},
+									"ExtraAttribute" : {
+										"Type" : 0,
+										"ChangeAll" : false,
+										"IsTemp" : false,
+										"Value" : 0
+									}
+								}
+							},{
+								"IsTrackSource" : true,
+								"RoleAttr" : {
+									"Type" : 0,
+									"Value" : null,
+									"IsRatio" : false,
+									"Ratio" : 0
+								},
+								"RoleExAttr" : {
+									"Type" : 0,
+									"Value" : null,
+									"IsRatio" : false,
+									"Ratio" : 0
+								},
+								"RoleSkill" : {
+									"Type" : 0,
+									"Value" : null,
+									"IsRatio" : false,
+									"Ratio" : 0
+								},
+								"RoleSystemAttr" : {
+									"Type" : 0,
+									"Value" : null,
+									"IsRatio" : false,
+									"Ratio" : 0
+								},
+								"ExDiceData" : {
+									"ExploreSkill" : {
+										"Type" : 405,
+										"ChangeAll" : false,
+										"IsTemp" : false,
+										"Value" : 1
+									},
+									"HeroAttribute" : {
+										"Type" : 0,
+										"ChangeAll" : false,
+										"IsTemp" : false,
+										"Value" : 0
+									},
+									"ExtraAttribute" : {
+										"Type" : 0,
+										"ChangeAll" : false,
+										"IsTemp" : false,
+										"Value" : 0
+									}
+								}
+							}
+						],
+						"IsRemove" : false
+					}
+				],
+				"Triggers" : [
+					
+				]
+			},
+			"SleepyEvent" : {
+				"Localization_Functin" : {
+					"TarKey" : "",
+					"SheetKey" : "",
+					"InputText" : "不再魅惑敌人，交涉/心理学的奖励骰收回",
+					"Characteristic" : null
+				},
+				"Inherent" : [
+					
+				],
+				"Triggers" : [
+					
+				]
+			},
+			"ConceptTraitTriggerDatas" : [
+				
+			],
+			"CrazyTraitTriggerDatas" : [
+				
+			],
+			"ActiveToHideCustom" : {
+				"Gold" : 0,
+				"InterludeTime" : 0,
+				"SpaceTimePoint" : 999
+			},
+			"HideToActiveCustom" : {
+				"Gold" : 0,
+				"InterludeTime" : 0,
+				"SpaceTimePoint" : 999
+			},
+			"EditorSheetKey" : null
+		}
+	}
+}

@@ -1799,18 +1799,23 @@ namespace AttackTargetVisualizer
         }
 
         /// <summary>
-        /// 白毛少女（880022）：力量对抗时，**敏捷的一半**额外加进对抗值
-        /// （2026-09-27 用户口径 —— 她力量太弱，碰上力量对抗基本赢不了）。
-        /// 战斗技能配置的"力量对抗"走的是 `UseCheck.CheckAttr = STR` + `isCompareDice = true`
-        /// （反编译 115717 / 55956），最终都调 `GetDiceCheckValue`，所以挂它的 Postfix。
+        /// 白毛少女（880022）：**力量检定 / 力量对抗**时，敏捷的一半额外加进检定值
+        /// （2026-09-27 用户口径 —— 她力量太弱，"碰上力量对抗基本不能成功"；
+        ///  后又要求做成通用版：只要这枚检定是力量检定就加，不限于对抗）。
+        ///
+        /// 覆盖范围：所有"用力量做检定"的场合都经过 `BattleHelper.GetDiceCheckValue` ——
+        ///   · 战斗技能的力量检定 / 力量对抗（`UseCheck.CheckAttr = STR`，反编译 115717 / 55956）；
+        ///   · 探索、面板里的力量检定（`GetDiceData` 内部也调它）；
+        ///   · **其它模组**只要用游戏标准的"属性检定/对抗"配置配技能，同样吃得到（我们挂的是底层入口）。
+        /// 只有"自己另写一套判定、不调游戏检定函数"的模组技能覆盖不到。
+        ///
         /// 读敏捷时再次调 `GetDiceCheckValue`（attrType=DEX）不会命中本分支，无递归问题。
         /// </summary>
-        internal static void OnQueryStrengthCompare(BattleRole target, EHeroAttribute attrType, bool isCompareDice,
-            ref int result)
+        internal static void OnQueryStrengthDiceValue(BattleRole target, EHeroAttribute attrType, ref int result)
         {
             try
             {
-                if (!isCompareDice || attrType != EHeroAttribute.STR)
+                if (attrType != EHeroAttribute.STR)
                 {
                     return;
                 }
@@ -1830,8 +1835,8 @@ namespace AttackTargetVisualizer
                     return;
                 }
                 result += bonus;
-                AttackTargetPlugin.LogInfo("白毛少女：「" + NameOf(target) + "」力量对抗 +敏捷的一半 " + bonus +
-                    "（敏捷 " + dex + "，对抗值 → " + result + "）");
+                AttackTargetPlugin.LogInfo("白毛少女：「" + NameOf(target) + "」力量检定/对抗 +敏捷的一半 " + bonus +
+                    "（敏捷 " + dex + "，检定值 → " + result + "）");
             }
             catch (Exception e)
             {
@@ -3473,22 +3478,22 @@ namespace AttackTargetVisualizer
     }
 
     /// <summary>
-    /// 白毛少女：力量对抗时，敏捷的一半一起参与（2026-09-27 用户口径）。
-    /// 同样挂在 `GetDiceCheckValue` 上 —— 战斗技能配置的"力量对抗"
-    /// （`UseCheck.CheckAttr = STR` + `isCompareDice = true`）最终都经过它。
+    /// 白毛少女：**力量检定 / 力量对抗**时，敏捷的一半一起参与（2026-09-27 用户口径，通用版）。
+    /// 挂在 `GetDiceCheckValue` 上 —— 战斗技能、探索/面板、以及其它模组用标准配置做的
+    /// 力量检定（`UseCheck.CheckAttr = STR`）都经过它。
     /// </summary>
     [HarmonyPatch(typeof(BattleHelper), "GetDiceCheckValue")]
-    internal static class Patch_WhiteHair_StrengthCompare
+    internal static class Patch_WhiteHair_StrengthDice
     {
-        private static void Postfix(BattleRole target, EHeroAttribute attrType, bool isCompareDice, ref int __result)
+        private static void Postfix(BattleRole target, EHeroAttribute attrType, ref int __result)
         {
             try
             {
-                SecretTraits.OnQueryStrengthCompare(target, attrType, isCompareDice, ref __result);
+                SecretTraits.OnQueryStrengthDiceValue(target, attrType, ref __result);
             }
             catch (Exception e)
             {
-                AttackTargetPlugin.LogError("白毛少女补丁出错（力量对抗）：" + e.Message);
+                AttackTargetPlugin.LogError("白毛少女补丁出错（力量检定）：" + e.Message);
             }
         }
     }

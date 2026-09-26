@@ -970,3 +970,6 @@ num += OffHandWeapon.ExtraContinuousAttackCount.Value + OffHandWeapon.ExtraConti
   `UseCheck.CheckAttr`（属性）+ `isCompareDice = true` 配置（反编译 115717 / 55956），
   最终仍然落到 `BattleHelper.GetDiceCheckValue(role, ..., attrType, ..., isCompareDice: true)` ——
   和上面"检定值 ±N"是同一个挂点，用 `isCompareDice && attrType == EHeroAttribute.STR` 就能精确锁定"力量对抗"。
+  - **想做"通用版"就别看 `isCompareDice`**：只判 `attrType == STR`，这样"力量检定（探索/面板/战斗技能）"
+    和"力量对抗"一次全覆盖。**其它模组**只要用游戏标准配置（`CheckAttr = STR`）配技能也同样吃得到——
+    我们挂的是底层入口不是具体技能；只有"自己另写判定、不调 `GetDiceCheckValue`"的模组技能覆盖不到。

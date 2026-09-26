@@ -47,7 +47,7 @@ namespace AttackTargetVisualizer
             PatchOne(harmony, typeof(Patch_JingJi_SetDamage));             // 荆棘：伤害接管（先发/反击 = 武器基础伤害；主动攻击拆 3 次）
             PatchOne(harmony, typeof(Patch_SecretTraits_BattleRole_TriggerBuffs)); // 战斗开始/结束/回合结束等节点
             PatchOne(harmony, typeof(Patch_FlowerScent_DiceCheckValue));           // 花香：意志检定 +5/层
-            PatchOne(harmony, typeof(Patch_WhiteHair_StrengthCompare));            // 白毛少女：力量对抗 +敏捷的一半
+            PatchOne(harmony, typeof(Patch_WhiteHair_StrengthDice));               // 白毛少女：力量检定/对抗 +敏捷的一半
             PatchOne(harmony, typeof(Patch_FlowerScent_ExploreRound));             // 花香：探索回合也减半
         }
 

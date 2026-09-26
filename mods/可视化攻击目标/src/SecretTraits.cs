@@ -1666,7 +1666,13 @@ namespace AttackTargetVisualizer
             // 现在一律传 false：**只补"状态缺失"，不再校验数值**。
             // 想改数值、又要让老存档跟上，就摘掉特质再挂一次（游戏内就能做），或者用 temp 里的脚本改档。
             SyncStatus(role, SecretIds.LilyTrait, SecretIds.LilyBuff, EHeroAttribute.POW, -30, "百合花", false);
-            SyncStatus(role, SecretIds.WhiteHairTrait, SecretIds.WhiteHairWeakBuff, EHeroAttribute.STR, -10, "白毛少女", false);
+            SyncStatus(role, SecretIds.WhiteHairTrait, SecretIds.WhiteHairWeakBuff, EHeroAttribute.STR, -40, "白毛少女", false);
+            // 「柔弱的白毛少女」（880032）的数值迁移：进游戏后每个角色只试一次
+            // （跨读档的防重复靠状态层数，见 MigrateWeaknessNumbers 的说明）
+            if (WeaknessMigrationTried.Add(role))
+            {
+                MigrateWeaknessNumbers(role);
+            }
             SyncStatus(role, SecretIds.LoneShadowTrait, SecretIds.LoneShadowBuff, EHeroAttribute.DEX, 20, "灰暗孤影", false);
             SyncStatus(role, SecretIds.MemoryTrait, SecretIds.MemoryBuff, EHeroAttribute.None, 0, "记忆的双剑", false);
             SyncWhiteHairDice(role);
@@ -1676,6 +1682,73 @@ namespace AttackTargetVisualizer
             // RemoveAvoidTrait(role);   // 2026-09-25 用户口径：改成改存档 —— 把 66「逃避」的 CurrentState 置成 2（Sleepy，沉睡），
             //                           // 用 temp\set_trait_state.ps1。函数本体留着，以后说不定能用在别的特质上。
             SyncCharmDaze(role);         // 恍惚：按当前是否处于魅惑，对齐意志 -25
+        }
+
+        // =====================================================================
+        // 四·零点五、「柔弱的白毛少女」（880032）的数值迁移
+        //
+        // 背景：这个状态 2026-09-27 从"力量 -10"改成了"力量 -40 / 体质 -40 / 运动 -20"。
+        // 但老存档里旧值已经**固化**进属性最终值，而读档后来源表是空的
+        // （见上面 EnsureTraitStatuses 里 2026-09-26 的注释）——
+        // 直接重挂会把旧值留在身上、再叠一遍新值，越扣越多（就是那个"读档又扣一遍"的 bug）。
+        //
+        // 所以：进游戏后的**第一次**对齐时做一次迁移 ——
+        //   · 来源表里还有这条状态（本进程挂的）→ 直接重挂，数值自然刷新；
+        //   · 来源表里没有（读档固化的旧值）→ 先手动补回旧值（力量 +10），再重挂。
+        // 迁移完成后把状态层数设成 2，当"已迁移"的版本标记
+        // （这个状态隐藏、数值不随层数缩放、MaxLayer 无上限），所以**只迁移一次**，
+        // 之后无论读档多少次都不会重复扣。
+        // 以后若再改这个状态的数值：把 WeaknessMigratedLayer +1、在这里补一段新的"补回旧值"逻辑即可。
+        // =====================================================================
+
+        /// <summary>「柔弱的白毛少女」迁移后的层数（当版本标记用：1 = 旧版数值，2 = 新版数值）。</summary>
+        private const int WeaknessMigratedLayer = 2;
+
+        /// <summary>本进程里已经尝试过迁移的角色（跨读档的防重复靠状态层数，见上）。</summary>
+        private static readonly HashSet<BattleRole> WeaknessMigrationTried = new HashSet<BattleRole>();
+
+        private static async void MigrateWeaknessNumbers(BattleRole role)
+        {
+            try
+            {
+                if (role == null || role.Data == null)
+                {
+                    return;
+                }
+                if (!HasTraitWake(role, SecretIds.WhiteHairTrait))
+                {
+                    return;   // 特质没醒着，等它醒了自己就是新数值
+                }
+                BuffData buff = role.GetBuff(SecretIds.WhiteHairWeakBuff);
+                if (buff == null)
+                {
+                    return;   // 状态不在：SyncStatus 会按新配置补挂，不需要迁移
+                }
+                if (buff.CurLayer >= WeaknessMigratedLayer)
+                {
+                    return;   // 已经迁移过（层数就是版本标记），绝不再动 —— 防"读档重复扣"
+                }
+                bool tracked = HasAttrSourceValue(role, EHeroAttribute.STR, buff.SourceKey, -40)
+                            || HasAttrSourceValue(role, EHeroAttribute.STR, buff.SourceKey, -10);
+                if (!tracked)
+                {
+                    // 读档固化的旧值（力量 -10）：先补回来（不带来源键，直接改最终值）
+                    await role.Data.ChangeAttr(true, new ChangeAttrData(EHeroAttribute.STR, "10"), "", false, false);
+                    AttackTargetPlugin.LogInfo("白毛少女：检测到读档固化的旧数值，补回 力量+10 后重挂「柔弱的白毛少女」");
+                }
+                await role.RemoveBuff(SecretIds.WhiteHairWeakBuff);
+                await role.AddBuff(role, SecretIds.WhiteHairWeakBuff);
+                BuffData fresh = role.GetBuff(SecretIds.WhiteHairWeakBuff);
+                if (fresh != null)
+                {
+                    await fresh.ChangeLayer(role, WeaknessMigratedLayer - 1);   // 层数 = 2，标记已迁移
+                }
+                AttackTargetPlugin.LogInfo("白毛少女：「柔弱的白毛少女」数值已刷新到最新配置（力量-40 / 体质-40 / 运动-20）");
+            }
+            catch (Exception e)
+            {
+                AttackTargetPlugin.LogError("白毛少女：数值迁移出错：" + e.Message);
+            }
         }
 
         /// <summary>茉莉身上不要的疯狂特质：66「逃避」（2026-09-25 用户要求移除）。</summary>

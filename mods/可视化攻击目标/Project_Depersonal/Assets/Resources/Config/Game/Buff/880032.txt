@@ -8,7 +8,7 @@
 			"Name" : {
 				"TarKey" : "",
 				"SheetKey" : "",
-				"InputText" : "柔弱",
+				"InputText" : "柔弱的白毛少女",
 				"Characteristic" : null
 			},
 			"Des" : {
@@ -21,7 +21,7 @@
 				"ReferenceType" : 0,
 				"Key" : null
 			},
-			"Comment" : "私货特质「白毛少女（880022）」的隐藏数值状态：力量-40、体质-40、运动-20，随特质苏醒挂/摘。",
+			"Comment" : "私货特质「白毛少女（880022）」的隐藏数值状态：力量-40、体质-40、运动-20，随特质苏醒挂/摘。2026-09-27 改名统一为「柔弱的白毛少女」；层数被插件当数值迁移版本标记用（1=旧版、2=新版），别手动改层数。",
 			"BuffType" : 4,
 			"BuffEffectType" : 3,
 			"OverlayType" : 2,

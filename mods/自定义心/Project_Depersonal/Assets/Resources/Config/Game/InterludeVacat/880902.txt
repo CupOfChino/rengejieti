@@ -5,11 +5,11 @@
 			"VacatId" : 880902,
 			"TitleTxt" : {
 				"TarKey" : "",
-				"InputText" : "添加心特质"
+				"InputText" : "添加「心」"
 			},
 			"DecTxt" : {
 				"TarKey" : "",
-				"InputText" : "让这个调查员获得【心】。先有心，才能有自己的那一颗。"
+				"InputText" : "让这个调查员获得【心】特质。先有特质，才能有属于他自己的「心」buff。"
 			},
 			"EffectTxt" : {
 				"TarKey" : "",

@@ -40,7 +40,9 @@ if ($UninstallHost) {
     Write-Output "没有找到挂载点：$target"
   }
   # 数据部分照清单删
-  $manifest = Join-Path (Join-Path $hostDir 'plugins') 'xineditor_installed.txt'
+  # 清单特意不用 .txt 后缀：游戏加载配置时会扫 mod 目录里的 *.txt 并尝试当数据表解析，
+  # 纯文本清单会被它读成"无效文件"并抛 FormatException（实测会刷一条红字报错）。
+  $manifest = Join-Path (Join-Path $hostDir 'plugins') 'xineditor_installed.manifest'
   if (Test-Path -LiteralPath $manifest) {
     foreach ($line in (Get-Content -LiteralPath $manifest -Encoding UTF8)) {
       $rel = $line.Trim()
@@ -105,7 +107,7 @@ if ($InstallHost) {
       Copy-Item -LiteralPath $f.FullName -Destination $dst -Force
       $installed += ('Project_Depersonal\' + $rel)
     }
-    Set-Content -LiteralPath (Join-Path $targetDir 'xineditor_installed.txt') -Value $installed -Encoding UTF8
+    Set-Content -LiteralPath (Join-Path $targetDir 'xineditor_installed.manifest') -Value $installed -Encoding UTF8
     Write-Output ("已合并数据 " + $installed.Count + " 个文件到宿主 Project_Depersonal")
   }
   Write-Output '改完记得重启游戏才会生效。'

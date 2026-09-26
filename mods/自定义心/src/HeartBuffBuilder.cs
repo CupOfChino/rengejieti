@@ -192,6 +192,10 @@ namespace XinEditor
             }
 
             int reduce = 0;
+            int physReducePercent = 0;
+            int magicReducePercent = 0;
+            int physBonusPercent = 0;
+            int magicBonusPercent = 0;
             for (int i = 0; i < def.Stats.Count; i++)
             {
                 HeartStat st = def.Stats[i];
@@ -225,6 +229,18 @@ namespace XinEditor
                     case HeartStatType.Athletics:
                         cfg.Arrts.Add(SkillAttr(EExploreSkill.Motion, st.Value));
                         break;
+                    case HeartStatType.PhysicalDamageReducePercent:
+                        physReducePercent += st.Value;
+                        break;
+                    case HeartStatType.MagicDamageReducePercent:
+                        magicReducePercent += st.Value;
+                        break;
+                    case HeartStatType.PhysicalDamageBonusPercent:
+                        physBonusPercent += st.Value;
+                        break;
+                    case HeartStatType.MagicDamageBonusPercent:
+                        magicBonusPercent += st.Value;
+                        break;
                 }
             }
 
@@ -232,9 +248,31 @@ namespace XinEditor
             {
                 cfg.Events.Add(MakeDamageReduceEvent(reduce));
             }
+            // 百分比类：走 Buff_ChangeAddOrReducePercentOption（按 SourceKey 追踪，摘状态时正常退回）
+            if (physReducePercent > 0)
+            {
+                cfg.Events.Add(MakePercentDamageEvent(isBonus: false, EDamageType.Ordinary, physReducePercent));
+            }
+            if (magicReducePercent > 0)
+            {
+                cfg.Events.Add(MakePercentDamageEvent(isBonus: false, EDamageType.Magic, magicReducePercent));
+            }
+            if (physBonusPercent > 0)
+            {
+                cfg.Events.Add(MakePercentDamageEvent(isBonus: true, EDamageType.Ordinary, physBonusPercent));
+            }
+            if (magicBonusPercent > 0)
+            {
+                cfg.Events.Add(MakePercentDamageEvent(isBonus: true, EDamageType.Magic, magicBonusPercent));
+            }
+            // 回合开始：精神值正常才扣 1 点维持；处于衰弱/衰竭则解除
             cfg.Events.Add(MakeSanCostEvent());
+            cfg.Events.Add(MakeSanBreakRoundStartEvent());
+            // 战斗中精神值刚掉进衰弱/衰竭的那一刻，立刻解除
             cfg.Events.Add(MakeSanBreakEvent(ESanState.Weak));
             cfg.Events.Add(MakeSanBreakEvent(ESanState.Collapse));
+            // 重伤（血量见底）或倒下时解除
+            cfg.Events.Add(MakeLifeStateClearEvent());
             cfg.Events.Add(MakeBattleEndEvent());
             return cfg;
         }
@@ -242,7 +280,10 @@ namespace XinEditor
         private static ChangeAttrData ExAttr(ERoleExtraAttribute type, int value)
         {
             ChangeAttrData d = new ChangeAttrData();
-            d.IsTrackSource = false;
+            // 必须是 true！false 时游戏会把 sourceKey 清成空串，
+            // 而 VariableData.Add("", v) 会走"直接加进 _baseValue、不记来源"的分支，
+            // 摘状态时 Remove("") 又找不到来源 → 每挂一次就永久叠一层（踩过大坑）。
+            d.IsTrackSource = true;
             d.RoleExAttr = new RoleParamVariableData<ERoleExtraAttribute>();
             d.RoleExAttr.Type = type;
             d.RoleExAttr.Value = value.ToString(CultureInfo.InvariantCulture);
@@ -252,7 +293,7 @@ namespace XinEditor
         private static ChangeAttrData HeroAttr(EHeroAttribute type, int value)
         {
             ChangeAttrData d = new ChangeAttrData();
-            d.IsTrackSource = false;
+            d.IsTrackSource = true;   // 同上：false 会导致数值永久叠加
             d.RoleAttr = new RoleParamVariableData<EHeroAttribute>();
             d.RoleAttr.Type = type;
             d.RoleAttr.Value = value.ToString(CultureInfo.InvariantCulture);
@@ -262,7 +303,7 @@ namespace XinEditor
         private static ChangeAttrData SkillAttr(EExploreSkill type, int value)
         {
             ChangeAttrData d = new ChangeAttrData();
-            d.IsTrackSource = false;
+            d.IsTrackSource = true;   // 同上：false 会导致数值永久叠加
             d.RoleSkill = new RoleParamVariableData<EExploreSkill>();
             d.RoleSkill.Type = type;
             d.RoleSkill.Value = value.ToString(CultureInfo.InvariantCulture);
@@ -297,11 +338,37 @@ namespace XinEditor
             return d;
         }
 
+        // 百分比增减伤：isBonus=true 是"造成伤害加成"，false 是"受到伤害减少"
+        // 物理伤害只算普通伤害（游戏里伤害类型只有 普通/爆炸/法术 三种）
+        private static BuffEventData MakePercentDamageEvent(bool isBonus, EDamageType damageType, int percent)
+        {
+            BuffEventData ev = new BuffEventData();
+            ev.EBuffTrigger = EBuffTriggerType.Stable;
+
+            Buff_ChangeAddOrReducePercentOption opt = new Buff_ChangeAddOrReducePercentOption();
+            opt.TargetType = BaseBuffOption.EBuffOptionTargetType.BuffTarget;
+            opt.ChangeType = isBonus
+                ? Buff_ChangeAddOrReducePercentOption.EHitType.CauseDamage
+                : Buff_ChangeAddOrReducePercentOption.EHitType.BeDamaged;
+            opt.IsRemove = false;
+            opt.ChangeByValue = false;              // false＝按比例
+            opt.Percent = percent / 100f;           // 50 → 0.5
+            opt.FloorValue = 0;
+            opt.DamageTypes = new List<EDamageType>();
+            opt.DamageTypes.Add(damageType);
+            ev.Funcs.Add(opt);
+            return ev;
+        }
+
         // 每回合开始前消耗 1 点精神值（和默认心一致）
+        // 只在自己精神状态正常时扣：衰弱/衰竭交给下面那条事件去解除
         private static BuffEventData MakeSanCostEvent()
         {
             BuffEventData ev = new BuffEventData();
             ev.EBuffTrigger = EBuffTriggerType.BeforeRoundStart;
+            ev.SatisfyAny = false;   // 两个条件都要满足：既不衰弱、也不衰竭
+            ev.Checks.Add(MakeSanStateCheck(ESanState.Weak, true));
+            ev.Checks.Add(MakeSanStateCheck(ESanState.Collapse, true));
 
             Buff_RoleAttrOption opt = new Buff_RoleAttrOption();
             opt.TargetType = BaseBuffOption.EBuffOptionTargetType.BuffTarget;
@@ -313,19 +380,61 @@ namespace XinEditor
             return ev;
         }
 
+        // 回合开始时的兜底复检：进战斗那一刻就已经是衰弱/衰竭的，SanStateChange 不会再触发，
+        // 只能靠这里在第一个回合开始时把它解掉
+        private static BuffEventData MakeSanBreakRoundStartEvent()
+        {
+            BuffEventData ev = new BuffEventData();
+            ev.EBuffTrigger = EBuffTriggerType.BeforeRoundStart;
+            ev.SatisfyAny = true;    // 衰弱或衰竭，任一即解除
+            ev.Checks.Add(MakeSanStateCheck(ESanState.Weak, false));
+            ev.Checks.Add(MakeSanStateCheck(ESanState.Collapse, false));
+
+            AddHealAndRemoveSelf(ev);
+            return ev;
+        }
+
         // 精神值陷入衰弱/衰竭时：补 5 点精神值并解除自己
         private static BuffEventData MakeSanBreakEvent(ESanState state)
         {
             BuffEventData ev = new BuffEventData();
             ev.EBuffTrigger = EBuffTriggerType.SanStateChange;
 
-            Buff_SelfSanStateCheck chk = new Buff_SelfSanStateCheck();
-            chk.SanState = state;
-            chk.Not = false;
-            ev.Checks.Add(chk);
+            ev.Checks.Add(MakeSanStateCheck(state, false));
 
             AddHealAndRemoveSelf(ev);
             return ev;
+        }
+
+        // 战斗中的倒下：解除【心】（不补精神值，回血留给游戏自己的结算）
+        // 注意：重伤（SevereWound，血量见底锁 1 血）不解除——只要精神值没垮，心就还在
+        private static BuffEventData MakeLifeStateClearEvent()
+        {
+            BuffEventData ev = new BuffEventData();
+            ev.EBuffTrigger = EBuffTriggerType.LifeStateChangeBeforeFIghtOverCheck;
+            ev.SatisfyAny = false;   // 只有一个条件：倒下
+            ev.Checks.Add(MakeLifeStateCheck(ELifeState.Death));
+
+            AddRemoveSelf(ev);
+            return ev;
+        }
+
+        private static Buff_SelfSanStateCheck MakeSanStateCheck(ESanState state, bool not)
+        {
+            Buff_SelfSanStateCheck chk = new Buff_SelfSanStateCheck();
+            chk.SanState = state;
+            chk.Not = not;
+            return chk;
+        }
+
+        private static Buff_SelfLifeStateCheck MakeLifeStateCheck(ELifeState state)
+        {
+            Buff_SelfLifeStateCheck chk = new Buff_SelfLifeStateCheck();
+            chk.TargetType = BaseBuffOption.EBuffOptionTargetType.BuffTarget;
+            chk.LifeState = state;
+            chk.SatisfyAny = false;
+            chk.Not = false;
+            return chk;
         }
 
         // 战斗结束时：补 5 点精神值并解除自己
@@ -347,6 +456,11 @@ namespace XinEditor
             heal.IsRemove = false;
             ev.Funcs.Add(heal);
 
+            AddRemoveSelf(ev);
+        }
+
+        private static void AddRemoveSelf(BuffEventData ev)
+        {
             Buff_BuffChangeOption remove = new Buff_BuffChangeOption();
             remove.ChangeType = EAddChangeMode.Remove;
             remove.TargetType = BaseBuffOption.EBuffOptionTargetType.BuffTarget;

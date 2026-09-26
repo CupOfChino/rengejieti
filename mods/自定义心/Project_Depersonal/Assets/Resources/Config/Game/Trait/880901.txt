@@ -1,0 +1,87 @@
+{
+	"Data" : {
+		"__type" : "BaseSheetData,Assembly-CSharp",
+		"value" : {
+			"__type" : "MOD.TraitData,Assembly-CSharp",
+			"Id" : 880901,
+			"IsCanCreateGet" : true,
+			"IsCloseInherit" : false,
+			"Type" : 4,
+			"CanRepeate" : false,
+			"TriggerLimit" : 0,
+			"Localization_Name" : {
+				"TarKey" : "",
+				"SheetKey" : "",
+				"InputText" : "心",
+				"Characteristic" : null
+			},
+			"Localization_Des" : {
+				"TarKey" : "",
+				"SheetKey" : "",
+				"InputText" : "FACE THE SIN,SAVE THE E.G.O",
+				"Characteristic" : null
+			},
+			"BuffsLink" : [
+				880901
+			],
+			"Terms" : [
+				
+			],
+			"CreateEvent" : null,
+			"WakeEvent" : {
+				"Localization_Functin" : {
+					"TarKey" : "",
+					"SheetKey" : "",
+					"InputText" : "自动激活",
+					"Characteristic" : null
+				},
+				"Inherent" : [],
+				"Triggers" : [
+					{
+						"TriggerType" : 211,
+						"RoleTriggerType" : 0,
+						"TimeTriggerType" : 0,
+						"Options" : [
+							{
+								"__type" : "MOD.TraitEvent.ActiveBuffOption,Assembly-CSharp",
+								"BuffId" : 880901
+							}
+						],
+						"NotTriggerCountAdd" : false
+					}
+				]
+			},
+			"SleepyEvent" : {
+				"Localization_Functin" : {
+					"TarKey" : "",
+					"SheetKey" : "",
+					"InputText" : "手动激活",
+					"Characteristic" : null
+				},
+				"Inherent" : [
+					
+				],
+				"Triggers" : [
+					
+				]
+			},
+			"ConceptTraitTriggerDatas" : [
+				
+			],
+			"CrazyTraitTriggerDatas" : [
+				
+			],
+			"ActiveToHideCustom" : {
+				"Gold" : 0,
+				"InterludeTime" : 0,
+				"SpaceTimePoint" : 0
+			},
+			"HideToActiveCustom" : {
+				"Gold" : 0,
+				"InterludeTime" : 0,
+				"SpaceTimePoint" : 0
+			},
+			"EditorSheetKey" : null
+		}
+	}
+}

@@ -10,3 +10,10 @@ Thumbs.db
 *.tmp
 *.log
 
+# API Key（图像生成等外部服务）—— 只放本地，绝不进 git
+tools/qwen_api_key.txt
+tools/*_api_key.txt
+tools/.env
+
+# 历史备份与试验素材（合计 ~72MB：早期心的备份、抠图诊断稿等）—— 只放本地
+other/

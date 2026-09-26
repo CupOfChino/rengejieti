@@ -1,0 +1,119 @@
+{
+	"ResourceReferenceConfigure" : {
+		"__type" : "ResourceReferenceConfigure,Assembly-CSharp",
+		"value" : {
+			"BgmResUnitDatas" : [
+				
+			],
+			"SoundResUnitDatas" : [
+				
+			],
+			"VoiceResUnitDatas" : [
+				
+			],
+			"HeadIconResUnitDatas" : [
+				
+			],
+			"CGResUnitDatas" : [
+				
+			],
+			"CloseUpResUnitDatas" : [
+				
+			],
+			"ItemIconResUnitDaras" : [
+				
+			],
+			"MythologicalResUnitDatas" : [
+				
+			],
+			"SkillIconResUnitDatas" : [
+				
+			],
+			"BuffIconResUnitDatas" : [
+				
+			],
+			"MagicIconResUnitDatas" : [
+				
+			],
+			"ModuleCoverResUnitDatas" : [
+				
+			],
+			"RelationSkillIconDatas" : [
+				
+			],
+			"CharaSprUnitDatas" : [
+				
+			],
+			"EffectResUnitDatas" : [
+				
+			],
+			"RoleModelUnitDatas" : [
+				
+			],
+			"SpecUnitDatas" : [
+				
+			],
+			"MeshMapNodeIconResUnitDatas" : [
+				
+			],
+			"TextModSceneDatas" : [
+				
+			],
+			"ExploreSkillDatas" : [
+				
+			],
+			"LogoDatas" : [
+				
+			],
+			"OptionTipDatas" : [
+				
+			],
+			"GameAchievementDatas" : [
+				
+			],
+			"RoleModelAnimDatas" : [
+				
+			],
+			"ShopRoleTextureDatas" : [
+				
+			],
+			"MapBgDatas" : [
+				
+			],
+			"SceneTextureDatas" : [
+				
+			],
+			"ScenePreviewDatas" : [
+				
+			],
+			"ExtraAndEffectDatas" : [
+				
+			],
+			"ResourceMap" : {1007:[
+					{ "Key" : "xin_icon", "Path" : "Resources\/Texture\/BuffIcon\/xin_icon", "Ext" : ".png" }
+				],1023:[
+					{ "Key" : "xin_glow_01", "Path" : "Resources\/Texture\/ExtraAnim\/xin_glow_01", "Ext" : ".png" },
+					{ "Key" : "xin_glow_02", "Path" : "Resources\/Texture\/ExtraAnim\/xin_glow_02", "Ext" : ".png" },
+					{ "Key" : "xin_glow_03", "Path" : "Resources\/Texture\/ExtraAnim\/xin_glow_03", "Ext" : ".png" },
+					{ "Key" : "xin_glow_04", "Path" : "Resources\/Texture\/ExtraAnim\/xin_glow_04", "Ext" : ".png" },
+					{ "Key" : "xin_glow_05", "Path" : "Resources\/Texture\/ExtraAnim\/xin_glow_05", "Ext" : ".png" },
+					{ "Key" : "xin_glow_06", "Path" : "Resources\/Texture\/ExtraAnim\/xin_glow_06", "Ext" : ".png" },
+					{ "Key" : "xin_glow_07", "Path" : "Resources\/Texture\/ExtraAnim\/xin_glow_07", "Ext" : ".png" },
+					{ "Key" : "xin_glow_08", "Path" : "Resources\/Texture\/ExtraAnim\/xin_glow_08", "Ext" : ".png" },
+					{ "Key" : "xin_glow_09", "Path" : "Resources\/Texture\/ExtraAnim\/xin_glow_09", "Ext" : ".png" },
+					{ "Key" : "xin_glow_10", "Path" : "Resources\/Texture\/ExtraAnim\/xin_glow_10", "Ext" : ".png" },
+					{ "Key" : "xin_glow_11", "Path" : "Resources\/Texture\/ExtraAnim\/xin_glow_11", "Ext" : ".png" },
+					{ "Key" : "xin_glow_12", "Path" : "Resources\/Texture\/ExtraAnim\/xin_glow_12", "Ext" : ".png" },
+					{ "Key" : "xin_glow_13", "Path" : "Resources\/Texture\/ExtraAnim\/xin_glow_13", "Ext" : ".png" },
+					{ "Key" : "xin_glow_14", "Path" : "Resources\/Texture\/ExtraAnim\/xin_glow_14", "Ext" : ".png" },
+					{ "Key" : "xin_glow_15", "Path" : "Resources\/Texture\/ExtraAnim\/xin_glow_15", "Ext" : ".png" },
+					{ "Key" : "xin_glow_16", "Path" : "Resources\/Texture\/ExtraAnim\/xin_glow_16", "Ext" : ".png" },
+					{ "Key" : "xin_glow_17", "Path" : "Resources\/Texture\/ExtraAnim\/xin_glow_17", "Ext" : ".png" },
+					{ "Key" : "xin_glow_18", "Path" : "Resources\/Texture\/ExtraAnim\/xin_glow_18", "Ext" : ".png" },
+					{ "Key" : "xin_glow_19", "Path" : "Resources\/Texture\/ExtraAnim\/xin_glow_19", "Ext" : ".png" },
+					{ "Key" : "xin_glow_20", "Path" : "Resources\/Texture\/ExtraAnim\/xin_glow_20", "Ext" : ".png" }
+				]
+			}
+		}
+	}
+}

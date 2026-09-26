@@ -65,6 +65,7 @@ namespace XinEditor
                 Harmony harmony = new Harmony(Guid);
                 PatchOne(harmony, typeof(Patch_ActiveBuffOption_Active));
                 PatchOne(harmony, typeof(Patch_ActiveBuffOption_UnActive));
+                PatchOne(harmony, typeof(Patch_BattleRole_TriggerBuffs));
                 PatchOne(harmony, typeof(Patch_InterludeVacation));
                 PatchOne(harmony, typeof(Patch_InputResponseData_Run));
                 PatchOne(harmony, typeof(Patch_KeyboardEventManager_MoveDir));
@@ -94,11 +95,17 @@ namespace XinEditor
 
         private void Update()
         {
+            _timer += UnityEngine.Time.unscaledDeltaTime;
             if (_startupDone)
             {
+                // 语言能在游戏设置里随时改，隔一会儿重贴一次英文文案
+                if (_timer >= 10f)
+                {
+                    _timer = 0f;
+                    XinText.ApplyDataOverlay();
+                }
                 return;
             }
-            _timer += UnityEngine.Time.unscaledDeltaTime;
             if (_timer < 3f)
             {
                 return;
@@ -113,6 +120,7 @@ namespace XinEditor
                 }
                 _startupDone = true;
                 EnsureAllRegistered();
+                XinText.ApplyDataOverlay();
                 LogRoles();
                 if (_debugAutoHeart != null && _debugAutoHeart.Value && Store.Hearts.Count == 0)
                 {
@@ -250,6 +258,9 @@ namespace XinEditor
     [HarmonyPatch(typeof(MOD.TraitEvent.ActiveBuffOption), "Active")]
     internal static class Patch_ActiveBuffOption_Active
     {
+        // 什么都不做的已完成 Task，用来顶掉"挂状态"这一步
+        private static readonly Task CompletedTask = Task.FromResult<object>(null);
+
         private static bool Prefix(MOD.TraitEvent.ActiveBuffOption __instance, RoleData role, ref Task __result)
         {
             try
@@ -261,6 +272,16 @@ namespace XinEditor
                 if (role == null || role.Role == null)
                 {
                     return true;
+                }
+                // 进战斗这一刻先判定：精神值已经在衰弱/衰竭，就不开【心】。
+                // （状态里的 SanStateChange 只在"精神状态发生变化"时触发，进场就已经衰弱它不会响）
+                ESanState san = role.SanState;
+                if (san == ESanState.Weak || san == ESanState.Collapse)
+                {
+                    XinEditorPlugin.LogInfo("「" + HeartStore.SafeRoleName(role) + "」精神值处于" +
+                        (san == ESanState.Weak ? "衰弱" : "衰竭") + "，本次战斗不开启【心】");
+                    __result = CompletedTask;
+                    return false;
                 }
                 HeartDefinition def = XinEditorPlugin.Store.Find(role);
                 if (def == null)

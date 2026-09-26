@@ -1,0 +1,28 @@
+{
+	"Data" : {
+		"__type" : "MOD.InterludeVacationConfig,Assembly-CSharp",
+		"value" : {
+			"VacatId" : 880903,
+			"TitleTxt" : {
+				"TarKey" : "",
+				"InputText" : "移除「心」"
+			},
+			"DecTxt" : {
+				"TarKey" : "",
+				"InputText" : "移除这个调查员的「心」buff 与【心】特质，他自己那颗自定义心也会一起删掉。"
+			},
+			"EffectTxt" : {
+				"TarKey" : "",
+				"InputText" : "移除「心」buff 与特质"
+			},
+			"Consume" : {
+				"Gold" : 0,
+				"InterludeTime" : 0,
+				"SpaceTimePoint" : 0
+			},
+			"Checks" : [],
+			"Opts" : [],
+			"EnableSeriousCheck" : false
+		}
+	}
+}

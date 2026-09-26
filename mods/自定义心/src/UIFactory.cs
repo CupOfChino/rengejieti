@@ -198,7 +198,7 @@ namespace XinEditor
             Text t = go.GetComponent<Text>();
             t.font = Font;
             t.fontSize = size;
-            t.text = text;
+            t.text = XinText.L(text);
             t.color = TextColor;
             t.alignment = anchor;
             t.horizontalOverflow = HorizontalWrapMode.Wrap;
@@ -224,7 +224,31 @@ namespace XinEditor
 
             field.contentType = numberOnly ? InputField.ContentType.IntegerNumber : InputField.ContentType.Standard;
             field.characterLimit = numberOnly ? 3 : 24;
+
+            // 告诉游戏"这个框也在收字"。
+            // 游戏自己的输入框都带 InputFieldControl，会把 InputField 登记进 KeyboardEventManager；
+            // 登记过之后，框一聚焦 IsEntryInput 就是 true，打字时的全局快捷键（U/空格/数字传送键、
+            // 列表切换这些）才会被游戏自己整体停掉，不然按到哪个字就跳哪个界面。
+            RegisterInputField(field);
             return field;
+        }
+
+        // 登记到游戏的键盘管理器。只登记不撤销：窗口是常驻对象、只做显隐，
+        // 没聚焦时 IsEntryInput 自己会回到 false，游戏按键也就自动恢复。
+        private static void RegisterInputField(InputField field)
+        {
+            try
+            {
+                if (!MonoSingleton<KeyboardEventManager>.HasInstance)
+                {
+                    return;
+                }
+                MonoSingleton<KeyboardEventManager>.Instance.AddFiled(field);
+            }
+            catch (Exception e)
+            {
+                XinEditorPlugin.LogError("登记输入框失败：" + e.Message);
+            }
         }
 
         internal static Button TextButton(Transform parent, string name, string label, UnityAction onClick,

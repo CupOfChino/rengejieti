@@ -1,0 +1,60 @@
+==========================================================
+Title（工坊标题，复制这一行）
+==========================================================
+[Limbus Company] Custom "Shin"
+
+==========================================================
+Description（工坊简介正文，从这里往下整段复制）
+==========================================================
+[h2]What is this[/h2]
+A DIY Limbus Company buff for Depersonalization: Shin (the "heart" buff).
+
+[h2]Warning: If you have other mods equipped that use hotkeys, it is recommended to copy them in after completing the input externally; otherwise, problems may occur!!! The game's own hotkeys are not affected at present.[/h2]
+
+[list]
+[*] Everything for Shin is included in this package: the default Shin buff (880901), the trait, the icon and the frame-animation effect
+[*] Requires the BepInEx framework mod
+[*] In the lobby, open "Interlude Time" and choose "Edit this investigator's Shin buff", then hit Save
+[/list]
+
+[h2]What you can customize[/h2]
+[list]
+[*] Speed is a fixed entry, up to 100
+[*] Up to 4 more entries: Damage Bonus (max 5), Damage Reduction (max 2), Dodge, Willpower, Occultism, Brawl, Shooting, Athletics (max 50 each), Physical/Magic Damage Reduction % (max 50%), Physical/Magic Damage Bonus % (max 100%)
+[*] The name is always "Shin (investigator) - suffix"; you pick the suffix, duplicate names are rejected
+[*] Costs 1 SP per round; removed when SP falls into Weakness/Collapse or when the battle ends
+[/list]
+
+Can't decide? Don't worry - this mod also comes with a handy random roll feature!
+
+[h2]How the random roll works[/h2]
+[list]
+[*] One d100 (1-100) is rolled per entry, and the number is converted into the value
+[*] Speed: the roll itself
+[*] Damage Bonus: roll / 20, rounded up
+[*] Damage Reduction: roll / 50, rounded up
+[*] Other stats: roll / 2, rounded up
+[*] Physical / Magic Damage Bonus %: the roll itself
+[*] Physical / Magic Damage Reduction %: roll / 2, rounded up
+[/list]
+Rounding rules:
+[list]
+[*] Except Damage Bonus / Damage Reduction, results are rounded to the nearest multiple of 5
+[*] Percentage entries are rounded to the nearest multiple of 10
+[*] Values are never 0: normal entries min 5, Damage Bonus / Reduction min 1, percentages min 10%
+[/list]
+Each reroll costs 5 Luck.
+
+Investigators without a custom Shin simply use the default "Shin" buff.
+
+[h2]Recent additions[/h2]
+[list]
+[*] When the Shin trait is asleep you no longer gain Shin automatically at the start of a battle. Instead you get the skill "Activate Shin": +50 Speed for the round (to seize the initiative); after the action, spend 5 SP to gain Shin and 4 Armor. That Armor ("Poised") is removed at the start of the next round
+[*] Three interlude entries now: "Edit this investigator's Shin buff" / "Add Shin" / "Remove Shin"
+[/list]
+
+[h2]This update[/h2]
+Finally pulled it off: by feeding the first and last frames to an AI video generator, the author now has a complete AI-made frame sequence for the effect. The result is close to 90% of a faithful recreation of Limbus Company's Shin. Rejoice!
+
+[h2]About the assets[/h2]
+Feel free to reuse them — just help spread the word about this mod. After all, I stayed up from the evening until past 3 a.m. recreating Shin's effect. qwq

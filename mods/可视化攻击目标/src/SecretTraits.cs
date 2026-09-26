@@ -21,6 +21,7 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Game;
+using Game.FixedSkill;
 using Game.Role.AI;
 using Game.SkillData;
 using GamePlayEvent;
@@ -42,7 +43,7 @@ namespace AttackTargetVisualizer
         internal const int LilyRing = 880004;           // 装备：百合花戒指（回魔法值 / 施法后追加伤害 / 习得枯萎术）
         internal const int LilyWreath = 880005;         // 装备：百合花环（护具槽；免疫四种状态 + 每回合解一个负面 = 叠【花香】）
         internal const int LilyAromaBuff = 880048;      // 状态：百合花芳香（敌人身上的层数 debuff）
-        internal const int FlowerScentBuff = 880049;    // 状态：花香（自身的伤害加成层数）
+        internal const int FlowerScentBuff = 880049;    // 状态：花香（每层意志检定 +5，2026-09-27 改）
 
         internal const int LilyBuff = 880024;           // 状态：百合花（纯显示）
         internal const int LoneShadowBuff = 880026;     // 状态：灰暗孤影（纯标记）
@@ -552,7 +553,7 @@ namespace AttackTargetVisualizer
                         ZangHua.ClearMarkBeDamage(role);     // 葬花：清掉上一场残留的剑痕易伤（防跨场残留）
                         JingJi.ClearState();              // 荆棘：清掉上一场战斗的状态缓存（束缚转换闸门 / 先发资格等）
                         JingJi.MarkFirstStrikeReady(role);   // 荆棘：先发资格只在这一刻判一次（2026-09-27 用户口径）
-                        ClearFlowerScent(role);              // 花香：战斗开始清一次（防上一场残留的层数和属性加成）
+                        // 花香：2026-09-27 起战斗开始**不再**清空（战斗之间保留层数），清空时机挪到了副本边界
                         // 2026-09-23 用户口径：状态数值的对齐**只在进入副本时做一次**（见 OnGamePlayEvent 的 EnterModule），
                         // 不要每场战斗都查一遍 —— 那样会反复重挂状态、属性来回跳。
                         ZangHua.EnsureWeapon(role);          // 葬花：战斗开始时确保茉莉手上有这把武器
@@ -571,7 +572,7 @@ namespace AttackTargetVisualizer
                         JingJi.ClearShufu(role);              // 荆棘：回合结束（所有人行动完成后）移除【束缚】
                         JingJi.ClearAllTargetLocks();         // 荆棘：回合结束也把【目标锁定】清掉（剩下的两种情况由死亡清理/战斗结束兜底）
                         ZangHua.OnRoundEndFor(role);         // 葬花：剑痕层数减半 + 补流血
-                        FlowerScentRoundEnd(role);           // 花香：层数减半（伤害加成跟着变）
+                        FlowerScentRoundEnd(role);           // 花香：层数减半（并回 1 点生命 + 1 点精神值）
                         break;
                     case EBuffTriggerType.ActionEnd:
                         QueueExtraAction(role);              // 灰暗孤影：近战武器攻击结束后，整套再来一遍
@@ -848,7 +849,8 @@ namespace AttackTargetVisualizer
         //   芳香（880048）：回合结束每层扣 1 点生命；满 5 层时立刻扣（最大生命 10% + 5）并清除
         //   戒指：回合开始回 2 点魔法值（用游戏自带的"每回合魔法回复"属性承载）
         //   头环：回合开始随机解除一个可解除的非永久负面状态，每解一个叠 1 层【花香】
-        //   花香（880049）：每层伤害加成 +1；回合结束层数减半
+        //   花香（880049）：每层意志检定 +5；战斗/探索回合结束层数减半并回 1 血 1 SAN
+        //                    （2026-09-27 用户口径：原"每层伤害加成"已撤掉）
         // =====================================================================
 
         /// <summary>身上有某件百合花装备 + 在战斗中 + 没死 —— 这类"装备带来的每回合效果"的通用前置。</summary>
@@ -876,7 +878,7 @@ namespace AttackTargetVisualizer
             catch (Exception) { return null; }
         }
 
-        /// <summary>百合花链：回合开始随机挑一名敌人吸 2 点生命，并叠 1 层【百合花芳香】。</summary>
+        /// <summary>百合花链：回合开始随机挑一名敌人吸 2 点生命，并叠 2~3 层【百合花芳香】。</summary>
         private static async void LilyChainRoundStart(BattleRole self)
         {
             try
@@ -887,7 +889,7 @@ namespace AttackTargetVisualizer
                 // 2026-09-24：原来是无脑 AddBuff，用户反馈层数一直是 1（像是每次都被刷回 1 层）。
                 // 这里改成显式取现有实例再叠 1 层，并把前后层数打进日志 ——
                 // 万一还是没涨，日志会直接告诉我们卡在哪儿（MaxLayer / DisableOverlayBuffs）。
-                int addLayer = UnityEngine.Random.Range(1, 4);   // 1~3 层（2026-09-25 用户口径）
+                int addLayer = UnityEngine.Random.Range(2, 4);   // 2~3 层（2026-09-27 用户口径：原 1~3）
                 BuffData aroma = target.GetBuff(SecretIds.LilyAromaBuff);
                 if (aroma != null)
                 {
@@ -1149,15 +1151,25 @@ namespace AttackTargetVisualizer
                 {
                     await self.AddBuff(self, SecretIds.FlowerScentBuff);
                 }
-                ClearFlowerScentAttr(self);      // 层数变了 → 伤害加成跟着变
+                ClearFlowerScentAttr(self);      // 清理旧版伤害加成记录（幂等，2026-09-27 起花香不再加伤害）
                 AttackTargetPlugin.LogInfo("百合花环：解除了「" + pickedName + "」（" + pickedLayer +
                     " 层），获得 " + gain + " 层「花香」");
             }
             catch (Exception e) { AttackTargetPlugin.LogError("百合花环：回合开始结算出错：" + e.Message); }
         }
 
-        /// <summary>花香：回合结束层数减半（向下取整）。</summary>
-        private static async void FlowerScentRoundEnd(BattleRole self)
+        /// <summary>花香：战斗回合结束时层数减半（探索回合走 OnEquipTrigger 那条）。</summary>
+        private static void FlowerScentRoundEnd(BattleRole self)
+        {
+            _ = HalveFlowerScent(self, "回合结束");
+        }
+
+        /// <summary>
+        /// 花香：层数减半（向下取整）。**层数减少时**回复 1 点生命 + 1 点精神值
+        /// （2026-09-27 用户口径：不再按减少的层数回血，每次"减少"事件只回 1+1）。
+        /// 战斗回合结束、探索回合都会调它。
+        /// </summary>
+        private static async Task HalveFlowerScent(BattleRole self, string reason)
         {
             try
             {
@@ -1169,7 +1181,6 @@ namespace AttackTargetVisualizer
                 // 看起来就是"无限叠加"（2026-09-25 用户反馈）。
                 int cur = buff.CurLayer;
                 int half = cur / 2;
-                int healed = cur - half;      // 减少的层数 = 回复的生命值（2026-09-25 用户口径）
                 if (half <= 0)
                 {
                     await self.RemoveBuff(SecretIds.FlowerScentBuff);
@@ -1178,25 +1189,35 @@ namespace AttackTargetVisualizer
                 {
                     await buff.ChangeLayer(self, half - cur);
                 }
-                if (healed > 0 && !self.IsDeath)
+                if (!self.IsDeath)
                 {
-                    await self.Data.ChangeAttr(true, new ChangeAttrData(ERoleExtraAttribute.CurrentHp,
-                        healed.ToString()), "", true, true);
-                    AttackTargetPlugin.LogInfo("花香：「" + NameOf(self) + "」层数减少 " + healed +
-                        " → 回复 " + healed + " 点生命（剩 " + half + " 层）");
+                    await self.Data.ChangeAttr(true, new ChangeAttrData(ERoleExtraAttribute.CurrentHp, "1"), "", true, true);
+                    await self.Data.ChangeAttr(true, new ChangeAttrData(ERoleExtraAttribute.CurrentSan, "1"), "", true, true);
                 }
                 ClearFlowerScentAttr(self);
+                AttackTargetPlugin.LogInfo("花香：「" + NameOf(self) + "」" + reason + "层数 " + cur + " → " + half +
+                    "，回复 1 点生命与 1 点精神值");
             }
-            catch (Exception e) { AttackTargetPlugin.LogError("花香：回合结束结算出错：" + e.Message); }
+            catch (Exception e) { AttackTargetPlugin.LogError("花香：层数减半出错：" + e.Message); }
         }
 
-        /// <summary>「花香」的伤害加成来源键 —— 按这个键加/摘，保证只有一份、不会叠乱。</summary>
+        /// <summary>
+        /// 「花香」**旧版伤害加成**的来源键（2026-09-26 之前用过）：现在只用来"清理老存档残留"，
+        /// 每次层数变化都按它摘一遍（幂等），保证不会再有旧的徒手伤害加值挂在身上。
+        /// </summary>
         private const string FlowerScentSourceKey = "secret_baihehua_scent";
 
         /// <summary>
-        /// 花香：直接清空（战斗开始时用）。
-        /// 2026-09-25 用户要求"再给花香加一个边界"：战斗开始也清一次，和"战斗结束/减半到 0"形成双保险，
-        /// 免得上一场残留的层数或属性加成带进新战斗。
+        /// 花香：每层让"意志检定"的成功区间 +5（2026-09-27 用户口径 —— 取代原来的伤害加成）。
+        /// 实现挂在 `BattleHelper.GetDiceCheckValue` 的 Postfix 上，
+        /// 战斗检定、buff 检定、探索/面板检定三条路都会经过它（面板那条也走 GetDiceCheckValue）。
+        /// </summary>
+        private const int FlowerScentPowPerLayer = 5;
+
+        /// <summary>
+        /// 花香：直接清空（**进入副本 / 副本结束**时用）。
+        /// 2026-09-27 用户口径：战斗开始不再清空（战斗之间保留层数），清空时机改成副本边界；
+        /// 清空本身不算"层数减少"的回复（那是减半时的待遇）。
         /// </summary>
         private static async void ClearFlowerScent(BattleRole role)
         {
@@ -1211,26 +1232,20 @@ namespace AttackTargetVisualizer
                 {
                     int layer = buff.CurLayer;
                     await role.RemoveBuff(SecretIds.FlowerScentBuff);
-                    AttackTargetPlugin.LogInfo("花香：战斗开始，清掉残留的 " + layer + " 层");
-                    // 清空也算"层数减少"，同样回血（2026-09-25 用户口径）
-                    if (layer > 0)
-                    {
-                        await role.Data.ChangeAttr(true, new ChangeAttrData(ERoleExtraAttribute.CurrentHp,
-                            layer.ToString()), "", true, true);
-                    }
+                    AttackTargetPlugin.LogInfo("花香：清空 " + layer + " 层（进入副本 / 副本结束）");
                 }
                 ClearFlowerScentAttr(role);   // 不管有没有 buff 都按当前层数对齐一次属性
             }
             catch (Exception e)
             {
-                AttackTargetPlugin.LogError("花香：战斗开始清理出错：" + e.Message);
+                AttackTargetPlugin.LogError("花香：清空出错：" + e.Message);
             }
         }
 
         /// <summary>
-        /// 把「花香」层数同步成伤害加成（每层 +1）。
-        /// 做法：先按 SourceKey 把上一次的记录摘掉，再按当前层数加一条 —— 摘/加都用同一个 key，
-        /// 所以反复调用也不会叠加（这正是 12.1 那个 IsTrackSource 坑的正解）。
+        /// 清理「花香」旧版的伤害加成记录（每层 +1 徒手伤害那套，2026-09-26 之前的实现）。
+        /// 现在花香不再提供伤害加成，这个函数只负责"按 SourceKey 把老记录摘掉"，
+        /// 反复调用是幂等的（这正是 12.1 那个 IsTrackSource 坑的正解）。
         /// </summary>
         private static async void ClearFlowerScentAttr(BattleRole role)
         {
@@ -1254,6 +1269,59 @@ namespace AttackTargetVisualizer
             catch (Exception)
             {
                 return 0;
+            }
+        }
+
+        /// <summary>
+        /// 花香：意志检定 +5/层（2026-09-27 用户口径：把"伤害加成"换成"更容易检定成功"）。
+        /// 挂在 `BattleHelper.GetDiceCheckValue` 的 Postfix —— 战斗技能检定、buff 检定、
+        /// 探索/面板检定三条路最终都走它，所以一处改动三处生效。
+        /// </summary>
+        internal static void OnQueryWillDiceValue(BattleRole target, EHeroAttribute attrType, ref int result)
+        {
+            try
+            {
+                if (attrType != EHeroAttribute.POW || target == null || result <= 0)
+                {
+                    return;
+                }
+                int layer = FlowerScentLayer(target);
+                if (layer <= 0)
+                {
+                    return;
+                }
+                int bonus = FlowerScentPowPerLayer * layer;
+                result += bonus;
+                AttackTargetPlugin.LogInfo("花香：「" + NameOf(target) + "」" + layer +
+                    " 层 → 本次意志检定 +" + bonus + "（成功区间 " + (result - bonus) + " → " + result + "）");
+            }
+            catch (Exception e)
+            {
+                AttackTargetPlugin.LogError("花香：意志检定加值出错：" + e.Message);
+            }
+        }
+
+        /// <summary>
+        /// 花香：探索中每个"探索回合"也减半（2026-09-27 用户口径：让探索里也能吃到回复与检定加成）。
+        /// 游戏在探索时逐个角色调 `TriggerEquipItemsEffect(ExploreRoundChange)`，我们挂在那上面。
+        /// </summary>
+        internal static void OnEquipTrigger(BattleRole role, ESkillTriggerType type)
+        {
+            try
+            {
+                if (type != ESkillTriggerType.ExploreRoundChange || role == null || role.Data == null)
+                {
+                    return;
+                }
+                if (FlowerScentLayer(role) <= 0)
+                {
+                    return;
+                }
+                _ = HalveFlowerScent(role, "探索回合");
+            }
+            catch (Exception e)
+            {
+                AttackTargetPlugin.LogError("花香：探索回合减半出错：" + e.Message);
             }
         }
 
@@ -1287,7 +1355,7 @@ namespace AttackTargetVisualizer
                 int now = self.Data.GetRoleExtraAttrValue(ERoleExtraAttribute.CurrentMp);
                 int cost = before - now;
                 if (cost <= 0) return;
-                int dmg = cost / 2;                      // 伤害 = 消耗魔法值的一半（向下取整）
+                int dmg = cost;                          // 伤害 = 消耗的魔法值（2026-09-27 用户口径：原为"一半"）
                 if (dmg <= 0) return;
                 List<Game.BattleNpcRole> enemies = BattleHelper.FightContent.CurWaveEnemies;
                 if (enemies == null) return;
@@ -1602,9 +1670,8 @@ namespace AttackTargetVisualizer
             SyncStatus(role, SecretIds.LoneShadowTrait, SecretIds.LoneShadowBuff, EHeroAttribute.DEX, 20, "灰暗孤影", false);
             SyncStatus(role, SecretIds.MemoryTrait, SecretIds.MemoryBuff, EHeroAttribute.None, 0, "记忆的双剑", false);
             SyncWhiteHairDice(role);
-            // 花香（880049）的伤害加成是插件按层数手动加到属性上的，和 buff 本身不是一套生命周期 ——
-            // 战斗结束时游戏会把 buff 清掉，加过的属性却不会自己退（2026-09-25 用户反馈"加成永久保留"）。
-            // 这里每次对齐时按当前层数重算一遍：buff 没了（层数 0）就把加成摘干净。
+            // 花香（880049）：2026-09-27 起不再提供伤害加成（改成"意志检定 +5/层"），
+            // 这里只负责把老存档里残留的旧属性加成按 SourceKey 摘干净（幂等）。
             ClearFlowerScentAttr(role);
             // RemoveAvoidTrait(role);   // 2026-09-25 用户口径：改成改存档 —— 把 66「逃避」的 CurrentState 置成 2（Sleepy，沉睡），
             //                           // 用 temp\set_trait_state.ps1。函数本体留着，以后说不定能用在别的特质上。
@@ -2202,23 +2269,8 @@ namespace AttackTargetVisualizer
                 // 由 JingJi 在最终扣血入口（BattleRole.SetDamage）接管 —— 这里不再改数值。
                 // 荆棘的挂层（普通攻击拆 3 次 = 3 层、先发 1 次 = 1 层）也一并挪到那边。
 
-                // 花香（880049）：每层让"自己造成的普通伤害"+5%（2026-09-25 用户改口径 ——
-                // 不再往属性上叠徒手伤害加成，改成直接按层数放大这次的普通伤害）。
-                if (source != null && damageData != null && result > 0
-                    && damageData.DamageType == EDamageType.Ordinary)
-                {
-                    int scent = FlowerScentLayer(source);
-                    if (scent > 0)
-                    {
-                        int scentBonus = (int)Math.Ceiling(result * 0.05f * scent);
-                        if (scentBonus > 0)
-                        {
-                            result += scentBonus;
-                            AttackTargetPlugin.LogInfo("花香：「" + NameOf(source) + "」" + scent +
-                                " 层 → 本次普通伤害 +" + scentBonus);
-                        }
-                    }
-                }
+                // 花香（880049）：2026-09-27 用户口径 —— **不再提供伤害加成**，
+                // 改成"每层让意志检定的成功区间 +5"，实现在 OnQueryWillDiceValue（GetDiceCheckValue 的 Postfix）。
                 // 粉尘爆炸（2026-09-25 用户追加）：带着【百合花芳香】的目标被火焰伤害打中时，
                 // 它和它的同阵营全体一起受 2×层数 的爆炸伤害，并移除它自己身上的芳香。
                 if (target != null && damageData != null && damageData.AddAttrs != null
@@ -2926,6 +2978,7 @@ namespace AttackTargetVisualizer
                 {
                     AttackTargetPlugin.LogInfo("私货特质：进入/离开模组，收回所有调查员身上的「百合未谢」");
                     RemoveUndyingEverywhere();
+                    ClearFlowerScentEverywhere();   // 花香：副本边界清空（2026-09-27 用户口径）
                     // 进模组时顺手把随特质苏醒的两个数值状态对齐一次
                     EnsureAllRolesTraitStatuses();
                     if (eventId == (int)EGameEvent_GamePlay.EnterModule)
@@ -2946,6 +2999,12 @@ namespace AttackTargetVisualizer
         private static void RemoveUndyingEverywhere()
         {
             ForEachKnownRole(RemoveUndying);
+        }
+
+        /// <summary>花香：把全队（主角队 + 后备队）身上的层数清空 —— 进入副本 / 副本结束时用。</summary>
+        private static void ClearFlowerScentEverywhere()
+        {
+            ForEachKnownRole(ClearFlowerScent);
         }
 
         private static void RemoveUndying(BattleRole role)
@@ -3274,6 +3333,48 @@ namespace AttackTargetVisualizer
             catch (Exception e)
             {
                 AttackTargetPlugin.LogError("私货特质补丁出错（面板意志检定）：" + e);
+            }
+        }
+    }
+
+    /// <summary>
+    /// 花香：意志检定 +5/层（2026-09-27 用户口径）。
+    /// 所有"技能检定 / 属性检定 / buff 检定 / 探索面板检定"最终都会经过
+    /// `BattleHelper.GetDiceCheckValue`，所以只在它这里加一次，天然不会重复。
+    /// </summary>
+    [HarmonyPatch(typeof(BattleHelper), "GetDiceCheckValue")]
+    internal static class Patch_FlowerScent_DiceCheckValue
+    {
+        private static void Postfix(BattleRole target, EHeroAttribute attrType, ref int __result)
+        {
+            try
+            {
+                SecretTraits.OnQueryWillDiceValue(target, attrType, ref __result);
+            }
+            catch (Exception e)
+            {
+                AttackTargetPlugin.LogError("花香补丁出错（意志检定）：" + e.Message);
+            }
+        }
+    }
+
+    /// <summary>
+    /// 花香：探索里每回合也减半（游戏探索时逐个角色调用 `TriggerEquipItemsEffect(ExploreRoundChange)`，
+    /// 见反编译 `RoundChange()` / `TimeChangeInRuleModule()`）。
+    /// </summary>
+    [HarmonyPatch(typeof(BattleRole), "TriggerEquipItemsEffect",
+        new Type[] { typeof(ESkillTriggerType), typeof(MOD_Dynamic_Item), typeof(MOD_Dynamic_Item) })]
+    internal static class Patch_FlowerScent_ExploreRound
+    {
+        private static void Prefix(BattleRole __instance, ESkillTriggerType type)
+        {
+            try
+            {
+                SecretTraits.OnEquipTrigger(__instance, type);
+            }
+            catch (Exception e)
+            {
+                AttackTargetPlugin.LogError("花香补丁出错（探索回合）：" + e.Message);
             }
         }
     }

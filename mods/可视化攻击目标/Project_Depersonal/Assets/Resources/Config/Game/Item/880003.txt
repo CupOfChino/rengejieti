@@ -1,176 +1,162 @@
 {
-    "Data":  {
-        "__type": "MOD.ItemData,Assembly-CSharp",
-                 "value":  {
-                               "IconPath":  "UI/Textures/Icon/Item/icon_item_baihehualian",
-                               "ItemId":  880003,
-                               "UniqueKey":  null,
-                               "ItemName":  {
-                                                "TarKey":  "",
-                                                "SheetKey":  "",
-                                                "InputText":  "百合花链",
-                                                "Characteristic":  null
-                                            },
-                               "ItemDes":  {
-                                               "TarKey":  "",
-                                               "SheetKey":  "",
-                                               "InputText":  "一朵小小的百合花，安静地悬在腕间。",
-                                               "Characteristic":  null
-                                           },
-                               "ItemEffectDes":  {
-                                                     "TarKey":  "",
-                                                     "SheetKey":  "",
-                                                     "InputText":  "装备后无法卸下。\n进入副本时自动获得并装备。\n每回合开始：为随机一名敌人叠加1~3层【百合花芳香】，并吸取其2点生命。",
-                                                     "Characteristic":  null
-                                                 },
-                               "IconPathReference":  {
-                                                         "ReferenceType":  1004,
-                                                         "Key":  "icon_item_baihehualian"
-                                                     },
-                               "Price":  0,
-                               "ChargingCount":  0,
-                               "ReplaceChargingConfig":  [
-
-                                                         ],
-                               "AutoDestruct":  false,
-                               "Disassemble":  {
-                                                   "Items":  {
-                                                                 "Type":  7,
-                                                                 "Ids":  [
-
-                                                                         ]
-                                                             },
-                                                   "PartsCount":  0
-                                               },
-                               "IsCantDisboard":  true,
-                               "DesignTag":  1,
-                               "TagList":  [
-
-                                           ],
-                               "ItemAttrValue":  [
-                                                     3,
-                                                     6
-                                                 ],
-                               "MythicalId":  0,
-                               "ItemType":  3,
-                               "ItemStaticAffixList":  [
-
-                                                       ],
-                               "ItemDynamicAffixList":  [
-
-                                                        ],
-                               "IsBindCharacter":  true,
-                               "BuffsLink":  [
-
-                                             ],
-                               "Terms":  [
-
-                                         ],
-                               "ConfigData":  [
-
-                                              ],
-                               "EquipmentConfigData":  {
-            "__type": "MOD.EquipConfigData,Assembly-CSharp",
-                                                           "EquipType":  0,
-                                                           "ShowConfirmEquipPopup":  false,
-                                                           "ConfirmEquipDesc":  {
-                                                                                    "TarKey":  "",
-                                                                                    "SheetKey":  "",
-                                                                                    "InputText":  null,
-                                                                                    "Characteristic":  null
-                                                                                },
-                                                           "InfoDatas":  [
-
-                                                                         ],
-                                                           "EnableOverrideDesc":  true,
-                                                           "OverrideDesc":  {
-                                                                                "TarKey":  "",
-                                                                                "SheetKey":  "",
-                                                                                "InputText":  "装备后无法卸下。\n进入副本时自动获得并装备。\n每回合开始：为随机一名敌人叠加1~3层【百合花芳香】，并吸取其2点生命。",
-                                                                                "Characteristic":  null
-                                                                            },
-                                                           "Arrts":  [
-
-                                                                     ],
-                                                           "Skills":  [
-
-                                                                      ],
-                                                           "Def":  {
-                                                                       "FxPath":  null,
-                                                                       "PointType":  0,
-                                                                       "AudioClip":  {
-                                                                                         "AudioRes":  null,
-                                                                                         "AudioReference":  {
-                                                                                                                "ReferenceType":  0,
-                                                                                                                "Key":  null
-                                                                                                            },
-                                                                                         "Volume":  1,
-                                                                                         "FadeTime":  1
-                                                                                     },
-                                                                       "ArmorValue":  0
-                                                                   }
-                                                       },
-                               "ThrowConfigData":  {
-                                                       "CanThrowOnNoCharge":  false,
-                                                       "PlayThrowAnim":  false,
-                                                       "ThrowAnimtorName":  null,
-                                                       "ThrowSpriteAnimName":  null,
-                                                       "DiceCheckType":  1,
-                                                       "ResultCheckType":  1,
-                                                       "ExploreSkill":  201,
-                                                       "UseTag":  1002,
-                                                       "LimitType":  1,
-                                                       "TargetSelect":  0,
-                                                       "CanSelectDeathRole":  false,
-                                                       "TargetFilter":  {
-                                                                            "RoleFilter":  [
-
-                                                                                           ],
-                                                                            "EnableMaxMinFilter":  false,
-                                                                            "Attribute":  0,
-                                                                            "Skill":  0,
-                                                                            "ExtraAttr":  0,
-                                                                            "MaxMinType":  0,
-                                                                            "EnableDistanceFilter":  false,
-                                                                            "DistanceFilterType":  0,
-                                                                            "EnableBuffLayerFilter":  false,
-                                                                            "BuffId":  0,
-                                                                            "BuffLayerMaxMinType":  0
-                                                                        },
-                                                       "FxPath":  null,
-                                                       "PointType":  0,
-                                                       "AudioClip":  {
-                                                                         "AudioRes":  null,
-                                                                         "AudioReference":  {
-                                                                                                "ReferenceType":  0,
-                                                                                                "Key":  null
-                                                                                            },
-                                                                         "Volume":  1,
-                                                                         "FadeTime":  1
-                                                                     },
-                                                       "UsageCheck":  [
-
-                                                                      ],
-                                                       "ConfigResultFuncs":  null,
-                                                       "ResultFuncs":  {
-
-                                                                       },
-                                                       "EnableOverrideDesc":  false,
-                                                       "OverrideDesc":  {
-                                                                            "TarKey":  null,
-                                                                            "SheetKey":  "",
-                                                                            "InputText":  null,
-                                                                            "Characteristic":  null
-                                                                        },
-                                                       "IgnoreInfoDesc":  false
-                                                   },
-                               "GetItemOpts":  [
-
-                                               ],
-                               "EndingOpts":  [
-
-                                              ],
-                               "EditorSheetKey":  null
-                           }
-             }
+  "Data": {
+    "__type": "MOD.ItemData,Assembly-CSharp",
+    "value": {
+      "IconPath": "UI/Textures/Icon/Item/icon_item_baihehualian",
+      "ItemId": 880003,
+      "UniqueKey": null,
+      "ItemName": {
+        "TarKey": "",
+        "SheetKey": "",
+        "InputText": "百合花链",
+        "Characteristic": null
+      },
+      "ItemDes": {
+        "TarKey": "",
+        "SheetKey": "",
+        "InputText": "一朵小小的百合花，安静地悬在腕间。",
+        "Characteristic": null
+      },
+      "ItemEffectDes": {
+        "TarKey": "",
+        "SheetKey": "",
+        "InputText": "装备后无法卸下。\n进入副本时自动获得并装备。\n最大生命值+4。\n每回合开始：为随机一名敌人叠加 2~3 层【百合花芳香】，并吸取其 2 点生命。",
+        "Characteristic": null
+      },
+      "IconPathReference": {
+        "ReferenceType": 1004,
+        "Key": "icon_item_baihehualian"
+      },
+      "Price": 0,
+      "ChargingCount": 0,
+      "ReplaceChargingConfig": [],
+      "AutoDestruct": false,
+      "Disassemble": {
+        "Items": {
+          "Type": 7,
+          "Ids": []
+        },
+        "PartsCount": 0
+      },
+      "IsCantDisboard": true,
+      "DesignTag": 1,
+      "TagList": [],
+      "ItemAttrValue": [
+        3,
+        6
+      ],
+      "MythicalId": 0,
+      "ItemType": 3,
+      "ItemStaticAffixList": [],
+      "ItemDynamicAffixList": [],
+      "IsBindCharacter": true,
+      "BuffsLink": [],
+      "Terms": [],
+      "ConfigData": [],
+      "EquipmentConfigData": {
+        "__type": "MOD.EquipConfigData,Assembly-CSharp",
+        "EquipType": 0,
+        "ShowConfirmEquipPopup": false,
+        "ConfirmEquipDesc": {
+          "TarKey": "",
+          "SheetKey": "",
+          "InputText": null,
+          "Characteristic": null
+        },
+        "InfoDatas": [
+  {
+    "DisableTrigger": false,
+    "TriggerType": 2,
+    "ItemCheckList": [],
+    "BaseOptions": [
+      {
+        "__type": "MOD.Item_AddAttrMaxValueOption,Assembly-CSharp",
+        "IsConversionBuff": false,
+        "Attribute": 0,
+        "Skill": 0,
+        "ExtraAttr": 101,
+        "AddValue": "4",
+        "IsRemove": false,
+        "SourceKey": null
+      }
+    ]
+  }
+],
+        "EnableOverrideDesc": true,
+        "OverrideDesc": {
+          "TarKey": "",
+          "SheetKey": "",
+          "InputText": "装备后无法卸下。\n进入副本时自动获得并装备。\n最大生命值+4。\n每回合开始：为随机一名敌人叠加 2~3 层【百合花芳香】，并吸取其 2 点生命。",
+          "Characteristic": null
+        },
+        "Arrts": [],
+        "Skills": [],
+        "Def": {
+          "FxPath": null,
+          "PointType": 0,
+          "AudioClip": {
+            "AudioRes": null,
+            "AudioReference": {
+              "ReferenceType": 0,
+              "Key": null
+            },
+            "Volume": 1,
+            "FadeTime": 1
+          },
+          "ArmorValue": 0
+        }
+      },
+      "ThrowConfigData": {
+        "CanThrowOnNoCharge": false,
+        "PlayThrowAnim": false,
+        "ThrowAnimtorName": null,
+        "ThrowSpriteAnimName": null,
+        "DiceCheckType": 1,
+        "ResultCheckType": 1,
+        "ExploreSkill": 201,
+        "UseTag": 1002,
+        "LimitType": 1,
+        "TargetSelect": 0,
+        "CanSelectDeathRole": false,
+        "TargetFilter": {
+          "RoleFilter": [],
+          "EnableMaxMinFilter": false,
+          "Attribute": 0,
+          "Skill": 0,
+          "ExtraAttr": 0,
+          "MaxMinType": 0,
+          "EnableDistanceFilter": false,
+          "DistanceFilterType": 0,
+          "EnableBuffLayerFilter": false,
+          "BuffId": 0,
+          "BuffLayerMaxMinType": 0
+        },
+        "FxPath": null,
+        "PointType": 0,
+        "AudioClip": {
+          "AudioRes": null,
+          "AudioReference": {
+            "ReferenceType": 0,
+            "Key": null
+          },
+          "Volume": 1,
+          "FadeTime": 1
+        },
+        "UsageCheck": [],
+        "ConfigResultFuncs": null,
+        "ResultFuncs": {},
+        "EnableOverrideDesc": false,
+        "OverrideDesc": {
+          "TarKey": null,
+          "SheetKey": "",
+          "InputText": null,
+          "Characteristic": null
+        },
+        "IgnoreInfoDesc": false
+      },
+      "GetItemOpts": [],
+      "EndingOpts": [],
+      "EditorSheetKey": null
+    }
+  }
 }

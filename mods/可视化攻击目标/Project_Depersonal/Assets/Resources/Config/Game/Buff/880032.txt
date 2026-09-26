@@ -14,14 +14,14 @@
 			"Des" : {
 				"TarKey" : "",
 				"SheetKey" : "",
-				"InputText" : "力量-10。",
+				"InputText" : "力量-40、体质-40、运动-20。",
 				"Characteristic" : null
 			},
 			"IconPathReference" : {
 				"ReferenceType" : 0,
 				"Key" : null
 			},
-			"Comment" : "私货特质「白毛少女（880022）」的隐藏数值状态：力量-10，随特质苏醒挂/摘。",
+			"Comment" : "私货特质「白毛少女（880022）」的隐藏数值状态：力量-40、体质-40、运动-20，随特质苏醒挂/摘。",
 			"BuffType" : 4,
 			"BuffEffectType" : 3,
 			"OverlayType" : 2,
@@ -72,49 +72,38 @@
 			"Arrts" : [
 				{
 					"IsTrackSource" : true,
-					"RoleAttr" : {
-						"Type" : 1,
-						"Value" : "-10",
-						"IsRatio" : false,
-						"Ratio" : 0
-					},
-					"RoleExAttr" : {
-						"Type" : 0,
-						"Value" : null,
-						"IsRatio" : false,
-						"Ratio" : 0
-					},
-					"RoleSkill" : {
-						"Type" : 0,
-						"Value" : null,
-						"IsRatio" : false,
-						"Ratio" : 0
-					},
-					"RoleSystemAttr" : {
-						"Type" : 0,
-						"Value" : null,
-						"IsRatio" : false,
-						"Ratio" : 0
-					},
+					"RoleAttr" : { "Type" : 1, "Value" : "-40", "IsRatio" : false, "Ratio" : 0 },
+					"RoleExAttr" : { "Type" : 0, "Value" : null, "IsRatio" : false, "Ratio" : 0 },
+					"RoleSkill" : { "Type" : 0, "Value" : null, "IsRatio" : false, "Ratio" : 0 },
+					"RoleSystemAttr" : { "Type" : 0, "Value" : null, "IsRatio" : false, "Ratio" : 0 },
 					"ExDiceData" : {
-						"ExploreSkill" : {
-							"Type" : 0,
-							"ChangeAll" : false,
-							"IsTemp" : false,
-							"Value" : 0
-						},
-						"HeroAttribute" : {
-							"Type" : 0,
-							"ChangeAll" : false,
-							"IsTemp" : false,
-							"Value" : 0
-						},
-						"ExtraAttribute" : {
-							"Type" : 0,
-							"ChangeAll" : false,
-							"IsTemp" : false,
-							"Value" : 0
-						}
+						"ExploreSkill" : { "Type" : 0, "ChangeAll" : false, "IsTemp" : false, "Value" : 0 },
+						"HeroAttribute" : { "Type" : 0, "ChangeAll" : false, "IsTemp" : false, "Value" : 0 },
+						"ExtraAttribute" : { "Type" : 0, "ChangeAll" : false, "IsTemp" : false, "Value" : 0 }
+					}
+				},
+				{
+					"IsTrackSource" : true,
+					"RoleAttr" : { "Type" : 6, "Value" : "-40", "IsRatio" : false, "Ratio" : 0 },
+					"RoleExAttr" : { "Type" : 0, "Value" : null, "IsRatio" : false, "Ratio" : 0 },
+					"RoleSkill" : { "Type" : 0, "Value" : null, "IsRatio" : false, "Ratio" : 0 },
+					"RoleSystemAttr" : { "Type" : 0, "Value" : null, "IsRatio" : false, "Ratio" : 0 },
+					"ExDiceData" : {
+						"ExploreSkill" : { "Type" : 0, "ChangeAll" : false, "IsTemp" : false, "Value" : 0 },
+						"HeroAttribute" : { "Type" : 0, "ChangeAll" : false, "IsTemp" : false, "Value" : 0 },
+						"ExtraAttribute" : { "Type" : 0, "ChangeAll" : false, "IsTemp" : false, "Value" : 0 }
+					}
+				},
+				{
+					"IsTrackSource" : true,
+					"RoleAttr" : { "Type" : 0, "Value" : null, "IsRatio" : false, "Ratio" : 0 },
+					"RoleExAttr" : { "Type" : 0, "Value" : null, "IsRatio" : false, "Ratio" : 0 },
+					"RoleSkill" : { "Type" : 201, "Value" : "-20", "IsRatio" : false, "Ratio" : 0 },
+					"RoleSystemAttr" : { "Type" : 0, "Value" : null, "IsRatio" : false, "Ratio" : 0 },
+					"ExDiceData" : {
+						"ExploreSkill" : { "Type" : 0, "ChangeAll" : false, "IsTemp" : false, "Value" : 0 },
+						"HeroAttribute" : { "Type" : 0, "ChangeAll" : false, "IsTemp" : false, "Value" : 0 },
+						"ExtraAttribute" : { "Type" : 0, "ChangeAll" : false, "IsTemp" : false, "Value" : 0 }
 					}
 				}
 			],

@@ -1,190 +1,194 @@
 {
-    "Data":  {
-        "__type": "MOD.ItemData,Assembly-CSharp",
-                 "value":  {
-                               "IconPath":  "UI/Textures/Icon/Item/icon_item_baihehuajiezhi",
-                               "ItemId":  880004,
-                               "UniqueKey":  null,
-                               "ItemName":  {
-                                                "TarKey":  "",
-                                                "SheetKey":  "",
-                                                "InputText":  "百合花戒指",
-                                                "Characteristic":  null
-                                            },
-                               "ItemDes":  {
-                                               "TarKey":  "",
-                                               "SheetKey":  "",
-                                               "InputText":  "戒面上凝着一朵不会再谢的百合。",
-                                               "Characteristic":  null
-                                           },
-                               "ItemEffectDes":  {
-                                                     "TarKey":  "",
-                                                     "SheetKey":  "",
-                                                     "InputText":  "装备后无法卸下。\n进入副本时自动获得并装备。\n装备时习得法术「枯萎术」。\n每回合开始恢复2点魔法值。\n施放法术后，对全体敌人造成等同于本次消耗魔法值的法术伤害。",
-                                                     "Characteristic":  null
-                                                 },
-                               "IconPathReference":  {
-                                                         "ReferenceType":  1004,
-                                                         "Key":  "icon_item_baihehuajiezhi"
-                                                     },
-                               "Price":  0,
-                               "ChargingCount":  0,
-                               "ReplaceChargingConfig":  [
-
-                                                         ],
-                               "AutoDestruct":  false,
-                               "Disassemble":  {
-                                                   "Items":  {
-                                                                 "Type":  7,
-                                                                 "Ids":  [
-
-                                                                         ]
-                                                             },
-                                                   "PartsCount":  0
-                                               },
-                               "IsCantDisboard":  true,
-                               "DesignTag":  1,
-                               "TagList":  [
-
-                                           ],
-                               "ItemAttrValue":  [
-                                                     3,
-                                                     6
-                                                 ],
-                               "MythicalId":  0,
-                               "ItemType":  3,
-                               "ItemStaticAffixList":  [
-
-                                                       ],
-                               "ItemDynamicAffixList":  [
-
-                                                        ],
-                               "IsBindCharacter":  true,
-                               "BuffsLink":  [
-
-                                             ],
-                               "Terms":  [
-
-                                         ],
-                               "ConfigData":  [
-
-                                              ],
-                               "EquipmentConfigData":  {
-            "__type": "MOD.EquipConfigData,Assembly-CSharp",
-                                                           "EquipType":  0,
-                                                           "ShowConfirmEquipPopup":  false,
-                                                           "ConfirmEquipDesc":  {
-                                                                                    "TarKey":  "",
-                                                                                    "SheetKey":  "",
-                                                                                    "InputText":  null,
-                                                                                    "Characteristic":  null
-                                                                                },
-                                                           "InfoDatas": [
-          {
-            "DisableTrigger": false,
-            "TriggerType": 2,
-            "ItemCheckList": [],
-            "BaseOptions": [
-              {
-                "__type": "MOD.Item_AddMagicOption,Assembly-CSharp",
-                "Magic": { "Id": 1 },
-                "IsRemove": false,
-                "IsRandom": false,
-                "RandomCount": 1,
-                "SourceKey": null
-              }
-            ]
-          }
-        ],
-                                                           "EnableOverrideDesc":  true,
-                                                           "OverrideDesc":  {
-                                                                                "TarKey":  "",
-                                                                                "SheetKey":  "",
-                                                                                "InputText":  "装备后无法卸下。\n进入副本时自动获得并装备。\n装备时习得法术「枯萎术」。\n每回合开始恢复2点魔法值。\n施放法术后，对全体敌人造成等同于本次消耗魔法值的法术伤害。",
-                                                                                "Characteristic":  null
-                                                                            },
-                                                           "Arrts":  [
-
-                                                                     ],
-                                                           "Skills":  [
-
-                                                                      ],
-                                                           "Def":  {
-                                                                       "FxPath":  null,
-                                                                       "PointType":  0,
-                                                                       "AudioClip":  {
-                                                                                         "AudioRes":  null,
-                                                                                         "AudioReference":  {
-                                                                                                                "ReferenceType":  0,
-                                                                                                                "Key":  null
-                                                                                                            },
-                                                                                         "Volume":  1,
-                                                                                         "FadeTime":  1
-                                                                                     },
-                                                                       "ArmorValue":  0
-                                                                   }
-                                                       },
-                               "ThrowConfigData":  {
-                                                       "CanThrowOnNoCharge":  false,
-                                                       "PlayThrowAnim":  false,
-                                                       "ThrowAnimtorName":  null,
-                                                       "ThrowSpriteAnimName":  null,
-                                                       "DiceCheckType":  1,
-                                                       "ResultCheckType":  1,
-                                                       "ExploreSkill":  201,
-                                                       "UseTag":  1002,
-                                                       "LimitType":  1,
-                                                       "TargetSelect":  0,
-                                                       "CanSelectDeathRole":  false,
-                                                       "TargetFilter":  {
-                                                                            "RoleFilter":  [
-
-                                                                                           ],
-                                                                            "EnableMaxMinFilter":  false,
-                                                                            "Attribute":  0,
-                                                                            "Skill":  0,
-                                                                            "ExtraAttr":  0,
-                                                                            "MaxMinType":  0,
-                                                                            "EnableDistanceFilter":  false,
-                                                                            "DistanceFilterType":  0,
-                                                                            "EnableBuffLayerFilter":  false,
-                                                                            "BuffId":  0,
-                                                                            "BuffLayerMaxMinType":  0
-                                                                        },
-                                                       "FxPath":  null,
-                                                       "PointType":  0,
-                                                       "AudioClip":  {
-                                                                         "AudioRes":  null,
-                                                                         "AudioReference":  {
-                                                                                                "ReferenceType":  0,
-                                                                                                "Key":  null
-                                                                                            },
-                                                                         "Volume":  1,
-                                                                         "FadeTime":  1
-                                                                     },
-                                                       "UsageCheck":  [
-
-                                                                      ],
-                                                       "ConfigResultFuncs":  null,
-                                                       "ResultFuncs":  {
-
-                                                                       },
-                                                       "EnableOverrideDesc":  false,
-                                                       "OverrideDesc":  {
-                                                                            "TarKey":  null,
-                                                                            "SheetKey":  "",
-                                                                            "InputText":  null,
-                                                                            "Characteristic":  null
-                                                                        },
-                                                       "IgnoreInfoDesc":  false
-                                                   },
-                               "GetItemOpts":  [
-
-                                               ],
-                               "EndingOpts":  [
-
-                                              ],
-                               "EditorSheetKey":  null
-                           }
-             }
+  "Data": {
+    "__type": "MOD.ItemData,Assembly-CSharp",
+    "value": {
+      "IconPath": "UI/Textures/Icon/Item/icon_item_baihehuajiezhi",
+      "ItemId": 880004,
+      "UniqueKey": null,
+      "ItemName": {
+        "TarKey": "",
+        "SheetKey": "",
+        "InputText": "百合花戒指",
+        "Characteristic": null
+      },
+      "ItemDes": {
+        "TarKey": "",
+        "SheetKey": "",
+        "InputText": "戒面上凝着一朵不会再谢的百合。",
+        "Characteristic": null
+      },
+      "ItemEffectDes": {
+        "TarKey": "",
+        "SheetKey": "",
+        "InputText": "装备后无法卸下。\n进入副本时自动获得并装备。\n魔法值上限+8。\n装备时习得法术「枯萎术」「赤印术」「真理之拳」「祝福术」。\n每回合开始恢复 2 点魔法值。\n施放法术后，对全体敌人造成等同于本次消耗魔法值的法术伤害。",
+        "Characteristic": null
+      },
+      "IconPathReference": {
+        "ReferenceType": 1004,
+        "Key": "icon_item_baihehuajiezhi"
+      },
+      "Price": 0,
+      "ChargingCount": 0,
+      "ReplaceChargingConfig": [],
+      "AutoDestruct": false,
+      "Disassemble": {
+        "Items": {
+          "Type": 7,
+          "Ids": []
+        },
+        "PartsCount": 0
+      },
+      "IsCantDisboard": true,
+      "DesignTag": 1,
+      "TagList": [],
+      "ItemAttrValue": [
+        3,
+        6
+      ],
+      "MythicalId": 0,
+      "ItemType": 3,
+      "ItemStaticAffixList": [],
+      "ItemDynamicAffixList": [],
+      "IsBindCharacter": true,
+      "BuffsLink": [],
+      "Terms": [],
+      "ConfigData": [],
+      "EquipmentConfigData": {
+        "__type": "MOD.EquipConfigData,Assembly-CSharp",
+        "EquipType": 0,
+        "ShowConfirmEquipPopup": false,
+        "ConfirmEquipDesc": {
+          "TarKey": "",
+          "SheetKey": "",
+          "InputText": null,
+          "Characteristic": null
+        },
+        "InfoDatas": [
+  {
+    "DisableTrigger": false,
+    "TriggerType": 2,
+    "ItemCheckList": [],
+    "BaseOptions": [
+      {
+        "__type": "MOD.Item_AddAttrMaxValueOption,Assembly-CSharp",
+        "IsConversionBuff": false,
+        "Attribute": 0,
+        "Skill": 0,
+        "ExtraAttr": 103,
+        "AddValue": "8",
+        "IsRemove": false,
+        "SourceKey": null
+      },
+      {
+        "__type": "MOD.Item_AddMagicOption,Assembly-CSharp",
+        "Magic": { "Id": 1 },
+        "IsRemove": false,
+        "IsRandom": false,
+        "RandomCount": 1,
+        "SourceKey": null
+      },
+      {
+        "__type": "MOD.Item_AddMagicOption,Assembly-CSharp",
+        "Magic": { "Id": 12 },
+        "IsRemove": false,
+        "IsRandom": false,
+        "RandomCount": 1,
+        "SourceKey": null
+      },
+      {
+        "__type": "MOD.Item_AddMagicOption,Assembly-CSharp",
+        "Magic": { "Id": 16 },
+        "IsRemove": false,
+        "IsRandom": false,
+        "RandomCount": 1,
+        "SourceKey": null
+      },
+      {
+        "__type": "MOD.Item_AddMagicOption,Assembly-CSharp",
+        "Magic": { "Id": 28 },
+        "IsRemove": false,
+        "IsRandom": false,
+        "RandomCount": 1,
+        "SourceKey": null
+      }
+    ]
+  }
+],
+        "EnableOverrideDesc": true,
+        "OverrideDesc": {
+          "TarKey": "",
+          "SheetKey": "",
+          "InputText": "装备后无法卸下。\n进入副本时自动获得并装备。\n魔法值上限+8。\n装备时习得法术「枯萎术」「赤印术」「真理之拳」「祝福术」。\n每回合开始恢复 2 点魔法值。\n施放法术后，对全体敌人造成等同于本次消耗魔法值的法术伤害。",
+          "Characteristic": null
+        },
+        "Arrts": [],
+        "Skills": [],
+        "Def": {
+          "FxPath": null,
+          "PointType": 0,
+          "AudioClip": {
+            "AudioRes": null,
+            "AudioReference": {
+              "ReferenceType": 0,
+              "Key": null
+            },
+            "Volume": 1,
+            "FadeTime": 1
+          },
+          "ArmorValue": 0
+        }
+      },
+      "ThrowConfigData": {
+        "CanThrowOnNoCharge": false,
+        "PlayThrowAnim": false,
+        "ThrowAnimtorName": null,
+        "ThrowSpriteAnimName": null,
+        "DiceCheckType": 1,
+        "ResultCheckType": 1,
+        "ExploreSkill": 201,
+        "UseTag": 1002,
+        "LimitType": 1,
+        "TargetSelect": 0,
+        "CanSelectDeathRole": false,
+        "TargetFilter": {
+          "RoleFilter": [],
+          "EnableMaxMinFilter": false,
+          "Attribute": 0,
+          "Skill": 0,
+          "ExtraAttr": 0,
+          "MaxMinType": 0,
+          "EnableDistanceFilter": false,
+          "DistanceFilterType": 0,
+          "EnableBuffLayerFilter": false,
+          "BuffId": 0,
+          "BuffLayerMaxMinType": 0
+        },
+        "FxPath": null,
+        "PointType": 0,
+        "AudioClip": {
+          "AudioRes": null,
+          "AudioReference": {
+            "ReferenceType": 0,
+            "Key": null
+          },
+          "Volume": 1,
+          "FadeTime": 1
+        },
+        "UsageCheck": [],
+        "ConfigResultFuncs": null,
+        "ResultFuncs": {},
+        "EnableOverrideDesc": false,
+        "OverrideDesc": {
+          "TarKey": null,
+          "SheetKey": "",
+          "InputText": null,
+          "Characteristic": null
+        },
+        "IgnoreInfoDesc": false
+      },
+      "GetItemOpts": [],
+      "EndingOpts": [],
+      "EditorSheetKey": null
+    }
+  }
 }

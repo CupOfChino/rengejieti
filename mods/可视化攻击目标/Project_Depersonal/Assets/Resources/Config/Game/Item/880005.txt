@@ -1,176 +1,184 @@
 {
-    "Data":  {
-        "__type": "MOD.ItemData,Assembly-CSharp",
-                 "value":  {
-                               "IconPath":  "UI/Textures/Icon/Item/icon_item_baihehuahuan",
-                               "ItemId":  880005,
-                               "UniqueKey":  null,
-                               "ItemName":  {
-                                                "TarKey":  "",
-                                                "SheetKey":  "",
-                                                "InputText":  "百合花环",
-                                                "Characteristic":  null
-                                            },
-                               "ItemDes":  {
-                                               "TarKey":  "",
-                                               "SheetKey":  "",
-                                               "InputText":  "编作环状的百合与青枝，戴上它，像是被什么温柔地护着。",
-                                               "Characteristic":  null
-                                           },
-                               "ItemEffectDes":  {
-                                                     "TarKey":  "",
-                                                     "SheetKey":  "",
-                                                     "InputText":  "装备后无法卸下。\n进入副本时自动获得并装备。\n骨折、流血、中毒、燃烧照样会挂上，但效果不生效。\n每轮开始：随机解除一个【昏迷 / 中毒 / 流血 / 燃烧 / 骨折 / 混乱 / 恐惧 / 弱点暴露】，并按被解除状态的层数为自己叠加【花香】。",
-                                                     "Characteristic":  null
-                                                 },
-                               "IconPathReference":  {
-                                                         "ReferenceType":  1004,
-                                                         "Key":  "icon_item_baihehuahuan"
-                                                     },
-                               "Price":  0,
-                               "ChargingCount":  0,
-                               "ReplaceChargingConfig":  [
-
-                                                         ],
-                               "AutoDestruct":  false,
-                               "Disassemble":  {
-                                                   "Items":  {
-                                                                 "Type":  7,
-                                                                 "Ids":  [
-
-                                                                         ]
-                                                             },
-                                                   "PartsCount":  0
-                                               },
-                               "IsCantDisboard":  true,
-                               "DesignTag":  1,
-                               "TagList":  [
-
-                                           ],
-                               "ItemAttrValue":  [
-                                                     3,
-                                                     6
-                                                 ],
-                               "MythicalId":  0,
-                               "ItemType":  3,
-                               "ItemStaticAffixList":  [
-
-                                                       ],
-                               "ItemDynamicAffixList":  [
-
-                                                        ],
-                               "IsBindCharacter":  true,
-                               "BuffsLink":  [
-
-                                             ],
-                               "Terms":  [
-
-                                         ],
-                               "ConfigData":  [
-
-                                              ],
-                               "EquipmentConfigData":  {
-            "__type": "MOD.EquipConfigData,Assembly-CSharp",
-                                                           "EquipType":  2,
-                                                           "ShowConfirmEquipPopup":  false,
-                                                           "ConfirmEquipDesc":  {
-                                                                                    "TarKey":  "",
-                                                                                    "SheetKey":  "",
-                                                                                    "InputText":  null,
-                                                                                    "Characteristic":  null
-                                                                                },
-                                                           "InfoDatas":  [
-
-                                                                         ],
-                                                           "EnableOverrideDesc":  true,
-                                                           "OverrideDesc":  {
-                                                                                "TarKey":  "",
-                                                                                "SheetKey":  "",
-                                                                                "InputText":  "装备后无法卸下。\n进入副本时自动获得并装备。\n骨折、流血、中毒、燃烧照样会挂上，但效果不生效。\n每轮开始：随机解除一个【昏迷 / 中毒 / 流血 / 燃烧 / 骨折 / 混乱 / 恐惧 / 弱点暴露】，并按被解除状态的层数为自己叠加【花香】。",
-                                                                                "Characteristic":  null
-                                                                            },
-                                                           "Arrts":  [
-
-                                                                     ],
-                                                           "Skills":  [
-
-                                                                      ],
-                                                           "Def":  {
-                                                                       "FxPath":  null,
-                                                                       "PointType":  0,
-                                                                       "AudioClip":  {
-                                                                                         "AudioRes":  null,
-                                                                                         "AudioReference":  {
-                                                                                                                "ReferenceType":  0,
-                                                                                                                "Key":  null
-                                                                                                            },
-                                                                                         "Volume":  1,
-                                                                                         "FadeTime":  1
-                                                                                     },
-                                                                       "ArmorValue":  0
-                                                                   }
-                                                       },
-                               "ThrowConfigData":  {
-                                                       "CanThrowOnNoCharge":  false,
-                                                       "PlayThrowAnim":  false,
-                                                       "ThrowAnimtorName":  null,
-                                                       "ThrowSpriteAnimName":  null,
-                                                       "DiceCheckType":  1,
-                                                       "ResultCheckType":  1,
-                                                       "ExploreSkill":  201,
-                                                       "UseTag":  1002,
-                                                       "LimitType":  1,
-                                                       "TargetSelect":  0,
-                                                       "CanSelectDeathRole":  false,
-                                                       "TargetFilter":  {
-                                                                            "RoleFilter":  [
-
-                                                                                           ],
-                                                                            "EnableMaxMinFilter":  false,
-                                                                            "Attribute":  0,
-                                                                            "Skill":  0,
-                                                                            "ExtraAttr":  0,
-                                                                            "MaxMinType":  0,
-                                                                            "EnableDistanceFilter":  false,
-                                                                            "DistanceFilterType":  0,
-                                                                            "EnableBuffLayerFilter":  false,
-                                                                            "BuffId":  0,
-                                                                            "BuffLayerMaxMinType":  0
-                                                                        },
-                                                       "FxPath":  null,
-                                                       "PointType":  0,
-                                                       "AudioClip":  {
-                                                                         "AudioRes":  null,
-                                                                         "AudioReference":  {
-                                                                                                "ReferenceType":  0,
-                                                                                                "Key":  null
-                                                                                            },
-                                                                         "Volume":  1,
-                                                                         "FadeTime":  1
-                                                                     },
-                                                       "UsageCheck":  [
-
-                                                                      ],
-                                                       "ConfigResultFuncs":  null,
-                                                       "ResultFuncs":  {
-
-                                                                       },
-                                                       "EnableOverrideDesc":  false,
-                                                       "OverrideDesc":  {
-                                                                            "TarKey":  null,
-                                                                            "SheetKey":  "",
-                                                                            "InputText":  null,
-                                                                            "Characteristic":  null
-                                                                        },
-                                                       "IgnoreInfoDesc":  false
-                                                   },
-                               "GetItemOpts":  [
-
-                                               ],
-                               "EndingOpts":  [
-
-                                              ],
-                               "EditorSheetKey":  null
-                           }
-             }
+  "Data": {
+    "__type": "MOD.ItemData,Assembly-CSharp",
+    "value": {
+      "IconPath": "UI/Textures/Icon/Item/icon_item_baihehuahuan",
+      "ItemId": 880005,
+      "UniqueKey": null,
+      "ItemName": {
+        "TarKey": "",
+        "SheetKey": "",
+        "InputText": "百合花环",
+        "Characteristic": null
+      },
+      "ItemDes": {
+        "TarKey": "",
+        "SheetKey": "",
+        "InputText": "编作环状的百合与青枝，戴上它，像是被什么温柔地护着。",
+        "Characteristic": null
+      },
+      "ItemEffectDes": {
+        "TarKey": "",
+        "SheetKey": "",
+        "InputText": "装备后无法卸下。\n进入副本时自动获得并装备。\n体质+10、意志+10。\n骨折、流血、中毒、燃烧照样会挂上，但效果不生效。\n每轮开始：随机解除一个【昏迷 / 中毒 / 流血 / 燃烧 / 骨折 / 混乱 / 恐惧 / 弱点暴露】，并按被解除状态的层数为自己叠加【花香】。",
+        "Characteristic": null
+      },
+      "IconPathReference": {
+        "ReferenceType": 1004,
+        "Key": "icon_item_baihehuahuan"
+      },
+      "Price": 0,
+      "ChargingCount": 0,
+      "ReplaceChargingConfig": [],
+      "AutoDestruct": false,
+      "Disassemble": {
+        "Items": {
+          "Type": 7,
+          "Ids": []
+        },
+        "PartsCount": 0
+      },
+      "IsCantDisboard": true,
+      "DesignTag": 1,
+      "TagList": [],
+      "ItemAttrValue": [
+        3,
+        6
+      ],
+      "MythicalId": 0,
+      "ItemType": 3,
+      "ItemStaticAffixList": [],
+      "ItemDynamicAffixList": [],
+      "IsBindCharacter": true,
+      "BuffsLink": [],
+      "Terms": [],
+      "ConfigData": [],
+      "EquipmentConfigData": {
+        "__type": "MOD.EquipConfigData,Assembly-CSharp",
+        "EquipType": 2,
+        "ShowConfirmEquipPopup": false,
+        "ConfirmEquipDesc": {
+          "TarKey": "",
+          "SheetKey": "",
+          "InputText": null,
+          "Characteristic": null
+        },
+        "InfoDatas": [
+  {
+    "DisableTrigger": false,
+    "TriggerType": 2,
+    "ItemCheckList": [],
+    "BaseOptions": [
+      {
+        "__type": "MOD.Item_RoleAttrOption,Assembly-CSharp",
+        "IsConversionBuff": false,
+        "Datas": [
+          {
+            "IsTrackSource": true,
+            "RoleAttr": { "Type": 6, "Value": "10", "IsRatio": false, "Ratio": 0 },
+            "RoleExAttr": { "Type": 0, "Value": null, "IsRatio": false, "Ratio": 0 },
+            "RoleSkill": { "Type": 0, "Value": null, "IsRatio": false, "Ratio": 0 },
+            "RoleSystemAttr": { "Type": 0, "Value": null, "IsRatio": false, "Ratio": 0 },
+            "ExDiceData": {
+              "ExploreSkill": { "Type": 0, "ChangeAll": false, "IsTemp": false, "Value": 0 },
+              "HeroAttribute": { "Type": 0, "ChangeAll": false, "IsTemp": false, "Value": 0 },
+              "ExtraAttribute": { "Type": 0, "ChangeAll": false, "IsTemp": false, "Value": 0 }
+            }
+          },
+          {
+            "IsTrackSource": true,
+            "RoleAttr": { "Type": 4, "Value": "10", "IsRatio": false, "Ratio": 0 },
+            "RoleExAttr": { "Type": 0, "Value": null, "IsRatio": false, "Ratio": 0 },
+            "RoleSkill": { "Type": 0, "Value": null, "IsRatio": false, "Ratio": 0 },
+            "RoleSystemAttr": { "Type": 0, "Value": null, "IsRatio": false, "Ratio": 0 },
+            "ExDiceData": {
+              "ExploreSkill": { "Type": 0, "ChangeAll": false, "IsTemp": false, "Value": 0 },
+              "HeroAttribute": { "Type": 0, "ChangeAll": false, "IsTemp": false, "Value": 0 },
+              "ExtraAttribute": { "Type": 0, "ChangeAll": false, "IsTemp": false, "Value": 0 }
+            }
+          }
+        ],
+        "IsRemove": false,
+        "SourceKey": null
+      }
+    ]
+  }
+],
+        "EnableOverrideDesc": true,
+        "OverrideDesc": {
+          "TarKey": "",
+          "SheetKey": "",
+          "InputText": "装备后无法卸下。\n进入副本时自动获得并装备。\n体质+10、意志+10。\n骨折、流血、中毒、燃烧照样会挂上，但效果不生效。\n每轮开始：随机解除一个【昏迷 / 中毒 / 流血 / 燃烧 / 骨折 / 混乱 / 恐惧 / 弱点暴露】，并按被解除状态的层数为自己叠加【花香】。",
+          "Characteristic": null
+        },
+        "Arrts": [],
+        "Skills": [],
+        "Def": {
+          "FxPath": null,
+          "PointType": 0,
+          "AudioClip": {
+            "AudioRes": null,
+            "AudioReference": {
+              "ReferenceType": 0,
+              "Key": null
+            },
+            "Volume": 1,
+            "FadeTime": 1
+          },
+          "ArmorValue": 0
+        }
+      },
+      "ThrowConfigData": {
+        "CanThrowOnNoCharge": false,
+        "PlayThrowAnim": false,
+        "ThrowAnimtorName": null,
+        "ThrowSpriteAnimName": null,
+        "DiceCheckType": 1,
+        "ResultCheckType": 1,
+        "ExploreSkill": 201,
+        "UseTag": 1002,
+        "LimitType": 1,
+        "TargetSelect": 0,
+        "CanSelectDeathRole": false,
+        "TargetFilter": {
+          "RoleFilter": [],
+          "EnableMaxMinFilter": false,
+          "Attribute": 0,
+          "Skill": 0,
+          "ExtraAttr": 0,
+          "MaxMinType": 0,
+          "EnableDistanceFilter": false,
+          "DistanceFilterType": 0,
+          "EnableBuffLayerFilter": false,
+          "BuffId": 0,
+          "BuffLayerMaxMinType": 0
+        },
+        "FxPath": null,
+        "PointType": 0,
+        "AudioClip": {
+          "AudioRes": null,
+          "AudioReference": {
+            "ReferenceType": 0,
+            "Key": null
+          },
+          "Volume": 1,
+          "FadeTime": 1
+        },
+        "UsageCheck": [],
+        "ConfigResultFuncs": null,
+        "ResultFuncs": {},
+        "EnableOverrideDesc": false,
+        "OverrideDesc": {
+          "TarKey": null,
+          "SheetKey": "",
+          "InputText": null,
+          "Characteristic": null
+        },
+        "IgnoreInfoDesc": false
+      },
+      "GetItemOpts": [],
+      "EndingOpts": [],
+      "EditorSheetKey": null
+    }
+  }
 }

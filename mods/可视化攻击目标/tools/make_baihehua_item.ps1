@@ -42,7 +42,7 @@ $v.ItemDes.Characteristic = $null
 
 $v.ItemEffectDes.TarKey = ""
 $v.ItemEffectDes.SheetKey = ""
-$v.ItemEffectDes.InputText = "装备后无法卸下。`n进入副本时自动获得并装备。`n最大生命值+6。`n探索中每回合恢复1点精神值。`n每场战斗限1次：战斗死亡时免疫此次死亡，生命值变为50%，并获得1回合伤害免疫。`n每2回合：免疫1次法术伤害。"
+$v.ItemEffectDes.InputText = "装备后无法卸下。`n进入副本时自动获得并装备。`n最大生命值+10。`n探索中每回合恢复1点精神值。`n每个副本限1次：战斗死亡时免疫此次死亡，生命值变为50%，并获得1回合伤害免疫。`n每2回合：免疫1次法术伤害。"
 $v.ItemEffectDes.Characteristic = $null
 
 # ---- 图标（先生成 PNG 用游戏编辑器导入，生成三件套后再把 Key 填成 icon_item_baihehua）----
@@ -88,7 +88,7 @@ $v.EquipmentConfigData.InfoDatas = @()
 $v.EquipmentConfigData.EnableOverrideDesc = $true
 $v.EquipmentConfigData.OverrideDesc.TarKey = ""
 $v.EquipmentConfigData.OverrideDesc.SheetKey = ""
-$v.EquipmentConfigData.OverrideDesc.InputText = "装备后无法卸下。`n进入副本时自动获得并装备。`n最大生命值+6。`n探索中每回合恢复1点精神值。`n每场战斗限1次：战斗死亡时免疫此次死亡，生命值变为50%，并获得1回合伤害免疫。`n每2回合：免疫1次法术伤害。"
+$v.EquipmentConfigData.OverrideDesc.InputText = "装备后无法卸下。`n进入副本时自动获得并装备。`n最大生命值+10。`n探索中每回合恢复1点精神值。`n每个副本限1次：战斗死亡时免疫此次死亡，生命值变为50%，并获得1回合伤害免疫。`n每2回合：免疫1次法术伤害。"
 $v.EquipmentConfigData.OverrideDesc.Characteristic = $null
 
 # ⚠ 大坑（2026-09-22 踩）：PowerShell 5.1 的 ConvertTo-Json 会把对象里的 `__type` 字段弄丢，
@@ -105,7 +105,7 @@ if ($out -notmatch '"EquipmentConfigData"\s*:\s*\{\s*"__type"') {
 # ---- 装备自带效果（InfoDatas）----
 # 这里**直接写 JSON 文本**、不走 PowerShell 对象：ConvertTo-Json 会把条目里的 `__type` 吃掉（同上面的坑）。
 # 两个效果：
-#   1) 装备时（TriggerType 2）加**最大生命值 +6**（ExtraAttr 101 = 生命值，Item_AddAttrMaxValueOption）
+#   1) 装备时（TriggerType 2）加**最大生命值 +10**（ExtraAttr 101 = 生命值，Item_AddAttrMaxValueOption）
 #   2) 探索回合变化（TriggerType 21，游戏探索里每 12 秒算一回合）**回复 1 点精神值**（ExtraAttr 102 = 当前精神值）
 #      （TriggerType 21 的取值参考原版 Item\1041.txt「灵玉符文」）
 $infoDatas = @'
@@ -121,7 +121,7 @@ $infoDatas = @'
                 "Attribute": 0,
                 "Skill": 0,
                 "ExtraAttr": 101,
-                "AddValue": "6",
+                "AddValue": "10",
                 "IsRemove": false,
                 "SourceKey": null
               }

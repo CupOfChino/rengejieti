@@ -3,6 +3,23 @@
 > 只记重点和"去哪找"。细节看活样例，不要在这份文档里找实现。
 > 存放位置总览见 `..\README.md`，各 mod 的分工见 `模组清单.md`。
 
+## 0. 用语约定（用户的黑话对照，2026-09-27 记）
+
+> 用户提需求时常用自己的简称。**照这里的对应关系理解，别自己另起一套叫法**，
+> 也别把"关键词"和"术语"混为一谈（这是两个不同的东西）。
+
+| 用户的说法 | 实际指什么 | 落在数据/代码的哪里 |
+| --- | --- | --- |
+| **关键词** | 显示在 UI 上的**效果说明文本**（一行一条的清单） | 特质/状态：`WakeEvent`（或 `HideEvent`）里的 `Localization_Functin.InputText`；装备：`EquipmentConfigData.OverrideDesc.InputText` |
+| 「像孤影一样旁边展示」 | 把效果做成**多行清单**（一条一行，`\n` 分隔），显示在特质详情里 | 见上（样例：Trait 880023 灰暗孤影的四行效果） |
+| **术语 / 右栏关键词** | 装备面板**右栏**那一列词条（**不是**上面的"关键词"） | 数据 `Terms` 字段 → `Game\TermData\*.txt`（样例：880002 先发、880005 荆棘） |
+| **面板** | 显示出来的数值/描述，通常指要改的数据字段 | `Item\*.txt`、`Buff\*.txt`、`Trait\*.txt` |
+| **私货** | 茉莉专属的自定义内容（4 特质 + 6 装备 + 状态） | `mods\可视化攻击目标` 的私货部分，细节见 `temp\私货特质_进度备忘.md` |
+| **进副本 / 出副本** | 进入 / 离开一个模组（module） | 游戏事件 `EGameEvent_GamePlay.EnterModule` / `FinishModule` |
+| **读档** | 从存档进入游戏（不是"启动游戏"） | "数值迁移"那套机制的触发场景（备忘第十五节） |
+| **限伤** | 给某次伤害加"单次不超过 N 点"的上限 | 例：旧版先发 / 反击的 10 点上限（已撤） |
+| **速攻 / 压制 / 破甲 / 主输出** | 用户描述武器**定位**的词 | 见备忘第十三节（葬花＝破甲主输出、荆棘＝速攻压制） |
+
 ## 1. 仓库结构与约定
 
 ```
@@ -949,3 +966,7 @@ num += OffHandWeapon.ExtraContinuousAttackCount.Value + OffHandWeapon.ExtraConti
   （反编译 `RoundChange()` / `TimeChangeInRuleModule()`），插件挂这个方法就能拿到"探索回合"事件。
   注意 `ESkillTriggerType` 在 **`Game.FixedSkill`** 命名空间（找不到类型时先想这里）。
   - 数据侧对应的 Item InfoData `TriggerType = 21` 是同一个时机（参考原版「灵玉符文」）。
+- **"力量对抗 / 属性对抗"走哪条路**（2026-09-27 白毛少女踩）：战斗技能里的对抗由技能的
+  `UseCheck.CheckAttr`（属性）+ `isCompareDice = true` 配置（反编译 115717 / 55956），
+  最终仍然落到 `BattleHelper.GetDiceCheckValue(role, ..., attrType, ..., isCompareDice: true)` ——
+  和上面"检定值 ±N"是同一个挂点，用 `isCompareDice && attrType == EHeroAttribute.STR` 就能精确锁定"力量对抗"。

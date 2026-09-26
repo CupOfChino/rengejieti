@@ -1798,6 +1798,47 @@ namespace AttackTargetVisualizer
             }
         }
 
+        /// <summary>
+        /// 白毛少女（880022）：力量对抗时，**敏捷的一半**额外加进对抗值
+        /// （2026-09-27 用户口径 —— 她力量太弱，碰上力量对抗基本赢不了）。
+        /// 战斗技能配置的"力量对抗"走的是 `UseCheck.CheckAttr = STR` + `isCompareDice = true`
+        /// （反编译 115717 / 55956），最终都调 `GetDiceCheckValue`，所以挂它的 Postfix。
+        /// 读敏捷时再次调 `GetDiceCheckValue`（attrType=DEX）不会命中本分支，无递归问题。
+        /// </summary>
+        internal static void OnQueryStrengthCompare(BattleRole target, EHeroAttribute attrType, bool isCompareDice,
+            ref int result)
+        {
+            try
+            {
+                if (!isCompareDice || attrType != EHeroAttribute.STR)
+                {
+                    return;
+                }
+                if (target == null || target.Data == null || !HasTraitWake(target, SecretIds.WhiteHairTrait))
+                {
+                    return;
+                }
+                int dex = BattleHelper.GetDiceCheckValue(target, EExploreSkill.None, EHeroAttribute.DEX,
+                    ERoleExtraAttribute.None, EExploreSkill.None, false);   // 当前敏捷（含各种加成）
+                if (dex <= 0)
+                {
+                    return;
+                }
+                int bonus = dex / 2;   // "敏捷数值的一半"，向下取整
+                if (bonus <= 0)
+                {
+                    return;
+                }
+                result += bonus;
+                AttackTargetPlugin.LogInfo("白毛少女：「" + NameOf(target) + "」力量对抗 +敏捷的一半 " + bonus +
+                    "（敏捷 " + dex + "，对抗值 → " + result + "）");
+            }
+            catch (Exception e)
+            {
+                AttackTargetPlugin.LogError("白毛少女：力量对抗加值出错：" + e.Message);
+            }
+        }
+
         private static bool HasSkill(BattleRole role, EExploreSkill skill)
         {
             try
@@ -3427,6 +3468,27 @@ namespace AttackTargetVisualizer
             catch (Exception e)
             {
                 AttackTargetPlugin.LogError("花香补丁出错（意志检定）：" + e.Message);
+            }
+        }
+    }
+
+    /// <summary>
+    /// 白毛少女：力量对抗时，敏捷的一半一起参与（2026-09-27 用户口径）。
+    /// 同样挂在 `GetDiceCheckValue` 上 —— 战斗技能配置的"力量对抗"
+    /// （`UseCheck.CheckAttr = STR` + `isCompareDice = true`）最终都经过它。
+    /// </summary>
+    [HarmonyPatch(typeof(BattleHelper), "GetDiceCheckValue")]
+    internal static class Patch_WhiteHair_StrengthCompare
+    {
+        private static void Postfix(BattleRole target, EHeroAttribute attrType, bool isCompareDice, ref int __result)
+        {
+            try
+            {
+                SecretTraits.OnQueryStrengthCompare(target, attrType, isCompareDice, ref __result);
+            }
+            catch (Exception e)
+            {
+                AttackTargetPlugin.LogError("白毛少女补丁出错（力量对抗）：" + e.Message);
             }
         }
     }

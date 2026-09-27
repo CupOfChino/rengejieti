@@ -70,7 +70,7 @@ $v.ItemDes.InputText = "花瓣落尽之处，旧日的记忆随之入土。"
 $v.ItemName.TarKey = ""
 $v.ItemDes.TarKey = ""
 $v.ItemEffectDes.TarKey = ""
-$v.ItemEffectDes.InputText = "葬花：攻击前进行一次敏捷检定，成功消耗2点充能、困难成功及以上消耗1点充能，本次攻击段数+1；击杀敌人时恢复1点充能。`n每段命中并造成伤害时，为目标叠加1层【剑痕】；目标每有1层【剑痕】，本次攻击伤害+10%。`n装备时：斗殴+10、力量+5、速度-5。`n【持握·葬花】"
+$v.ItemEffectDes.InputText = "葬花：攻击前进行一次敏捷检定，成功消耗2点充能、困难成功及以上消耗1点充能，本次攻击段数+1；击杀敌人时恢复1点充能。`n每段命中并造成伤害时，为目标叠加1层【剑痕】；目标每有1层【剑痕】，本次攻击伤害+5%。`n装备时：斗殴+10、力量+5、速度-5。`n【持握·葬花】"
 # （Item 数据没有 Comment 字段，说明写在 ItemEffectDes 里了；这份数据由 tools\make_zanghua_item.ps1 生成）
 
 # ---- 图标（我们做的那张茉莉剑）----
@@ -119,7 +119,7 @@ $v.EquipmentConfigData.InfoDatas = @(
 $v.EquipmentConfigData.EnableOverrideDesc = $true
 $v.EquipmentConfigData.OverrideDesc.TarKey = ""
 $v.EquipmentConfigData.OverrideDesc.SheetKey = ""
-$v.EquipmentConfigData.OverrideDesc.InputText = "葬花：攻击前进行一次敏捷检定，成功消耗2点充能、困难成功及以上消耗1点充能，本次攻击段数+1；击杀敌人时恢复1点充能。`n每段命中并造成伤害时，为目标叠加1层【剑痕】；目标每有1层【剑痕】，本次攻击伤害+10%。`n装备时：斗殴+10、力量+5、速度-5。`n【持握·葬花】"
+$v.EquipmentConfigData.OverrideDesc.InputText = "葬花：攻击前进行一次敏捷检定，成功消耗2点充能、困难成功及以上消耗1点充能，本次攻击段数+1；击杀敌人时恢复1点充能。`n每段命中并造成伤害时，为目标叠加1层【剑痕】；目标每有1层【剑痕】，本次攻击伤害+5%。`n装备时：斗殴+10、力量+5、速度-5。`n【持握·葬花】"
 
 # ---- 关键词术语（装备面板右侧那栏）：880001 = 剑痕 ----
 # 剑痕那条长解释从这里挪到 Game\TermData\880001.txt，描述里只留【剑痕】三个字，

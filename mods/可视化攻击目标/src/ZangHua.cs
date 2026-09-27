@@ -34,8 +34,9 @@ namespace AttackTargetVisualizer
     {
         internal const int WeaponItemId = 880001;
         internal const int MarkBuffId = 880040;      // 剑痕本体
-        internal const int MarkTierBase = 880040;    // 880041~880045 = 按层数的隐藏档位
-        internal const int MaxMark = 5;
+        internal const int MarkTierBase = 880040;    // 880041~880045 = 护甲档位（第 n 档 = 剑痕 2n 层）
+        internal const int MaxMark = 10;             // 剑痕上限（2026-09-27 用户口径：5 → 10）
+        internal const int MarkTierCount = 5;        // 护甲档位数量（护甲每 2 层 -1）
         internal const int BleedBuffId = 103;        // 本体【流血】
         internal const int InitCharge = 7;
 
@@ -55,12 +56,20 @@ namespace AttackTargetVisualizer
         private const string OffhandArmorKey = "zanghua_offhand_armor";
 
         /// <summary>
-        /// 剑痕的"受到伤害 +15%/层"（2026-09-27 用户口径 —— 剑痕定位改成"破甲 + 易伤"）。
+        /// 剑痕的"受到伤害 +5%/层"（2026-09-27 改版：上限抬到 10 层、每层效果减半）。
         /// 挂在目标的 `BeDamageChangePercentData` 上（不是属性），所以不受"属性不随层数缩放"的限制，
         /// 直接按当前层数写一个百分比即可。
         /// </summary>
         private const string MarkBeDamageKey = "zanghua_mark_be_damage";
-        private const float MarkBeDamagePerLayer = 0.15f;
+        private const float MarkBeDamagePerLayer = 0.05f;
+
+        /// <summary>
+        /// 剑痕的"闪避 / 运动 -5/层"（2026-09-27 用户口径）。
+        /// 这两条**按层数**生效、粒度比护甲细，5 个隐藏档位装不下，所以和束缚减速一样
+        /// 由插件按层数直接同步（同一个 SourceKey，加/摘成对、幂等）。
+        /// </summary>
+        private const string MarkDodgeMotionKey = "zanghua_mark_dodge_motion";
+        private const int MarkDodgeMotionPerLayer = 5;
 
         /// <summary>所有伤害类型（"受到伤害 +x%"对全部类型生效；共享同一份只读列表）。</summary>
         private static readonly List<EDamageType> MarkBeDamageTypes =
@@ -554,11 +563,12 @@ namespace AttackTargetVisualizer
                     result += MasterDamageBonus;
                 }
 
-                // 4. 每层剑痕 +10%（只对葬花；先算加成再叠层，避免本次命中吃到自己这层）
+                // 4. 每层剑痕 +5%（只对葬花；2026-09-27 改版：上限抬到 10 层、每层 +10% → +5%；
+                //    先算加成再叠层，避免本次命中吃到自己这层）
                 int layer = MarkLayer(target);
                 if (layer > 0)
                 {
-                    int bonus = (int)(result * 0.1f * layer);
+                    int bonus = (int)(result * 0.05f * layer);
                     if (bonus > 0)
                     {
                         result += bonus;
@@ -631,7 +641,12 @@ namespace AttackTargetVisualizer
             }
         }
 
-        /// <summary>按当前层数挂/摘隐藏档位（护甲 / 闪避 / 运动）与"受到伤害 +15%/层"。</summary>
+        /// <summary>
+        /// 按当前层数同步剑痕的全部数值效果（2026-09-27 改版：上限 10、每层效果削弱）：
+        ///   · 受到伤害 **+5%/层**（BeDamageChangePercentData，按层数）
+        ///   · 闪避 **-5/层**、运动 **-5/层**（插件按层数直接改属性，SourceKey 幂等）
+        ///   · 护甲：**每 2 层 -1**（走 880041~880045 五个隐藏档位，第 n 档 = 2n 层；1 层时还没有护甲削减）
+        /// </summary>
         internal static async void SyncMarkTier(BattleRole target)
         {
             try
@@ -645,17 +660,18 @@ namespace AttackTargetVisualizer
                 {
                     layer = MaxMark;
                 }
-                // 2026-09-27 用户口径：剑痕改成"破甲 + 易伤"——
-                // 每层：护甲-1、受到伤害+15%、闪避-10、运动-10。
-                // 速度削减已去掉（减速归荆棘的【束缚】管，两把武器不再抢同一个活）。
                 SyncMarkBeDamage(target, layer);
                 if (target.IsDeath)
                 {
                     return;   // 死亡时只要把增伤摘干净，不用再挂属性档位
                 }
-                for (int i = 1; i <= MaxMark; i++)
+                SyncMarkDodgeAndMotion(target, layer);
+
+                // 护甲：每 2 层 1 档（第 n 档 = 2n 层）
+                int tier = layer / 2;
+                for (int i = 1; i <= MarkTierCount; i++)
                 {
-                    bool shouldHave = i == layer;
+                    bool shouldHave = i == tier;
                     bool has = target.GetBuff(MarkTierBase + i) != null;
                     if (shouldHave && !has)
                     {
@@ -674,7 +690,36 @@ namespace AttackTargetVisualizer
         }
 
         /// <summary>
-        /// 按层数同步"受到伤害 +15%"（目标的 `BeDamageChangePercentData`，对所有伤害类型生效）。
+        /// 剑痕的"闪避 -5/层、运动 -5/层"（2026-09-27 用户口径）。
+        /// 做法和束缚减速一样：先按同一个 SourceKey 摘掉上次加的（摘完读到的就是没被削过的基础值），
+        /// 再按当前层数加一次 —— 幂等，反复调用也不会叠。
+        /// </summary>
+        private static async void SyncMarkDodgeAndMotion(BattleRole target, int layer)
+        {
+            try
+            {
+                if (target == null || target.Data == null)
+                {
+                    return;
+                }
+                await target.Data.ChangeAttr(false, new ChangeAttrData(ERoleExtraAttribute.Dodge, "0"), MarkDodgeMotionKey);
+                await target.Data.ChangeAttr(false, new ChangeAttrData(EExploreSkill.Motion, "0"), MarkDodgeMotionKey);
+                if (layer <= 0)
+                {
+                    return;
+                }
+                string value = (-MarkDodgeMotionPerLayer * layer).ToString();
+                await target.Data.ChangeAttr(true, new ChangeAttrData(ERoleExtraAttribute.Dodge, value), MarkDodgeMotionKey);
+                await target.Data.ChangeAttr(true, new ChangeAttrData(EExploreSkill.Motion, value), MarkDodgeMotionKey);
+            }
+            catch (Exception e)
+            {
+                AttackTargetPlugin.LogError("葬花：同步剑痕闪避/运动出错：" + e.Message);
+            }
+        }
+
+        /// <summary>
+        /// 按层数同步"受到伤害 +5%"（目标的 `BeDamageChangePercentData`，对所有伤害类型生效）。
         /// 层数为 0 就是把这条摘掉；加/摘都用同一个 SourceKey，保证不会叠加出错。
         /// </summary>
         internal static void SyncMarkBeDamage(BattleRole target, int layer)

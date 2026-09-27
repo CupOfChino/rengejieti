@@ -8,13 +8,13 @@
       "Name": {
         "TarKey": "",
         "SheetKey": "",
-        "InputText": "剑痕·1层（隐藏数值）",
+        "InputText": "剑痕·护甲档1（隐藏数值）",
         "Characteristic": null
       },
       "Des": {
         "TarKey": "",
         "SheetKey": "",
-        "InputText": "护甲-1、闪避-10、运动-10。",
+        "InputText": "护甲-1（对应剑痕 2 层）。",
         "Characteristic": null
       },
       "IconPathReference": {
@@ -81,100 +81,6 @@
           "RoleExAttr": {
             "Type": 112,
             "Value": "-1",
-            "IsRatio": false,
-            "Ratio": 0
-          },
-          "RoleSkill": {
-            "Type": 0,
-            "Value": null,
-            "IsRatio": false,
-            "Ratio": 0
-          },
-          "RoleSystemAttr": {
-            "Type": 0,
-            "Value": null,
-            "IsRatio": false,
-            "Ratio": 0
-          },
-          "ExDiceData": {
-            "ExploreSkill": {
-              "Type": 0,
-              "ChangeAll": false,
-              "IsTemp": false,
-              "Value": 0
-            },
-            "HeroAttribute": {
-              "Type": 0,
-              "ChangeAll": false,
-              "IsTemp": false,
-              "Value": 0
-            },
-            "ExtraAttribute": {
-              "Type": 0,
-              "ChangeAll": false,
-              "IsTemp": false,
-              "Value": 0
-            }
-          }
-        },
-        {
-          "IsTrackSource": true,
-          "RoleAttr": {
-            "Type": 0,
-            "Value": null,
-            "IsRatio": false,
-            "Ratio": 0
-          },
-          "RoleExAttr": {
-            "Type": 118,
-            "Value": "-10",
-            "IsRatio": false,
-            "Ratio": 0
-          },
-          "RoleSkill": {
-            "Type": 0,
-            "Value": null,
-            "IsRatio": false,
-            "Ratio": 0
-          },
-          "RoleSystemAttr": {
-            "Type": 0,
-            "Value": null,
-            "IsRatio": false,
-            "Ratio": 0
-          },
-          "ExDiceData": {
-            "ExploreSkill": {
-              "Type": 0,
-              "ChangeAll": false,
-              "IsTemp": false,
-              "Value": 0
-            },
-            "HeroAttribute": {
-              "Type": 0,
-              "ChangeAll": false,
-              "IsTemp": false,
-              "Value": 0
-            },
-            "ExtraAttribute": {
-              "Type": 0,
-              "ChangeAll": false,
-              "IsTemp": false,
-              "Value": 0
-            }
-          }
-        },
-        {
-          "IsTrackSource": true,
-          "RoleAttr": {
-            "Type": 0,
-            "Value": null,
-            "IsRatio": false,
-            "Ratio": 0
-          },
-          "RoleExAttr": {
-            "Type": 201,
-            "Value": "-10",
             "IsRatio": false,
             "Ratio": 0
           },

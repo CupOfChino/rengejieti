@@ -577,10 +577,17 @@ namespace AttackTargetVisualizer
         {
             try
             {
+                // 2026-09-27：先打一条"开始转换"的日志 —— 之前转换没有任何输出，
+                // 出问题时没法判断是"没被调用"还是"卡在中间"，所以把起点也记下来。
+                AttackTargetPlugin.LogInfo("荆棘：行动轮开始 → 「" + SecretTraits.NameOf(target) + "」开始把 " +
+                    count + " 层【荆棘】转成【束缚】");
                 await target.RemoveBuff(ThornBuffId);
-                for (int i = 0; i < count; i++)
+                // 一次挂上 + 补层数（原来是 for 循环逐个 AddBuff —— 层数一多会连着跑几十次事件链，既慢又容易出岔子）
+                await target.AddBuff(null, ShufuBuffId);
+                BuffData shufu = target.GetBuff(ShufuBuffId);
+                if (shufu != null && count > 1)
                 {
-                    await target.AddBuff(null, ShufuBuffId);
+                    await shufu.ChangeLayer(target, count - 1);
                 }
                 SyncShufuSpeed(target);
                 AttackTargetPlugin.LogInfo("荆棘：行动轮开始 → 「" + SecretTraits.NameOf(target) + "」的 " + count +

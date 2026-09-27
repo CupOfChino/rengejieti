@@ -5,15 +5,16 @@
 //                装备时 敏捷 +5 / 斗殴 +5 / 速度 +20（卸下时自动移除）
 //
 // 这里做的事（口径按 2026-09-27 用户最新定稿）：
-//   1. 攻击时以「斗殴 + 敏捷」联合检定 —— 走 GetDiceCheckValue 的 Postfix。
-//      游戏自带的 UniteCheckSkill 只能填"另一个技能"，填不了属性，所以这个只能在插件里补。
+//   1. 攻击检定 = **斗殴**（正常显示）；另做一次**隐藏的敏捷检定**（不弹骰子）决定挂不挂【荆棘】。
+//      隐藏检定的分档与游戏一致：骰 ≤ 敏捷/5 大成功、≤ /2 困难成功、≤ 敏捷 普通成功，否则失败
+//      （见 RollHiddenDexCheck；规则是对着游戏日志反推、核对过的）。
 //   2. 主动攻击 = 行动 1 次、伤害结算 3 次：数据 ContinuousAttackCount = 1，
 //      第 1 次伤害由游戏自己算，另外 2 次由插件克隆伤害数据重跑 CalculationDamage ——
 //      3 次各自吃一次护甲 / 减伤、各跳一个伤害数字，但只挥一次、只判定一次。
 //      每 1 次伤害各叠 1 层【荆棘】（一次命中 = 3 层）。
 //   3. 每段倍率：普通成功 ×0.5（三段合计 150%）；困难成功（DiffSuc）/ 大成功 ×1.0（合计 300%）。
 //      低护甲敌人被"多段压制"、高护甲敌人每段都被吃掉 —— 这是这套倍率的设计意图。
-//   4. 大成功：武器基础伤害 +2，且施加的【荆棘】层数翻倍（TryGreatSuccessBonus + RollThornLayers）。
+//   4. 挂层（2026-09-27 定稿）：隐藏敏捷检定**失败完全不挂**；成功每段各挂 1 层；大成功整次再额外 +1 层。
 //   5. 装备在主手：此武器伤害 +3；装备在副手：（先发）回合开始时随机打 1 名敌人一次。
 //      先发 = 掷一次武器基础伤害 + 只算防御侧，命中叠 1 层【荆棘】。
 //   6. 速度差加成**常驻**：双手（另一只手空）每高于目标 50 点伤害 +10%，单手每 100 点一档；
@@ -39,13 +40,14 @@ namespace AttackTargetVisualizer
         internal const int WeaponItemId = 880006;
 
         /// <summary>
-        /// 普通成功时"每一段"的伤害倍率（2026-09-27 用户口径）：
-        /// 行动 1 次、伤害结算 3 次、每次都单独算护甲。
-        /// 普通成功每段减半（合计 150%）；困难成功（DiffSuc）/ 大成功不减伤害（合计 300%）；
-        /// 大成功另外无视敌人一半护甲（见 TryHalfArmor）。
-        /// 低护甲敌人被"多段压制"、高护甲敌人每段都被吃掉 → 正是这套倍率的设计意图。
+        /// 伤害倍率（2026-09-27 用户定稿）—— 作用在"这一次攻击"上，之后复制 3 份：
+        ///   普通成功 ×0.5（三段合计 150%）
+        ///   困难成功（DiffSuc）×0.75（合计 225%）
+        ///   大成功（GreatSuccess）×1.0（合计 300%）
+        /// （原来大成功还额外"基础伤害 +2"，随这次的倍率表一起去掉。）
         /// </summary>
         private const float SegmentRatioNormal = 0.5f;
+        private const float SegmentRatioHard = 0.75f;
 
         /// <summary>主动攻击的伤害结算次数（2026-09-27 用户口径：行动 1 次、伤害结算 3 次）。</summary>
         private const int StrikeCount = 3;
@@ -64,11 +66,8 @@ namespace AttackTargetVisualizer
         private const int SpeedStepOneHanded = 100;
         private const float SpeedStepBonus = 0.1f;
 
-        /// <summary>大成功时武器基础伤害 +2（2026-09-27 用户口径，替代原来的"无视一半护甲"）。</summary>
-        private const int GreatSuccessBaseBonus = 2;
-
-        // 注：【荆棘】层数 2026-09-27 改成"每 1 次伤害固定 1 层"（原来的随机 1~2 层 + 大成功翻倍都取消），
-        //     常量随之删除；大成功的"额外 +1 层"将由"隐藏敏捷检定"决定（检定改造待做）。
+        // 注：【荆棘】挂层 2026-09-27 定稿 —— 由一次**隐藏的敏捷检定**决定（整次攻击判一次）：
+        //     失败完全不挂；成功每段挂 1 层；大成功整次再额外 +1 层（见 RollHiddenDexCheck）。
 
         // =====================================================================
         // 槽位判定
@@ -182,92 +181,12 @@ namespace AttackTargetVisualizer
         }
 
         // =====================================================================
-        // 1. 联合检定：斗殴 + 敏捷
+        // 1. 攻击检定（2026-09-27 改版）
+        //    原来这里是「斗殴 + 敏捷」联合检定（把敏捷加进斗殴的检定值）。
+        //    用户口径改成：**主检定 = 斗殴**（正常显示，结果影响伤害倍率），
+        //    另做一次**隐藏的敏捷检定**（不弹骰子）决定挂不挂【荆棘】 ——
+        //    实现见 RollHiddenDexCheck；挂层在 TripleStrike / 先发 / 反击里。
         // =====================================================================
-
-        /// <summary>
-        /// `BattleHelper.GetDiceCheckValue` 的 Postfix。
-        /// 只认"荆棘发起的、斗殴技能、且没有别的联合技能"的那种检定，
-        /// 把敏捷原样加到结果上（游戏自己会再 clamp 一次，所以两头都不越界）。
-        /// </summary>
-        internal static void OnQueryDiceCheckValue(BattleRole target, EExploreSkill skillType,
-            EHeroAttribute attrType, ERoleExtraAttribute extraType, EExploreSkill uniteSkillType, ref int result)
-        {
-            try
-            {
-                if (skillType != EExploreSkill.Combat || uniteSkillType != EExploreSkill.None)
-                {
-                    return;   // 只补"斗殴"这一条；联合技能已经有人填了就不动
-                }
-                if (extraType != ERoleExtraAttribute.None || attrType != EHeroAttribute.None)
-                {
-                    return;
-                }
-                BattleRole actor = CurrentActor();
-                if (actor == null)
-                {
-                    actor = target;
-                }
-                if (actor == null || !IsActingWithJingJi(actor))
-                {
-                    return;
-                }
-                if (target != null && target != actor)
-                {
-                    return;   // 只补"自己打出去"的那一次检定，别人（比如反击的敌人）不沾光
-                }
-                int dex = BattleHelper.GetDiceCheckValue(target, EExploreSkill.None, EHeroAttribute.DEX,
-                    ERoleExtraAttribute.None, EExploreSkill.None, false);
-                if (dex > 0)
-                {
-                    result += dex;
-                }
-            }
-            catch (Exception)
-            {
-            }
-        }
-
-        /// <summary>当前正在出手的人（没在战斗里就是 null）。</summary>
-        private static BattleRole CurrentActor()
-        {
-            try
-            {
-                if (!BattleHelper.IsInBattle || BattleHelper.FightContent == null)
-                {
-                    return null;
-                }
-                BattleRole actor = BattleHelper.FightContent.CurActionRole;
-                if (actor == null || actor.CurrentBehaviourData == null || !actor.CurrentBehaviourData.IsRunning)
-                {
-                    return null;
-                }
-                return actor;
-            }
-            catch (Exception)
-            {
-                return null;
-            }
-        }
-
-        /// <summary>这个人当前这次攻击用的是不是荆棘。</summary>
-        private static bool IsActingWithJingJi(BattleRole role)
-        {
-            try
-            {
-                BattleActiveBehaviorData behavior = role != null ? role.CurrentBehaviourData : null;
-                BattleSkillData skill = behavior != null ? behavior.BattleSkillData : null;
-                if (skill == null)
-                {
-                    return false;
-                }
-                return IsJingJiSkill(skill, false) || IsJingJiSkill(skill, true);
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-        }
 
         // =====================================================================
         // 2. 伤害的接管点（2026-09-27 定稿）
@@ -337,7 +256,20 @@ namespace AttackTargetVisualizer
                 // 2026-09-27 用户口径：普通成功每段减半（三段合计 150%）；
                 // 困难成功（DiffSuc）/ 大成功不减伤害（三段合计 300%）。
                 // 大成功的"无视一半护甲"不在这里做 —— 见 TryHalfArmor（要跑两次计算取差值）。
-                float ratio = diceResult == EDiceResult.Success ? SegmentRatioNormal : 1f;
+                // 三档倍率（2026-09-27 用户定稿）：普通 ×0.5 / 困难 ×0.75 / 大成功 ×1.0
+                float ratio;
+                if (diceResult == EDiceResult.Success)
+                {
+                    ratio = SegmentRatioNormal;
+                }
+                else if (diceResult == EDiceResult.DiffSuc)
+                {
+                    ratio = SegmentRatioHard;
+                }
+                else
+                {
+                    ratio = 1f;
+                }
 
                 // 速度差加成（2026-09-27 用户口径：常驻；双手每 50 点一档、单手每 100 点一档）
                 bool onMaster, onOffhand, asTwoHanded;
@@ -369,8 +301,7 @@ namespace AttackTargetVisualizer
                 AttackTargetPlugin.LogInfo("荆棘：判定 " + diceResult + " → 每段伤害 ×" + ratio.ToString("0.###") +
                     ((onMaster || asTwoHanded) ? "，主手 +" + MasterDamageBonus : "") +
                     ((speedDiff > 0) ? "，速度差 " + speedDiff + "（" + (asTwoHanded ? "双手" : "单手") +
-                        "每 " + speedStep + " 点一档）" : "") +
-                    (diceResult == EDiceResult.GreatSuccess ? "，大成功：基础伤害 +" + GreatSuccessBaseBonus : ""));
+                        "每 " + speedStep + " 点一档）" : ""));
             }
             catch (Exception e)
             {
@@ -508,14 +439,68 @@ namespace AttackTargetVisualizer
         /// 这样状态栏在命中当轮就能看出"下轮要挨什么"。
         /// </summary>
         /// <summary>
-        /// 每 1 次伤害要挂几层【荆棘】。
-        /// 2026-09-27 用户口径：**固定 1 层**（原来的随机 1~2 层、大成功翻倍都已取消）。
-        /// 参数 `diceResult` 暂时不用 —— 等"隐藏敏捷检定决定挂层"的改造落地后，
-        /// 这里会改成"敏捷失败不挂 / 成功挂 1 层 / 大成功挂 2 层"。
+        /// 隐藏的敏捷检定（2026-09-27 用户口径）：**整次攻击只判一次**，不弹骰子、不动战斗随机记录。
+        /// 判定规则和游戏自己的一致（对着日志反推、再按"目标 120 骰 10 = 大成功、骰 61/86/90 = 普通成功"核对过）：
+        ///   骰 1~100 → ≤ 检定值/5 = 大成功；≤ 检定值/2 = 困难成功；≤ 检定值 = 普通成功；否则失败。
+        /// 用途：决定这次攻击能不能给目标叠【荆棘】——
+        /// 失败完全不挂、成功每段各挂 1 层、大成功整次再额外 +1 层（见 TripleStrike）。
         /// </summary>
-        private static int RollThornLayers(EDiceResult diceResult)
+        private static EDiceResult RollHiddenDexCheck(BattleRole role)
         {
-            return 1;
+            try
+            {
+                if (role == null || role.Data == null)
+                {
+                    return EDiceResult.Fail;
+                }
+                int checkValue = BattleHelper.GetDiceCheckValue(role, EExploreSkill.None, EHeroAttribute.DEX,
+                    ERoleExtraAttribute.None, EExploreSkill.None, false);
+                if (checkValue <= 0)
+                {
+                    return EDiceResult.Fail;
+                }
+                int roll = UnityEngine.Random.Range(1, 101);   // 隐藏检定：不弹骰子、不复用战斗随机记录
+                if (roll <= Math.Max(1, checkValue / 5))
+                {
+                    AttackTargetPlugin.LogInfo("荆棘：隐藏敏捷检定 大成功（骰 " + roll + "，目标 " + checkValue + "）");
+                    return EDiceResult.GreatSuccess;
+                }
+                if (roll <= Math.Max(1, checkValue / 2))
+                {
+                    AttackTargetPlugin.LogInfo("荆棘：隐藏敏捷检定 困难成功（骰 " + roll + "，目标 " + checkValue + "）");
+                    return EDiceResult.DiffSuc;
+                }
+                if (roll <= checkValue)
+                {
+                    AttackTargetPlugin.LogInfo("荆棘：隐藏敏捷检定 成功（骰 " + roll + "，目标 " + checkValue + "）");
+                    return EDiceResult.Success;
+                }
+                AttackTargetPlugin.LogInfo("荆棘：隐藏敏捷检定 失败（骰 " + roll + "，目标 " + checkValue +
+                    "）→ 本次不叠【荆棘】");
+                return EDiceResult.Fail;
+            }
+            catch (Exception e)
+            {
+                AttackTargetPlugin.LogError("荆棘：隐藏敏捷检定出错：" + e.Message);
+                return EDiceResult.Fail;
+            }
+        }
+
+        /// <summary>
+        /// 先发 / 反击用：隐藏敏捷检定 → 成功挂 1 层、大成功再额外 +1 层、失败不挂。
+        /// </summary>
+        private static void RollThornByDex(BattleRole attacker, BattleRole target)
+        {
+            EDiceResult dexResult = RollHiddenDexCheck(attacker);
+            if (dexResult == EDiceResult.Fail)
+            {
+                return;
+            }
+            AddThorn(target, 1);
+            if (dexResult == EDiceResult.GreatSuccess)
+            {
+                AddThorn(target, 1);   // 大成功：整次额外 +1 层
+            }
         }
 
         internal static void AddThorn(BattleRole target, int layers)
@@ -1094,57 +1079,6 @@ namespace AttackTargetVisualizer
         }
 
         /// <summary>
-        /// 【大成功】荆棘主动攻击：**武器基础伤害 +2**（2026-09-27 用户口径，
-        /// 替代原来的"无视一半护甲"—— 破甲归葬花的剑痕，荆棘专心做速攻 / 压制）。
-        /// "施加的【荆棘】层数翻倍"在挂层处按 `DiceResult` 处理（见 RollThornLayers）。
-        /// </summary>
-        internal static bool TryGreatSuccessBonus(DamageData damageData, BattleRole source, BattleRole target,
-            DamageAdditionalData addData, ref int result)
-        {
-            try
-            {
-                if (InGuardedCalc || target == null || addData == null)
-                {
-                    return false;
-                }
-                if (addData.SourceType != EDamageSourceType.BattleSkill || !IsJingJi(addData.Weapon))
-                {
-                    return false;
-                }
-                if (addData.DiceResult != EDiceResult.GreatSuccess)
-                {
-                    return false;
-                }
-
-                DamageData fixedDamage = damageData != null
-                    ? damageData.Clone()
-                    : addData.Weapon.WeaponDamageData.Clone();
-                // 把"武器基础伤害"钉成 掷值 + 2，再跑一遍游戏自己的计算（护甲 / 其余加成照旧）
-                int baseDamage = RollWeaponBaseDamage(addData.Weapon) + GreatSuccessBaseBonus;
-                fixedDamage.Value = baseDamage.ToString();
-
-                InGuardedCalc = true;
-                try
-                {
-                    result = BattleHelper.CalculationDamage(fixedDamage, source, target, addData);
-                }
-                finally
-                {
-                    InGuardedCalc = false;
-                }
-
-                AttackTargetPlugin.LogInfo("荆棘：大成功 → 武器基础伤害 " + baseDamage + "（掷值 +" +
-                    GreatSuccessBaseBonus + "）→ 本次伤害 " + result);
-                return true;
-            }
-            catch (Exception e)
-            {
-                AttackTargetPlugin.LogError("荆棘：大成功加伤出错：" + e.Message);
-                return false;
-            }
-        }
-
-        /// <summary>
         /// `BattleRole.SetDamage` 的 Prefix 里调用。
         /// 返回 true 表示照常走原方法（先发 / 反击只是顺便挂一层【荆棘】）；
         /// 返回 false 表示这一次由我们接管（主动攻击要再补 2 次结算），并交出一个等它跑完的 Task。
@@ -1171,7 +1105,7 @@ namespace AttackTargetVisualizer
                 // ① 先发（SourceType = Other 的荆棘伤害）：伤害已经由"只算防御侧"算好，这里只挂层
                 if (addData.SourceType == EDamageSourceType.Other && IsJingJi(addData.Weapon))
                 {
-                    AddThorn(target, RollThornLayers(addData.DiceResult));
+                    RollThornByDex(hitData.Attacker, target);   // 先发：隐藏敏捷检定决定挂不挂层
                     return true;
                 }
 
@@ -1181,7 +1115,7 @@ namespace AttackTargetVisualizer
                 {
                     if (IsJingJi(addData.Weapon))
                     {
-                        AddThorn(target, RollThornLayers(addData.DiceResult));   // 反击也是"荆棘命中"，照常叠 1~2 层
+                        RollThornByDex(hitData.Attacker, target);   // 反击也走隐藏敏捷检定
                     }
                     return true;
                 }
@@ -1225,8 +1159,16 @@ namespace AttackTargetVisualizer
             {
                 AttackTargetPlugin.LogInfo("荆棘：命中「" + SecretTraits.NameOf(target) + "」→ 第 1 次伤害 " +
                     firstDamage + " 点，随后再补 " + (StrikeCount - 1) + " 次结算");
-                // 第 1 段：1~2 层（大成功翻倍成 2~4 层）
-                await AddThornAsync(target, RollThornLayers(addData.DiceResult));
+                // 2026-09-27 定稿：整次攻击只判一次**隐藏敏捷检定**决定挂层 ——
+                // 失败完全不挂；成功每段各挂 1 层；大成功整次再额外 +1 层
+                EDiceResult dexResult = RollHiddenDexCheck(attacker);
+                bool thornOk = dexResult == EDiceResult.Success || dexResult == EDiceResult.DiffSuc
+                            || dexResult == EDiceResult.GreatSuccess;
+                int extraThorn = dexResult == EDiceResult.GreatSuccess ? 1 : 0;
+                if (thornOk)
+                {
+                    await AddThornAsync(target, 1);
+                }
                 await target.SetDamage(firstDamage, playAnim, showChangeTip, hitData);
                 // 原版突刺命中特效 + 刀音效（2026-09-27 用户要求；整次攻击只播一次，3 段结算不会连着响）
                 SecretFx.Puncture(attacker, target);
@@ -1247,9 +1189,15 @@ namespace AttackTargetVisualizer
                     // 2026-09-27 用户口径：只判定 1 次、只计算 1 次 —— 后两段直接复制第 1 段的伤害值，
                     // 不再重跑 CalculationDamage（护甲 / 减免也只吃 1 次），表现就是 3 个基本相同的数字。
                     int damage = (int)firstDamage;
-                    // 补算的这两段也各挂一次（同样是"荆棘打出的伤害"）
-                    await AddThornAsync(target, RollThornLayers(extra.DiceResult));
+                    if (thornOk)
+                    {
+                        await AddThornAsync(target, 1);   // 每段各挂 1 层
+                    }
                     await target.OnHit(attacker, damage, damageData, extra, MakeRecord(attacker, addData.Weapon), null);
+                }
+                if (extraThorn > 0 && target != null && !target.IsDeath)
+                {
+                    await AddThornAsync(target, extraThorn);   // 敏捷大成功：整次额外 +1 层
                 }
             }
             catch (Exception e)
@@ -1296,27 +1244,6 @@ namespace AttackTargetVisualizer
             {
                 AttackTargetPlugin.LogError("荆棘补丁出错（伤害接管）：" + e.Message);
                 return true;
-            }
-        }
-    }
-
-    /// <summary>
-    /// 荆棘：把"敏捷"补进攻击检定值（斗殴 + 敏捷联合检定）。
-    /// 走 Postfix 而不是 Prefix —— 原方法算出来的斗殴值本身要保留，我们只是往上加。
-    /// </summary>
-    [HarmonyPatch(typeof(BattleHelper), "GetDiceCheckValue")]
-    internal static class Patch_JingJi_GetDiceCheckValue
-    {
-        private static void Postfix(BattleRole target, EExploreSkill skillType, EHeroAttribute attrType,
-            ERoleExtraAttribute extraType, EExploreSkill uniteSkillType, ref int __result)
-        {
-            try
-            {
-                JingJi.OnQueryDiceCheckValue(target, skillType, attrType, extraType, uniteSkillType, ref __result);
-            }
-            catch (Exception e)
-            {
-                AttackTargetPlugin.LogError("荆棘补丁出错（联合检定）：" + e);
             }
         }
     }

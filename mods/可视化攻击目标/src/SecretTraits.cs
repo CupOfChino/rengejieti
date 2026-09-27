@@ -3296,11 +3296,6 @@ namespace AttackTargetVisualizer
                     _takenOverByJingJi = true;
                     return false;   // 先发 / 灰暗孤影的反击：只算防御侧，数值已由它算好
                 }
-                if (JingJi.TryGreatSuccessBonus(damageData, source, target, addData, ref __result))
-                {
-                    _takenOverByJingJi = true;
-                    return false;   // 大成功的荆棘攻击：武器基础伤害 +2（层数翻倍在挂层处处理）
-                }
             }
             catch (Exception e)
             {

@@ -1198,9 +1198,10 @@ namespace AttackTargetVisualizer
         /// 荆棘主动攻击：行动 1 次、伤害结算 3 次（2026-09-27 用户口径）。
         /// 第 1 次是游戏自己算好的那份；第 2、3 次各克隆一份伤害数据、重新跑一次
         /// CalculationDamage（所以每次都单独吃护甲 / 减伤、单独跳伤害数字）。
-        /// **【荆棘】只挂一次**（2026-09-27 二次口径：原来是"每一份伤害各挂一次"，
-        /// 双持时一次行动能叠 6~12 层，太超模；现在整次攻击只摇一次层数 = 1~2 层，大成功翻倍）。
-        /// 和葬花的剑痕一致 —— 那个本来就用"同一个伤害实例只叠一次"去重，一次攻击也只叠 1 层。
+        /// **每一段伤害各挂一次【荆棘】**（2026-09-27 用户澄清：要的是"按武器判断"，
+        /// 不是"把三段压成一次"）——能走到这里就说明这次伤害是荆棘打出来的
+        /// （调用点已用 `IsJingJi(addData.Weapon)` 过滤），所以每段各挂是安全的：
+        /// 双持时葬花打出的那几段不会进这个方法，荆棘的 3 段则各挂 1~2 层（大成功翻倍）。
         /// </summary>
         private static async Task TripleStrike(BattleRole target, uint firstDamage, bool playAnim, bool showChangeTip,
             RoleHitData hitData)
@@ -1215,7 +1216,7 @@ namespace AttackTargetVisualizer
             {
                 AttackTargetPlugin.LogInfo("荆棘：命中「" + SecretTraits.NameOf(target) + "」→ 第 1 次伤害 " +
                     firstDamage + " 点，随后再补 " + (StrikeCount - 1) + " 次结算");
-                // 整次攻击只挂一次【荆棘】：1~2 层（大成功翻倍成 2~4 层）
+                // 第 1 段：1~2 层（大成功翻倍成 2~4 层）
                 await AddThornAsync(target, RollThornLayers(addData.DiceResult));
                 await target.SetDamage(firstDamage, playAnim, showChangeTip, hitData);
 
@@ -1233,7 +1234,8 @@ namespace AttackTargetVisualizer
                     ExtraStrikeData.Add(extra);
                     registered.Add(extra);
                     int damage = BattleHelper.CalculationDamage(damageData, attacker, target, extra);   // 完整重算（含护甲）
-                    // 补算的两次只造成伤害，不再重复挂【荆棘】（挂层已在上面做过一次）
+                    // 补算的这两段也各挂一次（同样是"荆棘打出的伤害"）
+                    await AddThornAsync(target, RollThornLayers(extra.DiceResult));
                     await target.OnHit(attacker, damage, damageData, extra, MakeRecord(attacker, addData.Weapon), null);
                 }
             }

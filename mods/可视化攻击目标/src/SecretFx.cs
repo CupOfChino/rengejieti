@@ -32,13 +32,13 @@ namespace AttackTargetVisualizer
             Play(FxRecover, SndRecover, self, self, 1f);
         }
 
-        /// <summary>突刺命中（荆棘的先发攻击）。</summary>
+        /// <summary>突刺命中（荆棘：先发 + 主动攻击，整次攻击只播一次）。</summary>
         internal static void Puncture(BattleRole self, BattleRole target)
         {
             Play(FxPuncture, SndKnife, self, target, 1.2f);
         }
 
-        /// <summary>斩击命中（灰暗孤影的反击）。</summary>
+        /// <summary>斩击命中（葬花：主动攻击 + 反击；灰暗孤影的反击也用它）。</summary>
         internal static void Slash(BattleRole self, BattleRole target)
         {
             Play(FxSlash, SndBlade, self, target, 1.2f);

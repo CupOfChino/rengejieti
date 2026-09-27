@@ -570,6 +570,13 @@ namespace AttackTargetVisualizer
                 if (!SecretTraits.MarkAppliedThisDamage(addData))
                 {
                     AddMark(source, target, asTwoHanded ? 2 : 1);
+                    // 原版斩击命中特效 + 刃器音效（2026-09-27 用户要求；和挂剑痕同一个"首次"判断，
+                    // 所以整次攻击只播一次，多段不会连着响）
+                    // 反击（StrickBack）除外 —— 孤影的反击流程自己会播一次，免得双响
+                    if (addData.SourceType != EDamageSourceType.StrickBack)
+                    {
+                        SecretFx.Slash(source, target);
+                    }
                 }
             }
             catch (Exception e)

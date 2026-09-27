@@ -1219,6 +1219,8 @@ namespace AttackTargetVisualizer
                 // 第 1 段：1~2 层（大成功翻倍成 2~4 层）
                 await AddThornAsync(target, RollThornLayers(addData.DiceResult));
                 await target.SetDamage(firstDamage, playAnim, showChangeTip, hitData);
+                // 原版突刺命中特效 + 刀音效（2026-09-27 用户要求；整次攻击只播一次，3 段结算不会连着响）
+                SecretFx.Puncture(attacker, target);
 
                 for (int i = 1; i < StrikeCount; i++)
                 {

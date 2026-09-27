@@ -40,6 +40,7 @@ namespace AttackTargetVisualizer
             PatchOne(harmony, typeof(Patch_ActionEffectProcess));             // 灰暗孤影：多段攻击的段间缓冲
             PatchOne(harmony, typeof(Patch_ZangHua_DeathClearMark));          // 葬花：标记"死亡清理中"（好让剑痕能被清掉）
             PatchOne(harmony, typeof(Patch_ZangHua_MarkCantBeRemoved));       // 葬花：剑痕不可被驱散
+            PatchOne(harmony, typeof(Patch_ZangHua_MarkOnHit));               // 葬花：每一段命中各叠 1 层剑痕
             PatchOne(harmony, typeof(Patch_LilyWreath_BlockDamage));          // 百合花环：流血/燃烧的效果不生效
             PatchOne(harmony, typeof(Patch_LilyWreath_BlockPercent));         // 百合花环：中毒的削属性不生效
             PatchOne(harmony, typeof(Patch_LilyWreath_BlockFracture));        // 百合花环：骨折不生效

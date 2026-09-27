@@ -2430,7 +2430,9 @@ namespace AttackTargetVisualizer
         }
 
         /// <summary>
-        /// 同一次伤害实例只叠 1 层剑痕（伤害计算会被调用多次：预览、日志、结算…）。
+        /// 同一次伤害实例只播一次斩击特效（伤害计算会被调用多次：预览、日志、结算…）。
+        /// 注：2026-09-27 起剑痕挂层改由 `ZangHua.OnDamageLanded`（每段各挂），不再用它去重；
+        /// 这个标记现在只服务于"整次攻击只播一次 Slash"。
         /// 键用弱引用，伤害数据被回收就自动清理。
         /// </summary>
         private static readonly ConditionalWeakTable<DamageAdditionalData, object> MarkDamageSeen =

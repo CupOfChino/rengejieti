@@ -566,10 +566,12 @@ namespace AttackTargetVisualizer
                     }
                 }
 
-                // 3. 每次造成伤害给目标 +1 层剑痕（"视为双手"时施加的负面状态 +1 层 → 变成 2 层）
+                // 3. 【剑痕挂层已挪到 OnDamageLanded】—— 2026-09-27 用户口径改成"每一段命中各叠 1 层"。
+                //    原来挂在这里（CalculationDamage 的 Postfix），多段共享同一个伤害实例、被去重成 1 层；
+                //    现在挪到"每段伤害落地"（SetDamage），和荆棘三段的做法一致。
+                //    这里只保留"整次攻击播一次"的斩击特效（和原来同一个去重判断）。
                 if (!SecretTraits.MarkAppliedThisDamage(addData))
                 {
-                    AddMark(source, target, asTwoHanded ? 2 : 1);
                     // 原版斩击命中特效 + 刃器音效（2026-09-27 用户要求；和挂剑痕同一个"首次"判断，
                     // 所以整次攻击只播一次，多段不会连着响）
                     // 反击（StrickBack）除外 —— 孤影的反击流程自己会播一次，免得双响
@@ -582,6 +584,34 @@ namespace AttackTargetVisualizer
             catch (Exception e)
             {
                 AttackTargetPlugin.LogError("葬花：命中结算出错：" + e.Message);
+            }
+        }
+
+        /// <summary>
+        /// 葬花命中挂剑痕（2026-09-27 用户口径：**每一段命中各叠 1 层**）。
+        /// 挂在最终扣血入口 `BattleRole.SetDamage` 上 —— 每一段伤害各走一次，
+        /// 天然对应"每段各挂"（多段共享同一个伤害实例也不影响，因为这里是按"段"调用的）。
+        /// 「视为双手」时每段 2 层（数据描述里那条"施加的负面状态 +1 层"）。
+        /// </summary>
+        internal static void OnDamageLanded(BattleRole source, BattleRole target, DamageAdditionalData addData)
+        {
+            try
+            {
+                if (addData == null || !addData.IsWeaponDamage || !IsZangHua(addData.Weapon))
+                {
+                    return;
+                }
+                if (source == null || target == null || target.IsDeath || target.Data == null)
+                {
+                    return;
+                }
+                bool onMaster, onOffhand, asTwoHanded;
+                GetSlot(source, out onMaster, out onOffhand, out asTwoHanded);
+                AddMark(source, target, asTwoHanded ? 2 : 1);
+            }
+            catch (Exception e)
+            {
+                AttackTargetPlugin.LogError("葬花：命中挂剑痕出错：" + e.Message);
             }
         }
 
@@ -936,6 +966,31 @@ namespace AttackTargetVisualizer
             catch (Exception)
             {
                 return true;
+            }
+        }
+    }
+
+    /// <summary>
+    /// 葬花：**每一段命中各叠 1 层剑痕**（2026-09-27 用户口径 —— 原来挂在 CalculationDamage 上，
+    /// 多段共享同一个伤害实例、被去重成"整次攻击只叠 1 层"）。
+    /// 挂在最终扣血入口 `BattleRole.SetDamage` 上：每一段伤害各走一次，天然对应"每段各挂"。
+    /// 荆棘那边在同一个方法上也有自己的补丁（`Patch_JingJi_SetDamage`）——两个 Prefix 的判断条件
+    /// 互斥（葬花武器 / 荆棘武器），互不影响。
+    /// </summary>
+    [HarmonyPatch(typeof(BattleRole), "SetDamage",
+        new Type[] { typeof(uint), typeof(bool), typeof(bool), typeof(RoleHitData) })]
+    internal static class Patch_ZangHua_MarkOnHit
+    {
+        private static void Prefix(BattleRole __instance, RoleHitData hitData)
+        {
+            try
+            {
+                ZangHua.OnDamageLanded(hitData != null ? hitData.Attacker : null, __instance,
+                    hitData != null ? hitData.AddData : null);
+            }
+            catch (Exception e)
+            {
+                AttackTargetPlugin.LogError("葬花补丁出错（命中挂剑痕）：" + e.Message);
             }
         }
     }

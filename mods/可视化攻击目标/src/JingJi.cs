@@ -67,9 +67,8 @@ namespace AttackTargetVisualizer
         /// <summary>大成功时武器基础伤害 +2（2026-09-27 用户口径，替代原来的"无视一半护甲"）。</summary>
         private const int GreatSuccessBaseBonus = 2;
 
-        /// <summary>每 1 次伤害施加的【荆棘】层数区间：1~2 层；大成功翻倍（2026-09-27 用户口径）。</summary>
-        private const int ThornLayersMin = 1;
-        private const int ThornLayersMax = 2;
+        // 注：【荆棘】层数 2026-09-27 改成"每 1 次伤害固定 1 层"（原来的随机 1~2 层 + 大成功翻倍都取消），
+        //     常量随之删除；大成功的"额外 +1 层"将由"隐藏敏捷检定"决定（检定改造待做）。
 
         // =====================================================================
         // 槽位判定
@@ -282,12 +281,21 @@ namespace AttackTargetVisualizer
         //    段数游标在"追加行动"（灰暗孤影）时会残留，把下一次行动的判定也钉住，属于隐患。
         // =====================================================================
 
-        /// <summary>战斗开始 / 结束时清一遍。</summary>
+        /// <summary>
+        /// 战斗开始 / 结束时清一遍。
+        ///
+        /// ⚠ 2026-09-27 修："先发资格"（FirstStrikeReady）**不能**在这里清 ——
+        /// `BattleStart` 是**逐个角色**触发的，清一次就被后来的角色清空一次：
+        /// 茉莉拿到资格后，她的队友接着触发 BattleStart 又把集合清空，
+        /// 等到轮开始要挂【目标锁定】时 `Contains(茉莉)` 已经是 false → 静默返回，
+        /// 表现就是"有先发资格日志、但从来没有目标锁定"（用户实测发现）。
+        /// 资格改由 `MarkFirstStrikeReady` 自己管（有资格就加、没资格就摘），
+        /// 战斗结束时由 `ClearFirstStrikeReady` 统一清。
+        /// </summary>
         internal static void ClearState()
         {
             PendingShufu.Clear();
             ConvertingShufu.Clear();
-            FirstStrikeReady.Clear();
             ExtraStrikeData.Clear();
             InGuardedCalc = false;
         }
@@ -500,21 +508,14 @@ namespace AttackTargetVisualizer
         /// 这样状态栏在命中当轮就能看出"下轮要挨什么"。
         /// </summary>
         /// <summary>
-        /// 每 1 次伤害要挂几层【荆棘】：常驻随机 1~2 层；大成功翻倍（2~4 层）。
-        /// 2026-09-27 用户口径。
+        /// 每 1 次伤害要挂几层【荆棘】。
+        /// 2026-09-27 用户口径：**固定 1 层**（原来的随机 1~2 层、大成功翻倍都已取消）。
+        /// 参数 `diceResult` 暂时不用 —— 等"隐藏敏捷检定决定挂层"的改造落地后，
+        /// 这里会改成"敏捷失败不挂 / 成功挂 1 层 / 大成功挂 2 层"。
         /// </summary>
         private static int RollThornLayers(EDiceResult diceResult)
         {
-            int layers = BattleHelper.RandomRange(ThornLayersMin, ThornLayersMax + 1);   // [min, max) → 1~2
-            if (layers < ThornLayersMin || layers > ThornLayersMax)
-            {
-                layers = ThornLayersMin;   // 随机源不可用时兜底成 1 层（RandomRange 的 Record 为空会返回 0）
-            }
-            if (diceResult == EDiceResult.GreatSuccess)
-            {
-                layers *= 2;   // 大成功：施加的 debuff 数量翻倍
-            }
-            return layers;
+            return 1;
         }
 
         internal static void AddThorn(BattleRole target, int layers)
@@ -1203,8 +1204,9 @@ namespace AttackTargetVisualizer
 
         /// <summary>
         /// 荆棘主动攻击：行动 1 次、伤害结算 3 次（2026-09-27 用户口径）。
-        /// 第 1 次是游戏自己算好的那份；第 2、3 次各克隆一份伤害数据、重新跑一次
-        /// CalculationDamage（所以每次都单独吃护甲 / 减伤、单独跳伤害数字）。
+        /// **只判定 1 次、只计算 1 次**：第 1 次的伤害是游戏自己算好的（含护甲 / 减免 / 倍率），
+        /// 第 2、3 次**直接复制这个结果**（不再重跑 CalculationDamage），
+        /// 表现就是"3 个基本相同的伤害数字"（倍率本身已经由第一段承担：普通 ×0.5 → 三段合计 150%）。
         /// **每一段伤害各挂一次【荆棘】**（2026-09-27 用户澄清：要的是"按武器判断"，
         /// 不是"把三段压成一次"）——能走到这里就说明这次伤害是荆棘打出来的
         /// （调用点已用 `IsJingJi(addData.Weapon)` 过滤），所以每段各挂是安全的：
@@ -1242,7 +1244,9 @@ namespace AttackTargetVisualizer
                     DamageAdditionalData extra = CloneAdditional(addData);
                     ExtraStrikeData.Add(extra);
                     registered.Add(extra);
-                    int damage = BattleHelper.CalculationDamage(damageData, attacker, target, extra);   // 完整重算（含护甲）
+                    // 2026-09-27 用户口径：只判定 1 次、只计算 1 次 —— 后两段直接复制第 1 段的伤害值，
+                    // 不再重跑 CalculationDamage（护甲 / 减免也只吃 1 次），表现就是 3 个基本相同的数字。
+                    int damage = (int)firstDamage;
                     // 补算的这两段也各挂一次（同样是"荆棘打出的伤害"）
                     await AddThornAsync(target, RollThornLayers(extra.DiceResult));
                     await target.OnHit(attacker, damage, damageData, extra, MakeRecord(attacker, addData.Weapon), null);

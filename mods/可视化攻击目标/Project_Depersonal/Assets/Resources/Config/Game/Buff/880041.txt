@@ -39,7 +39,7 @@
           "ReferenceType": 0,
           "Key": null
         },
-        "EffectName": null,
+        "EffectName": "",
         "EffectAnimName": null,
         "PlayPoint": 0
       },

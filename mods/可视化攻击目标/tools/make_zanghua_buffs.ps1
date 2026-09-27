@@ -2,6 +2,11 @@
 #   · 880040              剑痕本体（层数容器 + 图标 + 描述；回合结束的逻辑在插件里）
 #   · 880041 ~ 880045     按层数生效的隐藏状态（护甲 -x、闪避 -10x、运动 -10x）
 #
+# ⚠ 2026-09-27 踩坑记录：本脚本的模板曾把"游戏编辑器里改过的东西"覆盖回旧值 ——
+#   880040 的 OverlayType（1=叠加层数）、自制图标 icon_buff_zanghua_hen、zanghua_hen 帧特效
+#   都因为脚本还是旧模板被回退过一次（用户实测发现剑痕图标变回原版、层数叠不上去）。
+#   现在这三项都写进了脚本参数（overlayType / fxName），**以后在编辑器里改了数据，记得回写到本脚本**。
+#
 # 为什么拆成"本体 + 5 个档位"：游戏 buff 的属性数值是**固定值**，不随层数缩放
 # （Arrts 里没有"每层"的系数），所以只能按层数挂对应档位的隐藏 buff，表现上完全一致。
 # "受到伤害 +15x%" 不在数据里做 —— 它挂在目标的 BeDamageChangePercentData 上，
@@ -33,7 +38,8 @@ function New-AttrEntry([int]$exType, [string]$value) {
   }
 }
 
-function Write-Buff($id, $name, $des, $comment, [int]$maxLayer, [bool]$showUI, $arrts, $iconKey) {
+function Write-Buff($id, $name, $des, $comment, [int]$maxLayer, [bool]$showUI, $arrts, $iconKey,
+                    [int]$overlayType = 2, [string]$fxName = $null) {
   if ($iconKey) {
     $iconRef = [ordered]@{ ReferenceType = 1007; Key = $iconKey }
     $iconPath = "UI/Textures/Icon/Buff/$iconKey"
@@ -54,21 +60,22 @@ function Write-Buff($id, $name, $des, $comment, [int]$maxLayer, [bool]$showUI, $
         Comment           = $comment
         BuffType          = 4
         BuffEffectType    = 2
-        OverlayType       = 2
+        OverlayType       = $overlayType
         LayerCount        = [ordered]@{ Value = "1" }
         OverrideInitLayer = $false
         InitLayer         = 0
         MaxLayer          = $maxLayer
         FxPlayType        = 1
+        # 帧特效：$fxName 非空就挂 ExtraAnim 帧动画（参考原版 buff 的写法）
         UseFxPrefab       = [ordered]@{
           FxPath         = $null
-          UseFrameEffect = $false
+          UseFrameEffect = [bool]$fxName
           FxRes          = [ordered]@{ ReferenceType = 0; Key = $null }
-          EffectName     = $null
-          EffectAnimName = $null
-          PlayPoint      = 0
+          EffectName     = $fxName
+          EffectAnimName = $(if ($fxName) { "idle" } else { $null })
+          PlayPoint      = $(if ($fxName) { 2 } else { 0 })
         }
-        PlayFxInBattle    = $false
+        PlayFxInBattle    = [bool]$fxName
         PlayFxInExplore   = $false
         DelayTime         = 0
         EffectClip        = [ordered]@{ AudioRes = $null; AudioReference = [ordered]@{ ReferenceType = 0; Key = $null }; Volume = 1; FadeTime = 1 }
@@ -95,7 +102,7 @@ Write-Output "生成剑痕系列状态："
 Write-Buff 880040 "剑痕" `
   "空间被斩击后留下的痕迹，无需触碰便能感受到它的锋利。`n每层：护甲-1、受到伤害+15%、闪避-10、运动-10。`n回合结束时层数减半（向下取整），并按减少的层数获得等量【流血】。`n最高5层，不可驱散。" `
   "私货武器「葬花」的核心负面状态。层数容器：数值效果由 880041~880045 这五个隐藏档位承载（游戏 buff 属性不随层数缩放）；回合结束减半、补流血、不可驱散都在插件里做。" `
-  5 $true @() "icon_buff_shanghenleilei"
+  5 $true @() "icon_buff_zanghua_hen" 1 "zanghua_hen"
 
 # ---- 880041~880045：按层数生效的隐藏档位 ----
 for ($layer = 1; $layer -le 5; $layer++) {

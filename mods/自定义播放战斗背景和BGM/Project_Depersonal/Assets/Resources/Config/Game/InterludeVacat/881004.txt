@@ -1,0 +1,28 @@
+{
+	"Data" : {
+		"__type" : "MOD.InterludeVacationConfig,Assembly-CSharp",
+		"value" : {
+			"VacatId" : 881004,
+			"TitleTxt" : {
+				"TarKey" : "",
+				"InputText" : "移除「领域」"
+			},
+			"DecTxt" : {
+				"TarKey" : "",
+				"InputText" : "移除这个调查员的【领域】特质，他设置的那套战斗背景和BGM配置也会一起删掉。"
+			},
+			"EffectTxt" : {
+				"TarKey" : "",
+				"InputText" : "移除【领域】特质与配置"
+			},
+			"Consume" : {
+				"Gold" : 0,
+				"InterludeTime" : 0,
+				"SpaceTimePoint" : 0
+			},
+			"Checks" : [],
+			"Opts" : [],
+			"EnableSeriousCheck" : false
+		}
+	}
+}

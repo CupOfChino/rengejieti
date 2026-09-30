@@ -1,0 +1,28 @@
+{
+	"Data" : {
+		"__type" : "MOD.InterludeVacationConfig,Assembly-CSharp",
+		"value" : {
+			"VacatId" : 881003,
+			"TitleTxt" : {
+				"TarKey" : "",
+				"InputText" : "添加「领域」"
+			},
+			"DecTxt" : {
+				"TarKey" : "",
+				"InputText" : "给这个调查员加上【领域】特质。有了特质，才能在战斗里展开他自己的领域。"
+			},
+			"EffectTxt" : {
+				"TarKey" : "",
+				"InputText" : "获得【领域】特质"
+			},
+			"Consume" : {
+				"Gold" : 0,
+				"InterludeTime" : 0,
+				"SpaceTimePoint" : 0
+			},
+			"Checks" : [],
+			"Opts" : [],
+			"EnableSeriousCheck" : false
+		}
+	}
+}

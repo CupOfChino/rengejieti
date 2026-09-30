@@ -988,3 +988,192 @@ num += OffHandWeapon.ExtraContinuousAttackCount.Value + OffHandWeapon.ExtraConti
   - **想做"通用版"就别看 `isCompareDice`**：只判 `attrType == STR`，这样"力量检定（探索/面板/战斗技能）"
     和"力量对抗"一次全覆盖。**其它模组**只要用游戏标准配置（`CheckAttr = STR`）配技能也同样吃得到——
     我们挂的是底层入口不是具体技能；只有"自己另写判定、不调 `GetDiceCheckValue`"的模组技能覆盖不到。
+
+## 23. 武器的"命中特效 / 音效"怎么播（2026-09-27 排查"看不到攻击特效"踩出来）
+
+**结论先说：能放数据里就放数据里，插件那套只留给"没有武器表现链的攻击"（先发 / 反击 / 吸血）。**
+
+### 23.1 数据层（首选）：`DamageData` 自己就是武器的表现入口
+
+武器 `EquipmentConfigData.Damage` 上有两个字段决定"这次攻击长什么样"（反编译 `DamageData` 346520 起，
+播放逻辑 346600 起）：
+
+- `UseCommonEffect = true` + `CommonEffectId = N` → 走**通用战斗表现**，
+  即 `StreamingAssets\Game\CommonBattleEffectShow\N.txt`（含攻击动画 + 命中特效 + 音效 + 受击动作）。
+  常用 id：**1 通用徒手攻击 / 2 通用枪械射击 / 4 利刃受击 / 5 钝器受击 / 9 手雷 / 14 通用生命值恢复 / 16 通用精神恢复**。
+  例：原版 `Item\101.txt`（利刃武器）就是 `true + 4`。
+- `UseCommonEffect = false` + `EffectShow`（自定义表演序列）→ 自己拼 `PlayRoleAnimationData` /
+  `PlayRoleEffectData` / `PlaySoundData` / `PlayHitData` 四件套。
+  **照抄 `CommonBattleEffectShow\4.txt` 的结构只换特效和音效**最不容易漏字段；
+  原版样例：`Item\10306.txt` / `10604.txt` 用 `FXSkillHit_Puncture` 做突刺。
+- 两者互斥：`UseCommonEffect = true` 时游戏**完全忽略** `EffectShow`（别以为会叠加）。
+
+私货现状：葬花 `880001` = `true + 4`（利刃受击：FX_BladeHit + blade_hit）；
+荆棘 `880006` = 自定义 `EffectShow`（FXSkillHit_Puncture + weapon_knife）。
+两边都改了 `tools\make_zanghua_item.ps1` / `make_jingji_item.ps1`，**改数据必须连着脚本一起改**（见 18.3.2）。
+
+### 23.2 插件层（次选）：手工构造 `EffectShowData` 的两个静默坑
+
+只有**先发攻击（插件自己造的白送一击）和吸血回血**这类"不走武器表现链"的伤害才需要插件自己播
+（`mods\可视化攻击目标\src\SecretFx.cs`）。注意**普通攻击和反击都不用插件管**：
+`DamageData.Play` 在攻击技能流程里被调，`BattleHelper.StrickBackProcess`（反编译 19922 起）内部
+也会 `damageData.Play(...)` 打一次反击的武器表现 —— 插件再补就是双响。
+手工构造数据时有两个字段是**旧版遗留、运行时不读**，
+漏填就是**静默不播、日志里连报错都没有**：
+
+- `PlayRoleEffectData.FxPath`：标注是"旧版特效(仅作查看用)"。运行时优先读 **`FxPathReference`**
+  （`PrefabResoureReference`，`ReferenceType = EPrefabReferenceType.Effect(10001)`，
+  `Key` = **资源库里的文件名**，如 `FX_BladeHit`，**不是** `Effect/Prefabs/FX_BladeHit` 这种路径）。
+  两者都填最稳：原版数据也是两个都留着。
+- `AudioClipData.AudioRes`：类定义里是 `[ShowIf("@false")]`（永远隐藏）的过时字段。
+  `AudioManager.PlaySound(AudioClipData)` 只读 **`AudioReference`**
+  （`AudioResourceReference`，`ReferenceType = EAudioReferenceType.Sound(2)`，`Key` = 音效文件名，如 `blade_hit`）。
+  **只填 AudioRes = 完全没声音**（这次"没感觉到特效"的一半原因就是它）。
+
+资源名去哪查：游戏自带注册表 `Depersonalization-Release_Data\StreamingAssets\InternalConfigure.txt`，
+`EffectResUnitDatas` / `SoundResUnitDatas` 两段里是 `Key`+`Path` 成对的全量清单。
+想快速确认"这个特效路径到底读不读得到"，可以在插件里 `Resources.Load<GameObject>(fxPath)` 试一下打日志
+（`SecretFx.Probe` 就是这么写的，稳定后可删）。
+
+### 23.3 本地 ↔ 工坊同步清单（改特效时别落东西）
+
+`plugins\AttackTargetVisualizer.dll` + 改到的 `Item\*.txt`（还有生成脚本）——
+数据文件也**必须一起同步到工坊目录**，否则游戏读到的还是旧数据（插件更新了也没用）。
+
+## 24. 插件里怎么"主动发起一次正常弹骰子的检定"（2026-09-27 孤影追击限制踩出来）
+
+荆棘那次做的是**隐藏检定**（自己 `Random.Range`，不弹面板）。这次孤影要"正常弹骰子"，
+就需要直接驱动游戏自己的骰子面板。路子是有的，而且很短：
+
+```csharp
+// 1. 构造检定数据：属性检定 / 技能检定 / 二级属性检定 三种重载
+CheckDiceData diceData = new CheckDiceData(EHeroAttribute.POW, role, isCompareDice: false);
+//   技能：new CheckDiceData(EExploreSkill.xxx, role, extraData, skillSelectData, isCompareDice)
+//   二级：new CheckDiceData(ERoleExtraAttribute.xxx, role, isCompareDice)
+
+// 2. 让游戏面板自己演一遍（正常骰子演出 + 成功/失败判定都由游戏算）
+await PrefabSingleton<UIDicePanel>.Instance.Roll(EDiceShowType.None, diceData,
+    isLoop: true, EDiceResult.Success, -1, null);
+
+// 3. 拿结果
+EDiceResult result = PrefabSingleton<UIDicePanel>.Instance.CurrentResult;  // 档位（含大成功/大失败）
+int roll = PrefabSingleton<UIDicePanel>.Instance.RollResultValue;          // 骰面值（写日志用）
+```
+
+参考实现：原版 `SkillSelectData.GetResult`（反编译 115739 附近，探索/幕间的检定都是这条路）。
+几个要点：
+
+- `CheckDiceData` 内部会自己调 `BattleHelper.GetFinalCheckValue`，所以**装备/buff 对检定的修正全都会算进去**
+  （花香那种挂在 `GetDiceCheckValue` 上的"+5 成功区间"同样生效）。
+- `EDiceShowType.None` = 含大成功大失败的正常骰；想要暗骰用 `DarkDiceNone`。
+- 面板不是随时都有实例：动手前判 `PrefabSingleton<UIDicePanel>.HasInstance`，没有就走"按失败处理"的兜底，
+  别让异常把行动链卡住（`async void` 里抛异常非常难查）。
+- 调用点必须**已经脱离同步事件链**。孤影这套是排队到下一帧的 Tick 里执行才 `await` 的
+  （触发点在 `TriggerBuffs` 的 Prefix 里，是同步方法）。
+
+**顺带记两个常用判断（同一轮挖出来的）：**
+
+- **"这次行动是不是攻击行动"**：`role.CurrentBehaviourData.IsAttackAction`。
+  它对投掷返回 false（`ActionType == EBattleActionType.Throw` 时 `IsAttackAction` 恒为 false），
+  但**法术伤害也算 true**（`MagicData.Config.Type == EMagicType.Attack`）——要排除法术就用
+  `behaviour.MagicData != null` 再挡一道。
+- **精神状态**：`role.Data.SanState` → `ESanState.None(正常) / Full(充沛) / Weak(衰弱) / Collapse(衰竭)`，
+  对应的 buff 常量是 `GameConstants.SAN_FULL_BUFF_ID = 209`、`SAN_WEAK_BUFF_ID = 301`、`SAN_COLLAPSE_BUFF_ID = 302`。
+- **扣精神值**：`await role.Data.ChangeAttr(true, new ChangeAttrData(ERoleExtraAttribute.CurrentSan, "-2"), "", false, false)`；
+  先读当前值用 `role.Data.GetRoleExtraAttrValue(ERoleExtraAttribute.CurrentSan)`（和葬花扣 1 点回充能同一套写法）。
+
+## 25. 停用清单（用户要求"注释掉"的效果都记在这）
+
+按用户要求停用、但代码留着方便恢复的效果，一律用 `#if false ... #endif` 包住（**不要直接删代码**），
+恢复时把 `#if false` 改回 `#if true` 就行。**文本要同步去掉**（中文在数据文件、英文在 `SecretText.cs`）。
+
+| 日期 | 效果 | 代码位置 | 文本 |
+|---|---|---|---|
+| 2026-09-29 | 白毛少女：战斗开始时魅惑有理智的敌人 | `SecretTraits.ProcessWhiteHair`（`if (HasSan(enemy))` 分支） | `Trait\880022.txt` WakeEvent 第一行 + SleepyEvent 的"不再魅惑敌人" + `SecretText.WhiteHairEffect` 首行 |
+| 2026-09-29 | 百合花：受到魅惑的持续时间翻倍 | `SecretTraits.OnBeforeBuffAdd` | 文案里原本就没有这条（`Trait\880021.txt` / `Buff\880024.txt` 都没写）；`SecretText.LilyEffect` 的 "Charm lasts 100% longer on you." 已删 |
+
+注意：`Patch_BuffData_AddBuff` **不能整个注释掉** —— 它同时还负责百合花环的"免疫骨折/流血/中毒/燃烧"
+（`ShouldBlockBuff`），停用魅惑时长只动 `OnBeforeBuffAdd` 内部那一段。
+
+## 26. 战斗背景 / BGM 的运行时改法（2026-09-30，做「自定义播放战斗背景和BGM」挖出来的）
+
+这一节是做 `mods\自定义播放战斗背景和BGM` 时确认的机制，**改战斗画面/音乐都从这里抄**。
+
+### 26.1 战斗背景是 2D 精灵场景，别想着换场景
+
+- 战斗场景 = `StreamingAssets\Game\SceneTemplate\<名字>.txt`（战斗场景名以 `ZDCJ_` 开头），
+  内容是一整个 2D 场景（`SpriteRenderer` + URP 2D 光照），按排序层分：
+  **`BG`（背景）/ `Chara`（角色）/ `Front`（前景）**。
+- 战斗相机是**正交**的，`MOD_Entity_BaseRoom.Cam` 可以拿到；视野高度 `2 × camera.orthographicSize`
+  （默认 2.4 → 高 4.8 世界单位），宽度 = 高度 × aspect。场景里的背景块一般是 9×5（略大于视野）。
+- **想给战斗"换背景"最稳的办法是叠加层**，不是改场景：
+  世界空间 Canvas 挂到战斗相机下（`localPosition = (0,0,10)`），
+  `canvas.sortingLayerName = "BG"` + `sortingOrder = -1000`（比场景里所有背景都低），
+  尺寸按相机视野算。图片/视频铺满它 → 盖住原背景、但**不挡角色和前景**；战斗结束 `Destroy` 这一层就复原。
+  - 运行时相机：`BattleHelper.FightContent.Room.RoomEntity.Cam`。
+  - "从右往左展开"这类擦除动画用 **`RectMask2D` 容器宽度动画**：容器 `anchor/pivot` 钉在右边缘、
+    宽度 0 → 全宽、子 `RawImage` 右边缘对齐容器右边缘，图像就在屏幕上固定、裁剪窗口从右向左扩大
+    （图片/视频通用，因为都是 `RawImage`）。
+  - 图片铺屏用 `RawImage.uvRect` 手算 cover（保持比例、裁掉多余），视频用 `VideoPlayer.aspectRatio`。
+
+### 26.2 BGM：`AudioManager` 的四个要点
+
+| 要什么 | 怎么拿 |
+| --- | --- |
+| 当前 BGM 的"键" | `AudioManager.CurrentBgm.Key`（+ `ReferenceType`）——这就是"原始值" |
+| 正在播的音频源 | `AudioManager.BgmSource`（public `AudioSource`：`clip` / `loop` / `volume` / `isPlaying`） |
+| 走游戏通道切歌 | `AudioManager.SetBgm(AudioClipData)`（注意：**内部写死 `loop = true`**） |
+| 硬盘音频文件 | `UnityWebRequest` + `DownloadHandlerAudioClip`，按扩展名选 `AudioType.MPEG / OGGVORBIS / WAV` |
+
+**两个必须知道的坑**：
+
+1. **`SetBgm` 不能实现"只播一次"**：它硬编码 `BgmSource.loop = true`。
+   要做单次播放就自己 `Play()` 并把 `loop = false`，再在 `Update` 里盯着 `BgmSource.isPlaying`
+   变 false 后切回原曲（记得给开始播放留 0.5 秒宽限，刚 `Play()` 的帧 `isPlaying` 还不可靠）。
+2. **切歌前必须杀掉 `_volumeTween`**：游戏用 `SetBgmFadeInOut` 做 1.5 秒淡入，tween 完成时才执行
+   `Stop()` + 换 clip。你在这 1.5 秒里自己换歌，tween 结束会把**你的** BGM 顶掉/停掉。
+   `_volumeTween` 是私有字段，反射拿它再 `DG.Tweening.TweenExtensions.Kill(tween, false)` 即可
+   （字段名拿不到就安静跳过，别抛）。
+
+另外：战斗结束游戏自己会调 `MapContent.BackRoomBgm()` 恢复房间 BGM；
+你自己的复原逻辑挂在 `GameWorld.ExitBattle` 的 Prefix 上（那时游戏还没恢复，你先归位、它随后接管）。
+重开战斗走 `GameWorld.RestartBattle`，记得把"本场会话"状态清掉。
+
+### 26.3 硬盘上的图片/音频/视频怎么加载
+
+| 类型 | 做法 |
+| --- | --- |
+| png / jpg | `File.ReadAllBytes` + `Texture2D.LoadImage`（同步，够快） |
+| mp3 / ogg / wav | `UnityWebRequestMultimedia.GetAudioClip("file://" + path, type)`，等 `req.result == Success` 后 `DownloadHandlerAudioClip.GetContent(req)` |
+| mp4 | `VideoPlayer`：`source = Url`、`url = "file://" + path`、`isLooping = true`、`aspectRatio = VideoAspectRatio.FitOutside`（保持比例铺满；**没有 `Fill` 这个枚举值**）、`audioOutputMode = None`（静音）、`renderMode = RenderTexture` + `targetTexture`，然后 `Prepare()` → 轮询 `isPrepared`（加超时！）→ `Play()`。游戏自己的 `UICustomVideoPanel` 就是这套 |
+
+> 游戏自己的资源加载入口 `ResourceLibraryHelper`（`_LoadResByExtra`）也支持这套磁盘加载：
+> 运行时往 `ResourceLibraryManager.Instance.Data.ResourceDatas` 里塞一条 `ResourceData`
+> （`Extend.ExtraFolderPath` + `Path`）就能让游戏的 `AudioResourceReference.GetRes` 直接按 Key 取到文件。
+> 做"让游戏自己识别新资源"的需求时走这条路。
+
+### 26.4 打开系统文件管理器（选文件）
+
+游戏自带，直接用，别引第三方库：
+
+```csharp
+FolderBrowserHelper.SelectFile(delegate(string path) {
+    if (string.IsNullOrEmpty(path)) return;   // 玩家取消了
+    // path 是完整路径
+}, "战斗背景 (*.mp4;*.png;*.jpg)\0*.mp4;*.png;*.jpg");
+```
+
+- 过滤串格式：`描述\0模式`（和 Win32 的 `OPENFILENAME` 一致），多组用多个 `\0` 连接；
+- 它是**同步模态**对话框（调用期间游戏主线程会卡住），和游戏自己的用法一致；
+- 反编译位置：`FolderBrowserHelper.SelectFile`（`Assembly-CSharp` 221417 附近）。
+
+### 26.5 编译 / 挂载两个新坑
+
+1. **csc 命令行会超长**：引用游戏 `Managed` 里**全部** dll（两百多个）时，拼命令行会撞 Windows
+   的长度上限（报 `The filename or extension is too long`）。解法：把参数写进 **响应文件**
+   （每行一个、带引号），用 `dotnet exec csc.dll "@args.rsp"` 编译。
+   模板见 `mods\自定义播放战斗背景和BGM\tools\build.ps1`。
+2. **测试挂载不要覆盖宿主已有文件**：把 `Project_Depersonal` 合并进宿主时，宿主自己可能已有
+   `Project.rtmeta`；无脑覆盖并记进"卸载清单"，卸载时就会把宿主自己的文件删掉。
+   正确做法：**已存在的文件跳过 + 不记清单**（见同目录 `build.ps1`）。
+   （2026-09-30 踩过：宿主 `2919360679` 的 `Project.rtmeta` 被覆盖成了别的 mod 的版本）

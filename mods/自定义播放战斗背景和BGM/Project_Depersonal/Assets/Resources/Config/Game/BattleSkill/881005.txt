@@ -1,0 +1,120 @@
+{
+	"Data" : {
+		"__type" : "BaseSheetData,Assembly-CSharp",
+		"value" : {
+			"__type" : "MOD.BattleSkillTableData,Assembly-CSharp",
+			"Id" : 881005,
+			"IsCover" : false,
+			"Name" : {
+				"TarKey" : "",
+				"SheetKey" : "",
+				"InputText" : "领域展开",
+				"Characteristic" : null
+			},
+			"IsOverrideName" : false,
+			"OverrideNames" : [
+				
+			],
+			"Description" : {
+				"TarKey" : "",
+				"SheetKey" : "",
+				"InputText" : "将只属于自己的战斗领域具象化。\n\n把战斗背景切换成自己设定的那一张，并播放自己设定的战斗BGM。\n\n一场战斗里可以反复使用。",
+				"Characteristic" : null
+			},
+			"EffectDesc" : {
+				"TarKey" : null,
+				"SheetKey" : "",
+				"InputText" : null,
+				"Characteristic" : null
+			},
+			"Comment" : "自定义播放战斗背景和BGM：战斗中手动展开领域的技艺行动",
+			"IsMonster" : false,
+			"ShowPriority" : 0,
+			"SkillType" : 2,
+			"ActionType" : 2,
+			"TriggerWeaponType" : 0,
+			"IsMachiningSkill" : false,
+			"IsUseItem" : false,
+			"CannotBeCancelled" : false,
+			"HideInSkillSelectList" : false,
+			"CanShowInUnselectSkillList" : true,
+			"UseCustomIcon" : false,
+			"BattleSkillIcon" : "",
+			"BattleSkillIconReference" : {
+				"ReferenceType" : 0,
+				"Key" : null
+			},
+			"MonsterSkillIcon" : null,
+			"MonsterSkillIconReference" : {
+				"ReferenceType" : 0,
+				"Key" : null
+			},
+			"UseCustomSkillElementIcon" : false,
+			"CustomSkillElementIconPath" : null,
+			"CustomSkillElementIconReference" : {
+				"ReferenceType" : 0,
+				"Key" : null
+			},
+			"ShowCheck" : [
+				
+			],
+			"AnyCheckReach" : false,
+			"UseItemTargetType" : false,
+			"TargetSelectDatas" : [
+				{
+					"Checks" : [
+						
+					],
+					"TargetType" : 1,
+					"TargetId" : 0,
+					"UseWeaponTargetType" : false,
+					"RandomSelectTarget" : false,
+					"CanChooseDeathRole" : false
+				}
+			],
+			"UseWeaponSelectCount" : false,
+			"MaxSelectCount" : 1,
+			"NeedDice" : false,
+			"UseWeaponDiceConfig" : false,
+			"DiceType" : 0,
+			"DiceCheckType" : 0,
+			"ResultCheckType" : 0,
+			"UseWeaponAttackEffectType" : false,
+			"UseCustomAttackEffectType" : false,
+			"UseThrowItemEffectType" : false,
+			"AttackEffectType" : 0,
+			"IgnoreSelfDice" : false,
+			"IgnoreTargetDice" : false,
+			"DiceConfig" : null,
+			"SkillValue" : 0,
+			"NeedDamage" : false,
+			"DirectDamage" : false,
+			"UseWeaponDamage" : false,
+			"CustomDamage" : null,
+			"DamageValueType" : 0,
+			"IsCritical" : false,
+			"DamageRatio" : 1,
+			"DisableOffhandWeapon" : false,
+			"EffectList" : [
+				{
+					"Trigger" : 2,
+					"EffectChecks" : [
+						
+					],
+					"EffectOption" : [
+						
+					],
+					"AnyCheckReach" : false
+				}
+			],
+			"BindingCharacter" : false,
+			"BindingHero" : false,
+			"BindingCharacterId" : 0,
+			"BindingCharacters" : false,
+			"BindingDataList" : [
+				
+			],
+			"EditorSheetKey" : null
+		}
+	}
+}

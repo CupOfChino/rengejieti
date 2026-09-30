@@ -1,0 +1,21 @@
+==========================================================
+Title（工坊标题，复制这一行）
+==========================================================
+Custom Battle Background & BGM
+
+==========================================================
+Description（工坊简介正文，从这里往下整段复制）
+==========================================================
+[h2]What is this[/h2]
+This mod lets you switch battle backgrounds and BGM. In battle you can switch to a background and music you prepared in advance — keep the battlefield on your own rhythm.
+
+And most importantly of all, it can play "Shinjuku Showdown - Rain Love ver." (here comes the dumpling vinegar)
+
+[h2]How to use[/h2]
+To keep this package clean, the resources above are not included, but setting up your own is very easy. Prepare your ogg / mp3 / mp4 / png / jpg files, then in the interlude pick the custom domain action, click "choose file" and pick your resource. The mod copies it into the mod folder automatically — no manual file management needed.
+
+[h2]Source[/h2]
+GitHub: https://github.com/CupOfChino/rengejieti
+
+[h2]For mod authors[/h2]
+Mod authors can rewrite the various methods inside; see the .md files in the mod folder.

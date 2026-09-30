@@ -1,0 +1,28 @@
+{
+	"Data" : {
+		"__type" : "MOD.InterludeVacationConfig,Assembly-CSharp",
+		"value" : {
+			"VacatId" : 881002,
+			"TitleTxt" : {
+				"TarKey" : "",
+				"InputText" : "编辑自定义战斗背景和BGM"
+			},
+			"DecTxt" : {
+				"TarKey" : "",
+				"InputText" : "给这个调查员设置专属的战斗背景和战斗BGM：选图片/视频当背景，选ogg/mp3当BGM，还可以选择BGM是否循环。"
+			},
+			"EffectTxt" : {
+				"TarKey" : "",
+				"InputText" : "打开「领域」的编辑界面"
+			},
+			"Consume" : {
+				"Gold" : 0,
+				"InterludeTime" : 0,
+				"SpaceTimePoint" : 0
+			},
+			"Checks" : [],
+			"Opts" : [],
+			"EnableSeriousCheck" : false
+		}
+	}
+}

@@ -1,0 +1,78 @@
+{
+	"Data" : {
+		"__type" : "BaseSheetData,Assembly-CSharp",
+		"value" : {
+			"__type" : "MOD.TraitData,Assembly-CSharp",
+			"Id" : 881001,
+			"IsCanCreateGet" : true,
+			"IsCloseInherit" : false,
+			"Type" : 4,
+			"CanRepeate" : false,
+			"TriggerLimit" : 0,
+			"Localization_Name" : {
+				"TarKey" : "",
+				"SheetKey" : "",
+				"InputText" : "领域",
+				"Characteristic" : null
+			},
+			"Localization_Des" : {
+				"TarKey" : "",
+				"SheetKey" : "",
+				"InputText" : "将只属于自己的战斗领域具象化。\n\n特质苏醒（进入战斗）时自动展开：切换战斗背景并播放自定义战斗BGM。\n战斗中也可以使用技艺「领域展开」重新展开一次。\n\n战斗结束后，背景与BGM都会恢复原样。",
+				"Characteristic" : null
+			},
+			"BuffsLink" : [
+				
+			],
+			"Terms" : [
+				
+			],
+			"CreateEvent" : null,
+			"WakeEvent" : {
+				"Localization_Functin" : {
+					"TarKey" : "",
+					"SheetKey" : "",
+					"InputText" : "自动展开",
+					"Characteristic" : null
+				},
+				"Inherent" : [
+					
+				],
+				"Triggers" : [
+					
+				]
+			},
+			"SleepyEvent" : {
+				"Localization_Functin" : {
+					"TarKey" : "",
+					"SheetKey" : "",
+					"InputText" : "不展开",
+					"Characteristic" : null
+				},
+				"Inherent" : [
+					
+				],
+				"Triggers" : [
+					
+				]
+			},
+			"ConceptTraitTriggerDatas" : [
+				
+			],
+			"CrazyTraitTriggerDatas" : [
+				
+			],
+			"ActiveToHideCustom" : {
+				"Gold" : 0,
+				"InterludeTime" : 0,
+				"SpaceTimePoint" : 0
+			},
+			"HideToActiveCustom" : {
+				"Gold" : 0,
+				"InterludeTime" : 0,
+				"SpaceTimePoint" : 0
+			},
+			"EditorSheetKey" : null
+		}
+	}
+}

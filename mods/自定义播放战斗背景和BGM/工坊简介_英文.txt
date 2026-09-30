@@ -6,7 +6,6 @@ Custom Battle Background & BGM
 ==========================================================
 Description（工坊简介正文，从这里往下整段复制）
 ==========================================================
-[h2]What is this[/h2]
 This mod lets you switch battle backgrounds and BGM. In battle you can switch to a background and music you prepared in advance — keep the battlefield on your own rhythm.
 
 And most importantly of all, it can play "Shinjuku Showdown - Rain Love ver." (here comes the dumpling vinegar)

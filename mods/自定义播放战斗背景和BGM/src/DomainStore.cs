@@ -4,6 +4,20 @@
 // <mod 根目录>\CustomBattleAssets\profiles.cfg，
 // 用调查员的 RoleLibraryKey（建角色时生成的 GUID）当钥匙，换存档不会串号。
 
+// 自定义播放战斗背景和BGM：配置与资源的存读。
+//
+// 【重要】资源库放在**游戏存档目录**（Application.persistentDataPath）下，不放 mod 目录：
+//   Steam 更新工坊 mod 时会把 mod 目录整个重置（本项目实测踩过，见 docs\AI协作文档.md 第 4 节坑 7），
+//   玩家的背景/BGM 和配置放那里会被清掉。LocalLow 目录 Steam 不会碰，更新 mod 再多次也不丢。
+//
+//   %USERPROFILE%\AppData\LocalLow\MeowNature\Depersonalization-Release\CustomBattleBg\
+//   ├─ Background\   战斗背景（mp4 / png / jpg）
+//   ├─ Bgm\          战斗BGM（ogg / mp3）
+//   └─ profiles.cfg  每个调查员的配置
+//
+// 编辑窗底部的"打开资源库"按钮会直接打开这个目录，玩家不需要自己找路径。
+// 配置用调查员的 RoleLibraryKey（建角色时生成的 GUID）当钥匙，换存档不会串号。
+
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -28,27 +42,31 @@ namespace CustomBattleBg
 
         public string FilePath { get; private set; }
 
-        /// <summary>mod 根目录（插件 DLL 往上两级），运行时才有效。</summary>
+        /// <summary>资源库根目录（游戏存档目录下，和 Steam 工坊更新无关）。</summary>
+        public string AssetsRoot { get; private set; }
+
+        /// <summary>mod 根目录（插件 DLL 往上两级）；只用于日志显示，资源不存这里。</summary>
         public string ModRoot { get; private set; }
 
         public string BackgroundDir
         {
-            get { return Path.Combine(Path.Combine(ModRoot, DomainConstants.AssetsFolderName), DomainConstants.BackgroundFolderName); }
+            get { return Path.Combine(AssetsRoot, DomainConstants.BackgroundFolderName); }
         }
 
         public string BgmDir
         {
-            get { return Path.Combine(Path.Combine(ModRoot, DomainConstants.AssetsFolderName), DomainConstants.BgmFolderName); }
+            get { return Path.Combine(AssetsRoot, DomainConstants.BgmFolderName); }
         }
 
         public void Load()
         {
             ModRoot = ResolveModRoot();
-            string assetsDir = Path.Combine(ModRoot, DomainConstants.AssetsFolderName);
-            FilePath = Path.Combine(assetsDir, DomainConstants.StoreFileName);
-            if (!Directory.Exists(assetsDir))
+            // 资源库放游戏存档目录：Steam 更新工坊 mod 时会重置 mod 目录，放那里会把玩家的东西清掉
+            AssetsRoot = Path.Combine(Application.persistentDataPath, DomainConstants.AssetsFolderName);
+            FilePath = Path.Combine(AssetsRoot, DomainConstants.StoreFileName);
+            if (!Directory.Exists(AssetsRoot))
             {
-                Directory.CreateDirectory(assetsDir);
+                Directory.CreateDirectory(AssetsRoot);
             }
             if (!Directory.Exists(BackgroundDir))
             {

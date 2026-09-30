@@ -30,8 +30,8 @@ namespace CustomBattleBg
         /// <summary>技能来源标记，摘技能时按它来。</summary>
         public const string SkillSourceKey = "custombattlebg_domain_expand";
 
-        /// <summary>资源根目录名（在 mod 根目录下）。</summary>
-        public const string AssetsFolderName = "CustomBattleAssets";
+        /// <summary>资源库目录名（在游戏存档目录 %LocalLow%\MeowNature\Depersonalization-Release\ 下）。</summary>
+        public const string AssetsFolderName = "CustomBattleBg";
         public const string BackgroundFolderName = "Background";
         public const string BgmFolderName = "Bgm";
         public const string StoreFileName = "profiles.cfg";

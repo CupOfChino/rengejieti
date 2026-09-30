@@ -489,7 +489,7 @@ namespace CustomBattleBg
         {
             try
             {
-                string dir = Path.Combine(CustomBattleBgPlugin.Store.ModRoot, DomainConstants.AssetsFolderName);
+                string dir = CustomBattleBgPlugin.Store.AssetsRoot;
                 if (!Directory.Exists(dir))
                 {
                     Directory.CreateDirectory(dir);

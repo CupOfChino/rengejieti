@@ -1177,3 +1177,28 @@ FolderBrowserHelper.SelectFile(delegate(string path) {
    `Project.rtmeta`；无脑覆盖并记进"卸载清单"，卸载时就会把宿主自己的文件删掉。
    正确做法：**已存在的文件跳过 + 不记清单**（见同目录 `build.ps1`）。
    （2026-09-30 踩过：宿主 `2919360679` 的 `Project.rtmeta` 被覆盖成了别的 mod 的版本）
+
+### 26.6 幕间入口的隐藏与"重写"（2026-10-01，做接口时挖的）
+
+幕间度假列表的构建点是 **`UIInterludePanel.UpdateVacationInfo(HeroRoleData role)`**：
+
+```csharp
+ClearAddEle();                                   // 先把旧元素全部 Recycle
+List<InterludeVacationConfig> datas = Singleton<ResManager>.Instance.InterludeVacationFactory.Datas;
+foreach (...) {
+    if (checks 通过) {
+        UIChooseAddElement el = Pool_ChooseAdd.Alloc<UIChooseAddElement>();
+        el.Fresh(config, role, ScrollView_ChooseAdView);
+        ChooseAddElements.Add(el);               // ★ public List<UIChooseAddElement>
+    }
+}
+CurAddEle = null;
+```
+
+- **想隐藏某个入口**：在 `UpdateVacationInfo` 的 **Postfix** 里倒着遍历 `panel.ChooseAddElements`，
+  命中自己的 `VacatId` 就 `panel.Pool_ChooseAdd.Recycle(el.transform)` + `RemoveAt(i)`——
+  `CurAddEle` 在方法末尾已经被清掉，这时回收是安全的（`自定义播放战斗背景和BGM` 就是这么做的）。
+- **想接管点击**：入口的点击走 `UIInterludePanel._onClickVacationMode(config, tarRole)`，
+  在里面 Prefix 拦下来就行（自定义心和自定义背景/BGM 都用这个挂点）。
+- **想让别的模组能开关/重写你的入口**：暴露一个 public 静态 API（投票开关 + 注册回调 + 启动日志打印"谁关了哪些"），
+  参考 `mods\自定义播放战斗背景和BGM\src\DomainApi.cs` 与同名 mod 的 `接口文档.md`。

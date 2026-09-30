@@ -13,6 +13,9 @@ And most importantly of all, it can play "Shinjuku Showdown - Rain Love ver." (h
 [h2]How to use[/h2]
 To keep this package clean, the resources above are not included, but setting up your own is very easy. Prepare your ogg / mp3 / mp4 / png / jpg files, then in the interlude pick the custom domain action, click "choose file" and pick your resource. The mod copies it into the mod folder automatically — no manual file management needed.
 
+[h2]Important[/h2]
+If you unsubscribe from this mod, remember to manually clean up the asset folder at %USERPROFILE%\AppData\LocalLow\MeowNature\Depersonalization-Release\CustomBattleBg !!! (paste that path straight into your file explorer's address bar)
+
 [h2]Source[/h2]
 GitHub: https://github.com/CupOfChino/rengejieti
 

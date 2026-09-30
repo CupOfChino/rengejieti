@@ -13,6 +13,9 @@ Description（工坊简介正文，从这里往下整段复制）
 [h2]使用方式[/h2]
 本模组为了保证干净，不提供上面的资源，但您可以自行配置，非常简单。准备好你的ogg、mp3、mp4、png、jpg后，在幕间选择自定义领域行动，点击选择文件并找到您准备的资源，模组会自动帮您复制一份到模组文件夹下面，不需要手动调整
 
+[h2]重要提醒[/h2]
+取消订阅此模组时，资源库需要到 %USERPROFILE%\AppData\LocalLow\MeowNature\Depersonalization-Release\CustomBattleBg 手动清理！！！（把这个路径直接粘进资源管理器的地址栏就能打开）
+
 [h2]开源地址[/h2]
 模组开源地址（github仓库）：https://github.com/CupOfChino/rengejieti
 

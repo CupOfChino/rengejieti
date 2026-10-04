@@ -1,0 +1,28 @@
+{
+	"Data" : {
+		"__type" : "MOD.InterludeVacationConfig,Assembly-CSharp",
+		"value" : {
+			"VacatId" : 882002,
+			"TitleTxt" : {
+				"TarKey" : "",
+				"InputText" : "添加「速战速决」"
+			},
+			"DecTxt" : {
+				"TarKey" : "",
+				"InputText" : "给这个调查员加上【速战速决】特质。有了特质，战斗中速度达到门槛就能获得额外行动槽。"
+			},
+			"EffectTxt" : {
+				"TarKey" : "",
+				"InputText" : "获得【速战速决】特质"
+			},
+			"Consume" : {
+				"Gold" : 0,
+				"InterludeTime" : 0,
+				"SpaceTimePoint" : 0
+			},
+			"Checks" : [],
+			"Opts" : [],
+			"EnableSeriousCheck" : false
+		}
+	}
+}

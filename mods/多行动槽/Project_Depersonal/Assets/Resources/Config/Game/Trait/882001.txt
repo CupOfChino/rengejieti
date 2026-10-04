@@ -3,26 +3,26 @@
 		"__type" : "BaseSheetData,Assembly-CSharp",
 		"value" : {
 			"__type" : "MOD.TraitData,Assembly-CSharp",
-			"Id" : 880023,
-			"IsCanCreateGet" : false,
+			"Id" : 882001,
+			"IsCanCreateGet" : true,
 			"IsCloseInherit" : false,
-			"Type" : 6,
+			"Type" : 4,
 			"CanRepeate" : false,
 			"TriggerLimit" : 0,
 			"Localization_Name" : {
 				"TarKey" : "",
 				"SheetKey" : "",
-				"InputText" : "灰暗孤影",
+				"InputText" : "速战速决",
 				"Characteristic" : null
 			},
 			"Localization_Des" : {
 				"TarKey" : "",
 				"SheetKey" : "",
-				"InputText" : "作为传奇调查员，总是独来独往的她因一袭白发，被世人称为：灰暗孤影",
+				"InputText" : "获得额外行动槽",
 				"Characteristic" : null
 			},
 			"BuffsLink" : [
-				880026
+				
 			],
 			"Terms" : [
 				
@@ -32,14 +32,11 @@
 				"Localization_Functin" : {
 					"TarKey" : "",
 					"SheetKey" : "",
-        "InputText" : "攻击行动结束后进行意志检定（投掷、法术除外）：困难成功消耗2点精神值再追加一次攻击，大成功不消耗；普通成功、失败均不追加。精神值不足2点、或处于精神衰弱、精神衰竭状态时无法触发\n受到攻击闪避成功时，立刻用武器回击一次\n独行加成（除自己外每有1名友方存活，效果减半）：闪避+20、速度+20、物理伤害+50%\n常驻：敏捷+20",
+					"InputText" : "进入战斗时与战斗每一幕开始时：\n速度 ≥ 100：获得 1 个额外行动槽\n速度 ≥ 300：再获得 1 个额外行动槽（最多 3 个）",
 					"Characteristic" : null
 				},
 				"Inherent" : [
-					{
-						"__type" : "MOD.TraitEvent.ActiveBuffOption,Assembly-CSharp",
-						"BuffId" : 880026
-					}
+					
 				],
 				"Triggers" : [
 					
@@ -49,14 +46,11 @@
 				"Localization_Functin" : {
 					"TarKey" : "",
 					"SheetKey" : "",
-					"InputText" : "收回「灰暗孤影」状态",
+					"InputText" : "无效果",
 					"Characteristic" : null
 				},
 				"Inherent" : [
-					{
-						"__type" : "MOD.TraitEvent.RemoveBuffOption,Assembly-CSharp",
-						"BuffId" : 880026
-					}
+					
 				],
 				"Triggers" : [
 					
@@ -71,12 +65,12 @@
 			"ActiveToHideCustom" : {
 				"Gold" : 0,
 				"InterludeTime" : 0,
-				"SpaceTimePoint" : 999
+				"SpaceTimePoint" : 0
 			},
 			"HideToActiveCustom" : {
 				"Gold" : 0,
 				"InterludeTime" : 0,
-				"SpaceTimePoint" : 999
+				"SpaceTimePoint" : 0
 			},
 			"EditorSheetKey" : null
 		}

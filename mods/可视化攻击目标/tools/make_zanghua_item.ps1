@@ -100,6 +100,15 @@ $v.EquipmentConfigData.Damage.DamageType = 0
 $v.EquipmentConfigData.Damage.Value = "1D8+2"
 $v.EquipmentConfigData.Damage.IsNotBlock = $false
 
+# ---- 命中表现：用原版「利刃受击」（Id=4）----
+# 这是游戏自己的武器表现链（DamageData.UseCommonEffect），原版利刃武器就是这么配的：
+# 攻击动画 + 目标身上的 FX_BladeHit 斩击闪光 + blade_hit 音效 + 受击动作。
+# 为什么放数据里而不是插件里：插件那套是手工构造 EffectShowData，字段多、容易漏；
+# 走数据 = 和原版武器同一条路，表现一定一致（2026-09-27 用户反馈"看不到攻击特效"后改的）。
+# 注意：UseCommonEffect = true 时游戏会忽略下面的 EffectShow，别两边都配。
+$v.EquipmentConfigData.Damage.UseCommonEffect = $true
+$v.EquipmentConfigData.Damage.CommonEffectId = 4
+
 # ---- 装备时 / 卸下时的属性加成：斗殴 +10、力量 +5、速度 -5（2026-09-23 用户要求）----
 # 充能相关的数据层效果全部清掉（蔷薇黑剑那套"满充能消耗3点额外攻击"不是我们要的，改由插件做）
 $buffDatas = @(

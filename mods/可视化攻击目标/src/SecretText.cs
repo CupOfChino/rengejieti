@@ -71,7 +71,6 @@ namespace AttackTargetVisualizer
             "A beautiful lily - lacking in resistance, yet overwhelmingly alluring.";
         internal const string LilyEffect =
             "Willpower -25.\n" +
-            "Charm lasts 100% longer on you.\n" +
             "Enemy charm actions against you gain 1 bonus die.\n" +
             "Your opposing roll against charm actions gains 1 penalty die.\n" +
             "Enemy actions that charm will target the holder first.\n" +
@@ -82,7 +81,6 @@ namespace AttackTargetVisualizer
         internal const string WhiteHairTraitName = "White-Haired Girl";
         internal const string WhiteHairTraitDes = "A frail white-haired girl.";
         internal const string WhiteHairEffect =
-            "At the start of every battle, each enemy that has sanity rolls Willpower; on a failure it is charmed for 3 rounds.\n" +
             "Enemies without sanity gain 2 stacks of Exposed Weakness.\n" +
             "Persuade and Psychology checks gain 1 bonus die.";
 
@@ -90,7 +88,10 @@ namespace AttackTargetVisualizer
         internal const string LoneShadowDes =
             "A legendary investigator who always walks alone; because of her white hair, the world calls her: the Lone Shadow.";
         internal const string LoneShadowEffect =
-            "Melee weapon attacks strike once more.\n" +
+            "After an attack action (throw and magic excluded), roll Willpower: " +
+            "a hard success spends 2 Sanity to strike once more, an extreme success does so for free; " +
+            "a regular success or a failure grants nothing.\n" +
+            "Never triggers with less than 2 Sanity, or while Weakened or Collapsed.\n" +
             "While alone: Dodge +20, Speed +20, Physical damage +50%.\n" +
             "Always: Dexterity +20.";
 

@@ -1,0 +1,27 @@
+==========================================================
+Title (copy this line)
+==========================================================
+Extra Action Slots (Swift as the Wind)
+
+==========================================================
+Description (copy everything below)
+==========================================================
+This mod gives a single character multiple action slots - each slot can perform a different (or the same) action, independently of the others.
+
+The idea came from feeling that a boss only acting once per round is boring when several investigators are fighting it - we wanted richer action logic like Limbus Company / Library of Ruina. For now it is mainly for investigators, to test things out.
+
+[h2]How to get it[/h2]
+Use the interlude action to gain the [Swift as the Wind] trait.
+
+[h2]Recommended[/h2]
+Another mod of mine, "Visual Attack Target" (optional):
+https://steamcommunity.com/sharedfiles/filedetails/?id=3801731500
+
+[h2]Known limitation[/h2]
+For vanilla extra-action items such as the Old Pocket Watch, the effect only applies to the first action slot by default. The author has NOT actually tested this case - it may behave strangely. If you run into it, please include the log when reporting.
+
+[h2]Source[/h2]
+https://github.com/CupOfChino/rengejieti
+
+[h2]For mod authors[/h2]
+The whole point is to let more content be built on top. If you need it, read the files that ship with the mod (README.md / 接口文档.md).

@@ -31,6 +31,7 @@ namespace AttackTargetVisualizer
         private float _dashPhase;
         private bool _errorLogged;
         private bool _loggedThisRound;
+        private bool _loggedAnchorMode;
         private float _roundTimer;
         private bool _mirrored;
         private bool _selfChecked;
@@ -51,6 +52,11 @@ namespace AttackTargetVisualizer
 
             if (drawing)
             {
+                if (!_loggedAnchorMode)
+                {
+                    _loggedAnchorMode = true;
+                    AttackTargetPlugin.Log.LogInfo("箭头端点口径：行动槽顶部边框的中心（2026-10-04 版；锚点用整块槽框，不用左上角数字牌）");
+                }
                 MirrorFromHudIfNeeded();
                 try
                 {
@@ -450,7 +456,7 @@ namespace AttackTargetVisualizer
             bool dashed = IsRange(type);
 
             Vector2 fromScreen;
-            if (!TryGetSlot(src, false, out fromScreen))
+            if (!TryGetSlot(src, true, out fromScreen))
             {
                 return;
             }
@@ -481,7 +487,7 @@ namespace AttackTargetVisualizer
         {
             Vector2 pa;
             Vector2 pb;
-            if (!TryGetSlot(a, false, out pa) || !TryGetSlot(b, false, out pb))
+            if (!TryGetSlot(a, true, out pa) || !TryGetSlot(b, true, out pb))
             {
                 return;
             }
@@ -525,7 +531,6 @@ namespace AttackTargetVisualizer
             {
                 return;
             }
-            to.y += ArrowStyle.TargetGap;   // 落点抬到牌子上边框外面，免得箭头头被牌子挡住
             _specs.Add(new ArrowSpec
             {
                 From = from,
@@ -687,12 +692,16 @@ namespace AttackTargetVisualizer
 
                 if (hud.Trans_SkillShow != null && hud.Trans_SkillShow.gameObject.activeInHierarchy)
                 {
-                    RectTransform anchor = hud.Trans_SkillShow as RectTransform;
-                    if (hud.Image_ActionOrder != null && hud.Image_ActionOrder.gameObject.activeSelf)
+                    // 锚点取"整块行动槽"，**不要**取左上角的数字牌（Image_ActionOrder）——
+                    // 否则"顶边中点"会算到数字牌顶上（槽的角落）。
+                    // 优先级：技能牌子动画节点（整块牌子的实际矩形）→ 图标按钮 → 容器。
+                    RectTransform anchor = null;
+                    if (hud.Anim_SkillShow != null && hud.Anim_SkillShow.gameObject.activeInHierarchy)
                     {
-                        anchor = hud.Image_ActionOrder.rectTransform;
+                        anchor = hud.Anim_SkillShow.transform as RectTransform;
                     }
-                    else if (hud.Button_SkillIcon != null && hud.Button_SkillIcon.gameObject.activeInHierarchy)
+                    if (anchor == null && hud.Button_SkillIcon != null &&
+                        hud.Button_SkillIcon.gameObject.activeInHierarchy)
                     {
                         anchor = hud.Button_SkillIcon.transform as RectTransform;
                     }

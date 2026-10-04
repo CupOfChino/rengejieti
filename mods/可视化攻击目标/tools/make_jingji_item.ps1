@@ -111,6 +111,64 @@ $v.EquipmentConfigData.TargetSelect = 2
 $v.EquipmentConfigData.Damage.DamageType = 0
 $v.EquipmentConfigData.Damage.Value = "1D4+2"
 $v.EquipmentConfigData.Damage.IsNotBlock = $false
+
+# ---- 命中表现：原版「突刺」特效（FXSkillHit_Puncture + weapon_knife 刀音效）----
+# 和葬花分开：葬花走通用「利刃受击」（斩击），荆棘走自定义表演序列（突刺），两边长得不一样。
+# 结构照抄游戏自带 CommonBattleEffectShow\4.txt（利刃受击），只换特效/音效；
+# 放在武器的 DamageData.EffectShow 里由游戏在主动攻击命中时原生播放，
+# 插件只负责"先发 / 灰暗孤影反击"这种没有表现链的白送攻击（见 src\JingJi.cs）。
+$v.EquipmentConfigData.Damage.UseCommonEffect = $false
+$v.EquipmentConfigData.Damage.EffectShow = [ordered]@{
+  Duration    = 0.7
+  EffectShows = @(
+    [ordered]@{
+      '__type'        = 'MOD.PlayRoleAnimationData,Assembly-CSharp'
+      IsSelf          = $true
+      AnimtorName     = 'Attack'
+      SpriteAnimName  = 'attack'
+      BackToDefault   = $true
+      SpriteAnimFirst = $false
+      StartTime       = 0
+      DelayTime       = 0
+    },
+    [ordered]@{
+      '__type'              = 'MOD.PlayRoleEffectData,Assembly-CSharp'
+      IsSelf                = $false
+      UseFrameEffect        = $false
+      FxPath                = 'Effect/Prefabs/FXSkillHit_Puncture'
+      FxPathReference       = [ordered]@{ ReferenceType = 0; Key = $null }
+      EffectName            = $null
+      EffectAnimName        = $null
+      Duration              = 0.5
+      PlayCenterPoint       = $false
+      UseSameFx             = $true
+      PointUseFrameEffect   = $false
+      PlayCenterPointFxPath = $null
+      PointFxPathReference  = [ordered]@{ ReferenceType = 0; Key = $null }
+      PointEffectName       = $null
+      PointEffectAnimName   = $null
+      PointType             = 2
+      IsGroupCenter         = $false
+      DelayTime             = 0.1
+    },
+    [ordered]@{
+      '__type'             = 'MOD.PlaySoundData,Assembly-CSharp'
+      AudioClip            = [ordered]@{
+        AudioRes       = 'Sound/Audio/FX/weapon_knife'
+        AudioReference = [ordered]@{ ReferenceType = 2; Key = 'weapon_knife' }
+        Volume         = 1
+        FadeTime       = 1
+      }
+      IsLoop               = $false
+      StopOnBattleFinish   = $false
+      DelayTime            = 0.1
+    },
+    [ordered]@{
+      '__type'   = 'MOD.PlayHitData,Assembly-CSharp'
+      DelayTime  = 0.2
+    }
+  )
+}
 $v.EquipmentConfigData.Def.ArmorValue = 0
 
 # ---- 装备时 / 卸下时的属性加成 ----

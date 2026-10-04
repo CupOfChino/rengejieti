@@ -23,7 +23,7 @@ namespace AttackTargetVisualizer
         /// <summary>插件启动时调一次：挂上私货的全部 Harmony 补丁。</summary>
         internal static void Install(Harmony harmony)
         {
-            PatchOne(harmony, typeof(Patch_BuffData_AddBuff));             // 百合花：魅惑时长 ×2
+            PatchOne(harmony, typeof(Patch_BuffData_AddBuff));             // 百合花环：免疫骨折/流血/中毒/燃烧
             PatchOne(harmony, typeof(Patch_BattleBaseAI_AutoSelectTarget)); // 百合花：敌人魅惑行动优先指向她
             PatchOne(harmony, typeof(Patch_UpdateRollDiceTmpDiceCount));   // 百合花：魅惑行动的奖惩骰
             PatchOne(harmony, typeof(Patch_GetSkillEffectCount));          // 灰暗孤影 / 葬花：近战攻击整套再来一遍

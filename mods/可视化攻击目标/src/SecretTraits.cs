@@ -4,17 +4,19 @@
 // 施工备忘在 temp\私货特质_进度备忘.md（不进 git、不上传）。
 //
 // 为什么这几条必须写插件：
-//   · 百合花：魅惑时长 ×2（改这条 buff 的 EffectRounds）、
-//             敌方对持有者的魅惑行动 +1 奖励骰、对抗 +1 惩罚骰（改骰子）
-//   · 白毛少女：战斗开始给每个敌人做意志检定 / 无理智的叠弱点暴露（要批量跑 + 掷骰 + 出动画）
-//   · 灰暗孤影：近战武器攻击整套再来一遍、独行条件数值、每 2 回合 1 次法术免伤、每模组 1 次免死
+//   · 百合花：敌方对持有者的魅惑行动 +1 奖励骰、对抗 +1 惩罚骰（改骰子）
+//             —— 2026-09-29 用户要求，"受到魅惑的持续时间翻倍"已注释停用
+//   · 白毛少女：无理智的敌人叠弱点暴露
+//             —— 2026-09-29 用户要求，"战斗开始时魅惑敌人"已注释停用
+//   · 灰暗孤影：攻击行动后按意志检定追加重来一遍（困难成功耗 2 点精神值 / 大成功免费）、
+//               独行条件数值、每 2 回合 1 次法术免伤、每模组 1 次免死
 //
 // 两个容易踩的点（都在这里绕开了）：
 //   1. 游戏里大量方法是 async Task。Harmony 的 **Postfix 会在方法"第一次 await"处就跑**，
 //      不是等方法跑完。所以凡是"改完还要被后面的代码用到"的，都得挑同步方法，或者写成 Prefix。
-//   2. "追加一次攻击"没有用游戏自带的追击：追击只是**一次命中结算**，而且被「追击次数」属性
-//      卡成每行动 1 次（二连会变成 2+1=3 下）。这里改成把「连击段数」GetSkillEffectCount() ×2，
-//      于是整套行动原样再跑一遍（二连→4 段、横扫→两遍），每段都是游戏自己掷骰自己结算。
+//   2. "追加一次攻击"没有用游戏自带的追击（追击只是一次命中结算，且被「追击次数」卡死），
+//      而是借用原版怀表/额外行动那套 `Buff_TriggerBattleActionEffect`（UseLastRecord）重放上一次行动，
+//      再在外面包一层意志检定与精神值消耗（见第七节）。
 
 using System;
 using System.Collections.Generic;
@@ -221,10 +223,12 @@ namespace AttackTargetVisualizer
                 return;
             }
 
-            // 百合花：被魅惑的时长 +100%
-            // 游戏判定是「EffectRounds 每回合 +1（RoundStart），追平 Config.Duration 就解除」，
-            // 所以起手把 EffectRounds 压成 -Duration，就正好要多花一倍回合才追平（3 回合 → 6 回合）。
-            // 注意 Config.Duration 是全局模板，这里只改这一条实例的 EffectRounds，不会污染别的角色。
+            // 2026-09-29 用户要求：**注释停用**"受到魅惑的持续时间翻倍"（百合花）。
+            // 原来的实现（需要时把 #if false 改成 #if true 即可恢复）：
+            //   游戏判定是「EffectRounds 每回合 +1（RoundStart），追平 Config.Duration 就解除」，
+            //   所以起手把 EffectRounds 压成 -Duration，就正好要多花一倍回合才追平（3 回合 → 6 回合）。
+            //   注意 Config.Duration 是全局模板，这里只改这一条实例的 EffectRounds，不会污染别的角色。
+#if false
             if (buff.Id == SecretIds.VanillaCharmBuff
                 && buff.Config != null
                 && buff.Config.Duration > 0
@@ -233,6 +237,7 @@ namespace AttackTargetVisualizer
                 buff.EffectRounds = -buff.Config.Duration;
                 AttackTargetPlugin.LogInfo("百合花：「" + NameOf(role) + "」被魅惑的时长 ×2（" + buff.Config.Duration + " → " + (buff.Config.Duration * 2) + " 回合）");
             }
+#endif
         }
 
         /// <summary>
@@ -1388,10 +1393,25 @@ namespace AttackTargetVisualizer
         //     · 追加的这次行动结束不会再触发一遍（原版 IsTriggerActionEnd 默认 false）。
         //   为什么排队到 Tick 再执行：触发点是 TriggerBuffs 的 Prefix（同步方法），
         //   当场 await 会卡住 buff 事件链；等下一帧、事件链跑完再动手最稳。
+        //
+        //   2026-09-27 用户加限制（这一节的口径以这里为准）：
+        //     · 触发面从"近战"放宽到**所有攻击行动**（顺劈 / 武器攻击 / 空手攻击 / 远程射击都算），
+        //       但**投掷不算**、**法术不算**（追加会重放法术，语义不对）；
+        //     · 行动结束后要过一次**意志检定（正常弹骰子）**：
+        //         困难成功 → 消耗 2 点精神值，追加一次；
+        //         大成功   → 不消耗，追加一次；
+        //         普通成功 / 失败 → 不追加；
+        //       精神值不足 2 点时困难成功也不能追加；
+        //     · 处于**精神衰弱 / 精神衰竭**状态时，连检定都不做，直接不触发。
+        //   检定走游戏自己的骰子面板（CheckDiceData(POW) + UIDicePanel.Roll），
+        //   演出、结局档位都是原生的。
         // =====================================================================
 
         private static readonly HashSet<BattleRole> PendingExtraAction = new HashSet<BattleRole>();
         private static bool _extraActionRunning;
+
+        /// <summary>困难成功追击要花的精神值。</summary>
+        private const int LoneShadowPursuitSanCost = 2;
 
         private static void QueueExtraAction(BattleRole role)
         {
@@ -1418,10 +1438,22 @@ namespace AttackTargetVisualizer
                 {
                     return;
                 }
-                MOD_Dynamic_Item weapon = behaviour.BattleSkillData.MasterHandWeapon;
-                if (!IsMeleeWeapon(weapon))
+                // 只认"攻击行动"：顺劈 / 武器攻击 / 空手攻击 / 远程射击都算（2026-09-27 用户口径）。
+                // IsAttackAction 对投掷（ActionType = Throw）本来就返回 false，这里再加一道显式排除。
+                if (!behaviour.IsAttackAction || behaviour.ActionType == EBattleActionType.Throw)
                 {
-                    return;   // 只认近战武器攻击
+                    return;
+                }
+                if (behaviour.MagicData != null)
+                {
+                    return;   // 法术不算"攻击行动"：追加行动会重放法术，语义不对
+                }
+                // 精神衰弱 / 精神衰竭 → 连检定都不做，直接不触发（2026-09-27 用户口径）
+                if (!CanLoneShadowPursue(role))
+                {
+                    AttackTargetPlugin.LogInfo("灰暗孤影：「" + NameOf(role) +
+                        "」处于" + LoneShadowSanStateName(role) + "状态，本次不触发追加行动");
+                    return;
                 }
                 HeroSkillRecord record = role.LastSkillRecord;
                 if (record == null || record.Targets == null)
@@ -1464,6 +1496,70 @@ namespace AttackTargetVisualizer
             }
         }
 
+        /// <summary>精神衰弱 / 精神衰竭时不能触发追加行动（2026-09-27 用户口径）。</summary>
+        private static bool CanLoneShadowPursue(BattleRole role)
+        {
+            try
+            {
+                if (role == null || role.Data == null)
+                {
+                    return false;
+                }
+                ESanState state = role.Data.SanState;
+                return state != ESanState.Weak && state != ESanState.Collapse;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        private static string LoneShadowSanStateName(BattleRole role)
+        {
+            try
+            {
+                ESanState state = role.Data.SanState;
+                if (state == ESanState.Weak) return "精神衰弱";
+                if (state == ESanState.Collapse) return "精神衰竭";
+                if (state == ESanState.Full) return "精神充沛";
+                return "精神正常";
+            }
+            catch (Exception)
+            {
+                return "未知";
+            }
+        }
+
+        /// <summary>
+        /// 灰暗孤影的意志检定：走游戏自己的骰子面板（正常演出，不是隐藏判定）。
+        /// 结果档位直接读 UIDicePanel.CurrentResult（GreatSuccess / DiffSuc / Success / Fail / GreatFail）。
+        /// 面板不可用时按失败处理（宁可不追加，也不要在这里抛异常卡住行动链）。
+        /// </summary>
+        private static async Task<EDiceResult> RollLoneShadowWillCheck(BattleRole role)
+        {
+            try
+            {
+                if (!PrefabSingleton<UIDicePanel>.HasInstance)
+                {
+                    AttackTargetPlugin.LogError("灰暗孤影：骰子面板不可用，本次意志检定按失败处理");
+                    return EDiceResult.Fail;
+                }
+                CheckDiceData diceData = new CheckDiceData(EHeroAttribute.POW, role, false);
+                await PrefabSingleton<UIDicePanel>.Instance.Roll(EDiceShowType.None, diceData,
+                    isLoop: true, EDiceResult.Success, -1, null);
+                EDiceResult result = PrefabSingleton<UIDicePanel>.Instance.CurrentResult;
+                int roll = PrefabSingleton<UIDicePanel>.Instance.RollResultValue;
+                AttackTargetPlugin.LogInfo("灰暗孤影：「" + NameOf(role) + "」意志检定 " + result +
+                    "（骰 " + roll + "，目标 " + diceData.CheckValue + "，" + LoneShadowSanStateName(role) + "）");
+                return result;
+            }
+            catch (Exception e)
+            {
+                AttackTargetPlugin.LogError("灰暗孤影：意志检定出错：" + e.Message);
+                return EDiceResult.Fail;
+            }
+        }
+
         private static async void RunExtraAction(BattleRole role)
         {
             try
@@ -1477,7 +1573,43 @@ namespace AttackTargetVisualizer
                     return;
                 }
                 _extraActionRunning = true;
-                AttackTargetPlugin.LogInfo("灰暗孤影：「" + NameOf(role) + "」追加一次行动（原版机制：整套再来一遍）");
+
+                // 精神衰弱 / 精神衰竭：连检定都不做（排队时已挡一次，这里防状态中途变化）
+                if (!CanLoneShadowPursue(role))
+                {
+                    AttackTargetPlugin.LogInfo("灰暗孤影：「" + NameOf(role) + "」处于" +
+                        LoneShadowSanStateName(role) + "状态，取消追加行动");
+                    return;
+                }
+
+                // 意志检定（正常弹骰子）：困难成功 / 大成功才追加
+                EDiceResult checkResult = await RollLoneShadowWillCheck(role);
+                if (checkResult != EDiceResult.DiffSuc && checkResult != EDiceResult.GreatSuccess)
+                {
+                    AttackTargetPlugin.LogInfo("灰暗孤影：「" + NameOf(role) + "」意志检定未达困难成功，本次不追加行动");
+                    return;
+                }
+                if (checkResult == EDiceResult.DiffSuc)
+                {
+                    // 困难成功：消耗 2 点精神值；不足则不能追击（2026-09-27 用户口径）
+                    int san = role.Data.GetRoleExtraAttrValue(ERoleExtraAttribute.CurrentSan);
+                    if (san < LoneShadowPursuitSanCost)
+                    {
+                        AttackTargetPlugin.LogInfo("灰暗孤影：「" + NameOf(role) + "」精神值不足 " +
+                            LoneShadowPursuitSanCost + " 点（当前 " + san + "），无法追击");
+                        return;
+                    }
+                    await role.Data.ChangeAttr(true,
+                        new ChangeAttrData(ERoleExtraAttribute.CurrentSan, (-LoneShadowPursuitSanCost).ToString()),
+                        "", false, false);
+                    AttackTargetPlugin.LogInfo("灰暗孤影：「" + NameOf(role) + "」困难成功 → 消耗 " +
+                        LoneShadowPursuitSanCost + " 点精神值，追加一次行动");
+                }
+                else
+                {
+                    AttackTargetPlugin.LogInfo("灰暗孤影：「" + NameOf(role) + "」大成功 → 不消耗精神值，追加一次行动");
+                }
+
                 Buff_TriggerBattleActionEffect opt = new Buff_TriggerBattleActionEffect();
                 opt.TargetType = BaseBuffOption.EBuffOptionTargetType.BuffTarget;   // 自己
                 opt.UseLastRecord = true;          // 用记录里的技能（就是刚刚这次）
@@ -1541,6 +1673,9 @@ namespace AttackTargetVisualizer
                     }
                     if (HasSan(enemy))
                     {
+                        // 2026-09-29 用户要求：**注释停用**"战斗开始时魅惑有理智的敌人"（白毛少女）。
+                        // 恢复时把 #if false 改成 #if true 即可（下面的弱点暴露分支不受影响）。
+#if false
                         EDiceResult result = await RollAttrCheck(enemy, EHeroAttribute.POW);
                         if (result.GetLevel() < EDiceResult.Success.GetLevel())
                         {
@@ -1552,6 +1687,7 @@ namespace AttackTargetVisualizer
                         {
                             AttackTargetPlugin.LogInfo("白毛少女：「" + NameOf(enemy) + "」意志检定 " + result + "，抵抗住了魅惑");
                         }
+#endif
                     }
                     else
                     {
@@ -2640,7 +2776,10 @@ namespace AttackTargetVisualizer
         {
             try
             {
-                SecretFx.Slash(pending.Dodger, pending.Attacker);   // 原版刃器命中特效 + 音效
+                // 反击的命中特效**由游戏自己播**（2026-09-27 二次修改）：
+                // `BattleHelper.StrickBackProcess` 内部会 `damageData.Play(...)`（反编译 19922 起），
+                // 走的就是被反击者当前近战武器的表现链 —— 葬花 → 利刃受击、荆棘 → 突刺，
+                // 所以这里再补一次会双响，插件不再插手。
                 await BattleHelper.StrickBackProcess(pending.Dodger, pending.Attacker, true);
                 // 2026-09-25 用户要求：反击除了打伤害，还给敌人挂 1 层【流血】。
                 // 这里显式挂（不走武器的附加效果表），免得受"反击只跑一次伤害"的影响。
@@ -3181,7 +3320,11 @@ namespace AttackTargetVisualizer
     // 补丁
     // =====================================================================
 
-    /// <summary>百合花：魅惑时长 ×2。必须用 Prefix（AddBuff 是 async）。</summary>
+    /// <summary>
+    /// 百合花环：免疫骨折 / 流血 / 中毒 / 燃烧（拦在"要挂上去"这一刻）。
+    /// 注：2026-09-29 起原来的"百合花：魅惑时长 ×2"已注释停用（见 SecretTraits.OnBeforeBuffAdd）。
+    /// 必须用 Prefix（AddBuff 是 async）。
+    /// </summary>
     [HarmonyPatch(typeof(BuffData), "AddBuff")]
     internal static class Patch_BuffData_AddBuff
     {

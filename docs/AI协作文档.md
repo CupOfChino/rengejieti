@@ -1202,3 +1202,61 @@ CurAddEle = null;
   在里面 Prefix 拦下来就行（自定义心和自定义背景/BGM 都用这个挂点）。
 - **想让别的模组能开关/重写你的入口**：暴露一个 public 静态 API（投票开关 + 注册回调 + 启动日志打印"谁关了哪些"），
   参考 `mods\自定义播放战斗背景和BGM\src\DomainApi.cs` 与同名 mod 的 `接口文档.md`。
+
+## 27. 「多行动槽」：动战斗核心流程的七个关键点（2026-10-04，做 `mods\多行动槽` 挖出来的）
+
+这一节是做「多行动槽」（一个角色多个行动槽、逐槽选/逐槽打）时确认的机制。
+**以后要改"选行动 / 出手顺序 / 行动槽 HUD"，先看这节，能省掉一整天。**
+完整设计见 `docs\多行动槽-需求与设计.md`。
+
+1. **选行动的真相：整个 ActionStage 只等一次 `IsActionDecision`。**
+   `BattleFightContent.EnterPhase(ActionStage)` 对每个角色调 `RoleEnterActionStage`（async void，不 await），
+   所有角色的 `ActionSelect` **一起挂在后台等**；`IsActionDecision` 是等**全部角色都选完**时
+   由 `CheckAllAllyActionFinish()` 统一设置的——**不是"每个角色选完就返回一次"**。
+   所以"让一个角色选 N 次"不能写成 `for (i<N) await ActionSelect()`（第二次会永远等不到），
+   正确做法是：**一次 `ActionSelect` 覆盖整个角色的多槽**，"推进到下一个槽"放在
+   `UIBattlePanel._OnNextPhaseButtonClicked` 的 Prefix 里做（玩家每次确认 → 切指针 → 刷新 UI → 返回 false）。
+   敌人 AI 不同：`BattleNpcRole` 选完立刻 `IsActionDecision = true`，可以逐槽循环。
+
+2. **出手顺序：`CheckActionSequence()` 生成的是"角色级"列表**（`OrderBy(-Speed)`，LINQ 稳定排序），
+   `OnCalculationResult()` 逐个角色跑 `CurrentBehaviourData.Run()`。想多槽就**替换 `OnCalculationResult`**
+   （Prefix 返回 false + 自己塞 `__result`），照抄原逻辑、把"每角色一次"改成"该角色逐个槽"；
+   **不要展开 `SequenceList`**——`UpdateSkillIconAndActionOrder`、`PriorToSelfEnemyCount` 都会读它，
+   展开会把先攻数字和 buff 判定搞乱。
+
+3. **每幕开始的最稳钩子是 `BattleFightContent.UpdateControlRoleOnRoundStart`**（同步 void）：
+   它在战斗安装时调一次、每幕 `ActionStage` 开头（玩家选行动之前）调一次，正好是"进战斗 /
+   每幕开始"两个时机，而且没有 async 坑。
+
+4. **槽位数据用"指针切换"实现最省事**：让 `role.CurrentBehaviourData` 指向"当前正在编辑 / 执行的槽"，
+   游戏其余逻辑（检定、目标、buff、日志、伤害）全部照常。新建的 `BattleActiveBehaviorData` 要手动补
+   `Self = role; RollDice.Role = role;`（就是 `BattleActionData.Install` 的全部内容，别去 await 它）。
+   小心里面大量逻辑会**直接替换** `CurrentBehaviourData`（昏迷恢复、怀表重放）——进自己的逻辑前
+   先把"游戏当前指针"收编成当前槽的数据。
+
+5. **HUD 多槽 + 「可视化攻击目标」免改兼容**：那个 mod 的锚点优先级是
+   `Image_ActionOrder.activeSelf` → `Button_SkillIcon.activeInHierarchy` → `Trans_SkillShow`（取上边框中点）。
+   所以多槽的做法是：**隐藏原版数字 / 图标按钮**，用 `Anim_SkillShow` 的克隆体显示各槽，
+   `Trans_SkillShow` 留在原位置当"组容器"（它就是整组的对称中心）。克隆体记得把 Animator 禁用，
+   否则默认状态可能把图标盖掉；UI 节点的 active 状态要自己维护（游戏的 `CloseSkillIcon` 会关整组，
+   选到一半时要把已选槽重新亮出来）。
+
+6. **`IEnumeratorAwaitExtensions.GetAwaiter(...)` 在插件编译环境里 await 不了**：
+   `SimpleCoroutineAwaiter` 的 `GetAwaiter` 解析不到（编译报 CS1929）。要在自己的 `async Task`
+   里等游戏时间，就写一个 `TaskCompletionSource` + 插件自己 `StartCoroutine` 的包装
+   （参考 `mods\多行动槽\src\SlotUtil.cs` 的 `SlotWait`）。
+
+7. **插件静态字段不要叫 `Enabled`**：`BaseUnityPlugin` 自带一个 `Enabled`（类型是 `ConfigEntry<bool>`），
+   撞名会报"无法将 bool 隐式转换为 ConfigEntry<bool>"这种看着莫名其妙的错。我们自己的总开关叫
+   `ModEnabled`。
+
+8. **【首次实机踩到】`RoleData.CanControlAI` 对调查员恒为 `false`**：它的定义是
+   `AI != null && ConfigData.CanControlInBattle` 或"是 HeroNpc 的 BattleNpcRole"——玩家调查员
+   （`BattlePlayerRole`）两条都不满足。**判断"这是不是玩家控制的角色"要用
+   `role.IsHero || role is BattlePlayerRole`**；`CanControlAI` 只用来认"可控制 AI 的友方 NPC"。
+   这次错了的症状：玩家被当成 AI 走"逐槽循环"，第二次 `ActionSelect` 永远等不到
+   `IsActionDecision`，整个选行动阶段卡死。
+
+9. **HUD 克隆的一个顺序坑**：先隐藏原节点再 `Instantiate`，克隆体会**复制隐藏状态**
+   （表现为"槽框在、图标全没了"）。要克隆就先克隆、再隐藏原节点；或者克隆后把
+   按钮 / 图标子节点重新 `SetActive(true)`。

@@ -86,8 +86,64 @@
           "UseCommonEffect": false,
           "CommonEffectId": 1,
           "EffectShow": {
-            "Duration": 0,
-            "EffectShows": []
+            "Duration": 0.7,
+            "EffectShows": [
+              {
+                "__type": "MOD.PlayRoleAnimationData,Assembly-CSharp",
+                "IsSelf": true,
+                "AnimtorName": "Attack",
+                "SpriteAnimName": "attack",
+                "BackToDefault": true,
+                "SpriteAnimFirst": false,
+                "StartTime": 0,
+                "DelayTime": 0
+              },
+              {
+                "__type": "MOD.PlayRoleEffectData,Assembly-CSharp",
+                "IsSelf": false,
+                "UseFrameEffect": false,
+                "FxPath": "Effect/Prefabs/FXSkillHit_Puncture",
+                "FxPathReference": {
+                  "ReferenceType": 0,
+                  "Key": null
+                },
+                "EffectName": null,
+                "EffectAnimName": null,
+                "Duration": 0.5,
+                "PlayCenterPoint": false,
+                "UseSameFx": true,
+                "PointUseFrameEffect": false,
+                "PlayCenterPointFxPath": null,
+                "PointFxPathReference": {
+                  "ReferenceType": 0,
+                  "Key": null
+                },
+                "PointEffectName": null,
+                "PointEffectAnimName": null,
+                "PointType": 2,
+                "IsGroupCenter": false,
+                "DelayTime": 0.1
+              },
+              {
+                "__type": "MOD.PlaySoundData,Assembly-CSharp",
+                "AudioClip": {
+                  "AudioRes": "Sound/Audio/FX/weapon_knife",
+                  "AudioReference": {
+                    "ReferenceType": 2,
+                    "Key": "weapon_knife"
+                  },
+                  "Volume": 1,
+                  "FadeTime": 1
+                },
+                "IsLoop": false,
+                "StopOnBattleFinish": false,
+                "DelayTime": 0.1
+              },
+              {
+                "__type": "MOD.PlayHitData,Assembly-CSharp",
+                "DelayTime": 0.2
+              }
+            ]
           },
           "IsDirectDeath": false,
           "IsNotBlock": false

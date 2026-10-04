@@ -576,20 +576,16 @@ namespace AttackTargetVisualizer
                     }
                 }
 
-                // 3. 【剑痕挂层已挪到 OnDamageLanded】—— 2026-09-27 用户口径改成"每一段命中各叠 1 层"。
-                //    原来挂在这里（CalculationDamage 的 Postfix），多段共享同一个伤害实例、被去重成 1 层；
-                //    现在挪到"每段伤害落地"（SetDamage），和荆棘三段的做法一致。
-                //    这里只保留"整次攻击播一次"的斩击特效（和原来同一个去重判断）。
-                if (!SecretTraits.MarkAppliedThisDamage(addData))
-                {
-                    // 原版斩击命中特效 + 刃器音效（2026-09-27 用户要求；和挂剑痕同一个"首次"判断，
-                    // 所以整次攻击只播一次，多段不会连着响）
-                    // 反击（StrickBack）除外 —— 孤影的反击流程自己会播一次，免得双响
-                    if (addData.SourceType != EDamageSourceType.StrickBack)
-                    {
-                        SecretFx.Slash(source, target);
-                    }
-                }
+                // 3. 【剑痕挂层在 OnDamageLanded】—— 每一段命中各叠 1 层（2026-09-27 用户口径）。
+                //
+                // 命中特效（2026-09-27 二次修改）：**改由武器数据自己播**，这里不再插手。
+                // 880001.txt 里配了 `Damage.UseCommonEffect = true, CommonEffectId = 4`（原版「利刃受击」），
+                // 游戏在攻击结算时会自己播"斩击闪光 FX_BladeHit + blade_hit 音效 + 攻击/受击动作"。
+                // 走数据的原因：插件手工构造 EffectShowData 要填一长串字段，漏一个就静默不播（音效那次就是
+                // `AudioClipData.AudioReference` 没填），数据层是原版武器同一条路，最稳。
+                // 反击（StrickBack）例外：那条流程没有武器表现链，仍由孤影的反击代码补播（见 SecretTraits.cs）。
+                // 保留 MarkAppliedThisDamage 的调用标记，方便以后需要"整次攻击只做一次"的判断。
+                SecretTraits.MarkAppliedThisDamage(addData);
             }
             catch (Exception e)
             {

@@ -83,8 +83,8 @@
           "DB_Bonus": 1,
           "WithSuckBlood": false,
           "SuckBloodRatio": 0,
-          "UseCommonEffect": false,
-          "CommonEffectId": 1,
+          "UseCommonEffect": true,
+          "CommonEffectId": 4,
           "EffectShow": {
             "Duration": 0,
             "EffectShows": []

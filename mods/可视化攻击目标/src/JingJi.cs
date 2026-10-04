@@ -1170,8 +1170,10 @@ namespace AttackTargetVisualizer
                     await AddThornAsync(target, 1);
                 }
                 await target.SetDamage(firstDamage, playAnim, showChangeTip, hitData);
-                // 原版突刺命中特效 + 刀音效（2026-09-27 用户要求；整次攻击只播一次，3 段结算不会连着响）
-                SecretFx.Puncture(attacker, target);
+                // 主动攻击的突刺特效**改由武器数据自己播**（2026-09-27 二次修改）：
+                // 880006.txt 的 `Damage.EffectShow` 里配了 FXSkillHit_Puncture + weapon_knife，
+                // 游戏在攻击结算时会原生播放一次（3 段伤害共用这一次表现，不会连着响）。
+                // 插件只负责"先发 / 灰暗孤影反击"那种没有武器表现链的白送攻击（见 FirstStrike 与 SecretTraits.cs）。
 
                 for (int i = 1; i < StrikeCount; i++)
                 {

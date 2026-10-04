@@ -1,0 +1,28 @@
+{
+	"Data" : {
+		"__type" : "MOD.InterludeVacationConfig,Assembly-CSharp",
+		"value" : {
+			"VacatId" : 882003,
+			"TitleTxt" : {
+				"TarKey" : "",
+				"InputText" : "移除「速战速决」"
+			},
+			"DecTxt" : {
+				"TarKey" : "",
+				"InputText" : "移除这个调查员的【速战速决】特质。移除后，战斗中不再获得额外行动槽。"
+			},
+			"EffectTxt" : {
+				"TarKey" : "",
+				"InputText" : "移除【速战速决】特质"
+			},
+			"Consume" : {
+				"Gold" : 0,
+				"InterludeTime" : 0,
+				"SpaceTimePoint" : 0
+			},
+			"Checks" : [],
+			"Opts" : [],
+			"EnableSeriousCheck" : false
+		}
+	}
+}

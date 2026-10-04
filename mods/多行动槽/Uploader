@@ -2,7 +2,7 @@
 	"Uploader" : {
 		"__type" : "UGCUploaderData,Assembly-CSharp",
 		"value" : {
-			"FileId" : 0,
+			"FileId" : 3813306323,
 			"Title" : "多行动槽（速战速决）",
 			"PreviewPath" : "D:\\HuaweiMoveData\\Users\\huawei\\Desktop\\钢丝\\人格解体本地存档\\mods\\多行动槽\\创意工坊图\\1.jpg",
 			"Description" : "本模组实现单一个角色拥有行动槽可以执行不同\/相同的行动,并互不干扰\n\n创作初心是因为觉得boss每个回合只能行动1次,多个调查员打起来没什么意思.所以希望能和边狱巴士 废墟图书馆这些一样能有更丰富的行动逻辑.\n现阶段先给调查员用用测试一下\n\n[h2]获取方式[\/h2]\n在幕间执行行动获得[速战速决]即可\n\n[h2]建议搭配[\/h2]\n另一个我的模组可视化攻击目标(不是绝对):\nhttps:\/\/steamcommunity.com\/sharedfiles\/filedetails\/?id=3801731500\n\n[h2]边界说明[\/h2]\n对于原版的类似怀表等额外行动的道具默认只对第一个行动槽生效.但作者并没有实际测试过,可能会有一些奇奇怪怪的问题.如果遇到这种情况,反馈时请带上日志\n\n[h2]开源地址[\/h2]\nhttps:\/\/github.com\/CupOfChino\/rengejieti\n\n[h2]对模组作者[\/h2]\n本心就是希望拓展更多内容,如有需要,可以阅读模组自带的文件（README.md \/ 接口文档.md）",

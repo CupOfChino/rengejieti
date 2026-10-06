@@ -279,6 +279,14 @@ namespace CustomBattleBg
               "BGM selection cleared (file missing or in use by another profile; not deleted)." },
             { "已取消覆盖，资源库里原来的文件没有动。", "Overwrite cancelled; the existing file was kept." },
             { "打开资源库", "Open asset folder" },
+            { "资源库", "Library" },
+            { "从资源库选择战斗背景", "Choose battle background from the library" },
+            { "从资源库选择战斗BGM", "Choose battle BGM from the library" },
+            { "已从资源库选择背景：", "Background chosen from library: " },
+            { "已从资源库选择BGM：", "BGM chosen from library: " },
+            { "打开资源库文件夹", "Open asset folder" },
+            { "资源库里还没有这个类型的文件。\n先用「选择文件」从电脑导入一个吧。",
+              "No files of this type in the library yet.\nUse \"Choose file\" to import one from your computer first." },
             { "打开资源库失败，看日志。", "Failed to open the asset folder - check the log." },
         };
 

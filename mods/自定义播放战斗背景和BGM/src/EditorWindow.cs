@@ -205,30 +205,34 @@ namespace CustomBattleBg
             Text label2 = UIFactory.Label(panel, "Label_Bg", "战斗背景", 24, TextAnchor.MiddleLeft);
             UIFactory.Place(label2.rectTransform, 24f, y, 120f, 42f);
             _bgBox = UIFactory.TextButton(panel, "BgBox", "", OnPickBackground, false, 20);
-            UIFactory.Place(_bgBox.GetComponent<RectTransform>(), 148f, y, PanelWidth - 300f, 42f);
+            UIFactory.Place(_bgBox.GetComponent<RectTransform>(), 148f, y, 250f, 42f);
             _bgBoxText = _bgBox.transform.Find("Text").GetComponent<Text>();
             _bgBoxText.alignment = TextAnchor.MiddleLeft;
             _bgBoxText.horizontalOverflow = HorizontalWrapMode.Overflow;
             UIFactory.Stretch(_bgBoxText.rectTransform, 10f, 10f, 2f, 2f);
-            Button bgClear = UIFactory.TextButton(panel, "BgClear", "清除", OnClearBackground, true, 18);
-            UIFactory.Place(bgClear.GetComponent<RectTransform>(), PanelWidth - 140f, y + 2f, 64f, 38f);
-            Button bgPick = UIFactory.TextButton(panel, "BgPick", "选择文件", OnPickBackground, false, 18);
-            UIFactory.Place(bgPick.GetComponent<RectTransform>(), PanelWidth - 70f, y + 2f, 46f, 38f);
+            Button bgClear = UIFactory.TextButton(panel, "BgClear", "清除", OnClearBackground, true, 16);
+            UIFactory.Place(bgClear.GetComponent<RectTransform>(), 568f, y + 2f, 80f, 38f);
+            Button bgLib = UIFactory.TextButton(panel, "BgLib", "资源库", OnPickBgFromLibrary, false, 16);
+            UIFactory.Place(bgLib.GetComponent<RectTransform>(), 492f, y + 2f, 72f, 38f);
+            Button bgPick = UIFactory.TextButton(panel, "BgPick", "选择文件", OnPickBackground, false, 16);
+            UIFactory.Place(bgPick.GetComponent<RectTransform>(), 402f, y + 2f, 86f, 38f);
             y += 56f;
 
             // 战斗BGM
             Text label3 = UIFactory.Label(panel, "Label_Bgm", "战斗BGM", 24, TextAnchor.MiddleLeft);
             UIFactory.Place(label3.rectTransform, 24f, y, 120f, 42f);
             _bgmBox = UIFactory.TextButton(panel, "BgmBox", "", OnPickBgm, false, 20);
-            UIFactory.Place(_bgmBox.GetComponent<RectTransform>(), 148f, y, PanelWidth - 300f, 42f);
+            UIFactory.Place(_bgmBox.GetComponent<RectTransform>(), 148f, y, 250f, 42f);
             _bgmBoxText = _bgmBox.transform.Find("Text").GetComponent<Text>();
             _bgmBoxText.alignment = TextAnchor.MiddleLeft;
             _bgmBoxText.horizontalOverflow = HorizontalWrapMode.Overflow;
             UIFactory.Stretch(_bgmBoxText.rectTransform, 10f, 10f, 2f, 2f);
-            Button bgmClear = UIFactory.TextButton(panel, "BgmClear", "清除", OnClearBgm, true, 18);
-            UIFactory.Place(bgmClear.GetComponent<RectTransform>(), PanelWidth - 140f, y + 2f, 64f, 38f);
-            Button bgmPick = UIFactory.TextButton(panel, "BgmPick", "选择文件", OnPickBgm, false, 18);
-            UIFactory.Place(bgmPick.GetComponent<RectTransform>(), PanelWidth - 70f, y + 2f, 46f, 38f);
+            Button bgmClear = UIFactory.TextButton(panel, "BgmClear", "清除", OnClearBgm, true, 16);
+            UIFactory.Place(bgmClear.GetComponent<RectTransform>(), 568f, y + 2f, 80f, 38f);
+            Button bgmLib = UIFactory.TextButton(panel, "BgmLib", "资源库", OnPickBgmFromLibrary, false, 16);
+            UIFactory.Place(bgmLib.GetComponent<RectTransform>(), 492f, y + 2f, 72f, 38f);
+            Button bgmPick = UIFactory.TextButton(panel, "BgmPick", "选择文件", OnPickBgm, false, 16);
+            UIFactory.Place(bgmPick.GetComponent<RectTransform>(), 402f, y + 2f, 86f, 38f);
             y += 52f;
 
             // 挂载行动：战斗中用了这个行动就展开领域（选项在打开时按角色重建）
@@ -466,6 +470,32 @@ namespace CustomBattleBg
                 RefreshBoxes();
                 OnHintMsg(DomainText.L("已选择BGM：") + fileName);
             }, OnHintMsg, AskOverwriteFile);
+        }
+
+        /// <summary>从资源库里已有的文件里挑一张背景（不发生复制，直接用库里的文件）。</summary>
+        private void OnPickBgFromLibrary()
+        {
+            FileListPopup.Show(_canvasGo.transform, "从资源库选择战斗背景",
+                CustomBattleBgPlugin.Store.BackgroundDir, DomainConstants.BackgroundExtensions,
+                delegate(string fileName)
+                {
+                    _bgFile = fileName;
+                    RefreshBoxes();
+                    OnHintMsg(DomainText.L("已从资源库选择背景：") + fileName);
+                });
+        }
+
+        /// <summary>从资源库里已有的文件里挑一首 BGM。</summary>
+        private void OnPickBgmFromLibrary()
+        {
+            FileListPopup.Show(_canvasGo.transform, "从资源库选择战斗BGM",
+                CustomBattleBgPlugin.Store.BgmDir, DomainConstants.BgmExtensions,
+                delegate(string fileName)
+                {
+                    _bgmFile = fileName;
+                    RefreshBoxes();
+                    OnHintMsg(DomainText.L("已从资源库选择BGM：") + fileName);
+                });
         }
 
         /// <summary>选了同名文件时弹确认：覆盖 / 取消（AssetImporter 通过回调调到这里）。</summary>

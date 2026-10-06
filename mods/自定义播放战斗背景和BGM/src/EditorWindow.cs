@@ -1093,24 +1093,24 @@ namespace CustomBattleBg
             // 注意：这里**不要**给弹窗单独挂 Canvas。
             // GraphicRaycaster 只射线检测"挂在同一块画布上"的图形，子画布里的东西它打不到。
             Image box = UIFactory.Panel(_confirmGo.transform, "Box", UIFactory.PanelColor);
-            CenterPanel(box.rectTransform, 0f, 580f, 290f);
+            CenterPanel(box.rectTransform, 0f, 720f, 400f);
 
-            _confirmText = UIFactory.Label(box.transform, "Text", "", 22, TextAnchor.MiddleCenter);
-            UIFactory.Place(_confirmText.rectTransform, 20f, 16f, 540f, 170f);
+            _confirmText = UIFactory.Label(box.transform, "Text", "", 24, TextAnchor.MiddleCenter);
+            UIFactory.Place(_confirmText.rectTransform, 30f, 20f, 660f, 250f);
 
             Button yes = UIFactory.TextButton(box.transform, "Yes", "确认", delegate
             {
                 HideConfirm();
                 if (_confirmYes != null) { _confirmYes(); }
             }, false, 24);
-            UIFactory.Place(yes.GetComponent<RectTransform>(), 90f, 200f, 170f, 52f);
+            UIFactory.Place(yes.GetComponent<RectTransform>(), 130f, 300f, 200f, 56f);
 
             Button no = UIFactory.TextButton(box.transform, "No", "取消", delegate
             {
                 HideConfirm();
                 if (_confirmNo != null) { _confirmNo(); }
             }, false, 24);
-            UIFactory.Place(no.GetComponent<RectTransform>(), 320f, 200f, 170f, 52f);
+            UIFactory.Place(no.GetComponent<RectTransform>(), 390f, 300f, 200f, 56f);
 
             _confirmGo.SetActive(false);
         }

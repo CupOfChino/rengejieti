@@ -82,7 +82,7 @@ namespace CustomBattleBg
                 }
 
                 await PayCostAsync(p, caster, reason);
-                await ApplyLayeredBuffsAsync(p, caster, reason);
+                // 注意：buff 类效果**不在展开时施加**，只等每一行动轮开始时施加（用户口径）
             }
             catch (Exception e)
             {

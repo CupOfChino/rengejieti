@@ -38,6 +38,8 @@ namespace CustomBattleBg
 
         private float _timer;
         private bool _startupDone;
+        private float _preloadTimer;
+        private bool _preloadStarted;
 
         private void Awake()
         {
@@ -110,6 +112,17 @@ namespace CustomBattleBg
             _timer += UnityEngine.Time.unscaledDeltaTime;
             if (_startupDone)
             {
+                // 游戏就绪后等 5 秒再开始后台预加载状态表（避开启动争资源）
+                if (!_preloadStarted)
+                {
+                    _preloadTimer += UnityEngine.Time.unscaledDeltaTime;
+                    if (_preloadTimer >= 5f)
+                    {
+                        _preloadStarted = true;
+                        LogInfo("开始后台预加载状态表（第一次用编辑器就不用等了）…");
+                        StartCoroutine(DomainBuffBuilder.PreloadAllBuffsCo());
+                    }
+                }
                 // 语言能在游戏设置里随时改，隔一会儿重贴一次英文文案
                 if (_timer >= 10f)
                 {

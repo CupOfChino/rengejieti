@@ -211,6 +211,58 @@ namespace CustomBattleBg
             return cfg != null && cfg.Comment != null && cfg.Comment.StartsWith(DomainConstants.CommentTag);
         }
 
+        /// <summary>
+        /// 后台预加载全部状态数据（游戏本体的 buff 是"按需加载"的，第一次要用到才读文件）。
+        /// 分批跑（每帧几个），这样打开编辑器时状态列表已经就绪，不用等 2 秒。
+        /// </summary>
+        internal static IEnumerator PreloadAllBuffsCo()
+        {
+            BuffResFactory factory = null;
+            try
+            {
+                factory = Singleton<ResManager>.Instance.BuffFactory;
+            }
+            catch (Exception)
+            {
+            }
+            if (factory == null)
+            {
+                yield break;
+            }
+            List<ResloadFileData> pending = factory.LoadFileDatas;
+            if (pending == null || pending.Count == 0)
+            {
+                yield break;
+            }
+
+            long t0 = DateTime.Now.Ticks;
+            int loaded = 0;
+            for (int i = 0; i < pending.Count; i++)
+            {
+                ResloadFileData item = pending[i];
+                if (item != null && !string.IsNullOrEmpty(item.FileName))
+                {
+                    try
+                    {
+                        if (factory.GetConfig(item.FileName) != null)
+                        {
+                            loaded++;
+                        }
+                    }
+                    catch (Exception)
+                    {
+                    }
+                }
+                if ((i & 3) == 3)
+                {
+                    yield return null;   // 每 4 个让一帧，避免卡顿
+                }
+            }
+            long ms = (DateTime.Now.Ticks - t0) / TimeSpan.TicksPerMillisecond;
+            CustomBattleBgPlugin.LogInfo("状态表后台预加载完成：共 " + pending.Count + " 个文件、读取 " +
+                loaded + " 条，耗时 " + ms + " 毫秒");
+        }
+
         private static void ClearCache(BuffResFactory factory)
         {
             try

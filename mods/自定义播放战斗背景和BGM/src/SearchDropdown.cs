@@ -34,6 +34,7 @@ namespace CustomBattleBg
 
         private int _index;
         private string _filter = "";
+        private bool _built;   // 列表项是否已构建（400+ 项时懒构建，避免拖慢打开编辑窗）
 
         public Action<int> OnChanged = null;
 
@@ -97,8 +98,6 @@ namespace CustomBattleBg
             _contentRt.anchoredPosition = Vector2.zero;
             _contentRt.sizeDelta = new Vector2(0f, _options.Count * ItemHeight + 4f);
 
-            BuildItems();
-
             // 侧边滑动条
             Image barBg = UIFactory.Panel(_listRoot.transform, "Scrollbar", new Color(1f, 1f, 1f, 0.12f));
             UIFactory.Place(barBg.rectTransform, width - ScrollbarWidth + 2f, SearchHeight + 2f,
@@ -148,7 +147,7 @@ namespace CustomBattleBg
             {
                 _options.Add(new ActionOption("（不挂载）", 0, 0));
             }
-            BuildItems();
+            _built = false;   // 换了一批选项：下次打开列表时再重建
             RelayoutListHeight();
             _filter = "";
             if (_search != null)
@@ -199,6 +198,17 @@ namespace CustomBattleBg
             }
         }
 
+        /// <summary>列表项懒构建：第一次点开列表时才建（选项几百个时不至于拖慢打开编辑窗）。</summary>
+        private void EnsureBuilt()
+        {
+            if (_built)
+            {
+                return;
+            }
+            BuildItems();
+            _built = true;
+        }
+
         /// <summary>按保存的类型/id 回显（打开编辑窗时用）。</summary>
         public void SelectByTypeAndId(int type, int id)
         {
@@ -240,6 +250,10 @@ namespace CustomBattleBg
         // 按关键词显示/隐藏列表项，并把可见项重新排好
         private void LayoutItems()
         {
+            if (!_built)
+            {
+                return;   // 还没建过列表项（懒构建）
+            }
             float y = 2f;
             for (int i = 0; i < _items.Count; i++)
             {
@@ -282,6 +296,7 @@ namespace CustomBattleBg
             _opened = this;
             _listRoot.transform.SetAsLastSibling();
             _listRoot.SetActive(true);
+            EnsureBuilt();
             LayoutItems();
             try
             {

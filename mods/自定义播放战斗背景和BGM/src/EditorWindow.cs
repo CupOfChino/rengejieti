@@ -19,7 +19,7 @@ namespace CustomBattleBg
 {
     internal class DomainEditorWindow : MonoBehaviour
     {
-        private const float PanelWidth = 680f;
+        private const float PanelWidth = 820f;
         private const float PanelHeight = 780f;
         private const float SideWidth = 400f;
         private const int MaxSideRows = 9;
@@ -213,34 +213,37 @@ namespace CustomBattleBg
             Text label2 = UIFactory.Label(panel, "Label_Bg", "战斗背景", 24, TextAnchor.MiddleLeft);
             UIFactory.Place(label2.rectTransform, 24f, y, 120f, 42f);
             _bgBox = UIFactory.TextButton(panel, "BgBox", "", OnPickBackground, false, 20);
-            UIFactory.Place(_bgBox.GetComponent<RectTransform>(), 148f, y, 250f, 42f);
+            UIFactory.Place(_bgBox.GetComponent<RectTransform>(), 148f, y, 390f, 42f);
             _bgBoxText = _bgBox.transform.Find("Text").GetComponent<Text>();
             _bgBoxText.alignment = TextAnchor.MiddleLeft;
-            _bgBoxText.horizontalOverflow = HorizontalWrapMode.Overflow;
+            // 文件名太长就裁掉，别顶到按钮上（横向允许换行 + 纵向截断 = 视觉上单行截断）
+            _bgBoxText.horizontalOverflow = HorizontalWrapMode.Wrap;
+            _bgBoxText.verticalOverflow = VerticalWrapMode.Truncate;
             UIFactory.Stretch(_bgBoxText.rectTransform, 10f, 10f, 2f, 2f);
             Button bgClear = UIFactory.TextButton(panel, "BgClear", "清除", OnClearBackground, true, 16);
-            UIFactory.Place(bgClear.GetComponent<RectTransform>(), 568f, y + 2f, 80f, 38f);
+            UIFactory.Place(bgClear.GetComponent<RectTransform>(), 710f, y + 2f, 80f, 38f);
             Button bgLib = UIFactory.TextButton(panel, "BgLib", "资源库", OnPickBgFromLibrary, false, 16);
-            UIFactory.Place(bgLib.GetComponent<RectTransform>(), 492f, y + 2f, 72f, 38f);
+            UIFactory.Place(bgLib.GetComponent<RectTransform>(), 634f, y + 2f, 72f, 38f);
             Button bgPick = UIFactory.TextButton(panel, "BgPick", "选择文件", OnPickBackground, false, 16);
-            UIFactory.Place(bgPick.GetComponent<RectTransform>(), 402f, y + 2f, 86f, 38f);
+            UIFactory.Place(bgPick.GetComponent<RectTransform>(), 544f, y + 2f, 86f, 38f);
             y += 56f;
 
             // 战斗BGM
             Text label3 = UIFactory.Label(panel, "Label_Bgm", "战斗BGM", 24, TextAnchor.MiddleLeft);
             UIFactory.Place(label3.rectTransform, 24f, y, 120f, 42f);
             _bgmBox = UIFactory.TextButton(panel, "BgmBox", "", OnPickBgm, false, 20);
-            UIFactory.Place(_bgmBox.GetComponent<RectTransform>(), 148f, y, 250f, 42f);
+            UIFactory.Place(_bgmBox.GetComponent<RectTransform>(), 148f, y, 390f, 42f);
             _bgmBoxText = _bgmBox.transform.Find("Text").GetComponent<Text>();
             _bgmBoxText.alignment = TextAnchor.MiddleLeft;
-            _bgmBoxText.horizontalOverflow = HorizontalWrapMode.Overflow;
+            _bgmBoxText.horizontalOverflow = HorizontalWrapMode.Wrap;
+            _bgmBoxText.verticalOverflow = VerticalWrapMode.Truncate;
             UIFactory.Stretch(_bgmBoxText.rectTransform, 10f, 10f, 2f, 2f);
             Button bgmClear = UIFactory.TextButton(panel, "BgmClear", "清除", OnClearBgm, true, 16);
-            UIFactory.Place(bgmClear.GetComponent<RectTransform>(), 568f, y + 2f, 80f, 38f);
+            UIFactory.Place(bgmClear.GetComponent<RectTransform>(), 710f, y + 2f, 80f, 38f);
             Button bgmLib = UIFactory.TextButton(panel, "BgmLib", "资源库", OnPickBgmFromLibrary, false, 16);
-            UIFactory.Place(bgmLib.GetComponent<RectTransform>(), 492f, y + 2f, 72f, 38f);
+            UIFactory.Place(bgmLib.GetComponent<RectTransform>(), 634f, y + 2f, 72f, 38f);
             Button bgmPick = UIFactory.TextButton(panel, "BgmPick", "选择文件", OnPickBgm, false, 16);
-            UIFactory.Place(bgmPick.GetComponent<RectTransform>(), 402f, y + 2f, 86f, 38f);
+            UIFactory.Place(bgmPick.GetComponent<RectTransform>(), 544f, y + 2f, 86f, 38f);
             y += 52f;
 
             // 挂载行动：战斗中用了这个行动就展开领域（选项在打开时按角色重建）
@@ -282,16 +285,16 @@ namespace CustomBattleBg
 
             Text labelAllyEff = UIFactory.Label(panel, "Label_AllyEffect", "友方效果", 20, TextAnchor.MiddleLeft);
             UIFactory.Place(labelAllyEff.rectTransform, 24f, y, 120f, 40f);
-            _allyEffectDropdown = new SearchDropdown(panel, "AllyEffect", new List<ActionOption>(), 148f, y, 330f, 40f);
+            _allyEffectDropdown = new SearchDropdown(panel, "AllyEffect", new List<ActionOption>(), 148f, y, 470f, 40f);
             _allyEffectValue = UIFactory.TextInput(panel, "AllyEffectValue", "0", false);
-            UIFactory.Place(_allyEffectValue.GetComponent<RectTransform>(), 488f, y, 120f, 40f);
+            UIFactory.Place(_allyEffectValue.GetComponent<RectTransform>(), 628f, y, 120f, 40f);
             y += 46f;
 
             Text labelEnemyEff = UIFactory.Label(panel, "Label_EnemyEffect", "敌方效果", 20, TextAnchor.MiddleLeft);
             UIFactory.Place(labelEnemyEff.rectTransform, 24f, y, 120f, 40f);
-            _enemyEffectDropdown = new SearchDropdown(panel, "EnemyEffect", new List<ActionOption>(), 148f, y, 330f, 40f);
+            _enemyEffectDropdown = new SearchDropdown(panel, "EnemyEffect", new List<ActionOption>(), 148f, y, 470f, 40f);
             _enemyEffectValue = UIFactory.TextInput(panel, "EnemyEffectValue", "0", false);
-            UIFactory.Place(_enemyEffectValue.GetComponent<RectTransform>(), 488f, y, 120f, 40f);
+            UIFactory.Place(_enemyEffectValue.GetComponent<RectTransform>(), 628f, y, 120f, 40f);
             y += 46f;
 
             Text labelCost = UIFactory.Label(panel, "Label_Cost", "支付代价", 20, TextAnchor.MiddleLeft);
@@ -306,7 +309,7 @@ namespace CustomBattleBg
             UIFactory.Place(_costValue.GetComponent<RectTransform>(), 338f, y, 120f, 40f);
             Text costTip = UIFactory.Label(panel, "CostTip", "（每轮开始与展开时）", 18, TextAnchor.MiddleLeft);
             costTip.color = new Color(1f, 1f, 1f, 0.5f);
-            UIFactory.Place(costTip.rectTransform, 466f, y, 200f, 40f);
+            UIFactory.Place(costTip.rectTransform, 474f, y, 300f, 40f);
             y += 52f;
 
             _hint = UIFactory.Label(panel, "Hint", "", 22, TextAnchor.UpperLeft);
@@ -726,6 +729,8 @@ namespace CustomBattleBg
                 int preset = DomainEffectPreset.Presets[i];
                 list.Add(new ActionOption(DomainEffectPreset.DisplayName(preset), preset, 0));
             }
+            int total = 0;
+            int usable = 0;
             try
             {
                 if (Singleton<ResManager>.HasInstance)
@@ -734,6 +739,7 @@ namespace CustomBattleBg
                     if (factory != null)
                     {
                         List<BuffTableData> all = new List<BuffTableData>(factory.All);
+                        total = all.Count;
                         all.Sort(delegate(BuffTableData a, BuffTableData b)
                         {
                             int ia = a != null ? a.Id : 0;
@@ -743,7 +749,7 @@ namespace CustomBattleBg
                         for (int i = 0; i < all.Count; i++)
                         {
                             BuffTableData cfg = all[i];
-                            if (cfg == null || cfg.Name == null || string.IsNullOrEmpty(cfg.Name.InputText))
+                            if (cfg == null)
                             {
                                 continue;
                             }
@@ -752,8 +758,14 @@ namespace CustomBattleBg
                             {
                                 continue;
                             }
-                            list.Add(new ActionOption("【状态】" + cfg.Name.InputText,
+                            string name = ResolveBuffName(cfg);
+                            if (string.IsNullOrEmpty(name))
+                            {
+                                continue;
+                            }
+                            list.Add(new ActionOption("【状态】" + name,
                                 DomainEffectPreset.BuffOffset + cfg.Id, 0));
+                            usable++;
                         }
                     }
                 }
@@ -762,7 +774,33 @@ namespace CustomBattleBg
             {
                 CustomBattleBgPlugin.LogError("列状态列表失败：" + e.Message);
             }
+            CustomBattleBgPlugin.LogInfo("效果列表构建：状态表共 " + total + " 条，可用 " + usable +
+                " 条，加预设后合计 " + list.Count + " 项");
             return list;
+        }
+
+        /// <summary>取状态的名字：InputText 为空就用本地化表的值，再不行按编号显示。</summary>
+        private static string ResolveBuffName(BuffTableData cfg)
+        {
+            try
+            {
+                if (cfg.Name != null)
+                {
+                    if (!string.IsNullOrEmpty(cfg.Name.InputText))
+                    {
+                        return cfg.Name.InputText;
+                    }
+                    string v = cfg.Name.GetValue();
+                    if (!string.IsNullOrEmpty(v))
+                    {
+                        return v;
+                    }
+                }
+            }
+            catch (Exception)
+            {
+            }
+            return cfg.Id > 0 ? ("状态 " + cfg.Id) : "";
         }
 
         /// <summary>数值规范化：不允许负数的字段，负数自动归 0（用户口径）。</summary>

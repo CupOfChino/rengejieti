@@ -5,7 +5,7 @@
 			"FileId" : 3810876729,
 			"Title" : "自定义播放战斗背景和BGM",
 			"PreviewPath" : "D:\\HuaweiMoveData\\Users\\huawei\\Desktop\\钢丝\\人格解体本地存档\\mods\\自定义播放战斗背景和BGM\\创意工坊图\\1.jpg",
-			"Description" : "本模组提供一个切换背景和BGM的功能，在战斗中，你可以切换提前配置好的背景和音乐，让战场掌握在你的节奏之中。\n\n当然最最最重要的是，还可以播放《新宿决战·雨爱版》（饺子醋来了）\n\n[h2]使用方式[\/h2]\n本模组为了保证干净，不提供上面的资源，但您可以自行配置，非常简单。准备好你的ogg、mp3、mp4、png、jpg后，在幕间选择自定义领域行动，点击选择文件并找到您准备的资源，模组会自动帮您复制一份到模组文件夹下面，不需要手动调整\n\n[h2]重要提醒[\/h2]\n取消订阅此模组时，资源库需要到 %USERPROFILE%\\AppData\\LocalLow\\MeowNature\\Depersonalization-Release\\CustomBattleBg 手动清理！！！（把这个路径直接粘进资源管理器的地址栏就能打开）\n\n[h2]开源地址[\/h2]\n模组开源地址（github仓库）：https:\/\/github.com\/CupOfChino\/rengejieti\n\n[h2]给模组作者[\/h2]\n其他模组作者也可以重写里面的各种方法，具体请看模组文件夹中的.md文件",
+			"Description" : "本模组提供一个切换背景和BGM的功能，在战斗中，你可以切换提前配置好的背景和音乐，让战场掌握在你的节奏之中。你还可以自己自定义为你的盟友提供增益buff，为敌人提供减益buff——当然，反过来也是可以的。但要注意数值范围哦。\n\n当然最最最重要的是，还可以播放《新宿决战·雨爱版》（饺子醋来了）\n\n[h2]使用方式[\/h2]\n本模组为了保证干净，不提供上面的资源，但您可以自行配置，非常简单。准备好你的ogg、mp3、mp4、png、jpg后，在幕间选择自定义领域行动，点击选择文件并找到您准备的资源，模组会自动帮您复制一份到模组文件夹下面，不需要手动调整\n\n[h2]重要提醒[\/h2]\n取消订阅此模组时，资源库需要到 %USERPROFILE%\\AppData\\LocalLow\\MeowNature\\Depersonalization-Release\\CustomBattleBg 手动清理！！！（把这个路径直接粘进资源管理器的地址栏就能打开）\n\n[h2]开源地址[\/h2]\n模组开源地址（github仓库）：https:\/\/github.com\/CupOfChino\/rengejieti\n\n[h2]给模组作者[\/h2]\n其他模组作者也可以重写里面的各种方法，具体请看模组文件夹中的.md文件",
 			"ContentPath" : "",
 			"Visibility" : 2,
 			"Tags" : [

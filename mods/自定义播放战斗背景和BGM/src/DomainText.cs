@@ -64,6 +64,42 @@ namespace CustomBattleBg
             return roleName + "——" + suffix;
         }
 
+        /// <summary>按编号取状态（buff）的名字；取不到就返回"状态 编号"。</summary>
+        internal static string BuffName(int buffId)
+        {
+            try
+            {
+                if (Singleton<ResManager>.HasInstance)
+                {
+                    BuffResFactory factory = Singleton<ResManager>.Instance.BuffFactory;
+                    if (factory != null)
+                    {
+                        BuffTableData cfg = factory.GetCache(buffId.ToString());
+                        if (cfg == null)
+                        {
+                            List<BuffTableData> all = factory.All;
+                            for (int i = 0; i < all.Count; i++)
+                            {
+                                if (all[i] != null && all[i].Id == buffId)
+                                {
+                                    cfg = all[i];
+                                    break;
+                                }
+                            }
+                        }
+                        if (cfg != null && cfg.Name != null && !string.IsNullOrEmpty(cfg.Name.InputText))
+                        {
+                            return cfg.Name.InputText;
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+            }
+            return "状态 " + buffId;
+        }
+
         // ---------------- 数据文案（英文）----------------
 
         internal const string TraitName = "Domain";

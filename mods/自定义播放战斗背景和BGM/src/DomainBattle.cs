@@ -43,6 +43,11 @@ namespace CustomBattleBg
                 {
                     DomainSkill.OnBattleEnd(role);
                 }
+                else if (trigger == EBuffTriggerType.BeforeRoundStart)
+                {
+                    // 每轮开始：结算代价 + 施加 buff 类效果（只认当前领域的展开者）
+                    DomainEffects.OnRoundStart(role, "轮开始");
+                }
             }
             catch (Exception e)
             {
@@ -120,6 +125,7 @@ namespace CustomBattleBg
                     "）展开领域：" + (p != null ? p.DisplayName : "?"));
                 _domainOwnerKey = GetRoleKey(slowest.Data);
                 ApplyProfile(slowest.Data, p, "战斗开始");
+                DomainEffects.ApplyOnOpen(slowest, p, "战斗开始");
             }
             catch (Exception e)
             {
@@ -295,6 +301,7 @@ namespace CustomBattleBg
         {
             try
             {
+                DomainEffects.RemoveCurrent("战斗结束");
                 BattleBgLayer.Hide();
                 BattleBgm.RestoreOrigin();
             }
@@ -319,6 +326,7 @@ namespace CustomBattleBg
         {
             try
             {
+                DomainEffects.RemoveCurrent("重开战斗");
                 BattleBgLayer.Hide();
             }
             catch (Exception e)
@@ -362,6 +370,7 @@ namespace CustomBattleBg
                 _domainOwnerKey = key;
                 CustomBattleBgPlugin.LogInfo("（" + reason + "）「" + name + "」展开领域：" + profile.DisplayName);
                 ApplyProfile(roleData, profile, reason);
+                DomainEffects.ApplyOnOpen(self, profile, reason);
             }
             catch (Exception e)
             {

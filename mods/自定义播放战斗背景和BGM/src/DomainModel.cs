@@ -39,6 +39,13 @@ namespace CustomBattleBg
         /// <summary>数据里的备注前缀，方便识别我们自己的东西。</summary>
         public const string CommentTag = "自定义播放战斗背景和BGM：";
 
+        /// <summary>领域状态用的图标：原版「开辟」（Buff 436）的图标，直接引用不用导素材。</summary>
+        public const string DomainStatusIconKey = "icon_buff_zhenli";
+
+        /// <summary>本 mod 运行时注册状态用的编号区间（881011 起，模组清单已登记）。</summary>
+        public const int CustomBuffIdMin = 881011;
+        public const int CustomBuffIdMax = 881999;
+
         /// <summary>运行时 CurrentBgm 的 Key 前缀（我们自己的 BGM 用它标记，便于比较/复原）。</summary>
         public const string CustomBgmKeyPrefix = "custombgm_";
 
@@ -113,6 +120,48 @@ namespace CustomBattleBg
         /// <summary>挂载行动的显示名（只用于界面回显和日志）。</summary>
         public string MountName = "";
 
+        // ==================== 领域效果（2026-10-07）====================
+
+        /// <summary>领域作用于友方：0=无，1=自身，2=所有友方（含自己）。</summary>
+        public int AllyTarget = 0;
+
+        /// <summary>领域是否作用于敌方（勾选后对所有敌人施加敌方效果）。</summary>
+        public bool EnemyTarget = false;
+
+        /// <summary>友方效果（DomainEffectPreset 常量或 BuffOffset+层 buffId）。</summary>
+        public int AllyEffectType = 0;
+
+        /// <summary>友方效果数值（挂多少层 / 加多少百分比 / 扣回多少点）。</summary>
+        public int AllyEffectValue = 0;
+
+        /// <summary>敌方效果。</summary>
+        public int EnemyEffectType = 0;
+        public int EnemyEffectValue = 0;
+
+        /// <summary>支付代价：0=无，1=扣除生命值，2=扣除精神值，3=扣除魔法值。</summary>
+        public int CostType = 0;
+
+        /// <summary>支付代价数值（不可为负）。</summary>
+        public int CostValue = 0;
+
+        /// <summary>是否配过"数据相关"的内容（效果/代价），保存时用来决定要不要弹"后果自负"警告。</summary>
+        public bool HasAnyEffectData
+        {
+            get
+            {
+                return AllyTarget != 0 || EnemyTarget || AllyEffectType != 0 || EnemyEffectType != 0 || CostType != 0;
+            }
+        }
+
+        /// <summary>运行时分配的领域状态 buff 编号（显示用）。</summary>
+        public int StatusBuffId;
+
+        /// <summary>运行时分配的友方效果 buff 编号（隐藏）。</summary>
+        public int AllyEffectBuffId;
+
+        /// <summary>运行时分配的敌方效果 buff 编号（隐藏）。</summary>
+        public int EnemyEffectBuffId;
+
         public bool HasBackground
         {
             get { return !string.IsNullOrEmpty(BgFile); }
@@ -147,5 +196,112 @@ namespace CustomBattleBg
             Type = type;
             Id = id;
         }
+    }
+
+    /// <summary>领域效果的预设项（框A 前几行），以及"具体 buff"的编码方式。</summary>
+    public static class DomainEffectPreset
+    {
+        public const int None = 0;
+        public const int PhysicalDamage = 1;        // 造成物理伤害（展开时结算一次）
+        public const int PhysicalDamageBonus = 2;   // 物理伤害增加%（持续）
+        public const int PhysicalDamageReduce = 3;  // 物理伤害减免%（持续）
+        public const int MagicDamage = 4;           // 造成法术伤害（展开时结算一次）
+        public const int MagicDamageBonus = 5;      // 法术伤害增加%（持续）
+        public const int MagicDamageReduce = 6;     // 法术伤害减免%（持续）
+        public const int MpDrain = 7;               // 扣除魔法值（展开时结算一次）
+        public const int MpRestore = 8;             // 恢复魔法值（展开时结算一次）
+        public const int SanDrain = 9;              // 扣除精神值（展开时结算一次）
+        public const int SanRestore = 10;           // 恢复精神值（展开时结算一次）
+
+        /// <summary>大于等于这个值表示"具体 buff"（值 - 偏移 = buffId）。</summary>
+        public const int BuffOffset = 100000;
+
+        public static bool IsBuff(int type)
+        {
+            return type >= BuffOffset;
+        }
+
+        public static int BuffIdOf(int type)
+        {
+            return type - BuffOffset;
+        }
+
+        /// <summary>这个预设是不是"持续类"（挂状态、领域移除时消失）。</summary>
+        public static bool IsPersistent(int type)
+        {
+            return type == PhysicalDamageBonus || type == PhysicalDamageReduce ||
+                   type == MagicDamageBonus || type == MagicDamageReduce;
+        }
+
+        /// <summary>这个预设是不是"百分比类"（数值 = 百分数）。</summary>
+        public static bool IsPercent(int type)
+        {
+            return IsPersistent(type);
+        }
+
+        /// <summary>不允许为负数的预设（保存时负数自动归 0）。</summary>
+        public static bool MustBeNonNegative(int type)
+        {
+            switch (type)
+            {
+                case PhysicalDamage:
+                case MagicDamage:
+                case MpDrain:
+                case MpRestore:
+                case SanDrain:
+                case SanRestore:
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        public static string Name(int type)
+        {
+            switch (type)
+            {
+                case PhysicalDamage: return "造成物理伤害";
+                case PhysicalDamageBonus: return "物理伤害增加（%）";
+                case PhysicalDamageReduce: return "物理伤害减免（%）";
+                case MagicDamage: return "造成法术伤害";
+                case MagicDamageBonus: return "法术伤害增加（%）";
+                case MagicDamageReduce: return "法术伤害减免（%）";
+                case MpDrain: return "扣除魔法值";
+                case MpRestore: return "恢复魔法值";
+                case SanDrain: return "扣除精神值";
+                case SanRestore: return "恢复精神值";
+                default: return "（无）";
+            }
+        }
+
+        /// <summary>界面上显示的完整名称（含具体 buff）。</summary>
+        public static string DisplayName(int type)
+        {
+            if (type == None)
+            {
+                return "（无）";
+            }
+            if (IsBuff(type))
+            {
+                return "【状态】" + DomainText.BuffName(BuffIdOf(type));
+            }
+            return Name(type);
+        }
+
+        /// <summary>预设项列表（框A 前面的固定几行）。</summary>
+        public static readonly int[] Presets = new int[]
+        {
+            None,
+            PhysicalDamage,
+            PhysicalDamageBonus,
+            PhysicalDamageReduce,
+            MagicDamage,
+            MagicDamageBonus,
+            MagicDamageReduce,
+            MpDrain,
+            MpRestore,
+            SanDrain,
+            SanRestore
+        };
     }
 }

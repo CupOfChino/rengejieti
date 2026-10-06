@@ -20,7 +20,7 @@ namespace CustomBattleBg
     internal class DomainEditorWindow : MonoBehaviour
     {
         private const float PanelWidth = 680f;
-        private const float PanelHeight = 576f;
+        private const float PanelHeight = 780f;
         private const float SideWidth = 400f;
         private const int MaxSideRows = 9;
 
@@ -41,6 +41,14 @@ namespace CustomBattleBg
         private Button _loopBox;
         private Button _halfBox;
         private SearchDropdown _mountDropdown;
+        private SearchDropdown _allyTargetDropdown;
+        private Button _enemyBox;
+        private SearchDropdown _allyEffectDropdown;
+        private InputField _allyEffectValue;
+        private SearchDropdown _enemyEffectDropdown;
+        private InputField _enemyEffectValue;
+        private SearchDropdown _costDropdown;
+        private InputField _costValue;
         private Text _hint;
         private GameObject _maskGo;
         private GameObject _panelGo;
@@ -253,6 +261,54 @@ namespace CustomBattleBg
             UIFactory.Place(halfLabel.rectTransform, 192f, y, PanelWidth - 216f, 36f);
             y += 48f;
 
+            // ---- 领域效果（数据模块，2026-10-07）----
+            Text effectTitle = UIFactory.Label(panel, "EffectTitle",
+                "领域效果（自定义数据，出问题后果自负）", 22, TextAnchor.MiddleLeft);
+            effectTitle.color = UIFactory.HintColor;
+            UIFactory.Place(effectTitle.rectTransform, 24f, y, PanelWidth - 48f, 32f);
+            y += 32f;
+
+            Text labelAlly = UIFactory.Label(panel, "Label_AllyTarget", "作用于友方", 20, TextAnchor.MiddleLeft);
+            UIFactory.Place(labelAlly.rectTransform, 24f, y, 120f, 40f);
+            List<ActionOption> allyTargetOptions = new List<ActionOption>();
+            allyTargetOptions.Add(new ActionOption("无", 0, 0));
+            allyTargetOptions.Add(new ActionOption("自身", 1, 0));
+            allyTargetOptions.Add(new ActionOption("所有友方", 2, 0));
+            _allyTargetDropdown = new SearchDropdown(panel, "AllyTarget", allyTargetOptions, 148f, y, 140f, 40f);
+            _enemyBox = UIFactory.Checkbox(panel, "EnemyBox", 320f, y, 36f, OnToggleEnemyTarget);
+            Text enemyLabel = UIFactory.Label(panel, "EnemyLabel", "作用于敌方", 20, TextAnchor.MiddleLeft);
+            UIFactory.Place(enemyLabel.rectTransform, 364f, y, 140f, 40f);
+            y += 46f;
+
+            Text labelAllyEff = UIFactory.Label(panel, "Label_AllyEffect", "友方效果", 20, TextAnchor.MiddleLeft);
+            UIFactory.Place(labelAllyEff.rectTransform, 24f, y, 120f, 40f);
+            _allyEffectDropdown = new SearchDropdown(panel, "AllyEffect", new List<ActionOption>(), 148f, y, 330f, 40f);
+            _allyEffectValue = UIFactory.TextInput(panel, "AllyEffectValue", "0", false);
+            UIFactory.Place(_allyEffectValue.GetComponent<RectTransform>(), 488f, y, 120f, 40f);
+            y += 46f;
+
+            Text labelEnemyEff = UIFactory.Label(panel, "Label_EnemyEffect", "敌方效果", 20, TextAnchor.MiddleLeft);
+            UIFactory.Place(labelEnemyEff.rectTransform, 24f, y, 120f, 40f);
+            _enemyEffectDropdown = new SearchDropdown(panel, "EnemyEffect", new List<ActionOption>(), 148f, y, 330f, 40f);
+            _enemyEffectValue = UIFactory.TextInput(panel, "EnemyEffectValue", "0", false);
+            UIFactory.Place(_enemyEffectValue.GetComponent<RectTransform>(), 488f, y, 120f, 40f);
+            y += 46f;
+
+            Text labelCost = UIFactory.Label(panel, "Label_Cost", "支付代价", 20, TextAnchor.MiddleLeft);
+            UIFactory.Place(labelCost.rectTransform, 24f, y, 120f, 40f);
+            List<ActionOption> costOptions = new List<ActionOption>();
+            costOptions.Add(new ActionOption("无", 0, 0));
+            costOptions.Add(new ActionOption("扣除生命值", 1, 0));
+            costOptions.Add(new ActionOption("扣除精神值", 2, 0));
+            costOptions.Add(new ActionOption("扣除魔法值", 3, 0));
+            _costDropdown = new SearchDropdown(panel, "CostType", costOptions, 148f, y, 180f, 40f);
+            _costValue = UIFactory.TextInput(panel, "CostValue", "0", false);
+            UIFactory.Place(_costValue.GetComponent<RectTransform>(), 338f, y, 120f, 40f);
+            Text costTip = UIFactory.Label(panel, "CostTip", "（每轮开始与展开时）", 18, TextAnchor.MiddleLeft);
+            costTip.color = new Color(1f, 1f, 1f, 0.5f);
+            UIFactory.Place(costTip.rectTransform, 466f, y, 200f, 40f);
+            y += 52f;
+
             _hint = UIFactory.Label(panel, "Hint", "", 22, TextAnchor.UpperLeft);
             _hint.color = UIFactory.HintColor;
             UIFactory.Place(_hint.rectTransform, 24f, y, PanelWidth - 48f, 64f);
@@ -285,6 +341,7 @@ namespace CustomBattleBg
                 return;
             }
             _role = role;
+            _effectWarningConfirmed = false;
             _def = CustomBattleBgPlugin.Store.Find(role);
             if (_def == null)
             {
@@ -307,6 +364,7 @@ namespace CustomBattleBg
             _halfScreen = _def.HalfScreen;
             RefreshBoxes();
             RefreshMountOptions(role);
+            RefreshEffectControls();
             _hint.text = _def.Section == "" || string.IsNullOrEmpty(_def.Section)
                 ? DomainText.L("这个角色还没有自己的领域配置，填好后点确认就会生成一条。")
                 : "";
@@ -319,6 +377,49 @@ namespace CustomBattleBg
             }
             catch (Exception)
             {
+            }
+        }
+
+        /// <summary>回显"领域效果"模块（打开编辑窗时调）。</summary>
+        private void RefreshEffectControls()
+        {
+            if (_def == null)
+            {
+                return;
+            }
+            try
+            {
+                List<ActionOption> allyTargets = new List<ActionOption>();
+                allyTargets.Add(new ActionOption("无", 0, 0));
+                allyTargets.Add(new ActionOption("自身", 1, 0));
+                allyTargets.Add(new ActionOption("所有友方", 2, 0));
+                _allyTargetDropdown.SetOptions(allyTargets);
+                _allyTargetDropdown.SelectByTypeAndId(_def.AllyTarget, 0);
+
+                _enemyTarget = _def.EnemyTarget;
+                UIFactory.SetCheckbox(_enemyBox, _enemyTarget);
+
+                List<ActionOption> effects = BuildEffectOptions();
+                _allyEffectDropdown.SetOptions(effects);
+                _allyEffectDropdown.SelectByTypeAndId(_def.AllyEffectType, 0);
+                _enemyEffectDropdown.SetOptions(new List<ActionOption>(effects));
+                _enemyEffectDropdown.SelectByTypeAndId(_def.EnemyEffectType, 0);
+
+                _allyEffectValue.text = _def.AllyEffectValue.ToString();
+                _enemyEffectValue.text = _def.EnemyEffectValue.ToString();
+
+                List<ActionOption> costs = new List<ActionOption>();
+                costs.Add(new ActionOption("无", 0, 0));
+                costs.Add(new ActionOption("扣除生命值", 1, 0));
+                costs.Add(new ActionOption("扣除精神值", 2, 0));
+                costs.Add(new ActionOption("扣除魔法值", 3, 0));
+                _costDropdown.SetOptions(costs);
+                _costDropdown.SelectByTypeAndId(_def.CostType, 0);
+                _costValue.text = _def.CostValue.ToString();
+            }
+            catch (Exception e)
+            {
+                CustomBattleBgPlugin.LogError("回显领域效果失败：" + e.Message);
             }
         }
 
@@ -607,6 +708,84 @@ namespace CustomBattleBg
             UIFactory.SetCheckbox(_halfBox, _halfScreen);
         }
 
+        private bool _enemyTarget;
+        private bool _effectWarningConfirmed;
+
+        private void OnToggleEnemyTarget()
+        {
+            _enemyTarget = !_enemyTarget;
+            UIFactory.SetCheckbox(_enemyBox, _enemyTarget);
+        }
+
+        /// <summary>效果下拉框的选项：预设效果在前，后面是游戏里所有状态（buff）。</summary>
+        private List<ActionOption> BuildEffectOptions()
+        {
+            List<ActionOption> list = new List<ActionOption>();
+            for (int i = 0; i < DomainEffectPreset.Presets.Length; i++)
+            {
+                int preset = DomainEffectPreset.Presets[i];
+                list.Add(new ActionOption(DomainEffectPreset.DisplayName(preset), preset, 0));
+            }
+            try
+            {
+                if (Singleton<ResManager>.HasInstance)
+                {
+                    BuffResFactory factory = Singleton<ResManager>.Instance.BuffFactory;
+                    if (factory != null)
+                    {
+                        List<BuffTableData> all = new List<BuffTableData>(factory.All);
+                        all.Sort(delegate(BuffTableData a, BuffTableData b)
+                        {
+                            int ia = a != null ? a.Id : 0;
+                            int ib = b != null ? b.Id : 0;
+                            return ia.CompareTo(ib);
+                        });
+                        for (int i = 0; i < all.Count; i++)
+                        {
+                            BuffTableData cfg = all[i];
+                            if (cfg == null || cfg.Name == null || string.IsNullOrEmpty(cfg.Name.InputText))
+                            {
+                                continue;
+                            }
+                            // 跳过我们自己的运行时状态，避免自我引用
+                            if (cfg.Comment != null && cfg.Comment.StartsWith(DomainConstants.CommentTag))
+                            {
+                                continue;
+                            }
+                            list.Add(new ActionOption("【状态】" + cfg.Name.InputText,
+                                DomainEffectPreset.BuffOffset + cfg.Id, 0));
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                CustomBattleBgPlugin.LogError("列状态列表失败：" + e.Message);
+            }
+            return list;
+        }
+
+        /// <summary>数值规范化：不允许负数的字段，负数自动归 0（用户口径）。</summary>
+        private static int NormalizeValue(string text, int effectType, bool isCost)
+        {
+            int v;
+            if (!int.TryParse((text ?? "").Trim(), out v))
+            {
+                return 0;
+            }
+            if (isCost)
+            {
+                return v < 0 ? 0 : v;
+            }
+            if (effectType != 0 &&
+                (DomainEffectPreset.MustBeNonNegative(effectType) || DomainEffectPreset.IsBuff(effectType)) &&
+                v < 0)
+            {
+                return 0;
+            }
+            return v;
+        }
+
         private static string CleanText(string raw)
         {
             if (string.IsNullOrEmpty(raw))
@@ -652,6 +831,21 @@ namespace CustomBattleBg
                 _def.MountType = mount != null ? mount.Type : 0;
                 _def.MountId = mount != null ? mount.Id : 0;
                 _def.MountName = mount != null ? mount.Label : "";
+
+                // 领域效果（数据相关）
+                ActionOption allyTargetOpt = _allyTargetDropdown != null ? _allyTargetDropdown.Current : null;
+                _def.AllyTarget = allyTargetOpt != null ? allyTargetOpt.Type : 0;
+                _def.EnemyTarget = _enemyTarget;
+                ActionOption allyEff = _allyEffectDropdown != null ? _allyEffectDropdown.Current : null;
+                _def.AllyEffectType = allyEff != null ? allyEff.Type : 0;
+                _def.AllyEffectValue = NormalizeValue(_allyEffectValue.text, _def.AllyEffectType, false);
+                ActionOption enemyEff = _enemyEffectDropdown != null ? _enemyEffectDropdown.Current : null;
+                _def.EnemyEffectType = enemyEff != null ? enemyEff.Type : 0;
+                _def.EnemyEffectValue = NormalizeValue(_enemyEffectValue.text, _def.EnemyEffectType, false);
+                ActionOption costOpt = _costDropdown != null ? _costDropdown.Current : null;
+                _def.CostType = costOpt != null ? costOpt.Type : 0;
+                _def.CostValue = NormalizeValue(_costValue.text, 0, true);
+
                 if (string.IsNullOrEmpty(_def.RoleKey))
                 {
                     if (_role != null && !string.IsNullOrEmpty(_role.RoleLibraryKey))
@@ -667,6 +861,28 @@ namespace CustomBattleBg
                 {
                     _def.Section = CustomBattleBgPlugin.Store.NextSection();
                 }
+
+                // 配了"数据相关"的内容 → 先让玩家确认"后果自负"（用户口径：只定义背景和BGM则不弹）
+                if (_def.HasAnyEffectData && !_effectWarningConfirmed)
+                {
+                    ShowConfirm(
+                        DomainText.L("你自定义了领域效果（数据相关）。\n\n" +
+                                     "这些数据不保证正确：如果导致游戏出错，本模组只会把效果部分自动失效" +
+                                     "（背景与BGM不受影响），不会帮你修复。\n\n确定保存吗？"),
+                        delegate
+                        {
+                            _effectWarningConfirmed = true;
+                            OnConfirm();   // 确认后重新走一遍保存流程
+                        },
+                        delegate
+                        {
+                            _hint.text = DomainText.L("已取消保存（数据没有改动）。");
+                        });
+                    return;
+                }
+                _effectWarningConfirmed = false;
+
+                DomainBuffBuilder.Rebuild(_def);   // 效果数据变了 → 重建运行时状态
                 CustomBattleBgPlugin.Store.Save(_def);
                 _hint.text = DomainText.L("已保存：" + display + "\n改动在下一场战斗生效。");
                 RebuildSideList();

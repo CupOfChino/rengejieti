@@ -150,6 +150,17 @@ namespace CustomBattleBg
                 "挂载行动类型（0=不挂载 1=战斗技能 2=任意法术 3=具体法术）").Value;
             p.MountId = _file.Bind(section, "MountId", 0, "挂载行动的 id（技能或法术）").Value;
             p.MountName = _file.Bind(section, "MountName", "", "挂载行动的显示名").Value;
+            p.AllyTarget = _file.Bind(section, "AllyTarget", 0, "领域作用于友方（0=无 1=自身 2=所有友方）").Value;
+            p.EnemyTarget = _file.Bind(section, "EnemyTarget", false, "领域是否作用于敌方").Value;
+            p.AllyEffectType = _file.Bind(section, "AllyEffectType", 0, "友方效果").Value;
+            p.AllyEffectValue = _file.Bind(section, "AllyEffectValue", 0, "友方效果数值").Value;
+            p.EnemyEffectType = _file.Bind(section, "EnemyEffectType", 0, "敌方效果").Value;
+            p.EnemyEffectValue = _file.Bind(section, "EnemyEffectValue", 0, "敌方效果数值").Value;
+            p.CostType = _file.Bind(section, "CostType", 0, "支付代价类型（0=无 1=生命 2=精神 3=魔法）").Value;
+            p.CostValue = _file.Bind(section, "CostValue", 0, "支付代价数值").Value;
+            p.StatusBuffId = _file.Bind(section, "StatusBuffId", 0, "领域状态编号，插件自动填写").Value;
+            p.AllyEffectBuffId = _file.Bind(section, "AllyEffectBuffId", 0, "友方效果编号，插件自动填写").Value;
+            p.EnemyEffectBuffId = _file.Bind(section, "EnemyEffectBuffId", 0, "敌方效果编号，插件自动填写").Value;
             return p;
         }
 
@@ -172,6 +183,17 @@ namespace CustomBattleBg
                 "挂载行动类型（0=不挂载 1=战斗技能 2=任意法术 3=具体法术）").Value = p.MountType;
             _file.Bind(p.Section, "MountId", 0, "挂载行动的 id（技能或法术）").Value = p.MountId;
             _file.Bind(p.Section, "MountName", "", "挂载行动的显示名").Value = p.MountName;
+            _file.Bind(p.Section, "AllyTarget", 0, "领域作用于友方（0=无 1=自身 2=所有友方）").Value = p.AllyTarget;
+            _file.Bind(p.Section, "EnemyTarget", false, "领域是否作用于敌方").Value = p.EnemyTarget;
+            _file.Bind(p.Section, "AllyEffectType", 0, "友方效果").Value = p.AllyEffectType;
+            _file.Bind(p.Section, "AllyEffectValue", 0, "友方效果数值").Value = p.AllyEffectValue;
+            _file.Bind(p.Section, "EnemyEffectType", 0, "敌方效果").Value = p.EnemyEffectType;
+            _file.Bind(p.Section, "EnemyEffectValue", 0, "敌方效果数值").Value = p.EnemyEffectValue;
+            _file.Bind(p.Section, "CostType", 0, "支付代价类型（0=无 1=生命 2=精神 3=魔法）").Value = p.CostType;
+            _file.Bind(p.Section, "CostValue", 0, "支付代价数值").Value = p.CostValue;
+            _file.Bind(p.Section, "StatusBuffId", 0, "领域状态编号，插件自动填写").Value = p.StatusBuffId;
+            _file.Bind(p.Section, "AllyEffectBuffId", 0, "友方效果编号，插件自动填写").Value = p.AllyEffectBuffId;
+            _file.Bind(p.Section, "EnemyEffectBuffId", 0, "敌方效果编号，插件自动填写").Value = p.EnemyEffectBuffId;
             _file.Save();
 
             if (!_profiles.Contains(p))
@@ -189,7 +211,10 @@ namespace CustomBattleBg
             string[] keys = new string[]
             {
                 "RoleKey", "RoleName", "Suffix", "BgFile", "BgmFile", "BgmLoop", "HalfScreen",
-                "MountType", "MountId", "MountName"
+                "MountType", "MountId", "MountName",
+                "AllyTarget", "EnemyTarget", "AllyEffectType", "AllyEffectValue",
+                "EnemyEffectType", "EnemyEffectValue", "CostType", "CostValue",
+                "StatusBuffId", "AllyEffectBuffId", "EnemyEffectBuffId"
             };
             for (int i = 0; i < keys.Length; i++)
             {
@@ -295,6 +320,29 @@ namespace CustomBattleBg
                 }
             }
             return SectionPrefix + "999";
+        }
+
+        /// <summary>给领域状态/持续效果找一个没人占用的 buff 编号（0 = 满了）。</summary>
+        public int AllocateBuffId()
+        {
+            for (int id = DomainConstants.CustomBuffIdMin; id <= DomainConstants.CustomBuffIdMax; id++)
+            {
+                bool used = false;
+                for (int i = 0; i < _profiles.Count; i++)
+                {
+                    if (_profiles[i].StatusBuffId == id || _profiles[i].AllyEffectBuffId == id ||
+                        _profiles[i].EnemyEffectBuffId == id)
+                    {
+                        used = true;
+                        break;
+                    }
+                }
+                if (!used)
+                {
+                    return id;
+                }
+            }
+            return 0;
         }
 
         // 按调查员找他的配置：先认编号，编号对不上再按名字兜底

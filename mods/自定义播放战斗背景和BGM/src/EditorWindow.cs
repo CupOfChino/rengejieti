@@ -278,9 +278,10 @@ namespace CustomBattleBg
             allyTargetOptions.Add(new ActionOption("自身", 1, 0));
             allyTargetOptions.Add(new ActionOption("所有友方", 2, 0));
             _allyTargetDropdown = new SearchDropdown(panel, "AllyTarget", allyTargetOptions, 148f, y, 140f, 40f);
-            _enemyBox = UIFactory.Checkbox(panel, "EnemyBox", 320f, y, 36f, OnToggleEnemyTarget);
+            // 作用于敌方：文字在前、勾选框在后
             Text enemyLabel = UIFactory.Label(panel, "EnemyLabel", "作用于敌方", 20, TextAnchor.MiddleLeft);
-            UIFactory.Place(enemyLabel.rectTransform, 364f, y, 140f, 40f);
+            UIFactory.Place(enemyLabel.rectTransform, 320f, y, 120f, 40f);
+            _enemyBox = UIFactory.Checkbox(panel, "EnemyBox", 444f, y, 36f, OnToggleEnemyTarget);
             y += 46f;
 
             Text labelAllyEff = UIFactory.Label(panel, "Label_AllyEffect", "友方效果", 20, TextAnchor.MiddleLeft);
@@ -738,8 +739,15 @@ namespace CustomBattleBg
                     BuffResFactory factory = Singleton<ResManager>.Instance.BuffFactory;
                     if (factory != null)
                     {
-                        List<BuffTableData> all = new List<BuffTableData>(factory.All);
+                        // 【重要】BuffTableData 是"按需加载"的：游戏启动时只把文件路径登记进
+                        // LoadFileDatas，没真正读进内存。直接取 All 只能拿到各 mod 加载过的那几十条，
+                        // 游戏本体的（中毒/燃烧/流血…）全在待加载清单里。
+                        // 所以：先按清单逐个 GetConfig 触发加载，再统一收集。
+                        long t0 = DateTime.Now.Ticks;
+                        List<BuffTableData> all = CollectAllBuffs(factory);
                         total = all.Count;
+                        long ms = (DateTime.Now.Ticks - t0) / TimeSpan.TicksPerMillisecond;
+                        CustomBattleBgPlugin.LogInfo("状态表加载：共收集 " + all.Count + " 条（耗时 " + ms + " 毫秒）");
                         all.Sort(delegate(BuffTableData a, BuffTableData b)
                         {
                             int ia = a != null ? a.Id : 0;
@@ -801,6 +809,55 @@ namespace CustomBattleBg
             {
             }
             return cfg.Id > 0 ? ("状态 " + cfg.Id) : "";
+        }
+
+        /// <summary>
+        /// 收集全部状态：已加载的（各 mod 的）+ 按 LoadingFileDatas 清单触发的按需加载（游戏本体的）。
+        /// 不这么做的话，游戏本体的状态（中毒/燃烧/流血…）一条都列不出来。
+        /// </summary>
+        private static List<BuffTableData> CollectAllBuffs(BuffResFactory factory)
+        {
+            List<BuffTableData> result = new List<BuffTableData>();
+            HashSet<int> seen = new HashSet<int>();
+
+            List<BuffTableData> loaded = new List<BuffTableData>(factory.All);
+            for (int i = 0; i < loaded.Count; i++)
+            {
+                AddUnique(result, seen, loaded[i]);
+            }
+
+            List<ResloadFileData> pending = factory.LoadFileDatas;
+            if (pending != null)
+            {
+                for (int i = 0; i < pending.Count; i++)
+                {
+                    ResloadFileData item = pending[i];
+                    if (item == null || string.IsNullOrEmpty(item.FileName))
+                    {
+                        continue;
+                    }
+                    try
+                    {
+                        BuffTableData cfg = factory.GetConfig(item.FileName);
+                        AddUnique(result, seen, cfg);
+                    }
+                    catch (Exception)
+                    {
+                        // 单条读不出来就跳过，不影响其它
+                    }
+                }
+            }
+            return result;
+        }
+
+        private static void AddUnique(List<BuffTableData> list, HashSet<int> seen, BuffTableData cfg)
+        {
+            if (cfg == null || seen.Contains(cfg.Id))
+            {
+                return;
+            }
+            seen.Add(cfg.Id);
+            list.Add(cfg);
         }
 
         /// <summary>数值规范化：不允许负数的字段，负数自动归 0（用户口径）。</summary>

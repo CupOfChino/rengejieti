@@ -1,0 +1,130 @@
+{
+	"ResourceReferenceConfigure" : {
+		"__type" : "ResourceReferenceConfigure,Assembly-CSharp",
+		"value" : {
+			"BgmResUnitDatas" : [
+				
+			],
+			"SoundResUnitDatas" : [
+				
+			],
+			"VoiceResUnitDatas" : [
+				
+			],
+			"HeadIconResUnitDatas" : [
+				
+			],
+			"CGResUnitDatas" : [
+				
+			],
+			"CloseUpResUnitDatas" : [
+				
+			],
+			"ItemIconResUnitDaras" : [
+				
+			],
+			"MythologicalResUnitDatas" : [
+				
+			],
+			"SkillIconResUnitDatas" : [
+				
+			],
+			"BuffIconResUnitDatas" : [
+				
+			],
+			"MagicIconResUnitDatas" : [
+				
+			],
+			"ModuleCoverResUnitDatas" : [
+				
+			],
+			"RelationSkillIconDatas" : [
+				
+			],
+			"CharaSprUnitDatas" : [
+				
+			],
+			"EffectResUnitDatas" : [
+				
+			],
+			"RoleModelUnitDatas" : [
+				
+			],
+			"SpecUnitDatas" : [
+				
+			],
+			"MeshMapNodeIconResUnitDatas" : [
+				
+			],
+			"TextModSceneDatas" : [
+				
+			],
+			"ExploreSkillDatas" : [
+				
+			],
+			"LogoDatas" : [
+				
+			],
+			"OptionTipDatas" : [
+				
+			],
+			"GameAchievementDatas" : [
+				
+			],
+			"RoleModelAnimDatas" : [
+				
+			],
+			"ShopRoleTextureDatas" : [
+				
+			],
+			"MapBgDatas" : [
+				
+			],
+			"SceneTextureDatas" : [
+				
+			],
+			"ScenePreviewDatas" : [
+				
+			],
+			"ExtraAndEffectDatas" : [
+				
+			],
+			"ResourceMap" : {1007:[
+					{
+						"Key" : "icon_domain_magic_down",
+						"Path" : "Resources\/Texture\/Buff\/icon_domain_magic_down",
+						"Ext" : ".png"
+					},{
+						"Key" : "icon_domain_magic_guard",
+						"Path" : "Resources\/Texture\/Buff\/icon_domain_magic_guard",
+						"Ext" : ".png"
+					},{
+						"Key" : "icon_domain_magic_up",
+						"Path" : "Resources\/Texture\/Buff\/icon_domain_magic_up",
+						"Ext" : ".png"
+					},{
+						"Key" : "icon_domain_magic_vuln",
+						"Path" : "Resources\/Texture\/Buff\/icon_domain_magic_vuln",
+						"Ext" : ".png"
+					},{
+						"Key" : "icon_domain_phys_down",
+						"Path" : "Resources\/Texture\/Buff\/icon_domain_phys_down",
+						"Ext" : ".png"
+					},{
+						"Key" : "icon_domain_phys_guard",
+						"Path" : "Resources\/Texture\/Buff\/icon_domain_phys_guard",
+						"Ext" : ".png"
+					},{
+						"Key" : "icon_domain_phys_up",
+						"Path" : "Resources\/Texture\/Buff\/icon_domain_phys_up",
+						"Ext" : ".png"
+					},{
+						"Key" : "icon_domain_phys_vuln",
+						"Path" : "Resources\/Texture\/Buff\/icon_domain_phys_vuln",
+						"Ext" : ".png"
+					}
+				]
+			}
+		}
+	}
+}

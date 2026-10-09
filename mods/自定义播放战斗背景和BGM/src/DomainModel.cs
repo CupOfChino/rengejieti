@@ -213,6 +213,12 @@ namespace CustomBattleBg
         public const int SanDrain = 9;              // 扣除精神值（展开时结算一次）
         public const int SanRestore = 10;           // 恢复精神值（展开时结算一次）
 
+        // 2026-10-09 补：巴士那套"伤害弱化 / 易损"（和增伤/守护凑齐四种）
+        public const int PhysicalDamageDown = 11;   // 造成伤害减少%（弱化）
+        public const int PhysicalVulnerable = 12;   // 受到伤害增加%（易损）
+        public const int MagicDamageDown = 13;      // 法术版弱化
+        public const int MagicVulnerable = 14;      // 法术版易损
+
         /// <summary>大于等于这个值表示"具体 buff"（值 - 偏移 = buffId）。</summary>
         public const int BuffOffset = 100000;
 
@@ -230,7 +236,9 @@ namespace CustomBattleBg
         public static bool IsPersistent(int type)
         {
             return type == PhysicalDamageBonus || type == PhysicalDamageReduce ||
-                   type == MagicDamageBonus || type == MagicDamageReduce;
+                   type == MagicDamageBonus || type == MagicDamageReduce ||
+                   type == PhysicalDamageDown || type == PhysicalVulnerable ||
+                   type == MagicDamageDown || type == MagicVulnerable;
         }
 
         /// <summary>这个预设是不是"百分比类"（数值 = 百分数）。</summary>
@@ -266,6 +274,10 @@ namespace CustomBattleBg
                 case MagicDamage: return "造成法术伤害";
                 case MagicDamageBonus: return "法术伤害增加（%）";
                 case MagicDamageReduce: return "法术伤害减免（%）";
+                case PhysicalDamageDown: return "物理伤害弱化（%）";
+                case PhysicalVulnerable: return "物理易损（%）";
+                case MagicDamageDown: return "法术伤害弱化（%）";
+                case MagicVulnerable: return "法术易损（%）";
                 case MpDrain: return "扣除魔法值";
                 case MpRestore: return "恢复魔法值";
                 case SanDrain: return "扣除精神值";
@@ -288,6 +300,34 @@ namespace CustomBattleBg
             return Name(type);
         }
 
+        /// <summary>挂到角色身上时显示的状态名（短一点，方便状态栏显示）。</summary>
+        public static string ShortName(int type)
+        {
+            switch (type)
+            {
+                case PhysicalDamageBonus: return "伤害强化";
+                case PhysicalDamageDown: return "伤害弱化";
+                case PhysicalDamageReduce: return "守护";
+                case PhysicalVulnerable: return "易损";
+                case MagicDamageBonus: return "法术强化";
+                case MagicDamageDown: return "法术弱化";
+                case MagicDamageReduce: return "法术守护";
+                case MagicVulnerable: return "法术易损";
+                case PhysicalDamage: return "领域伤害（物理）";
+                case MagicDamage: return "领域伤害（法术）";
+                case MpDrain: return "领域：扣除魔法值";
+                case MpRestore: return "领域：恢复魔法值";
+                case SanDrain: return "领域：扣除精神值";
+                case SanRestore: return "领域：恢复精神值";
+                default:
+                    if (IsBuff(type))
+                    {
+                        return DomainText.BuffName(BuffIdOf(type));
+                    }
+                    return Name(type);
+            }
+        }
+
         /// <summary>预设项列表（框A 前面的固定几行）。</summary>
         public static readonly int[] Presets = new int[]
         {
@@ -295,9 +335,13 @@ namespace CustomBattleBg
             PhysicalDamage,
             PhysicalDamageBonus,
             PhysicalDamageReduce,
+            PhysicalDamageDown,
+            PhysicalVulnerable,
             MagicDamage,
             MagicDamageBonus,
             MagicDamageReduce,
+            MagicDamageDown,
+            MagicVulnerable,
             MpDrain,
             MpRestore,
             SanDrain,

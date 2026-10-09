@@ -26,6 +26,7 @@ namespace CustomBattleBg
         private static DomainProfile _current;
         private static BattleRole _owner;
         private static bool _broken;
+        private static readonly List<int> _trackedBuffs = new List<int>();   // 领域挂出去、不会随回合衰减的状态
 
         internal static bool HasActiveDomain
         {
@@ -63,26 +64,10 @@ namespace CustomBattleBg
                     await caster.AddBuff(caster, statusId);
                 }
 
-                if (p.AllyTarget != 0)
-                {
-                    List<BattleRole> allies = GetAllyTargets(caster, p.AllyTarget);
-                    for (int i = 0; i < allies.Count; i++)
-                    {
-                        await ApplyImmediateAsync(p, allies[i], caster, true, reason);
-                    }
-                }
-
-                if (p.EnemyTarget)
-                {
-                    List<BattleRole> enemies = GetEnemyTargets();
-                    for (int i = 0; i < enemies.Count; i++)
-                    {
-                        await ApplyImmediateAsync(p, enemies[i], caster, false, reason);
-                    }
-                }
-
+                // 展开时只处理"不会随回合衰减"的手选 buff（挂一次，领域结束时收回）；
+                // 预设效果、资源结算、会衰减的 buff 都留到每轮开始（见 OnRoundStartAsync）。
+                await ApplyPersistentGameBuffsAsync(p, caster, reason);
                 await PayCostAsync(p, caster, reason);
-                // 注意：buff 类效果**不在展开时施加**，只等每一行动轮开始时施加（用户口径）
             }
             catch (Exception e)
             {
@@ -109,7 +94,7 @@ namespace CustomBattleBg
                     return;
                 }
                 await PayCostAsync(_current, _owner, reason);
-                await ApplyLayeredBuffsAsync(_current, _owner, reason);
+                await ApplyRoundEffectsAsync(_current, _owner, reason);
             }
             catch (Exception e)
             {
@@ -132,6 +117,7 @@ namespace CustomBattleBg
             _broken = false;
             if (p == null)
             {
+                _trackedBuffs.Clear();
                 return;
             }
             try
@@ -154,6 +140,19 @@ namespace CustomBattleBg
                             await SafeRemoveBuff(all[i], p.EnemyEffectBuffId);
                         }
                     }
+                }
+                // 领域挂出去的"不会随回合衰减"的状态：跟着领域一起收回（战斗结束/被别的领域顶掉）
+                if (_trackedBuffs.Count > 0)
+                {
+                    List<BattleRole> all = GetAllBattleRoles();
+                    for (int i = 0; i < all.Count; i++)
+                    {
+                        for (int k = 0; k < _trackedBuffs.Count; k++)
+                        {
+                            await SafeRemoveBuff(all[i], _trackedBuffs[k]);
+                        }
+                    }
+                    _trackedBuffs.Clear();
                 }
                 CustomBattleBgPlugin.LogInfo("领域已移除（" + reason + "）：" + p.DisplayName);
             }
@@ -190,6 +189,10 @@ namespace CustomBattleBg
                 case DomainEffectPreset.PhysicalDamageReduce:
                 case DomainEffectPreset.MagicDamageBonus:
                 case DomainEffectPreset.MagicDamageReduce:
+                case DomainEffectPreset.PhysicalDamageDown:
+                case DomainEffectPreset.PhysicalVulnerable:
+                case DomainEffectPreset.MagicDamageDown:
+                case DomainEffectPreset.MagicVulnerable:
                     {
                         int effId = DomainBuffBuilder.EnsureBuff(p,
                             isAlly ? DomainBuffBuilder.KindAlly : DomainBuffBuilder.KindEnemy);
@@ -211,32 +214,6 @@ namespace CustomBattleBg
                 case DomainEffectPreset.SanRestore:
                     await ChangeAttrAsync(target, ERoleExtraAttribute.CurrentSan, Math.Abs(value));
                     break;
-            }
-        }
-
-        private static async Task ApplyLayeredBuffsAsync(DomainProfile p, BattleRole caster, string reason)
-        {
-            if (p == null || caster == null)
-            {
-                return;
-            }
-            if (p.AllyTarget != 0 && DomainEffectPreset.IsBuff(p.AllyEffectType))
-            {
-                List<BattleRole> allies = GetAllyTargets(caster, p.AllyTarget);
-                for (int i = 0; i < allies.Count; i++)
-                {
-                    await AddBuffLayers(caster, allies[i], DomainEffectPreset.BuffIdOf(p.AllyEffectType),
-                        p.AllyEffectValue);
-                }
-            }
-            if (p.EnemyTarget && DomainEffectPreset.IsBuff(p.EnemyEffectType))
-            {
-                List<BattleRole> enemies = GetEnemyTargets();
-                for (int i = 0; i < enemies.Count; i++)
-                {
-                    await AddBuffLayers(caster, enemies[i], DomainEffectPreset.BuffIdOf(p.EnemyEffectType),
-                        p.EnemyEffectValue);
-                }
             }
         }
 
@@ -274,6 +251,131 @@ namespace CustomBattleBg
             catch (Exception e)
             {
                 CustomBattleBgPlugin.LogError("施加状态层数失败（" + buffId + "）：" + e.Message);
+            }
+        }
+
+        // ---------------- 三种情况的分流 ----------------
+        //
+        // 情况1：扣/回 生命·精神·魔法 → 每轮开始结算一次
+        // 情况2：会随回合衰减的手选 buff + 预设增减益/伤害（挂上后回合结束自动解除）→ 每轮开始施加
+        // 情况3：不会随回合衰减的手选 buff → 展开时挂一次，并追踪，领域结束/被顶掉时收回
+
+        /// <summary>展开时：挂"不会随回合衰减"的手选 buff（情况3）。</summary>
+        private static async Task ApplyPersistentGameBuffsAsync(DomainProfile p, BattleRole caster, string reason)
+        {
+            if (p.AllyTarget != 0 && DomainEffectPreset.IsBuff(p.AllyEffectType))
+            {
+                int buffId = DomainEffectPreset.BuffIdOf(p.AllyEffectType);
+                if (!DomainBuffBuilder.IsDecayingBuff(buffId))
+                {
+                    List<BattleRole> allies = GetAllyTargets(caster, p.AllyTarget);
+                    for (int i = 0; i < allies.Count; i++)
+                    {
+                        await AddPersistentBuff(caster, allies[i], buffId, p.AllyEffectValue);
+                    }
+                }
+            }
+            if (p.EnemyTarget && DomainEffectPreset.IsBuff(p.EnemyEffectType))
+            {
+                int buffId = DomainEffectPreset.BuffIdOf(p.EnemyEffectType);
+                if (!DomainBuffBuilder.IsDecayingBuff(buffId))
+                {
+                    List<BattleRole> enemies = GetEnemyTargets();
+                    for (int i = 0; i < enemies.Count; i++)
+                    {
+                        await AddPersistentBuff(caster, enemies[i], buffId, p.EnemyEffectValue);
+                    }
+                }
+            }
+        }
+
+        private static async Task AddPersistentBuff(BattleRole caster, BattleRole target, int buffId, int layers)
+        {
+            await AddBuffLayers(caster, target, buffId, layers);
+            if (!_trackedBuffs.Contains(buffId))
+            {
+                _trackedBuffs.Add(buffId);
+                CustomBattleBgPlugin.LogInfo("领域挂上了不会衰减的状态，开始追踪：" + buffId);
+            }
+        }
+
+        /// <summary>每轮开始：预设效果 + 资源结算 + 会衰减的手选 buff（情况1、2）。</summary>
+        private static async Task ApplyRoundEffectsAsync(DomainProfile p, BattleRole caster, string reason)
+        {
+            if (p == null || caster == null)
+            {
+                return;
+            }
+            if (p.AllyTarget != 0)
+            {
+                List<BattleRole> allies = GetAllyTargets(caster, p.AllyTarget);
+                for (int i = 0; i < allies.Count; i++)
+                {
+                    await ApplyRoundEffectTo(p, allies[i], caster, true);
+                }
+            }
+            if (p.EnemyTarget)
+            {
+                List<BattleRole> enemies = GetEnemyTargets();
+                for (int i = 0; i < enemies.Count; i++)
+                {
+                    await ApplyRoundEffectTo(p, enemies[i], caster, false);
+                }
+            }
+        }
+
+        private static async Task ApplyRoundEffectTo(DomainProfile p, BattleRole target, BattleRole caster, bool isAlly)
+        {
+            if (target == null)
+            {
+                return;
+            }
+            int type = isAlly ? p.AllyEffectType : p.EnemyEffectType;
+            int value = isAlly ? p.AllyEffectValue : p.EnemyEffectValue;
+            if (type == 0)
+            {
+                return;
+            }
+            if (DomainEffectPreset.IsBuff(type))
+            {
+                int buffId = DomainEffectPreset.BuffIdOf(type);
+                // 只会衰减的那种每轮补（不会衰减的在展开时挂过了）
+                if (DomainBuffBuilder.IsDecayingBuff(buffId))
+                {
+                    await AddBuffLayers(caster, target, buffId, value);
+                }
+                return;
+            }
+            switch (type)
+            {
+                case DomainEffectPreset.PhysicalDamage:
+                case DomainEffectPreset.MagicDamage:
+                case DomainEffectPreset.PhysicalDamageBonus:
+                case DomainEffectPreset.PhysicalDamageReduce:
+                case DomainEffectPreset.MagicDamageBonus:
+                case DomainEffectPreset.MagicDamageReduce:
+                    {
+                        // 每轮挂一份"领域效果"状态：加成在挂上时生效，回合结束自己解除（巴士节奏）
+                        int effId = DomainBuffBuilder.EnsureBuff(p,
+                            isAlly ? DomainBuffBuilder.KindAlly : DomainBuffBuilder.KindEnemy);
+                        if (effId > 0)
+                        {
+                            await target.AddBuff(caster, effId);
+                        }
+                        break;
+                    }
+                case DomainEffectPreset.MpDrain:
+                    await ChangeAttrAsync(target, ERoleExtraAttribute.CurrentMp, -Math.Abs(value));
+                    break;
+                case DomainEffectPreset.MpRestore:
+                    await ChangeAttrAsync(target, ERoleExtraAttribute.CurrentMp, Math.Abs(value));
+                    break;
+                case DomainEffectPreset.SanDrain:
+                    await ChangeAttrAsync(target, ERoleExtraAttribute.CurrentSan, -Math.Abs(value));
+                    break;
+                case DomainEffectPreset.SanRestore:
+                    await ChangeAttrAsync(target, ERoleExtraAttribute.CurrentSan, Math.Abs(value));
+                    break;
             }
         }
 

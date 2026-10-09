@@ -212,6 +212,46 @@ namespace CustomBattleBg
         }
 
         /// <summary>
+        /// 这个状态会不会"随回合衰减"——判断依据：数据里有没有"改自己层数"的选项（Buff_BuffLayerOption）。
+        /// 中毒/流血/燃烧这类每回合掉层的都有；开辟那种常驻的没有。
+        /// 用于把"用户手选的游戏 buff"自动分流：衰减的每轮施加、不衰减的展开时挂一次。
+        /// </summary>
+        internal static bool IsDecayingBuff(int buffId)
+        {
+            try
+            {
+                if (buffId <= 0 || !Singleton<ResManager>.HasInstance)
+                {
+                    return false;
+                }
+                BuffTableData cfg = Singleton<ResManager>.Instance.BuffFactory.GetConfig(buffId);
+                if (cfg == null || cfg.Events == null)
+                {
+                    return false;
+                }
+                for (int i = 0; i < cfg.Events.Count; i++)
+                {
+                    BuffEventData ev = cfg.Events[i];
+                    if (ev == null || ev.Funcs == null)
+                    {
+                        continue;
+                    }
+                    for (int j = 0; j < ev.Funcs.Count; j++)
+                    {
+                        if (ev.Funcs[j] is Buff_BuffLayerOption)
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+            }
+            return false;
+        }
+
+        /// <summary>
         /// 后台预加载全部状态数据（游戏本体的 buff 是"按需加载"的，第一次要用到才读文件）。
         /// 分批跑（每帧几个），这样打开编辑器时状态列表已经就绪，不用等 2 秒。
         /// </summary>
@@ -287,7 +327,8 @@ namespace CustomBattleBg
 
         // ---------------- 构建 ----------------
 
-        private static BuffTableData NewBase(int id, string name, string des, bool showUI)
+        private static BuffTableData NewBase(int id, string name, string des, bool showUI, bool negative,
+            string iconKey)
         {
             BuffTableData cfg = new BuffTableData();
             cfg.Id = id;
@@ -298,11 +339,11 @@ namespace CustomBattleBg
             cfg.Des = new LocalizationBuffKeyData();
             cfg.Des.TarKey = "";
             cfg.Des.SheetKey = "";
-            cfg.Des.InputText = des;
+            // 负面状态的描述用红色，正面/中性保持默认色（用户口径；游戏自己的描述也走富文本）
+            cfg.Des.InputText = Colorize(des, negative);
             cfg.IconPathReference = new TextureResourceReference();
             cfg.IconPathReference.ReferenceType = ETextureReferenceType.BuffIcon;
-            // 图标直接用原版「开辟」（Buff 436）的 icon_buff_zhenli，不需要导入素材
-            cfg.IconPathReference.Key = DomainConstants.DomainStatusIconKey;
+            cfg.IconPathReference.Key = iconKey;
             cfg.Comment = DomainConstants.CommentTag + name;
             cfg.BuffType = EBuffType.Other;
             cfg.BuffEffectType = EBuffEffectType.Neutral;
@@ -319,21 +360,105 @@ namespace CustomBattleBg
             return cfg;
         }
 
+        private static string Colorize(string text, bool negative)
+        {
+            if (string.IsNullOrEmpty(text) || !negative)
+            {
+                return text;
+            }
+            return "<color=#FF5555>" + text + "</color>";
+        }
+
+        /// <summary>这个效果对"受益人"来说是正面的还是负面的（决定描述颜色和状态正负）。</summary>
+        internal static bool IsNegativeEffect(int type)
+        {
+            switch (type)
+            {
+                case DomainEffectPreset.PhysicalDamage:
+                case DomainEffectPreset.MagicDamage:
+                case DomainEffectPreset.MpDrain:
+                case DomainEffectPreset.SanDrain:
+                case DomainEffectPreset.PhysicalDamageDown:
+                case DomainEffectPreset.PhysicalVulnerable:
+                case DomainEffectPreset.MagicDamageDown:
+                case DomainEffectPreset.MagicVulnerable:
+                    return true;
+            }
+            if (DomainEffectPreset.IsBuff(type))
+            {
+                try
+                {
+                    if (Singleton<ResManager>.HasInstance)
+                    {
+                        BuffTableData cfg = Singleton<ResManager>.Instance.BuffFactory.GetConfig(
+                            DomainEffectPreset.BuffIdOf(type));
+                        if (cfg != null)
+                        {
+                            return cfg.BuffEffectType == EBuffEffectType.Negative;
+                        }
+                    }
+                }
+                catch (Exception)
+                {
+                }
+            }
+            return false;
+        }
+
         private static BuffTableData Build(DomainProfile p, int kind, int id)
         {
             if (kind == KindStatus)
             {
-                return NewBase(id, p.DisplayName, BuildSummary(p), true);
+                // 领域状态：图标用原版「开辟」（Buff 436）的 icon_buff_zhenli
+                return NewBase(id, p.DisplayName, BuildSummary(p), true, false,
+                    DomainConstants.DomainStatusIconKey);
             }
             bool ally = kind == KindAlly;
             int type = ally ? p.AllyEffectType : p.EnemyEffectType;
             int value = ally ? p.AllyEffectValue : p.EnemyEffectValue;
+            bool showUI = !IsDirectDamage(type);   // 每回合造成伤害那两条不显示图标（伤害是领域带来的）
             BuffTableData cfg = NewBase(id,
-                (ally ? "领域效果（友方）：" : "领域效果（敌方）：") + p.DisplayName,
-                BuildSummary(p), false);
+                DomainEffectPreset.ShortName(type),
+                BuildSummary(p), showUI, IsNegativeEffect(type), IconKeyOf(type));
             AddPercentEffect(cfg, type, value);
             AddInstantDamage(cfg, type, value);
+            AddRoundEndSelfRemove(cfg);   // 效果 buff 每轮施加、回合结束自动解除（巴士那套节奏）
             return cfg;
+        }
+
+        private static bool IsDirectDamage(int type)
+        {
+            return type == DomainEffectPreset.PhysicalDamage || type == DomainEffectPreset.MagicDamage;
+        }
+
+        /// <summary>预设效果对应的图标 key（导入进 Buff 目录的那批）。</summary>
+        internal static string IconKeyOf(int type)
+        {
+            switch (type)
+            {
+                case DomainEffectPreset.PhysicalDamageBonus: return "icon_domain_phys_up";
+                case DomainEffectPreset.PhysicalDamageDown: return "icon_domain_phys_down";
+                case DomainEffectPreset.PhysicalDamageReduce: return "icon_domain_phys_guard";
+                case DomainEffectPreset.PhysicalVulnerable: return "icon_domain_phys_vuln";
+                case DomainEffectPreset.MagicDamageBonus: return "icon_domain_magic_up";
+                case DomainEffectPreset.MagicDamageDown: return "icon_domain_magic_down";
+                case DomainEffectPreset.MagicDamageReduce: return "icon_domain_magic_guard";
+                case DomainEffectPreset.MagicVulnerable: return "icon_domain_magic_vuln";
+                default: return DomainConstants.DomainStatusIconKey;
+            }
+        }
+
+        // 回合结束时把自己摘掉（配合"每轮开始施加"= 巴士的回合制 buff 节奏）
+        private static void AddRoundEndSelfRemove(BuffTableData cfg)
+        {
+            BuffEventData ev = new BuffEventData();
+            ev.EBuffTrigger = EBuffTriggerType.RoundEnd;
+            Buff_BuffChangeOption remove = new Buff_BuffChangeOption();
+            remove.ChangeType = EAddChangeMode.Remove;
+            remove.TargetType = BaseBuffOption.EBuffOptionTargetType.BuffTarget;
+            remove.IsSelf = true;
+            ev.Funcs.Add(remove);
+            cfg.Events.Add(ev);
         }
 
         // 百分比增减伤：走 Buff_ChangeAddOrReducePercentOption（按 SourceKey 追踪，摘状态时正常退回）
@@ -345,21 +470,42 @@ namespace CustomBattleBg
             }
             bool isBonus;
             EDamageType damageType;
+            int percent = value;
             switch (type)
             {
                 case DomainEffectPreset.PhysicalDamageBonus:
                     isBonus = true;
                     damageType = EDamageType.Ordinary;
                     break;
+                case DomainEffectPreset.PhysicalDamageDown:
+                    isBonus = true;                     // 造成伤害 -X%
+                    damageType = EDamageType.Ordinary;
+                    percent = -value;
+                    break;
                 case DomainEffectPreset.PhysicalDamageReduce:
-                    isBonus = false;
+                    isBonus = false;                    // 受到伤害 -X%
+                    damageType = EDamageType.Ordinary;
+                    percent = -value;
+                    break;
+                case DomainEffectPreset.PhysicalVulnerable:
+                    isBonus = false;                    // 受到伤害 +X%
                     damageType = EDamageType.Ordinary;
                     break;
                 case DomainEffectPreset.MagicDamageBonus:
                     isBonus = true;
                     damageType = EDamageType.Magic;
                     break;
+                case DomainEffectPreset.MagicDamageDown:
+                    isBonus = true;
+                    damageType = EDamageType.Magic;
+                    percent = -value;
+                    break;
                 case DomainEffectPreset.MagicDamageReduce:
+                    isBonus = false;
+                    damageType = EDamageType.Magic;
+                    percent = -value;
+                    break;
+                case DomainEffectPreset.MagicVulnerable:
                     isBonus = false;
                     damageType = EDamageType.Magic;
                     break;
@@ -376,7 +522,7 @@ namespace CustomBattleBg
                 : Buff_ChangeAddOrReducePercentOption.EHitType.BeDamaged;
             opt.IsRemove = false;
             opt.ChangeByValue = false;
-            opt.Percent = value / 100f;
+            opt.Percent = percent / 100f;
             opt.FloorValue = 0;
             opt.DamageTypes = new List<EDamageType>();
             opt.DamageTypes.Add(damageType);

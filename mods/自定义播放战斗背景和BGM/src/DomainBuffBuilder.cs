@@ -346,8 +346,15 @@ namespace CustomBattleBg
             cfg.IconPathReference.Key = iconKey;
             cfg.Comment = DomainConstants.CommentTag + name;
             cfg.BuffType = EBuffType.Other;
-            cfg.BuffEffectType = EBuffEffectType.Neutral;
-            cfg.OverlayType = EBuffOverlyingType.None;
+            cfg.BuffEffectType = negative ? EBuffEffectType.Negative : EBuffEffectType.Positive;
+            // 按层显示：层数 = 数值/10（每层 10%），图标角标能直接看到档位；
+            // MaxLayer 必须给上限，否则角标会显示成"∞"
+            cfg.OverlayType = EBuffOverlyingType.OverlyLayer;
+            cfg.LayerCount = new MODValue();
+            cfg.LayerCount.Value = "1";
+            cfg.OverrideInitLayer = true;
+            cfg.InitLayer = 1;
+            cfg.MaxLayer = 999;
             cfg.FxPlayType = EBuffFXPlayType.None;
             cfg.UseFxPrefab = new ItemFxInfoData();
             cfg.UseFxPrefab.FxRes = new PrefabResoureReference();

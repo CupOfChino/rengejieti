@@ -361,8 +361,8 @@ namespace CustomBattleBg
                         if (effId > 0)
                         {
                             await target.AddBuff(caster, effId);
-                            // 层数 = 数值/10（每层 10%），图标角标直接显示档位
-                            int layers = Math.Max(1, Math.Abs(value) / 10);
+                            // 玩家填的就是层数（每层 10%），图标角标直接显示
+                            int layers = Math.Max(1, Math.Abs(value));
                             BuffData buff = target.GetBuff(effId);
                             if (buff != null)
                             {

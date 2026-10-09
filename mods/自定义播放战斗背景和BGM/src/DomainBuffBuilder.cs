@@ -477,7 +477,7 @@ namespace CustomBattleBg
             }
             bool isBonus;
             EDamageType damageType;
-            int percent = value;
+            int percent = value * 10;   // 玩家填的是层数，每层 10%
             switch (type)
             {
                 case DomainEffectPreset.PhysicalDamageBonus:
@@ -487,12 +487,12 @@ namespace CustomBattleBg
                 case DomainEffectPreset.PhysicalDamageDown:
                     isBonus = true;                     // 造成伤害 -X%
                     damageType = EDamageType.Ordinary;
-                    percent = -value;
+                    percent = -percent;
                     break;
                 case DomainEffectPreset.PhysicalDamageReduce:
                     isBonus = false;                    // 受到伤害 -X%
                     damageType = EDamageType.Ordinary;
-                    percent = -value;
+                    percent = -percent;
                     break;
                 case DomainEffectPreset.PhysicalVulnerable:
                     isBonus = false;                    // 受到伤害 +X%
@@ -505,12 +505,12 @@ namespace CustomBattleBg
                 case DomainEffectPreset.MagicDamageDown:
                     isBonus = true;
                     damageType = EDamageType.Magic;
-                    percent = -value;
+                    percent = -percent;
                     break;
                 case DomainEffectPreset.MagicDamageReduce:
                     isBonus = false;
                     damageType = EDamageType.Magic;
-                    percent = -value;
+                    percent = -percent;
                     break;
                 case DomainEffectPreset.MagicVulnerable:
                     isBonus = false;
@@ -620,7 +620,8 @@ namespace CustomBattleBg
             string name = DomainEffectPreset.Name(type);
             if (DomainEffectPreset.IsPercent(type))
             {
-                return name + " " + (value >= 0 ? "+" : "") + value + "%";
+                // 填的是层数，每层 10%——描述里两个都写出来，一眼看懂
+                return name + " " + value + " 层（" + (value * 10) + "%）";
             }
             return name + " " + value;
         }

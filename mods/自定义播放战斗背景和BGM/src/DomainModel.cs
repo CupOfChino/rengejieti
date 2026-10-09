@@ -258,6 +258,15 @@ namespace CustomBattleBg
                 case MpRestore:
                 case SanDrain:
                 case SanRestore:
+                // 增减益类现在填的是"层数"（每层 10%），负数没有意义
+                case PhysicalDamageBonus:
+                case PhysicalDamageReduce:
+                case MagicDamageBonus:
+                case MagicDamageReduce:
+                case PhysicalDamageDown:
+                case PhysicalVulnerable:
+                case MagicDamageDown:
+                case MagicVulnerable:
                     return true;
                 default:
                     return false;
@@ -269,15 +278,15 @@ namespace CustomBattleBg
             switch (type)
             {
                 case PhysicalDamage: return "造成物理伤害";
-                case PhysicalDamageBonus: return "物理伤害增加（%）";
-                case PhysicalDamageReduce: return "物理伤害减免（%）";
+                case PhysicalDamageBonus: return "物理伤害强化";
+                case PhysicalDamageReduce: return "物理守护";
                 case MagicDamage: return "造成法术伤害";
-                case MagicDamageBonus: return "法术伤害增加（%）";
-                case MagicDamageReduce: return "法术伤害减免（%）";
-                case PhysicalDamageDown: return "物理伤害弱化（%）";
-                case PhysicalVulnerable: return "物理易损（%）";
-                case MagicDamageDown: return "法术伤害弱化（%）";
-                case MagicVulnerable: return "法术易损（%）";
+                case MagicDamageBonus: return "法术伤害强化";
+                case MagicDamageReduce: return "法术守护";
+                case PhysicalDamageDown: return "物理伤害弱化";
+                case PhysicalVulnerable: return "物理易损";
+                case MagicDamageDown: return "法术伤害弱化";
+                case MagicVulnerable: return "法术易损";
                 case MpDrain: return "扣除魔法值";
                 case MpRestore: return "恢复魔法值";
                 case SanDrain: return "扣除精神值";
@@ -297,7 +306,14 @@ namespace CustomBattleBg
             {
                 return "【状态】" + DomainText.BuffName(BuffIdOf(type));
             }
-            return Name(type);
+            // 增减益类的数值按"层"填（每层 10%），界面上标清楚，免得和百分比混淆
+            return IsPercent(type) ? (Name(type) + "（层）") : Name(type);
+        }
+
+        /// <summary>层数换算成实际百分比（每层 10%）。</summary>
+        public static int PercentOf(int type, int value)
+        {
+            return IsPercent(type) ? value * 10 : value;
         }
 
         /// <summary>挂到角色身上时显示的状态名（短一点，方便状态栏显示）。</summary>

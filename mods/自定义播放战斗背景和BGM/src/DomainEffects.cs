@@ -361,12 +361,18 @@ namespace CustomBattleBg
                         if (effId > 0)
                         {
                             await target.AddBuff(caster, effId);
-                            // 玩家填的就是层数（每层 10%），图标角标直接显示
+                            // 玩家填的就是层数（每层 10%），图标角标直接显示。
+                            // 注意 ChangeLayer 内部是 CurLayer += layer（永远"加"），
+                            // 而 AddBuff 已经给了 1 层，所以要按"差额"调，不能直接传目标层数。
                             int layers = Math.Max(1, Math.Abs(value));
                             BuffData buff = target.GetBuff(effId);
                             if (buff != null)
                             {
-                                await buff.ChangeLayer(target, layers, false, false);
+                                int delta = layers - buff.CurLayer;
+                                if (delta != 0)
+                                {
+                                    await buff.ChangeLayer(target, delta, false, false);
+                                }
                             }
                         }
                         break;

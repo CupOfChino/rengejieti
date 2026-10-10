@@ -426,7 +426,7 @@ namespace CustomBattleBg
             bool showUI = !IsDirectDamage(type);   // 每回合造成伤害那两条不显示图标（伤害是领域带来的）
             BuffTableData cfg = NewBase(id,
                 DomainEffectPreset.ShortName(type),
-                BuildSummary(p), showUI, IsNegativeEffect(type), IconKeyOf(type));
+                BuildEffectDescription(type, value), showUI, IsNegativeEffect(type), IconKeyOf(type));
             AddPercentEffect(cfg, type, value);
             AddInstantDamage(cfg, type, value);
             AddRoundEndSelfRemove(cfg);   // 效果 buff 每轮施加、回合结束自动解除（巴士那套节奏）
@@ -580,6 +580,40 @@ namespace CustomBattleBg
             opt.IsUnblock = true;
             ev.Funcs.Add(opt);
             cfg.Events.Add(ev);
+        }
+
+        /// <summary>
+        /// 单个效果状态的描述：只讲这个状态自己的事（用户口径：
+        /// "伤害强化"就写"造成的物理伤害 +20%"，不是整个领域的摘要）。
+        /// </summary>
+        private static string BuildEffectDescription(int type, int value)
+        {
+            int percent = Math.Abs(value) * 10;   // 每层 10%
+            switch (type)
+            {
+                case DomainEffectPreset.PhysicalDamageBonus:
+                    return "造成的物理伤害 +" + percent + "%";
+                case DomainEffectPreset.PhysicalDamageReduce:
+                    return "受到的物理伤害 -" + percent + "%";
+                case DomainEffectPreset.PhysicalDamageDown:
+                    return "造成的物理伤害 -" + percent + "%";
+                case DomainEffectPreset.PhysicalVulnerable:
+                    return "受到的物理伤害 +" + percent + "%";
+                case DomainEffectPreset.MagicDamageBonus:
+                    return "造成的法术伤害 +" + percent + "%";
+                case DomainEffectPreset.MagicDamageReduce:
+                    return "受到的法术伤害 -" + percent + "%";
+                case DomainEffectPreset.MagicDamageDown:
+                    return "造成的法术伤害 -" + percent + "%";
+                case DomainEffectPreset.MagicVulnerable:
+                    return "受到的法术伤害 +" + percent + "%";
+                case DomainEffectPreset.PhysicalDamage:
+                    return "每回合造成 " + Math.Abs(value) + " 点物理伤害";
+                case DomainEffectPreset.MagicDamage:
+                    return "每回合造成 " + Math.Abs(value) + " 点法术伤害";
+                default:
+                    return DomainEffectPreset.ShortName(type);
+            }
         }
 
         /// <summary>把配置的效果/代价拼成给人的说明文字（挂在状态 buff 的描述里）。</summary>

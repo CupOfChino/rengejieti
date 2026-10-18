@@ -23,6 +23,17 @@ A DIY Limbus Company buff for Depersonalization: Shin (the "heart" buff).
 [*] Up to 4 more entries: Damage Bonus (max 5), Damage Reduction (max 2), Dodge, Willpower, Occultism, Brawl, Shooting, Athletics (max 50 each), Physical/Magic Damage Reduction % (max 50%), Physical/Magic Damage Bonus % (max 100%)
 [*] The name is always "Shin (investigator) - suffix"; you pick the suffix, duplicate names are rejected
 [*] Costs 1 SP per round; removed when SP falls into Weakness/Collapse or when the battle ends
+[*] Two optional "Shin effects": pick a target (self / all allies / allies only / one enemy / all enemies), a trigger (round start/end, after a hit, before/after an action), a buff/debuff and its layer count. The buff list is searchable and includes the base game and every loaded mod
+[/list]
+
+[h2]Shin effect notes[/h2]
+[list]
+[*] Use these effects with care. A bad combination may prevent the battle from continuing; test it in a battle after saving
+[*] Both effect rows are optional; leave them empty and the Shin behaves exactly as before
+[*] If a buff and layer count are filled in, saving shows a one-time "data-related, use at your own risk" confirmation
+[*] "One enemy" means the enemy that was just hit for the after-hit trigger; for other triggers one living enemy is chosen at random
+[*] If the selected buff is missing (its mod is disabled or removed), saving is blocked. At runtime a broken effect is skipped; the Shin itself is unaffected
+[*] With "Custom Battle Background & BGM" enabled, its eight layer-based presets (physical/magic damage up, guard, down, vulnerable) also appear; each layer is 10%
 [/list]
 
 Can't decide? Don't worry - this mod also comes with a handy random roll feature!

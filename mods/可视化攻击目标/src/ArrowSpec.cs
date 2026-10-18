@@ -18,8 +18,11 @@ namespace AttackTargetVisualizer
         /// <summary>虚线＝范围攻击；实线＝单体指向。</summary>
         public bool Dashed;
 
+        /// <summary>画成直线（自己的行动槽到角色头顶用），不抬贝塞尔弧。</summary>
+        public bool Straight;
+
         /// <summary>
-        /// 只画曲线的一段（按弧长比例）。争锋相对用：两条黄箭头共用同一条弧线，
+        /// 只画曲线的一段（按弧长比例）。对抗用：两条箭头共用同一条弧线，
         /// 各画一半，箭头头在中点相撞。
         /// 普通箭头：0 → 1。
         /// </summary>
@@ -36,11 +39,13 @@ namespace AttackTargetVisualizer
         /// <summary>整条箭头的不透明度（含箭头头部）。0.8＝略透，1＝完全不透明。</summary>
         public const float LineAlpha = 0.8f;
 
-        // 敌对＝红，友好＝蓝，争锋相对＝黄
+        // 敌对＝红，友好＝绿，干扰技艺＝蓝，对抗＝黄/青
         public static readonly Color Hostile = new Color(1.00f, 0.13f, 0.13f, LineAlpha);
         public static readonly Color Friendly = new Color(0.35f, 0.85f, 0.30f, LineAlpha);
         public static readonly Color Interference = new Color(0.25f, 0.62f, 1.00f, LineAlpha);
         public static readonly Color Clash = new Color(1.00f, 0.85f, 0.10f, LineAlpha);
+        /// <summary>技艺对技艺的对抗：青蓝色。</summary>
+        public static readonly Color TechniqueClash = new Color(0.10f, 0.92f, 1.00f, LineAlpha);
 
         /// <summary>箭杆粗细（画布单位，≈ 1920×1080 下的像素）。</summary>
         public const float LineWidth = 6f;

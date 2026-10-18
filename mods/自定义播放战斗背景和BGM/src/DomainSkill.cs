@@ -40,7 +40,7 @@ namespace CustomBattleBg
                     return;
                 }
                 DomainProfile profile = CustomBattleBgPlugin.Store.Find(role.Data);
-                if (profile == null || !profile.HasAnything)
+                if (profile == null || !profile.HasAnyContent)
                 {
                     RemoveSkill(role);
                     return;

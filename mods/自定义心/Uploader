@@ -14,7 +14,7 @@
 			"KeyValueTags" : {
 			},
 			"MetaData" : null,
-			"ChangeNote" : "弹窗时本体快捷键禁用"
+			"ChangeNote" : "新增两条心效果（目标/触发/施加或获得/层数）"
 		}
 	}
 }

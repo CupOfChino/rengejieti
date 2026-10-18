@@ -1203,6 +1203,40 @@ CurAddEle = null;
 - **想让别的模组能开关/重写你的入口**：暴露一个 public 静态 API（投票开关 + 注册回调 + 启动日志打印"谁关了哪些"），
   参考 `mods\自定义播放战斗背景和BGM\src\DomainApi.cs` 与同名 mod 的 `接口文档.md`。
 
+### 26.7 把战斗背景/BGM/领域效果开放给其它模组（2026-10-18）
+
+- 公开 API 在 `mods\自定义播放战斗背景和BGM\src\DomainApiRuntime.cs`，与旧 `DomainApi.cs`
+  用 `partial class DomainApi` 合并；旧入口接口签名不变。
+- 外部模组用 `RegisterDomain(requester, id, DomainDefinition)` 注册自己的背景/BGM/效果；
+  资源可直接给绝对路径，或用 `AssetRoot + 相对路径`，不复制进玩家资源库。
+- `ExpandDomain(requester, id, BattleRole caster, reason)` 可在任意战斗方法里直接展开，
+  不要求【领域】特质；`PlayVisual / PlayBackground` 依赖战斗相机，`PlayBgm` 任意场景可用。
+- **战斗开始时机的准确边界**：`BattleFightContent` 先创建 `Room`，再 `Run()` 触发
+  `BeforeBattleStart` / `BattleStart`，所以这两个回调里可以直接展开；更早的
+  `GameWorld.EnterBattle` Prefix 可能还没有 `FightContent.Room`，要用
+  `DomainApi.IsBattleReady()` 判断或延后到 BattleStart。
+- `BindAction(...)` 把定义预先绑定到 `BattleSkillData.Id` / `MagicData.Id` / 任意法术，
+  使用时由 `DomainBattle.OnActionStart` 触发；外部绑定优先于玩家自己的「挂载行动」。
+- 外部定义仍走 `DomainProfile` / `DomainEffects` / `DomainBuffBuilder` 同一条运行时路径：
+  `DomainProfile` 新增 `RuntimeDisplayName / ExternalOwner / ExternalId /
+  BackgroundFullPath / BgmFullPath` 等运行时字段（不写 `profiles.cfg`）。
+- `DomainEffects` 的目标选择已改为**按施法者阵营**：玩家施法仍走 Allies/CurWaveEnemies，
+  怪物/NPC 施法时友方=当前波次敌人、敌方=Allies；给敌人做领域时不会反过来。
+- 外部 domain 的 buff 编号与玩家配置共用 `881011-881999` 段，统一经
+  `DomainStore.AllocateBuffId()` 分配；`DomainApi.IsBuffIdInUse()` 防止两边撞号。
+- 非战斗调用 `PlayBgm` 时只记录一份原始 BGM，不会把战斗会话标记弄脏；
+  `StopPlayback` 负责复原。完整示例见 mod 的 `接口文档.md`。
+- **展开对话框/音效（2026-10-18）**：`DomainProfile` 新增
+  `ShowOpenDialog / PlayOpenSound / SfxFile / RuntimeDialogSuffix`，外部
+  `DomainDefinition` 对应 `ShowDialogOnOpen / PlaySoundOnOpen / SoundPath / DialogSuffix`；
+  音效放资源库 `Sfx`（ogg/mp3/wav），播放走 `AudioManager.PlaySound(clip,...)` 的 SFX 通道。
+  对话框走 `RoleModel.ShowDialog`，固定文本「领域展开——后缀」，`DialogBoxData.Time = 2.5`；
+  后缀用 `BaseMeshEffect` 按可见字符区间做逐字交错上下浮动（相位 `i * π`），不依赖旧版 Text
+  不支持的动态富文本标签。表现层在 `DomainEffects.ApplyOnOpen` 里触发，失败不影响背景/BGM/效果。
+- **特质醒/睡口径**：`DomainMenu.HasDomainTrait` 只检查特质是否存在，幕间编辑不受沉睡影响；
+  战斗开始自动展开仍由 `HasAwakeTrait` 判定。沉睡描述已改为
+  “不在战斗开始自动播放，不影响挂载的行动”。
+
 ## 27. 「多行动槽」：动战斗核心流程的七个关键点（2026-10-04，做 `mods\多行动槽` 挖出来的）
 
 这一节是做「多行动槽」（一个角色多个行动槽、逐槽选/逐槽打）时确认的机制。
@@ -1260,3 +1294,74 @@ CurAddEle = null;
 9. **HUD 克隆的一个顺序坑**：先隐藏原节点再 `Instantiate`，克隆体会**复制隐藏状态**
    （表现为"槽框在、图标全没了"）。要克隆就先克隆、再隐藏原节点；或者克隆后把
    按钮 / 图标子节点重新 `SetActive(true)`。
+
+10. **给预设角色/怪物直接分配槽数（2026-10-18）**：`ExtraActionSlotApi` 新增
+    `SetExtraSlotCountForRoleKey / SetExtraSlotCountForConfigId / SetExtraSlotCountForRoleName`。
+    这些是"创作时登记"的静态规则，不依赖战斗中的 `BattleRole` 实例；
+    `SlotManager.CalcTargetCount → ExtraActionSlotApi.GetExtraCount` 在每场战斗/每一幕
+    重算时自动匹配 `RoleData.RoleLibraryKey / ConfigId / Name`。同一 `sourceKey` 对同一角色
+    只算一次（多条命中取最大值），不同来源与运行时 `SetExtraSlotCount` 叠加。
+    调查员用稳定 `RoleLibraryKey`，怪物/NPC 优先用 `ConfigId`；名字匹配只作兜底。
+
+## 28. 「可视化攻击目标」：对抗配色与目标改写（2026-10-18）
+
+**对抗配色按双方各自的行动类型判，不按左右/阵营固定**：
+
+- 攻击型（`IsAttackAction`，含伤害法术；投掷按红色攻击型处理）vs 攻击型 → 两条黄色；
+- 技艺（`EBattleActionType.Skill`）vs 技艺 → 两条青蓝色；
+- 技艺 vs 攻击型 → 技艺侧蓝、攻击侧红，两个箭头头仍在中点相撞。
+
+实现入口：`mods\可视化攻击目标\src\ArrowLayer.cs` 的 `AddDuel` / `DuelSideColor`；
+颜色常量在 `src\ArrowSpec.cs`。完整需求见 `docs\可视化攻击目标-需求与设计.md` 第 3.3 节。
+
+**原版“改攻击目标”调研结论**：`BattleActiveBehaviorData.InterceptTarget` 只会被
+`BattleSkillEvent.InterceptOption` 写入；原版 BattleSkill 数据里只有 `7 诱敌` 使用它。
+诱敌的单体目标分支实际走 `ClearCurrentActionOption`（取消目标行动），
+不是“把目标原本打 A 改成打诱敌者”；因此不存在用户举例的 A/B/C 单体强制改指向，
+本轮没有实现该预测。以后若模组技能使用 `InterceptOption`，先确认 `TargetType` /
+`ForceIntercept` 与目标行动类型，再决定是否把虚拟目标覆盖接入箭头配对。
+
+**自指向箭头（2026-10-18）**：`ETargetSelect.Self`，或 `Targets` 里实际包含自己时，
+走 `ArrowLayer.AddSelfArrow`：起点和普通箭头一致（`TryGetSlot(..., true)`，
+行动槽 `Anim_SkillShow` / `Trans_SkillShow` 的**上边框中点**），终点取角色模型
+`Trans_Head` 的世界坐标投屏，画**蓝色虚线直线**（`ArrowSpec.Straight = true`）。
+它单独使用 `SelfCanvas` / `SelfGraphic`，排序值为行动槽画布的 `-1`；普通箭头层是 `+10`。
+因此线段穿过行动槽的部分会被牌子遮住，视觉上从牌子下沿露出。
+群体行动同时包含自己和队友时，队友照常画，自己额外多一条自指向箭头；
+拿不到行动槽就不画，不退化成头顶对头顶。
+
+## 29. 「自定义心」附加效果用的 buff 事件（2026-10-18）
+
+「自定义心」的附加效果没有新增 Harmony 钩子，而是直接写进心 buff 的
+`BuffTableData.Events`，由游戏 `BuffData.TriggerBuff` 按节点执行。可用的触发值：
+
+| 界面文字 | 枚举 | 实际时点 |
+| --- | --- | --- |
+| 行动轮开始 | `BeforeRoundStart` (15) | 和自定义BGM 每轮施加效果一致；比 `RoundStart` (2) 更早 |
+| 行动轮结束 | `RoundEnd` (3) | 回合结算末尾 |
+| 攻击命中后 | `Damage` (7) | 攻击者结算伤害后触发；聚合参数里带 `RoleHitData` |
+| 行动前 | `ActionStart` (4) | `BattleRole.ActionStart()` |
+| 行动后 | `ActionEnd` (5) | `BattleRole.ActionEnd()` |
+
+目标用 `Buff_BuffChangeOption.TargetType` / `Buff_BuffLayerOption.TargetType`：
+
+- 自己 → `BuffTarget`
+- 所有友方（含自己）→ `AllAlly`
+- 仅限友方（不含自己/后备）→ `AllAllyExceptSelfAndBackUp`
+- 单个敌人 → 命中触发用 `BeHitRole`，其余触发用 `RandomNotDeadEnemy`
+- 所有敌人 → `AllEnemy`
+
+“加 N 层”是 `BuffChangeOption(Add)` + `BuffLayerOption(+N-1)`，因为 `AddBuff` 首次自带 1 层。
+**不要**直接写 `ChangeLayer(N)`，否则会多 1 层（这也是自定义BGM 之前踩过的“层数多 1”坑）。
+
+预设效果（自定义BGM 的物理/法术 强化、守护、弱化、易损）在自定义心里用独立的隐藏 buff 承载：
+`OverlayType=OverlyLayer`、`MaxLayer=配置层数`、百分比在生成时按 `层数×10%` 写死。
+这样重复触发不会无限加层，角标层数与实际百分比一致。隐藏 buff 的 `Comment` 用
+`自定义心效果：` 前缀，和心本体的 `自定义心：` 分开，清理时不会误删别的心的核心状态。
+
+状态列表收集必须同时遍历 `BuffFactory.All` 和 `BuffFactory.LoadFileDatas`（逐条 `GetConfig`），
+否则游戏本体的中毒/流血等状态不会出现；具体实现见 `mods\自定义心\src\HeartBuffCatalog.cs`。
+
+**幕间入口的特质判断（2026-10-18 用户口径）**：`HeartMenu.HasHeartTrait` 只判断
+`role.GetTraitData(880901) != null`，**不要**再要求 `CurrentState == ETraitState.Wake`。
+特质沉睡时仍然允许打开「修改当前角色【心】」编辑窗；添加/移除入口也统一按“有没有特质”判断。

@@ -54,10 +54,15 @@ namespace AttackTargetVisualizer
             {
                 perp = -perp;
             }
-            // 虚线的弧线抬得更高（AOE 一眼能认出来，也不会和单体线糊在一起）
-            float arcFactor = a.Dashed ? ArrowStyle.ArcFactor * ArrowStyle.DashArcBoost : ArrowStyle.ArcFactor;
-            float arcMax = a.Dashed ? ArrowStyle.DashArcMax : ArrowStyle.ArcMax;
-            float arc = Mathf.Clamp(dist * arcFactor, ArrowStyle.ArcMin, arcMax);
+            // 虚线的弧线抬得更高（AOE 一眼能认出来，也不会和单体线糊在一起）；
+            // 自指向箭头走直线；起点与普通箭头一致，靠下层画布遮住穿过行动槽的部分。
+            float arc = 0f;
+            if (!a.Straight)
+            {
+                float arcFactor = a.Dashed ? ArrowStyle.ArcFactor * ArrowStyle.DashArcBoost : ArrowStyle.ArcFactor;
+                float arcMax = a.Dashed ? ArrowStyle.DashArcMax : ArrowStyle.ArcMax;
+                arc = Mathf.Clamp(dist * arcFactor, ArrowStyle.ArcMin, arcMax);
+            }
             Vector2 p1 = (p0 + p2) * 0.5f + perp * arc;
 
             SampleCurve(p0, p1, p2, dist);

@@ -41,7 +41,11 @@ namespace XinEditor
             }
         }
 
-        /// <summary>这个角色身上有没有【心】特质。</summary>
+        /// <summary>
+        /// 这个角色身上有没有【心】特质。
+        /// 编辑/添加/移除都只认“有没有”，不要求特质处于苏醒状态；
+        /// 沉睡时也要能编辑自己的心。
+        /// </summary>
         internal static bool HasHeartTrait(RoleData role)
         {
             if (role == null)
@@ -55,7 +59,7 @@ namespace XinEditor
                 {
                     return false;
                 }
-                return trait.CurrentState == ETraitState.Wake;
+                return true;
             }
             catch (Exception)
             {

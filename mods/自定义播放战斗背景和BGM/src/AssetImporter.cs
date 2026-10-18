@@ -44,6 +44,20 @@ namespace CustomBattleBg
                 ask);
         }
 
+        /// <summary>打开文件管理器挑一段领域展开音效，成功则回调复制后的文件名。</summary>
+        internal static void PickSfx(Action<string> onPicked, Action<string> onHint, AskOverwriteHandler ask)
+        {
+            PickFile(
+                "领域音效 (*.ogg;*.mp3;*.wav)\0*.ogg;*.mp3;*.wav",
+                DomainConstants.SfxExtensions,
+                DomainConstants.SfxFolderName,
+                CustomBattleBgPlugin.Store.SfxDir,
+                "这个文件格式不对：音效只支持 ogg / mp3 / wav。",
+                onPicked,
+                onHint,
+                ask);
+        }
+
         private static void PickFile(string filter, string[] allowedExts, string kindName, string targetDir,
             string badExtMsg, Action<string> onPicked, Action<string> onHint, AskOverwriteHandler ask)
         {

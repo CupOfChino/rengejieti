@@ -271,6 +271,8 @@ mods\自定义战斗背景和BGM\            ← mod 根目录（测试期可能
 
 | 日期 | 内容 |
 | --- | --- |
+| 2026-10-18 | **展开表现 + 沉睡口径**：编辑窗在“作用于敌方”下新增「开启时出现对话框」「开启时音效」；对话框显示「领域展开——后缀」，后缀红体加粗并逐字交错上下浮动，约 2.5 秒自动关闭；音效支持 `ogg/mp3/wav`，走游戏 SFX 通道、展开时播放一次；外部 `DomainDefinition` 同步增加 `ShowDialogOnOpen / DialogSuffix / PlaySoundOnOpen / SoundPath`。特质沉睡描述改为“不在战斗开始自动播放，不影响挂载的行动”，幕间编辑改为只检查特质是否存在，不再看醒/睡 |
+| 2026-10-18 | 对外领域运行时 API：`DomainDefinition` 注册外部背景/BGM/效果；`ExpandDomain` 可在任意战斗方法直接展开（不要求特质/玩家配置）；`PlayVisual / PlayBackground / PlayBgm / StopPlayback`；`BindAction` 把领域预绑定到技能/法术；`GetCurrentDomain` 查询当前领域。资源支持绝对路径或 `AssetRoot` 相对路径；领域效果按施法者阵营结算，怪物也能用。接口文档已重写 |
 | 2026-09-30 | 立项：需求理解稿 + 可行性调研（背景叠加方案 / BGM 通道 / 文件选择器 / 视频 / 触发时机 / 分辨率建议） |
 | 2026-09-30 | 用户确认：领域展开=新增技艺、同时只执行最慢的一名、右→左展开 1 秒、mod 落 `mods\自定义播放战斗背景和BGM`、要带添加/移除特质入口、测试宿主用 2919360679 |
 | 2026-09-30 | 实现完成并通过编译（`plugins\CustomBattleBg.dll`，71168 字节）：数据表、编辑窗、资源导入、背景叠加层（1 秒右→左展开）、BGM 记录/切换/复原、领域展开技艺、重开战斗兼容；已挂到 2919360679 待实机验证 |
@@ -287,9 +289,10 @@ mods\自定义战斗背景和BGM\            ← mod 根目录（测试期可能
 
 ## 8. 待办（用户 2026-09-30 追加）
 
-- [ ] **对外接口 + 接口文档**（用户明确要，不急）：把"切换战斗背景 / 播放战斗BGM / 查询当前领域"这类能力
-      做成其他 mod 或插件可以直接调用的公开 API（静态类 + 文档），方便别人复用这套机制。
-      —— 等主功能实机验证通过后再动手。
+- [x] **对外接口 + 接口文档**（2026-10-18 完成）：公开 `DomainApi` 增加
+      `RegisterDomain / ExpandDomain / PlayVisual / PlayBackground / PlayBgm /
+      StopPlayback / GetCurrentDomain`，以及技能/法术行动绑定；外部定义可直接使用
+      自己 mod 目录的资源，不要求玩家配置或【领域】特质。
 - [ ] flac 等其它音频格式的支持（用户问过；当前只收 ogg / mp3，flac 需要转格式或用额外解码库）
 
 ---
@@ -457,3 +460,26 @@ mods\自定义战斗背景和BGM\            ← mod 根目录（测试期可能
 | 3 | 不会衰减的状态 | **展开时挂一次** + 追踪（`_trackedBuffs`），领域结束/被顶掉时收回 |
 
 **描述配色**：负面状态描述包 `<color=#FF5555>`（红），正面/中性保持默认白（游戏描述本身支持富文本，855.txt 就是例子）。
+
+### 9.10 展开对话框 + 音效（2026-10-18）
+
+用户口径：
+
+1. 编辑窗在「作用于敌方」这一排下面新增「开启时出现对话框」「开启时音效」；
+2. 音效从资源库选择（新增 `Sfx` 目录，支持 `ogg/mp3/wav`），展开成功时播放一次；
+3. 角色对话框显示「领域展开——领域后缀」，其中「领域展开」黑体加粗，后缀红体加粗；
+4. 后缀按字符交错上下浮动（例：`无量空处` 四个字一个一个向上/向下交替）；
+5. 对话框没有原版持续时间时给 2~3 秒，有默认就跟随默认 —— 本实现使用 `DialogBoxData.Time = 2.5`。
+
+实现要点：
+
+| 模块 | 做法 |
+| --- | --- |
+| 数据 | `DomainProfile` 增加 `ShowOpenDialog / PlayOpenSound / SfxFile / RuntimeDialogSuffix`；外部 `DomainDefinition` 对应 `ShowDialogOnOpen / PlaySoundOnOpen / SoundPath / DialogSuffix` |
+| 资源 | `DomainConstants.SfxFolderName = "Sfx"`、`SfxExtensions = {ogg,mp3,wav}`；`DomainStore` 负责 Sfx 目录、存读、删除与引用保护；`AssetImporter.PickSfx` 负责导入 |
+| 对话框 | `DomainPresentation` 用 `GamePlayEvent.TimeLine.DialogBoxData` + `RoleModel.ShowDialog`；`IsCloseVoice=true`，`Time=2.5`；不 await 任务，避免阻塞领域效果链 |
+| 浮动 | `DomainDialogFloatEffect : BaseMeshEffect` 挂到 `UIDialogBoxElement.Text_Content`；按可见字符索引把后缀每字的 4 个顶点做 `sin(t + i*π)` 纵向偏移，逐字交错；约 5.5 秒后自毁（覆盖对话框生命周期） |
+| 音效 | `MediaLoader.LoadAudioClip` 从磁盘加载，`AudioManager.PlaySound(clip,1,false)` 走 SFX 混音组；播放完销毁临时 clip |
+| 触发 | `DomainEffects.ApplyOnOpenAsync` 在领域成功展开后调用 `DomainPresentation.PlayOnOpen`；背景/BGM/效果失败不影响表现层，表现失败也不影响战斗 |
+
+注意：`DialogBoxData` 在 `GamePlayEvent.TimeLine` 命名空间（不是全局）；`Text_Content` 是 UnityEngine.UI.Text，旧版 Text 不支持动态 `<voffset>`，因此采用网格效果而不是富文本动画标签。

@@ -34,6 +34,7 @@ namespace CustomBattleBg
         public const string AssetsFolderName = "CustomBattleBg";
         public const string BackgroundFolderName = "Background";
         public const string BgmFolderName = "Bgm";
+        public const string SfxFolderName = "Sfx";
         public const string StoreFileName = "profiles.cfg";
 
         /// <summary>数据里的备注前缀，方便识别我们自己的东西。</summary>
@@ -54,6 +55,16 @@ namespace CustomBattleBg
 
         public static readonly string[] BackgroundExtensions = new string[] { ".mp4", ".png", ".jpg" };
         public static readonly string[] BgmExtensions = new string[] { ".ogg", ".mp3" };
+        public static readonly string[] SfxExtensions = new string[] { ".ogg", ".mp3", ".wav" };
+
+        /// <summary>领域展开对话框的自动关闭时间（0 = 等玩家点击）。</summary>
+        public const float OpenDialogDuration = 2.5f;
+
+        /// <summary>对话框里领域后缀的上下浮动幅度（像素）。</summary>
+        public const float OpenDialogFloatAmplitude = 6f;
+
+        /// <summary>对话框里领域后缀上下浮动一个来回的秒数。</summary>
+        public const float OpenDialogFloatPeriod = 1.2f;
 
         /// <summary>背景图片/视频的推荐分辨率文案。</summary>
         public const string BackgroundResolutionTip = "图片推荐 1920×1080（16:9，png/jpg）；视频推荐 1920×1080 MP4（H.264）";
@@ -84,6 +95,22 @@ namespace CustomBattleBg
     /// <summary>某个调查员的「领域」配置。</summary>
     public class DomainProfile
     {
+        // ==================== 外部模组注册（2026-10-18）====================
+        //
+        // 这些字段只在运行时使用，不写进 profiles.cfg：
+        //   · RuntimeDisplayName：外部模组直接给的领域名（不拼“调查员名——后缀”）；
+        //   · ExternalOwner / ExternalId：DomainApi 里注册者的命名空间和定义 id；
+        //   · BackgroundFullPath / BgmFullPath：外部模组自己的资源绝对路径。
+        // 玩家通过编辑窗创建的配置这四项都是空的，行为与以前完全一致。
+
+        public string RuntimeDisplayName = "";
+        public string ExternalOwner = "";
+        public string ExternalId = "";
+        public string BackgroundFullPath = "";
+        public string BgmFullPath = "";
+        public string SfxFullPath = "";
+        public string RuntimeDialogSuffix = "";
+
         /// <summary>存盘用的小节名，例如 domain_001。</summary>
         public string Section = "";
 
@@ -96,14 +123,23 @@ namespace CustomBattleBg
         /// <summary>玩家自己起的后缀。</summary>
         public string Suffix = "";
 
-        /// <summary>背景文件名（不含路径），位于 CustomBattleAssets\Background。</summary>
+        /// <summary>背景文件名（不含路径），位于 CustomBattleBg\Background。</summary>
         public string BgFile = "";
 
-        /// <summary>BGM 文件名（不含路径），位于 CustomBattleAssets\Bgm。</summary>
+        /// <summary>BGM 文件名（不含路径），位于 CustomBattleBg\Bgm。</summary>
         public string BgmFile = "";
 
         /// <summary>BGM 是否循环。</summary>
         public bool BgmLoop = true;
+
+        /// <summary>展开成功时是否显示角色对话框。</summary>
+        public bool ShowOpenDialog = false;
+
+        /// <summary>展开成功时是否播放一次音效。</summary>
+        public bool PlayOpenSound = false;
+
+        /// <summary>展开音效文件名（不含路径），位于资源库的 Sfx 目录。</summary>
+        public string SfxFile = "";
 
         /// <summary>背景只占上半屏（下方保留原来的战斗背景，角色看起来还站在地上）。</summary>
         public bool HalfScreen = false;
@@ -177,9 +213,33 @@ namespace CustomBattleBg
             get { return HasBackground || HasBgm; }
         }
 
+        public bool HasOpeningPresentation
+        {
+            get { return ShowOpenDialog || PlayOpenSound; }
+        }
+
+        /// <summary>有没有任何可展开的内容（背景 / BGM / 领域效果 / 展开对话框或音效）。</summary>
+        public bool HasAnyContent
+        {
+            get { return HasAnything || HasAnyEffectData || HasOpeningPresentation; }
+        }
+
+        /// <summary>是不是外部模组通过 DomainApi 注册的定义（而不是玩家配置）。</summary>
+        public bool IsExternal
+        {
+            get { return !string.IsNullOrEmpty(ExternalOwner) || !string.IsNullOrEmpty(ExternalId); }
+        }
+
         public string DisplayName
         {
-            get { return DomainText.BuildDisplayName(RoleName, Suffix); }
+            get
+            {
+                if (!string.IsNullOrEmpty(RuntimeDisplayName))
+                {
+                    return RuntimeDisplayName;
+                }
+                return DomainText.BuildDisplayName(RoleName, Suffix);
+            }
         }
     }
 

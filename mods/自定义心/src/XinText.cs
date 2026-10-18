@@ -226,6 +226,28 @@ namespace XinEditor
                             SetText(custom.Name, def.DisplayName);
                             SetText(custom.Des, def.BuildDescription());
                         }
+
+                        // 预设效果的隐藏状态也换文案（它们不是心本体，单独处理）。
+                        for (int k = 0; k < HeartConstants.MaxEffects; k++)
+                        {
+                            HeartEffect effect = def.GetEffect(k);
+                            if (effect == null || !effect.IsConfigured ||
+                                !HeartEffectPreset.IsSupported(effect.EffectType))
+                            {
+                                continue;
+                            }
+                            int effectBuffId = def.GetEffectBuffId(k);
+                            if (effectBuffId <= 0)
+                            {
+                                continue;
+                            }
+                            BuffTableData effectBuff = FindById(res.BuffFactory, effectBuffId, o => o.Id);
+                            if (effectBuff != null)
+                            {
+                                SetText(effectBuff.Name, HeartBuffBuilder.PresetEffectName(effect));
+                                SetText(effectBuff.Des, HeartBuffBuilder.PresetEffectDescription(effect));
+                            }
+                        }
                     }
                 }
             }
@@ -349,6 +371,27 @@ namespace XinEditor
             { "删除出错，看日志。", "Delete failed - check the log." },
             { "已填回默认心的数值（伤害+2、速度+20、减伤1）。名字不动，点保存才生效。",
               "Restored the default values (Damage +2, Speed +20, damage taken -1). The name is untouched; hit Save to apply." },
+            { "已填回默认心的数值（伤害+2、速度+20、减伤1），附加效果已清空。名字不动，点保存才生效。",
+              "Restored the default values (Damage +2, Speed +20, damage taken -1) and cleared the extra effects. The name is untouched; hit Save to apply." },
+            { "心效果（可选，最多两条；填了会在保存时提示）",
+              "Shin effects (optional, up to two; a warning appears when filled)" },
+            { "本效果建议谨慎搭配，出错可能导致战斗无法进行，建议完成后找一场战斗测试一下",
+              "Use these effects with care. A bad combination may prevent the battle from continuing; test it in a battle after saving." },
+            { "目标", "Target" },
+            { "触发", "Trigger" },
+            { "施加/获得", "Apply / Gain" },
+            { "层数", "Layers" },
+            { "搜索关键词…", "Search..." },
+            { "自己", "Self" },
+            { "所有友方", "All allies" },
+            { "仅限友方", "Allies only" },
+            { "单个敌人", "One enemy" },
+            { "所有敌人", "All enemies" },
+            { "行动轮开始", "Round start" },
+            { "行动轮结束", "Round end" },
+            { "攻击命中后", "After a hit" },
+            { "行动前", "Before an action" },
+            { "行动后", "After an action" },
         };
 
         private static readonly string[] Fragments = new string[]

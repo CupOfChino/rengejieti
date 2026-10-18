@@ -20,7 +20,7 @@ namespace CustomBattleBg
     internal class DomainEditorWindow : MonoBehaviour
     {
         private const float PanelWidth = 820f;
-        private const float PanelHeight = 780f;
+        private const float PanelHeight = 880f;
         private const float SideWidth = 400f;
         private const int MaxSideRows = 9;
 
@@ -38,6 +38,10 @@ namespace CustomBattleBg
         private Text _bgBoxText;
         private Button _bgmBox;
         private Text _bgmBoxText;
+        private Button _dialogBox;
+        private Button _soundBox;
+        private Button _sfxBox;
+        private Text _sfxBoxText;
         private Button _loopBox;
         private Button _halfBox;
         private SearchDropdown _mountDropdown;
@@ -63,8 +67,11 @@ namespace CustomBattleBg
         // 编辑中的值（点确认才写回）
         private string _bgFile = "";
         private string _bgmFile = "";
+        private string _sfxFile = "";
         private bool _bgmLoop = true;
         private bool _halfScreen = false;
+        private bool _showOpenDialog = false;
+        private bool _playOpenSound = false;
 
         internal static bool IsOpen
         {
@@ -252,7 +259,12 @@ namespace CustomBattleBg
             List<ActionOption> mountOptions = new List<ActionOption>();
             mountOptions.Add(new ActionOption("（不挂载）", 0, 0));
             _mountDropdown = new SearchDropdown(panel, "MountDropdown", mountOptions, 148f, y, PanelWidth - 300f, 42f);
-            y += 56f;
+            y += 46f;
+            Text mountTip = UIFactory.Label(panel, "MountTip",
+                "（苏醒状态自动触发，需要沉睡状态下才有作用）", 16, TextAnchor.MiddleLeft);
+            mountTip.color = UIFactory.HintColor;
+            UIFactory.Place(mountTip.rectTransform, 148f, y, PanelWidth - 172f, 22f);
+            y += 26f;
 
             _loopBox = UIFactory.Checkbox(panel, "LoopBox", 148f, y, 36f, OnToggleLoop);
             Text loopLabel = UIFactory.Label(panel, "LoopLabel", "循环播放", 20, TextAnchor.MiddleLeft);
@@ -283,6 +295,28 @@ namespace CustomBattleBg
             UIFactory.Place(enemyLabel.rectTransform, 320f, y, 120f, 40f);
             _enemyBox = UIFactory.Checkbox(panel, "EnemyBox", 444f, y, 36f, OnToggleEnemyTarget);
             y += 46f;
+
+            // 领域展开时的表现（2026-10-18）
+            _dialogBox = UIFactory.Checkbox(panel, "DialogBox", 148f, y, 36f, OnToggleOpenDialog);
+            Text dialogLabel = UIFactory.Label(panel, "DialogLabel", "开启时出现对话框", 20, TextAnchor.MiddleLeft);
+            UIFactory.Place(dialogLabel.rectTransform, 192f, y, 300f, 36f);
+            y += 46f;
+
+            _soundBox = UIFactory.Checkbox(panel, "SoundBox", 148f, y, 36f, OnToggleOpenSound);
+            Text soundLabel = UIFactory.Label(panel, "SoundLabel", "开启时音效", 20, TextAnchor.MiddleLeft);
+            UIFactory.Place(soundLabel.rectTransform, 192f, y, 120f, 36f);
+            _sfxBox = UIFactory.TextButton(panel, "SfxBox", "", OnPickSfx, false, 18);
+            UIFactory.Place(_sfxBox.GetComponent<RectTransform>(), 320f, y, 300f, 40f);
+            _sfxBoxText = _sfxBox.transform.Find("Text").GetComponent<Text>();
+            _sfxBoxText.alignment = TextAnchor.MiddleLeft;
+            _sfxBoxText.horizontalOverflow = HorizontalWrapMode.Wrap;
+            _sfxBoxText.verticalOverflow = VerticalWrapMode.Truncate;
+            UIFactory.Stretch(_sfxBoxText.rectTransform, 10f, 10f, 2f, 2f);
+            Button sfxLib = UIFactory.TextButton(panel, "SfxLib", "资源库", OnPickSfxFromLibrary, false, 16);
+            UIFactory.Place(sfxLib.GetComponent<RectTransform>(), 628f, y + 1f, 72f, 38f);
+            Button sfxClear = UIFactory.TextButton(panel, "SfxClear", "清除", OnClearSfx, true, 16);
+            UIFactory.Place(sfxClear.GetComponent<RectTransform>(), 708f, y + 1f, 80f, 38f);
+            y += 52f;
 
             Text labelAllyEff = UIFactory.Label(panel, "Label_AllyEffect", "友方效果", 20, TextAnchor.MiddleLeft);
             UIFactory.Place(labelAllyEff.rectTransform, 24f, y, 120f, 40f);
@@ -364,8 +398,11 @@ namespace CustomBattleBg
             _suffix.text = _def.Suffix;
             _bgFile = _def.BgFile;
             _bgmFile = _def.BgmFile;
+            _sfxFile = _def.SfxFile;
             _bgmLoop = _def.BgmLoop;
             _halfScreen = _def.HalfScreen;
+            _showOpenDialog = _def.ShowOpenDialog;
+            _playOpenSound = _def.PlayOpenSound;
             RefreshBoxes();
             RefreshMountOptions(role);
             RefreshEffectControls();
@@ -525,6 +562,15 @@ namespace CustomBattleBg
                     ? new Color(1f, 1f, 1f, 0.35f)
                     : UIFactory.TextColor;
             }
+            if (_sfxBoxText != null)
+            {
+                _sfxBoxText.text = DomainText.L(string.IsNullOrEmpty(_sfxFile) ? "未选择" : _sfxFile);
+                _sfxBoxText.color = string.IsNullOrEmpty(_sfxFile)
+                    ? new Color(1f, 1f, 1f, 0.35f)
+                    : UIFactory.TextColor;
+            }
+            UIFactory.SetCheckbox(_dialogBox, _showOpenDialog);
+            UIFactory.SetCheckbox(_soundBox, _playOpenSound);
             UIFactory.SetCheckbox(_loopBox, _bgmLoop);
             UIFactory.SetCheckbox(_halfBox, _halfScreen);
         }
@@ -577,6 +623,17 @@ namespace CustomBattleBg
             }, OnHintMsg, AskOverwriteFile);
         }
 
+        private void OnPickSfx()
+        {
+            AssetImporter.PickSfx(delegate(string fileName)
+            {
+                _sfxFile = fileName;
+                _playOpenSound = true;
+                RefreshBoxes();
+                OnHintMsg(DomainText.L("已选择音效：") + fileName);
+            }, OnHintMsg, AskOverwriteFile);
+        }
+
         /// <summary>从资源库里已有的文件里挑一张背景（不发生复制，直接用库里的文件）。</summary>
         private void OnPickBgFromLibrary()
         {
@@ -600,6 +657,19 @@ namespace CustomBattleBg
                     _bgmFile = fileName;
                     RefreshBoxes();
                     OnHintMsg(DomainText.L("已从资源库选择BGM：") + fileName);
+                });
+        }
+
+        private void OnPickSfxFromLibrary()
+        {
+            FileListPopup.Show(_canvasGo.transform, "从资源库选择展开音效",
+                CustomBattleBgPlugin.Store.SfxDir, DomainConstants.SfxExtensions,
+                delegate(string fileName)
+                {
+                    _sfxFile = fileName;
+                    _playOpenSound = true;
+                    RefreshBoxes();
+                    OnHintMsg(DomainText.L("已从资源库选择音效：") + fileName);
                 });
         }
 
@@ -669,6 +739,21 @@ namespace CustomBattleBg
                 null);
         }
 
+        private void OnClearSfx()
+        {
+            if (string.IsNullOrEmpty(_sfxFile))
+            {
+                OnHintMsg(DomainText.L("没有选择音效。"));
+                return;
+            }
+            string file = _sfxFile;
+            ShowConfirm(
+                DomainText.L("清除会把这段音效文件一起删掉：\n" + file +
+                             "\n\n（删掉后要重新导入才能再用）"),
+                delegate { DoClearSfx(file); },
+                null);
+        }
+
         private void DoClearBackground(string file)
         {
             _bgFile = "";
@@ -700,6 +785,23 @@ namespace CustomBattleBg
                 : DomainText.L("已清除BGM选择（文件不存在或被别的配置用着，没有删）。"));
         }
 
+        private void DoClearSfx(string file)
+        {
+            _sfxFile = "";
+            _playOpenSound = false;
+            RefreshBoxes();
+            bool deleted = CustomBattleBgPlugin.Store.TryDeleteSfxFile(file, _def);
+            if (_def != null && !string.IsNullOrEmpty(_def.Section))
+            {
+                _def.SfxFile = "";
+                _def.PlayOpenSound = false;
+                CustomBattleBgPlugin.Store.Save(_def);
+            }
+            OnHintMsg(deleted
+                ? DomainText.L("已清除并删除音效文件：" + file)
+                : DomainText.L("已清除音效选择（文件不存在或被别的配置用着，没有删）。"));
+        }
+
         private void OnToggleLoop()
         {
             _bgmLoop = !_bgmLoop;
@@ -719,6 +821,18 @@ namespace CustomBattleBg
         {
             _enemyTarget = !_enemyTarget;
             UIFactory.SetCheckbox(_enemyBox, _enemyTarget);
+        }
+
+        private void OnToggleOpenDialog()
+        {
+            _showOpenDialog = !_showOpenDialog;
+            UIFactory.SetCheckbox(_dialogBox, _showOpenDialog);
+        }
+
+        private void OnToggleOpenSound()
+        {
+            _playOpenSound = !_playOpenSound;
+            UIFactory.SetCheckbox(_soundBox, _playOpenSound);
         }
 
         /// <summary>效果下拉框的选项：预设效果在前，后面是游戏里所有状态（buff）。</summary>
@@ -916,11 +1030,19 @@ namespace CustomBattleBg
                     _hint.text = DomainText.L("已经有一条同名的领域了，换个后缀。");
                     return;
                 }
+                if (_playOpenSound && string.IsNullOrEmpty(_sfxFile))
+                {
+                    _hint.text = DomainText.L("已勾选“开启时音效”，请先选择音效文件，或取消勾选。");
+                    return;
+                }
 
                 _def.Suffix = suffix;
                 _def.BgFile = _bgFile;
                 _def.BgmFile = _bgmFile;
                 _def.BgmLoop = _bgmLoop;
+                _def.ShowOpenDialog = _showOpenDialog;
+                _def.PlayOpenSound = _playOpenSound;
+                _def.SfxFile = _sfxFile;
                 _def.HalfScreen = _halfScreen;
                 ActionOption mount = _mountDropdown != null ? _mountDropdown.Current : null;
                 _def.MountType = mount != null ? mount.Type : 0;

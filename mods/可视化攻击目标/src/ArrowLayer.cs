@@ -9,10 +9,12 @@ namespace AttackTargetVisualizer
     /// <summary>
     /// 挂在箭头画布上：每帧从战斗数据算出"该画哪些箭头"，交给 <see cref="ArrowGraphic"/> 画。
     ///
-    /// 规则（v0.1）：
-    ///   · 打敌人＝红，打队友＝蓝；单体＝实线，范围/随机＝虚线；
-    ///   · 目标是自己的不画；
-    ///   · 双方互为目标且都是敌方单体 → 换成两个黄色箭头，头对头撞在中点；
+    /// 规则（v0.2.3）：
+    ///   · 打敌人＝红，打队友＝绿；单体＝实线，范围/随机＝虚线；
+    ///   · 目标是自己的 → 起点与普通箭头一致（行动槽上边框中点），但画在行动槽下面一层，
+    ///     蓝色虚线直指角色模型顶部中点，穿过牌子的部分会被牌子遮住；
+    ///   · 双方互为目标且都是敌方单体 → 换成一对对抗箭头，头对头撞在中点：
+    ///       攻击 vs 攻击＝黄，技艺 vs 技艺＝青蓝，技艺 vs 攻击＝蓝/红；
     ///   · 多条箭头指向同一目标 → 共用终点，只画一个箭头头；
     ///   · 只在"选行动"阶段（EFightPhase.ActionStage）显示，一进入出手演出（ResultStage）就全清。
     /// </summary>
@@ -20,8 +22,11 @@ namespace AttackTargetVisualizer
     {
         internal ArrowGraphic Graphic;
         internal Canvas Canvas;
+        internal ArrowGraphic SelfGraphic;
+        internal Canvas SelfCanvas;
 
         private readonly List<ArrowSpec> _specs = new List<ArrowSpec>();
+        private readonly List<ArrowSpec> _selfSpecs = new List<ArrowSpec>();
         private readonly List<BattleRole> _roles = new List<BattleRole>();
         private readonly List<BattleRole> _targets = new List<BattleRole>();
         private readonly HashSet<BattleRole> _headDone = new HashSet<BattleRole>();
@@ -44,6 +49,7 @@ namespace AttackTargetVisualizer
             }
 
             _specs.Clear();
+            _selfSpecs.Clear();
             _headDone.Clear();
             _duelled.Clear();
             _desc.Length = 0;
@@ -82,8 +88,13 @@ namespace AttackTargetVisualizer
 
             Graphic.DashPhase = _dashPhase;
             Graphic.SetArrows(_specs);
+            if (SelfGraphic != null)
+            {
+                SelfGraphic.DashPhase = _dashPhase;
+                SelfGraphic.SetArrows(_selfSpecs);
+            }
 
-            if (_specs.Count > 0)
+            if (_specs.Count + _selfSpecs.Count > 0)
             {
                 _dashPhase += Time.unscaledDeltaTime * ArrowStyle.DashSpeed;
                 if (_dashPhase > 100000f)
@@ -98,6 +109,9 @@ namespace AttackTargetVisualizer
         /// 抬上去以后箭头压在牌子、HP 条、buff 图标这些战斗 UI 之上，不会再被遮挡。
         /// </summary>
         private const int SortingLift = 10;
+
+        /// <summary>自指向箭头单独放在行动槽下面一层。</summary>
+        private const int SelfSortingOffset = -1;
 
         /// <summary>
         /// 把自己这层画布对齐到游戏行动槽牌子的画布上。
@@ -126,14 +140,13 @@ namespace AttackTargetVisualizer
             }
 
             SetLayerRecursive(gameObject, sample.gameObject.layer);
+            CopyCanvasSettings(Canvas, sc, sc.sortingOrder + SortingLift);   // 普通箭头压在牌子上面
 
-            Canvas.renderMode = sc.renderMode;
-            Canvas.worldCamera = sc.worldCamera;
-            Canvas.planeDistance = sc.planeDistance;
-            Canvas.overrideSorting = sc.overrideSorting;
-            Canvas.sortingLayerID = sc.sortingLayerID;
-            Canvas.sortingOrder = sc.sortingOrder + SortingLift;   // 压在牌子上面
-            Canvas.pixelPerfect = sc.pixelPerfect;
+            if (SelfCanvas != null)
+            {
+                SetLayerRecursive(SelfCanvas.gameObject, sample.gameObject.layer);
+                CopyCanvasSettings(SelfCanvas, sc, sc.sortingOrder + SelfSortingOffset);   // 自指向箭头压在牌子下面
+            }
 
             _mirrored = true;
             AttackTargetPlugin.Log.LogInfo(string.Format(
@@ -141,6 +154,12 @@ namespace AttackTargetVisualizer
                 sample.gameObject.layer, LayerMask.LayerToName(sample.gameObject.layer),
                 sc.renderMode, sc.sortingLayerName, sc.sortingLayerID,
                 sc.sortingOrder, Canvas.sortingOrder, sc.planeDistance, sc.overrideSorting));
+            if (SelfCanvas != null)
+            {
+                AttackTargetPlugin.Log.LogInfo(string.Format(
+                    "自指向箭头层：sortingLayer={0}({1}) order={2}",
+                    SelfCanvas.sortingLayerName, SelfCanvas.sortingLayerID, SelfCanvas.sortingOrder));
+            }
 
             LogOtherCanvasOrders();
 
@@ -148,13 +167,25 @@ namespace AttackTargetVisualizer
             {
                 _selfChecked = true;
                 AttackTargetPlugin.Log.LogInfo(string.Format(
-                    "自我检查：graphic.canvas={0} material={1} graphicActive={2} canvasActive={3} 本层layer={4}({5})",
+                    "自我检查：graphic.canvas={0} material={1} graphicActive={2} canvasActive={3} selfOrder={4} 本层layer={5}({6})",
                     Graphic != null && Graphic.canvas != null ? Graphic.canvas.name : "null",
                     Graphic != null && Graphic.material != null ? Graphic.material.name : "null",
                     Graphic != null && Graphic.isActiveAndEnabled,
                     Canvas.isActiveAndEnabled,
+                    SelfCanvas != null ? SelfCanvas.sortingOrder : int.MinValue,
                     gameObject.layer, LayerMask.LayerToName(gameObject.layer)));
             }
+        }
+
+        private static void CopyCanvasSettings(Canvas target, Canvas source, int sortingOrder)
+        {
+            target.renderMode = source.renderMode;
+            target.worldCamera = source.worldCamera;
+            target.planeDistance = source.planeDistance;
+            target.overrideSorting = source.overrideSorting;
+            target.sortingLayerID = source.sortingLayerID;
+            target.sortingOrder = sortingOrder;
+            target.pixelPerfect = source.pixelPerfect;
         }
 
         private static HUDElement FindSampleHud()
@@ -252,14 +283,15 @@ namespace AttackTargetVisualizer
                 return;
             }
             _roundTimer += Time.unscaledDeltaTime;
-            if (_specs.Count == 0 && _roundTimer < 3f)
+            int arrowCount = _specs.Count + _selfSpecs.Count;
+            if (arrowCount == 0 && _roundTimer < 3f)
             {
                 return;   // 还没确定任何行动，先不刷日志
             }
             _loggedThisRound = true;
             AttackTargetPlugin.Log.LogInfo(
-                "选行动阶段：参战角色 " + _roles.Count + " 个，箭头 " + _specs.Count + " 条");
-            if (_specs.Count > 0)
+                "选行动阶段：参战角色 " + _roles.Count + " 个，箭头 " + arrowCount + " 条");
+            if (arrowCount > 0)
             {
                 AttackTargetPlugin.Log.LogInfo("箭头明细：" + _desc.ToString().TrimEnd());
                 AttackTargetPlugin.Log.LogInfo("落点：" + DescribeAnchors());
@@ -276,9 +308,11 @@ namespace AttackTargetVisualizer
                     Canvas.worldCamera != null ? Canvas.worldCamera.name : "null"));
             }
 
-            if (_specs.Count > 0)
+            if (arrowCount > 0)
             {
-                ArrowSpec s = _specs[_specs.Count - 1];
+                ArrowSpec s = _specs.Count > 0
+                    ? _specs[_specs.Count - 1]
+                    : _selfSpecs[_selfSpecs.Count - 1];
                 AttackTargetPlugin.Log.LogInfo(string.Format(
                     "末条箭头局部坐标：{0:F0},{1:F0} → {2:F0},{3:F0}（虚线={4} 带头={5}）",
                     s.From.x, s.From.y, s.To.x, s.To.y, s.Dashed, s.Head));
@@ -422,20 +456,31 @@ namespace AttackTargetVisualizer
             BattleActiveBehaviorData data = src.CurrentBehaviourData;
             ETargetSelect type = data.TargetSelectType;
 
-            // 自身（以及没定目标）不画
-            if (type == ETargetSelect.None || type == ETargetSelect.Self)
+            // 没定目标不画；纯自身行动走"行动槽顶边 → 角色头顶"的下层蓝虚线
+            if (type == ETargetSelect.None)
             {
+                return;
+            }
+            if (type == ETargetSelect.Self)
+            {
+                AddSelfArrow(src);
                 return;
             }
 
             _targets.Clear();
             bool anyHostile = false;
+            bool selfTargeted = false;
             for (int i = 0; i < data.Targets.Count; i++)
             {
                 BattleRole t = data.Targets[i];
-                if (t == null || t.IsDeath || t == src)
+                if (t == null || t.IsDeath)
                 {
-                    continue;   // 打自己的那一段不算
+                    continue;
+                }
+                if (t == src)
+                {
+                    selfTargeted = true;
+                    continue;
                 }
                 if (_targets.Contains(t))
                 {
@@ -447,42 +492,90 @@ namespace AttackTargetVisualizer
                     anyHostile = true;
                 }
             }
-            if (_targets.Count == 0)
-            {
-                return;   // 全是自己 → 不画
-            }
 
             Color color = PickColor(data, anyHostile);
             bool dashed = IsRange(type);
 
+            if (_targets.Count > 0)
+            {
+                Vector2 fromScreen;
+                if (!TryGetSlot(src, true, out fromScreen))
+                {
+                    return;
+                }
+
+                for (int i = 0; i < _targets.Count; i++)
+                {
+                    BattleRole t = _targets[i];
+                    Vector2 toScreen;
+                    if (!TryGetSlot(t, true, out toScreen))
+                    {
+                        continue;
+                    }
+                    // 同一个目标只在第一条箭头上画箭头头，后面的箭杆都收束到它
+                    bool head = _headDone.Add(t);
+                    AddArrow(fromScreen, toScreen, color, dashed, head);
+
+                    if (head)
+                    {
+                        _desc.Append(Name(src)).Append('→').Append(Name(t))
+                             .Append('(').Append(ColorName(color))
+                             .Append(dashed ? "虚)" : "实)").Append(' ');
+                    }
+                }
+            }
+
+            // 群疗/群体 buff 这类同时包含自己的行动：其他目标照常画，自己额外一条蓝虚线。
+            if (selfTargeted)
+            {
+                AddSelfArrow(src);
+            }
+        }
+
+        /// <summary>
+        /// 指向自己的行动：起点与其他箭头一致（行动槽上边框中点），
+        /// 单独画在行动槽下面的图层，蓝色虚线直指角色模型顶部中点。
+        /// </summary>
+        private void AddSelfArrow(BattleRole src)
+        {
             Vector2 fromScreen;
             if (!TryGetSlot(src, true, out fromScreen))
             {
                 return;
             }
-
-            for (int i = 0; i < _targets.Count; i++)
+            Vector2 toScreen;
+            if (!TryGetRoleTopScreen(src, out toScreen))
             {
-                BattleRole t = _targets[i];
-                Vector2 toScreen;
-                if (!TryGetSlot(t, true, out toScreen))
-                {
-                    continue;
-                }
-                // 同一个目标只在第一条箭头上画箭头头，后面的箭杆都收束到它
-                bool head = _headDone.Add(t);
-                AddArrow(fromScreen, toScreen, color, dashed, head);
-
-                if (head)
-                {
-                    _desc.Append(Name(src)).Append('→').Append(Name(t))
-                         .Append('(').Append(ColorName(color))
-                         .Append(dashed ? "虚)" : "实)").Append(' ');
-                }
+                return;
             }
+
+            Vector2 from;
+            Vector2 to;
+            if (SelfGraphic == null ||
+                !ToLocal(SelfGraphic, SelfCanvas, fromScreen, out from) ||
+                !ToLocal(SelfGraphic, SelfCanvas, toScreen, out to))
+            {
+                return;
+            }
+
+            _selfSpecs.Add(new ArrowSpec
+            {
+                From = from,
+                To = to,
+                Color = ArrowStyle.Interference,
+                Dashed = true,
+                Straight = true,
+                PS0 = 0f,
+                PS1 = 1f,
+                Head = true
+            });
+            _desc.Append(Name(src)).Append("↓自己(蓝虚) ");
         }
 
-        /// <summary>争锋相对：A、B 互为目标，两个黄箭头共用一条弧线，各画一半，头对头撞在中点。</summary>
+        /// <summary>
+        /// 对抗：A、B 互为目标，两条箭头共用一条弧线、各画一半，头对头撞在中点。
+        /// 颜色按行动类型区分：攻攻＝黄，技技＝青蓝，技攻＝蓝/红。
+        /// </summary>
         private void AddDuel(BattleRole a, BattleRole b)
         {
             Vector2 pa;
@@ -503,11 +596,25 @@ namespace AttackTargetVisualizer
                 return;
             }
 
+            DuelKind kind = ClassifyDuel(a.CurrentBehaviourData, b.CurrentBehaviourData);
+            Color colorA = DuelSideColor(a.CurrentBehaviourData);
+            Color colorB = DuelSideColor(b.CurrentBehaviourData);
+            if (kind == DuelKind.AttackAttack)
+            {
+                colorA = ArrowStyle.Clash;
+                colorB = ArrowStyle.Clash;
+            }
+            else if (kind == DuelKind.TechniqueTechnique)
+            {
+                colorA = ArrowStyle.TechniqueClash;
+                colorB = ArrowStyle.TechniqueClash;
+            }
+
             ArrowSpec spec = new ArrowSpec
             {
                 From = from,
                 To = to,
-                Color = ArrowStyle.Clash,
+                Color = colorA,
                 Dashed = false,
                 Head = true
             };
@@ -518,9 +625,27 @@ namespace AttackTargetVisualizer
 
             spec.PS0 = 1f;
             spec.PS1 = 0.5f;
+            spec.Color = colorB;
             _specs.Add(spec);
 
-            _desc.Append(Name(a)).Append('⇄').Append(Name(b)).Append("(黄) ");
+            string kindName;
+            if (kind == DuelKind.AttackAttack)
+            {
+                kindName = "黄";
+            }
+            else if (kind == DuelKind.TechniqueTechnique)
+            {
+                kindName = "青";
+            }
+            else if (kind == DuelKind.TechniqueAttack)
+            {
+                kindName = "蓝红";
+            }
+            else
+            {
+                kindName = ColorName(colorA) + "/" + ColorName(colorB);
+            }
+            _desc.Append(Name(a)).Append('⇄').Append(Name(b)).Append('(').Append(kindName).Append(") ");
         }
 
         private void AddArrow(Vector2 fromScreen, Vector2 toScreen, Color color, bool dashed, bool head)
@@ -630,6 +755,72 @@ namespace AttackTargetVisualizer
             return skill != null && skill.Config != null && skill.Config.ActionType == EBattleActionType.Throw;
         }
 
+        private enum DuelKind
+        {
+            AttackAttack,
+            TechniqueTechnique,
+            TechniqueAttack,
+            Other
+        }
+
+        /// <summary>技艺＝原版行动类型为「技艺」，且不属于攻击型/投掷。</summary>
+        private static bool IsTechniqueAction(BattleActiveBehaviorData data)
+        {
+            if (data == null || IsAttackLike(data))
+            {
+                return false;
+            }
+            if (data.ActionType == EBattleActionType.Skill)
+            {
+                return true;
+            }
+            BattleSkillData skill = data.BattleSkillData;
+            return skill != null && skill.Config != null
+                && skill.Config.ActionType == EBattleActionType.Skill;
+        }
+
+        /// <summary>攻击型行动：普通攻击、伤害法术，以及视觉上固定为红色的投掷。</summary>
+        private static bool IsAttackLike(BattleActiveBehaviorData data)
+        {
+            return data != null && (data.IsAttackAction || IsThrowAction(data));
+        }
+
+        private static DuelKind ClassifyDuel(BattleActiveBehaviorData a, BattleActiveBehaviorData b)
+        {
+            bool aTechnique = IsTechniqueAction(a);
+            bool bTechnique = IsTechniqueAction(b);
+            bool aAttack = IsAttackLike(a);
+            bool bAttack = IsAttackLike(b);
+
+            if (aTechnique && bTechnique)
+            {
+                return DuelKind.TechniqueTechnique;
+            }
+            if (aAttack && bAttack)
+            {
+                return DuelKind.AttackAttack;
+            }
+            if ((aTechnique && bAttack) || (aAttack && bTechnique))
+            {
+                return DuelKind.TechniqueAttack;
+            }
+            return DuelKind.Other;
+        }
+
+        /// <summary>对抗中每一侧的基础色：技艺蓝、攻击红，未知类型沿用普通箭头判色。</summary>
+        private static Color DuelSideColor(BattleActiveBehaviorData data)
+        {
+            if (IsTechniqueAction(data))
+            {
+                return ArrowStyle.Interference;
+            }
+            if (IsAttackLike(data))
+            {
+                return ArrowStyle.Hostile;
+            }
+            return PickColor(data, true);
+        }
+
         private static string ColorName(Color c)
         {
             if (c == ArrowStyle.Hostile)
@@ -643,6 +834,10 @@ namespace AttackTargetVisualizer
             if (c == ArrowStyle.Interference)
             {
                 return "蓝";
+            }
+            if (c == ArrowStyle.TechniqueClash)
+            {
+                return "青";
             }
             return "黄";
         }
@@ -679,55 +874,74 @@ namespace AttackTargetVisualizer
         private static bool TryGetSlot(BattleRole role, bool topEdge, out Vector2 screen)
         {
             screen = Vector2.zero;
+            RectTransform anchor;
+            Camera cam;
+            if (TryGetSlotAnchor(role, out anchor, out cam))
+            {
+                screen = topEdge ? TopCenterOf(anchor, cam) : ScreenOf(cam, anchor.position);
+                return true;
+            }
+            return TryGetRoleTopScreen(role, out screen);
+        }
+
+        /// <summary>取技能牌子 / 编辑牌子的实际矩形和 HUD 相机。</summary>
+        private static bool TryGetSlotAnchor(BattleRole role, out RectTransform anchor, out Camera cam)
+        {
+            anchor = null;
+            cam = null;
             if (role == null || role.Model == null)
             {
                 return false;
             }
 
             HUDElement hud = role.Model.Hud;
-            if (hud != null)
+            if (hud == null)
             {
-                Canvas canvas = hud.GetComponent<Canvas>();
-                Camera cam = canvas != null ? canvas.worldCamera : null;
+                return false;
+            }
+            Canvas canvas = hud.GetComponent<Canvas>();
+            cam = canvas != null ? canvas.worldCamera : null;
 
-                if (hud.Trans_SkillShow != null && hud.Trans_SkillShow.gameObject.activeInHierarchy)
+            if (hud.Trans_SkillShow != null && hud.Trans_SkillShow.gameObject.activeInHierarchy)
+            {
+                // 锚点取"整块行动槽"，**不要**取左上角的数字牌（Image_ActionOrder）——
+                // 否则"顶边中点"会算到数字牌顶上（槽的角落）。
+                // 优先级：技能牌子动画节点（整块牌子的实际矩形）→ 图标按钮 → 容器。
+                if (hud.Anim_SkillShow != null && hud.Anim_SkillShow.gameObject.activeInHierarchy)
                 {
-                    // 锚点取"整块行动槽"，**不要**取左上角的数字牌（Image_ActionOrder）——
-                    // 否则"顶边中点"会算到数字牌顶上（槽的角落）。
-                    // 优先级：技能牌子动画节点（整块牌子的实际矩形）→ 图标按钮 → 容器。
-                    RectTransform anchor = null;
-                    if (hud.Anim_SkillShow != null && hud.Anim_SkillShow.gameObject.activeInHierarchy)
-                    {
-                        anchor = hud.Anim_SkillShow.transform as RectTransform;
-                    }
-                    if (anchor == null && hud.Button_SkillIcon != null &&
-                        hud.Button_SkillIcon.gameObject.activeInHierarchy)
-                    {
-                        anchor = hud.Button_SkillIcon.transform as RectTransform;
-                    }
-                    if (anchor == null)
-                    {
-                        anchor = hud.Trans_SkillShow as RectTransform;
-                    }
-                    if (anchor != null)
-                    {
-                        screen = topEdge ? TopCenterOf(anchor, cam) : ScreenOf(cam, anchor.position);
-                        return true;
-                    }
+                    anchor = hud.Anim_SkillShow.transform as RectTransform;
                 }
-
-                if (hud.Trans_EditorAction != null && hud.Trans_EditorAction.gameObject.activeInHierarchy)
+                if (anchor == null && hud.Button_SkillIcon != null &&
+                    hud.Button_SkillIcon.gameObject.activeInHierarchy)
                 {
-                    RectTransform ea = hud.Trans_EditorAction as RectTransform;
-                    if (ea != null)
-                    {
-                        screen = topEdge ? TopCenterOf(ea, cam) : ScreenOf(cam, ea.position);
-                        return true;
-                    }
+                    anchor = hud.Button_SkillIcon.transform as RectTransform;
+                }
+                if (anchor == null)
+                {
+                    anchor = hud.Trans_SkillShow as RectTransform;
+                }
+                if (anchor != null)
+                {
+                    return true;
                 }
             }
 
-            // 退化：钉在头顶
+            if (hud.Trans_EditorAction != null && hud.Trans_EditorAction.gameObject.activeInHierarchy)
+            {
+                anchor = hud.Trans_EditorAction as RectTransform;
+                return anchor != null;
+            }
+            return false;
+        }
+
+        /// <summary>角色模型顶部中点的屏幕坐标（Trans_Head 优先）。</summary>
+        private static bool TryGetRoleTopScreen(BattleRole role, out Vector2 screen)
+        {
+            screen = Vector2.zero;
+            if (role == null || role.Model == null)
+            {
+                return false;
+            }
             Camera battleCam = BattleHelper.BattleCam;
             if (battleCam == null)
             {
@@ -761,13 +975,18 @@ namespace AttackTargetVisualizer
 
         private bool ToLocal(Vector2 screen, out Vector2 local)
         {
+            return ToLocal(Graphic, Canvas, screen, out local);
+        }
+
+        private static bool ToLocal(ArrowGraphic graphic, Canvas canvas, Vector2 screen, out Vector2 local)
+        {
             local = Vector2.zero;
-            if (Graphic == null)
+            if (graphic == null)
             {
                 return false;
             }
-            Camera cam = Canvas != null ? Canvas.worldCamera : null;
-            return RectTransformUtility.ScreenPointToLocalPointInRectangle(Graphic.rectTransform, screen, cam, out local);
+            Camera cam = canvas != null ? canvas.worldCamera : null;
+            return RectTransformUtility.ScreenPointToLocalPointInRectangle(graphic.rectTransform, screen, cam, out local);
         }
     }
 }

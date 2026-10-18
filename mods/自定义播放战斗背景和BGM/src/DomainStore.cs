@@ -58,6 +58,11 @@ namespace CustomBattleBg
             get { return Path.Combine(AssetsRoot, DomainConstants.BgmFolderName); }
         }
 
+        public string SfxDir
+        {
+            get { return Path.Combine(AssetsRoot, DomainConstants.SfxFolderName); }
+        }
+
         public void Load()
         {
             ModRoot = ResolveModRoot();
@@ -75,6 +80,10 @@ namespace CustomBattleBg
             if (!Directory.Exists(BgmDir))
             {
                 Directory.CreateDirectory(BgmDir);
+            }
+            if (!Directory.Exists(SfxDir))
+            {
+                Directory.CreateDirectory(SfxDir);
             }
 
             _file = new ConfigFile(FilePath, true);
@@ -144,6 +153,11 @@ namespace CustomBattleBg
             p.BgFile = _file.Bind(section, "BgFile", "", "战斗背景文件名（CustomBattleAssets\\Background 下）").Value;
             p.BgmFile = _file.Bind(section, "BgmFile", "", "战斗BGM文件名（CustomBattleAssets\\Bgm 下）").Value;
             p.BgmLoop = _file.Bind(section, "BgmLoop", true, "BGM 是否循环播放").Value;
+            p.ShowOpenDialog = _file.Bind(section, "ShowOpenDialog", false,
+                "展开成功时是否显示角色对话框").Value;
+            p.PlayOpenSound = _file.Bind(section, "PlayOpenSound", false,
+                "展开成功时是否播放一次音效").Value;
+            p.SfxFile = _file.Bind(section, "SfxFile", "", "展开音效文件名（Sfx 下）").Value;
             p.HalfScreen = _file.Bind(section, "HalfScreen", false,
                 "背景只占上半屏（true=上方显示自定义背景、下方保留原背景）").Value;
             p.MountType = _file.Bind(section, "MountType", 0,
@@ -177,6 +191,9 @@ namespace CustomBattleBg
             _file.Bind(p.Section, "BgFile", "", "战斗背景文件名（CustomBattleAssets\\Background 下）").Value = p.BgFile;
             _file.Bind(p.Section, "BgmFile", "", "战斗BGM文件名（CustomBattleAssets\\Bgm 下）").Value = p.BgmFile;
             _file.Bind(p.Section, "BgmLoop", true, "BGM 是否循环播放").Value = p.BgmLoop;
+            _file.Bind(p.Section, "ShowOpenDialog", false, "展开成功时是否显示角色对话框").Value = p.ShowOpenDialog;
+            _file.Bind(p.Section, "PlayOpenSound", false, "展开成功时是否播放一次音效").Value = p.PlayOpenSound;
+            _file.Bind(p.Section, "SfxFile", "", "展开音效文件名（Sfx 下）").Value = p.SfxFile;
             _file.Bind(p.Section, "HalfScreen", false,
                 "背景只占上半屏（true=上方显示自定义背景、下方保留原背景）").Value = p.HalfScreen;
             _file.Bind(p.Section, "MountType", 0,
@@ -210,7 +227,8 @@ namespace CustomBattleBg
             }
             string[] keys = new string[]
             {
-                "RoleKey", "RoleName", "Suffix", "BgFile", "BgmFile", "BgmLoop", "HalfScreen",
+                "RoleKey", "RoleName", "Suffix", "BgFile", "BgmFile", "BgmLoop",
+                "ShowOpenDialog", "PlayOpenSound", "SfxFile", "HalfScreen",
                 "MountType", "MountId", "MountName",
                 "AllyTarget", "EnemyTarget", "AllyEffectType", "AllyEffectValue",
                 "EnemyEffectType", "EnemyEffectValue", "CostType", "CostValue",
@@ -237,6 +255,7 @@ namespace CustomBattleBg
             }
             string bg = p.BgFile;
             string bgm = p.BgmFile;
+            string sfx = p.SfxFile;
             Delete(p);
             if (!string.IsNullOrEmpty(bg))
             {
@@ -246,21 +265,31 @@ namespace CustomBattleBg
             {
                 TryDeleteBgmFile(bgm, p);
             }
+            if (!string.IsNullOrEmpty(sfx))
+            {
+                TryDeleteSfxFile(sfx, p);
+            }
         }
 
         /// <summary>删除一张背景文件（若没有别的配置在用）。返回是否真的删了。</summary>
         public bool TryDeleteBackgroundFile(string fileName, DomainProfile except)
         {
-            return TryDeleteFile(Path.Combine(BackgroundDir, fileName), fileName, except, true);
+            return TryDeleteFile(Path.Combine(BackgroundDir, fileName), fileName, except, 0);
         }
 
         /// <summary>删除一首 BGM 文件（若没有别的配置在用）。返回是否真的删了。</summary>
         public bool TryDeleteBgmFile(string fileName, DomainProfile except)
         {
-            return TryDeleteFile(Path.Combine(BgmDir, fileName), fileName, except, false);
+            return TryDeleteFile(Path.Combine(BgmDir, fileName), fileName, except, 1);
         }
 
-        private bool TryDeleteFile(string fullPath, string fileName, DomainProfile except, bool isBackground)
+        /// <summary>删除一段展开音效（若没有别的配置在用）。返回是否真的删了。</summary>
+        public bool TryDeleteSfxFile(string fileName, DomainProfile except)
+        {
+            return TryDeleteFile(Path.Combine(SfxDir, fileName), fileName, except, 2);
+        }
+
+        private bool TryDeleteFile(string fullPath, string fileName, DomainProfile except, int kind)
         {
             try
             {
@@ -276,7 +305,7 @@ namespace CustomBattleBg
                     {
                         continue;
                     }
-                    string used = isBackground ? other.BgFile : other.BgmFile;
+                    string used = kind == 0 ? other.BgFile : (kind == 1 ? other.BgmFile : other.SfxFile);
                     if (!string.IsNullOrEmpty(used) &&
                         string.Equals(used, fileName, StringComparison.OrdinalIgnoreCase))
                     {
@@ -327,6 +356,11 @@ namespace CustomBattleBg
         {
             for (int id = DomainConstants.CustomBuffIdMin; id <= DomainConstants.CustomBuffIdMax; id++)
             {
+                // 外部模组注册的领域也在同一段里分配编号
+                if (DomainApi.IsBuffIdInUse(id))
+                {
+                    continue;
+                }
                 bool used = false;
                 for (int i = 0; i < _profiles.Count; i++)
                 {
@@ -343,6 +377,63 @@ namespace CustomBattleBg
                 }
             }
             return 0;
+        }
+
+        /// <summary>
+        /// 背景的真实路径：外部注册的定义优先用自己的绝对路径；
+        /// 玩家配置仍然落在资源库的 Background 目录。
+        /// </summary>
+        public string ResolveBackgroundPath(DomainProfile p)
+        {
+            if (p == null)
+            {
+                return "";
+            }
+            if (!string.IsNullOrEmpty(p.BackgroundFullPath))
+            {
+                return p.BackgroundFullPath;
+            }
+            if (string.IsNullOrEmpty(p.BgFile))
+            {
+                return "";
+            }
+            return Path.Combine(BackgroundDir, p.BgFile);
+        }
+
+        /// <summary>BGM 的真实路径；外部定义可用自己的绝对路径。</summary>
+        public string ResolveBgmPath(DomainProfile p)
+        {
+            if (p == null)
+            {
+                return "";
+            }
+            if (!string.IsNullOrEmpty(p.BgmFullPath))
+            {
+                return p.BgmFullPath;
+            }
+            if (string.IsNullOrEmpty(p.BgmFile))
+            {
+                return "";
+            }
+            return Path.Combine(BgmDir, p.BgmFile);
+        }
+
+        /// <summary>展开音效的真实路径；外部定义可用自己的绝对路径。</summary>
+        public string ResolveSfxPath(DomainProfile p)
+        {
+            if (p == null)
+            {
+                return "";
+            }
+            if (!string.IsNullOrEmpty(p.SfxFullPath))
+            {
+                return p.SfxFullPath;
+            }
+            if (string.IsNullOrEmpty(p.SfxFile))
+            {
+                return "";
+            }
+            return Path.Combine(SfxDir, p.SfxFile);
         }
 
         // 按调查员找他的配置：先认编号，编号对不上再按名字兜底
@@ -455,6 +546,15 @@ namespace CustomBattleBg
                 return false;
             }
             return File.Exists(Path.Combine(BgmDir, p.BgmFile));
+        }
+
+        public bool SfxExists(DomainProfile p)
+        {
+            if (p == null || string.IsNullOrEmpty(p.SfxFile))
+            {
+                return false;
+            }
+            return File.Exists(Path.Combine(SfxDir, p.SfxFile));
         }
 
         internal static string SafeRoleName(RoleData role)

@@ -47,7 +47,7 @@ namespace CustomBattleBg
             int id = GetBuffId(p, kind);
             if (id < DomainConstants.CustomBuffIdMin || id > DomainConstants.CustomBuffIdMax)
             {
-                id = CustomBattleBgPlugin.Store.AllocateBuffId();
+                id = CustomBattleBgPlugin.EnsureStore().AllocateBuffId();
                 SetBuffId(p, kind, id);
             }
             if (id == 0)
@@ -59,7 +59,7 @@ namespace CustomBattleBg
             if (existing != null && !IsOurs(existing))
             {
                 // 编号被别人占了，换一个
-                id = CustomBattleBgPlugin.Store.AllocateBuffId();
+                id = CustomBattleBgPlugin.EnsureStore().AllocateBuffId();
                 if (id == 0)
                 {
                     return 0;
@@ -152,6 +152,12 @@ namespace CustomBattleBg
                 {
                     return;
                 }
+                // 其它插件可能在自己的 Awake 里注册定义，此时游戏数据表还没就绪；
+                // 不在这里报错，真正展开时 EnsureBuff 会按需生成。
+                if (!Singleton<ResManager>.HasInstance)
+                {
+                    return;
+                }
                 BuffResFactory factory = Singleton<ResManager>.Instance.BuffFactory;
                 if (factory == null)
                 {
@@ -174,6 +180,10 @@ namespace CustomBattleBg
             try
             {
                 if (p == null)
+                {
+                    return;
+                }
+                if (!Singleton<ResManager>.HasInstance)
                 {
                     return;
                 }

@@ -21,7 +21,7 @@ using UnityEngine;
 
 namespace DuoActionSlot
 {
-    [BepInPlugin(Guid, "多行动槽", "0.1.0")]
+    [BepInPlugin(Guid, "多行动槽", "0.2.0")]
     public class DuoActionSlotPlugin : BaseUnityPlugin
     {
         public const string Guid = "codex.depersonal.duoactionslot";

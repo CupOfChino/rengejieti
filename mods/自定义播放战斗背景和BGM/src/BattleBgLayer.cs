@@ -47,11 +47,11 @@ namespace CustomBattleBg
         }
 
         /// <summary>显示（或替换成）一张背景。图片立即展开，视频等准备好再展开。</summary>
-        internal static void Show(Camera cam, string filePath, bool isVideo, bool halfScreen)
+        internal static bool Show(Camera cam, string filePath, bool isVideo, bool halfScreen)
         {
             if (cam == null || string.IsNullOrEmpty(filePath))
             {
-                return;
+                return false;
             }
             if (_instance == null)
             {
@@ -59,7 +59,7 @@ namespace CustomBattleBg
                 UnityEngine.Object.DontDestroyOnLoad(go);
                 _instance = go.AddComponent<BattleBgLayer>();
             }
-            _instance.ShowInternal(cam, filePath, isVideo, halfScreen);
+            return _instance.ShowInternal(cam, filePath, isVideo, halfScreen);
         }
 
         /// <summary>销毁叠加层，背景复原。</summary>
@@ -71,7 +71,7 @@ namespace CustomBattleBg
             }
         }
 
-        private void ShowInternal(Camera cam, string filePath, bool isVideo, bool halfScreen)
+        private bool ShowInternal(Camera cam, string filePath, bool isVideo, bool halfScreen)
         {
             try
             {
@@ -82,7 +82,7 @@ namespace CustomBattleBg
                 EnsureRoot();
                 if (_root == null)
                 {
-                    return;
+                    return false;
                 }
                 _root.transform.SetParent(cam.transform, false);
                 _root.transform.localPosition = new Vector3(0f, 0f, 10f);
@@ -102,12 +102,18 @@ namespace CustomBattleBg
                 }
                 else
                 {
-                    ShowImageNow(filePath);
+                    if (!ShowImageNow(filePath))
+                    {
+                        HideInternal();
+                        return false;
+                    }
                 }
+                return true;
             }
             catch (Exception e)
             {
                 CustomBattleBgPlugin.LogError("显示战斗背景失败：" + e);
+                return false;
             }
         }
 
@@ -239,13 +245,13 @@ namespace CustomBattleBg
             }
         }
 
-        private void ShowImageNow(string filePath)
+        private bool ShowImageNow(string filePath)
         {
             _tex = MediaLoader.LoadTexture(filePath);
             if (_tex == null)
             {
                 CustomBattleBgPlugin.LogError("背景图片读取失败，跳过切换：" + filePath);
-                return;
+                return false;
             }
             if (_visual != null)
             {
@@ -256,6 +262,7 @@ namespace CustomBattleBg
             }
             LayoutImage();
             StartReveal();
+            return true;
         }
 
         private IEnumerator ShowVideoCo(string filePath)

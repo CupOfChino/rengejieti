@@ -38,12 +38,20 @@ namespace CustomBattleBg
             get { return _current; }
         }
 
-        internal static void ApplyOnOpen(BattleRole caster, DomainProfile p, string reason)
+        /// <summary>当前领域的展开者（没有则为 null）。</summary>
+        internal static BattleRole Owner
         {
-            ApplyOnOpenAsync(caster, p, reason);
+            get { return _owner; }
         }
 
-        private static async void ApplyOnOpenAsync(BattleRole caster, DomainProfile p, string reason)
+        internal static void ApplyOnOpen(BattleRole caster, DomainProfile p, string reason,
+            bool showPresentation = true)
+        {
+            ApplyOnOpenAsync(caster, p, reason, showPresentation);
+        }
+
+        private static async void ApplyOnOpenAsync(BattleRole caster, DomainProfile p, string reason,
+            bool showPresentation)
         {
             try
             {
@@ -57,6 +65,13 @@ namespace CustomBattleBg
                 _current = p;
                 _owner = caster;
                 _broken = false;
+
+                // 展开表现（对话框/音效）独立于效果结算，失败也只写日志。
+                // 背景实际替换失败时不播放，避免"领域已经展开过、背景没变却又出现对话框"。
+                if (showPresentation)
+                {
+                    DomainPresentation.PlayOnOpen(caster, p, reason);
+                }
 
                 int statusId = DomainBuffBuilder.EnsureBuff(p, DomainBuffBuilder.KindStatus);
                 if (statusId > 0)
@@ -280,7 +295,7 @@ namespace CustomBattleBg
                 int buffId = DomainEffectPreset.BuffIdOf(p.EnemyEffectType);
                 if (!DomainBuffBuilder.IsDecayingBuff(buffId))
                 {
-                    List<BattleRole> enemies = GetEnemyTargets();
+                    List<BattleRole> enemies = GetEnemyTargets(caster);
                     for (int i = 0; i < enemies.Count; i++)
                     {
                         await AddPersistentBuff(caster, enemies[i], buffId, p.EnemyEffectValue);
@@ -316,7 +331,7 @@ namespace CustomBattleBg
             }
             if (p.EnemyTarget)
             {
-                List<BattleRole> enemies = GetEnemyTargets();
+                List<BattleRole> enemies = GetEnemyTargets(caster);
                 for (int i = 0; i < enemies.Count; i++)
                 {
                     await ApplyRoundEffectTo(p, enemies[i], caster, false);
@@ -463,12 +478,29 @@ namespace CustomBattleBg
             }
             try
             {
-                List<BattleRole> allies = BattleHelper.FightContent.Allies;
-                for (int i = 0; i < allies.Count; i++)
+                // 以施法者阵营为准：玩家角色对应 Allies，怪物/NPC 对应当前波次敌人。
+                // 这样外部模组给敌人做领域时，友方 / 敌方的含义不会反过来。
+                bool casterIsAlly = caster != null && caster.IsAlly;
+                if (casterIsAlly)
                 {
-                    if (allies[i] != null && !allies[i].IsDeath)
+                    List<BattleRole> allies = BattleHelper.FightContent.Allies;
+                    for (int i = 0; i < allies.Count; i++)
                     {
-                        result.Add(allies[i]);
+                        if (allies[i] != null && !allies[i].IsDeath)
+                        {
+                            result.Add(allies[i]);
+                        }
+                    }
+                }
+                else
+                {
+                    List<BattleNpcRole> enemies = BattleHelper.FightContent.CurWaveEnemies;
+                    for (int i = 0; i < enemies.Count; i++)
+                    {
+                        if (enemies[i] != null && !enemies[i].IsDeath)
+                        {
+                            result.Add(enemies[i]);
+                        }
                     }
                 }
             }
@@ -479,17 +511,32 @@ namespace CustomBattleBg
             return result;
         }
 
-        private static List<BattleRole> GetEnemyTargets()
+        private static List<BattleRole> GetEnemyTargets(BattleRole caster)
         {
             List<BattleRole> result = new List<BattleRole>();
             try
             {
-                List<BattleNpcRole> enemies = BattleHelper.FightContent.CurWaveEnemies;
-                for (int i = 0; i < enemies.Count; i++)
+                bool casterIsAlly = caster != null && caster.IsAlly;
+                if (casterIsAlly)
                 {
-                    if (enemies[i] != null && !enemies[i].IsDeath)
+                    List<BattleNpcRole> enemies = BattleHelper.FightContent.CurWaveEnemies;
+                    for (int i = 0; i < enemies.Count; i++)
                     {
-                        result.Add(enemies[i]);
+                        if (enemies[i] != null && !enemies[i].IsDeath)
+                        {
+                            result.Add(enemies[i]);
+                        }
+                    }
+                }
+                else
+                {
+                    List<BattleRole> allies = BattleHelper.FightContent.Allies;
+                    for (int i = 0; i < allies.Count; i++)
+                    {
+                        if (allies[i] != null && !allies[i].IsDeath)
+                        {
+                            result.Add(allies[i]);
+                        }
                     }
                 }
             }

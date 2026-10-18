@@ -42,7 +42,7 @@ namespace XinEditor
 
             if (def.BuffId < HeartConstants.CustomBuffIdMin || def.BuffId > HeartConstants.CustomBuffIdMax)
             {
-                def.BuffId = XinEditorPlugin.Store.AllocateBuffId();
+                def.BuffId = XinEditorPlugin.Store.AllocateBuffId(def);
             }
             if (def.BuffId == 0)
             {
@@ -54,10 +54,11 @@ namespace XinEditor
             {
                 if (IsOurs(existing))
                 {
+                    EnsureEffectBuffs(def, false);
                     return def.BuffId;
                 }
                 // 编号被别人占了，换一个
-                int newId = XinEditorPlugin.Store.AllocateBuffId();
+                int newId = XinEditorPlugin.Store.AllocateBuffId(def);
                 if (newId == 0)
                 {
                     return 0;
@@ -65,6 +66,7 @@ namespace XinEditor
                 def.BuffId = newId;
             }
 
+            EnsureEffectBuffs(def, false);
             factory.UGC.Add(Build(def));
             ClearCache(factory);
             XinEditorPlugin.LogInfo("已生成自定义心状态：" + def.DisplayName + "（编号 " + def.BuffId + "）");
@@ -81,7 +83,8 @@ namespace XinEditor
         {
             try
             {
-                if (def == null || def.BuffId <= 0)
+                if (def == null ||
+                    (def.BuffId <= 0 && def.Effect1BuffId <= 0 && def.Effect2BuffId <= 0))
                 {
                     return;
                 }
@@ -91,6 +94,7 @@ namespace XinEditor
                     return;
                 }
                 Unregister(def);
+                EnsureEffectBuffs(def, true);
                 factory.UGC.Add(Build(def));
                 ClearCache(factory);
                 XinEditorPlugin.LogInfo("已更新自定义心状态：" + def.DisplayName + "（编号 " + def.BuffId + "）");
@@ -115,7 +119,13 @@ namespace XinEditor
                 {
                     return;
                 }
-                int removed = factory.UGC.RemoveAll(o => o.Id == def.BuffId && IsOurs(o));
+                int removed = def.BuffId > 0
+                    ? factory.UGC.RemoveAll(o => o.Id == def.BuffId && IsOurs(o))
+                    : 0;
+                removed += RemoveEffectBuff(factory, def.Effect1BuffId);
+                removed += RemoveEffectBuff(factory, def.Effect2BuffId);
+                def.Effect1BuffId = 0;
+                def.Effect2BuffId = 0;
                 if (removed > 0)
                 {
                     ClearCache(factory);
@@ -125,6 +135,32 @@ namespace XinEditor
             {
                 XinEditorPlugin.LogError("移除状态失败：" + e.Message);
             }
+        }
+
+        private static int RemoveEffectBuff(BuffResFactory factory, int id)
+        {
+            if (id <= 0)
+            {
+                return 0;
+            }
+            return factory.UGC.RemoveAll(o => o.Id == id && IsEffectBuff(o));
+        }
+
+        private static bool IsEffectBuff(BuffTableData cfg)
+        {
+            return cfg != null && cfg.Comment != null &&
+                   cfg.Comment.StartsWith(HeartConstants.EffectCommentTag);
+        }
+
+        private static bool IsEffectBuffFor(BuffTableData cfg, HeartDefinition def, int index)
+        {
+            if (cfg == null || def == null || cfg.Comment == null)
+            {
+                return false;
+            }
+            // 用心的本体编号做归属标记，不依赖可改名的显示名。
+            return cfg.Comment == HeartConstants.EffectCommentTag +
+                "heart=" + def.BuffId + ";effect=" + (index + 1);
         }
 
         // 往 buff 表里塞了新东西之后要清它自己的缓存，否则按类型枚举的地方看不到
@@ -265,6 +301,33 @@ namespace XinEditor
             {
                 cfg.Events.Add(MakePercentDamageEvent(isBonus: true, EDamageType.Magic, magicBonusPercent));
             }
+
+            // 附加效果：每条效果独立成一个 buff 事件；单条出错只跳过这一条，不影响心本身。
+            for (int i = 0; i < HeartConstants.MaxEffects; i++)
+            {
+                HeartEffect effect = def.GetEffect(i);
+                if (effect == null || !effect.IsConfigured)
+                {
+                    continue;
+                }
+                try
+                {
+                    BuffEventData effectEvent = MakeEffectEvent(def, i, effect);
+                    if (effectEvent != null)
+                    {
+                        cfg.Events.Add(effectEvent);
+                        XinEditorPlugin.LogInfo("心效果 " + (i + 1) + " 已挂：" +
+                            HeartEffectText.TriggerName(effect.Trigger) + " / " +
+                            HeartEffectText.TargetName(effect.Target) + " / " +
+                            HeartEffectText.EffectName(effect.EffectType) + " ×" + effect.Layers);
+                    }
+                }
+                catch (Exception e)
+                {
+                    XinEditorPlugin.LogError("生成心效果失败（第 " + (i + 1) + " 条），已跳过：" + e.Message);
+                }
+            }
+
             // 回合开始：精神值正常才扣 1 点维持；处于衰弱/衰竭则解除
             cfg.Events.Add(MakeSanCostEvent());
             cfg.Events.Add(MakeSanBreakRoundStartEvent());
@@ -275,6 +338,382 @@ namespace XinEditor
             cfg.Events.Add(MakeLifeStateClearEvent());
             cfg.Events.Add(MakeBattleEndEvent());
             return cfg;
+        }
+
+        // ==================== 附加效果 ====================
+
+        /// <summary>
+        /// 预设效果需要一个单独的隐藏状态来承载图标/层数；每条预设效果分配一个编号。
+        /// 普通游戏状态直接引用原编号，不额外占号。
+        /// </summary>
+        private static void EnsureEffectBuffs(HeartDefinition def, bool rebuild)
+        {
+            if (def == null)
+            {
+                return;
+            }
+            try
+            {
+                BuffResFactory factory = Singleton<ResManager>.Instance.BuffFactory;
+                if (factory == null)
+                {
+                    return;
+                }
+
+                bool changed = false;
+                for (int i = 0; i < HeartConstants.MaxEffects; i++)
+                {
+                    try
+                    {
+                        HeartEffect effect = def.GetEffect(i);
+                        int oldId = def.GetEffectBuffId(i);
+                        if (effect == null || !effect.IsConfigured ||
+                            !HeartEffectPreset.IsSupported(effect.EffectType))
+                        {
+                            if (oldId > 0)
+                            {
+                                changed |= RemoveEffectBuff(factory, oldId) > 0;
+                            }
+                            def.SetEffectBuffId(i, 0);
+                            continue;
+                        }
+
+                        int id = oldId;
+                        if (id < HeartConstants.CustomBuffIdMin || id > HeartConstants.CustomBuffIdMax)
+                        {
+                            id = 0;
+                        }
+                        if (id > 0)
+                        {
+                            BuffTableData cached = factory.GetCache(id.ToString(CultureInfo.InvariantCulture));
+                            if (cached != null && !IsEffectBuffFor(cached, def, i))
+                            {
+                                id = 0;   // 编号被别的数据占了
+                            }
+                            else if (cached != null && IsEffectBuffFor(cached, def, i) && !rebuild)
+                            {
+                                continue;   // 本次会话里已经注册过，保持原样
+                            }
+                        }
+                        if (id == 0)
+                        {
+                            def.SetEffectBuffId(i, 0);
+                            id = XinEditorPlugin.Store.AllocateBuffId(def);
+                            if (id == 0)
+                            {
+                                XinEditorPlugin.LogError("没有空闲编号可用于心效果 " + (i + 1) + "，本次跳过");
+                                continue;
+                            }
+                            def.SetEffectBuffId(i, id);
+                            changed = true;
+                        }
+
+                        // 同一编号的旧运行时数据先摘掉，保证改层数/改类型后立即生效。
+                        changed |= factory.UGC.RemoveAll(o => o.Id == id && IsEffectBuffFor(o, def, i)) > 0;
+                        factory.UGC.Add(BuildPresetEffectBuff(def, i, effect, id));
+                        changed = true;
+                    }
+                    catch (Exception e)
+                    {
+                        // 这一条生成失败就清掉编号，避免核心 buff 的事件指向一个不存在的状态。
+                        def.SetEffectBuffId(i, 0);
+                        XinEditorPlugin.LogError("生成心效果状态失败（第 " + (i + 1) + " 条），已跳过：" + e.Message);
+                    }
+                }
+
+                if (changed)
+                {
+                    ClearCache(factory);
+                }
+            }
+            catch (Exception e)
+            {
+                XinEditorPlugin.LogError("生成心效果状态失败：" + e);
+            }
+        }
+
+        private static BuffTableData BuildPresetEffectBuff(HeartDefinition def, int index, HeartEffect effect, int id)
+        {
+            string name = PresetEffectName(effect);
+            string des = PresetEffectDescription(effect);
+            bool negative = HeartEffectPreset.IsNegative(effect.EffectType);
+
+            BuffTableData cfg = new BuffTableData();
+            cfg.Id = id;
+            cfg.Name = new LocalizationBuffKeyData();
+            cfg.Name.TarKey = "";
+            cfg.Name.SheetKey = "";
+            cfg.Name.InputText = name;
+            cfg.Des = new LocalizationBuffKeyData();
+            cfg.Des.TarKey = "";
+            cfg.Des.SheetKey = "";
+            cfg.Des.InputText = des;
+            cfg.IconPathReference = new TextureResourceReference();
+            cfg.IconPathReference.ReferenceType = ETextureReferenceType.BuffIcon;
+            cfg.IconPathReference.Key = HeartEffectPreset.IconKey(effect.EffectType);
+            cfg.Comment = HeartConstants.EffectCommentTag +
+                "heart=" + def.BuffId + ";effect=" + (index + 1);
+            cfg.BuffType = EBuffType.Other;
+            cfg.BuffEffectType = negative ? EBuffEffectType.Negative : EBuffEffectType.Positive;
+            // 按层显示；MaxLayer 设成配置层数，重复触发时不会被无限叠加，
+            // 角标显示的层数也就永远和实际百分比一致。
+            cfg.OverlayType = EBuffOverlyingType.OverlyLayer;
+            cfg.LayerCount = new MODValue();
+            cfg.LayerCount.Value = "1";
+            cfg.OverrideInitLayer = true;
+            cfg.InitLayer = 1;
+            cfg.MaxLayer = Math.Max(1, effect.Layers);
+            cfg.FxPlayType = EBuffFXPlayType.None;
+            cfg.UseFxPrefab = new ItemFxInfoData();
+            cfg.UseFxPrefab.FxRes = new PrefabResoureReference();
+            cfg.PlayFxInBattle = false;
+            cfg.PlayFxInExplore = false;
+            cfg.IsDeathClear = true;
+            cfg.IsShowUI = true;
+            cfg.Arrts = new List<ChangeAttrData>();
+            cfg.Events = new List<BuffEventData>();
+            AddPresetPercentEvent(cfg, effect.EffectType, effect.Layers);
+            AddBattleEndSelfRemove(cfg);
+            return cfg;
+        }
+
+        private static void AddBattleEndSelfRemove(BuffTableData cfg)
+        {
+            BuffEventData ev = new BuffEventData();
+            ev.EBuffTrigger = EBuffTriggerType.BattleEnd;
+            Buff_BuffChangeOption remove = new Buff_BuffChangeOption();
+            remove.ChangeType = EAddChangeMode.Remove;
+            remove.TargetType = BaseBuffOption.EBuffOptionTargetType.BuffTarget;
+            remove.IsSelf = true;
+            ev.Funcs.Add(remove);
+            cfg.Events.Add(ev);
+        }
+
+        internal static string PresetEffectName(HeartEffect effect)
+        {
+            if (effect == null)
+            {
+                return "";
+            }
+            return XinText.T("心效果：", "Shin Effect: ") + HeartEffectPreset.ShortName(effect.EffectType);
+        }
+
+        internal static string PresetEffectDescription(HeartEffect effect)
+        {
+            if (effect == null)
+            {
+                return "";
+            }
+            string des = HeartEffectPreset.Description(effect.EffectType, effect.Layers) +
+                         "\n" + XinText.T("层数 " + effect.Layers + "（每层 10%）",
+                                          "Layers: " + effect.Layers + " (10% per layer)");
+            if (HeartEffectPreset.IsNegative(effect.EffectType))
+            {
+                des = "<color=#FF5555>" + des + "</color>";
+            }
+            return des;
+        }
+
+        private static BuffEventData MakeEffectEvent(HeartDefinition def, int index, HeartEffect effect)
+        {
+            int buffId = ResolveEffectBuffId(def, index, effect);
+            if (buffId <= 0)
+            {
+                return null;
+            }
+
+            BaseBuffOption.EBuffOptionTargetType targetType = MapEffectTarget(effect.Target, effect.Trigger);
+            BuffEventData ev = new BuffEventData();
+            ev.EBuffTrigger = MapEffectTrigger(effect.Trigger);
+            ev.SatisfyAny = false;
+            // 心和默认心一样：精神值异常时不再产生附加效果。
+            ev.Checks.Add(MakeSanStateCheck(ESanState.Weak, true));
+            ev.Checks.Add(MakeSanStateCheck(ESanState.Collapse, true));
+
+            Buff_BuffChangeOption add = new Buff_BuffChangeOption();
+            add.ChangeType = EAddChangeMode.Add;
+            add.BuffId = buffId;
+            add.TargetType = targetType;
+            add.TargetAddData = new BaseBuffOption.BuffTargetAdditionalData();
+            add.IsSelf = false;
+            ev.Funcs.Add(add);
+
+            if (effect.Layers > 1)
+            {
+                Buff_BuffLayerOption layer = new Buff_BuffLayerOption();
+                layer.IsSelf = false;
+                layer.TargetType = targetType;
+                layer.TargetAddData = new BaseBuffOption.BuffTargetAdditionalData();
+                layer.BuffId = buffId;
+                layer.ChangeToSpecLayer = false;
+                layer.LayerCount = new MODValue();
+                layer.LayerCount.Value = (effect.Layers - 1).ToString(CultureInfo.InvariantCulture);
+                layer.IgnoreLayerChangeOnFirstRound = false;
+                ev.Funcs.Add(layer);
+            }
+            return ev;
+        }
+
+        private static int ResolveEffectBuffId(HeartDefinition def, int index, HeartEffect effect)
+        {
+            if (effect == null)
+            {
+                return 0;
+            }
+            if (HeartEffectPreset.IsSupported(effect.EffectType))
+            {
+                int presetId = def.GetEffectBuffId(index);
+                BuffTableData cached = null;
+                try
+                {
+                    if (presetId > 0 && Singleton<ResManager>.HasInstance)
+                    {
+                        cached = Singleton<ResManager>.Instance.BuffFactory.GetCache(
+                            presetId.ToString(CultureInfo.InvariantCulture));
+                    }
+                }
+                catch (Exception)
+                {
+                }
+                if (presetId <= 0 || cached == null || !IsEffectBuffFor(cached, def, index))
+                {
+                    XinEditorPlugin.LogError("心效果 " + (index + 1) + " 的预设状态还没有注册或已失效，已跳过");
+                    return 0;
+                }
+                return presetId;
+            }
+            if (effect.EffectType < HeartConstants.EffectBuffOffset)
+            {
+                XinEditorPlugin.LogError("心效果 " + (index + 1) + " 的类型无效（" + effect.EffectType + "），已跳过");
+                return 0;
+            }
+
+            int buffId = effect.EffectType - HeartConstants.EffectBuffOffset;
+            if (buffId == def.BuffId || buffId == def.Effect1BuffId || buffId == def.Effect2BuffId)
+            {
+                XinEditorPlugin.LogError("心效果 " + (index + 1) + " 指向了心自己，已跳过（防止递归）");
+                return 0;
+            }
+            if (!HeartBuffCatalog.ValidateBuff(buffId))
+            {
+                // 可能只是还没读进内存（游戏本体状态是按需加载的），补读一次再判断。
+                HeartBuffCatalog.LoadAllBuffsNow();
+                if (!HeartBuffCatalog.ValidateBuff(buffId))
+                {
+                    XinEditorPlugin.LogError("心效果 " + (index + 1) + " 要施加的状态不存在或是运行时状态，已跳过：" + buffId);
+                    return 0;
+                }
+            }
+            return buffId;
+        }
+
+        private static BaseBuffOption.EBuffOptionTargetType MapEffectTarget(
+            HeartEffectTarget target, HeartEffectTrigger trigger)
+        {
+            switch (target)
+            {
+                case HeartEffectTarget.AllAllies:
+                    return BaseBuffOption.EBuffOptionTargetType.AllAlly;
+                case HeartEffectTarget.AlliesOnly:
+                    return BaseBuffOption.EBuffOptionTargetType.AllAllyExceptSelfAndBackUp;
+                case HeartEffectTarget.SingleEnemy:
+                    // 命中后优先取本次被打的敌人；其它时点没有“当前目标”，随机一个存活敌人。
+                    return trigger == HeartEffectTrigger.Hit
+                        ? BaseBuffOption.EBuffOptionTargetType.BeHitRole
+                        : BaseBuffOption.EBuffOptionTargetType.RandomNotDeadEnemy;
+                case HeartEffectTarget.AllEnemies:
+                    return BaseBuffOption.EBuffOptionTargetType.AllEnemy;
+                case HeartEffectTarget.Self:
+                default:
+                    return BaseBuffOption.EBuffOptionTargetType.BuffTarget;
+            }
+        }
+
+        private static EBuffTriggerType MapEffectTrigger(HeartEffectTrigger trigger)
+        {
+            switch (trigger)
+            {
+                case HeartEffectTrigger.RoundEnd:
+                    return EBuffTriggerType.RoundEnd;
+                case HeartEffectTrigger.Hit:
+                    return EBuffTriggerType.Damage;
+                case HeartEffectTrigger.ActionStart:
+                    return EBuffTriggerType.ActionStart;
+                case HeartEffectTrigger.ActionEnd:
+                    return EBuffTriggerType.ActionEnd;
+                case HeartEffectTrigger.RoundStart:
+                default:
+                    // 和自定义BGM 的“每个行动轮开始”一致：BeforeRoundStart。
+                    return EBuffTriggerType.BeforeRoundStart;
+            }
+        }
+
+        private static void AddPresetPercentEvent(BuffTableData cfg, int type, int layers)
+        {
+            if (!HeartEffectPreset.IsSupported(type) || layers <= 0)
+            {
+                return;
+            }
+            bool isBonus;
+            EDamageType damageType;
+            int percent = layers * 10;
+            switch (type)
+            {
+                case HeartEffectPreset.PhysicalDamageBonus:
+                    isBonus = true;
+                    damageType = EDamageType.Ordinary;
+                    break;
+                case HeartEffectPreset.PhysicalDamageDown:
+                    isBonus = true;
+                    damageType = EDamageType.Ordinary;
+                    percent = -percent;
+                    break;
+                case HeartEffectPreset.PhysicalDamageReduce:
+                    isBonus = false;
+                    damageType = EDamageType.Ordinary;
+                    percent = -percent;
+                    break;
+                case HeartEffectPreset.PhysicalVulnerable:
+                    isBonus = false;
+                    damageType = EDamageType.Ordinary;
+                    break;
+                case HeartEffectPreset.MagicDamageBonus:
+                    isBonus = true;
+                    damageType = EDamageType.Magic;
+                    break;
+                case HeartEffectPreset.MagicDamageDown:
+                    isBonus = true;
+                    damageType = EDamageType.Magic;
+                    percent = -percent;
+                    break;
+                case HeartEffectPreset.MagicDamageReduce:
+                    isBonus = false;
+                    damageType = EDamageType.Magic;
+                    percent = -percent;
+                    break;
+                case HeartEffectPreset.MagicVulnerable:
+                    isBonus = false;
+                    damageType = EDamageType.Magic;
+                    break;
+                default:
+                    return;
+            }
+
+            BuffEventData ev = new BuffEventData();
+            ev.EBuffTrigger = EBuffTriggerType.Stable;
+            Buff_ChangeAddOrReducePercentOption opt = new Buff_ChangeAddOrReducePercentOption();
+            opt.TargetType = BaseBuffOption.EBuffOptionTargetType.BuffTarget;
+            opt.ChangeType = isBonus
+                ? Buff_ChangeAddOrReducePercentOption.EHitType.CauseDamage
+                : Buff_ChangeAddOrReducePercentOption.EHitType.BeDamaged;
+            opt.IsRemove = false;
+            opt.ChangeByValue = false;
+            opt.Percent = percent / 100f;
+            opt.FloorValue = 0;
+            opt.DamageTypes = new List<EDamageType>();
+            opt.DamageTypes.Add(damageType);
+            ev.Funcs.Add(opt);
+            cfg.Events.Add(ev);
         }
 
         private static ChangeAttrData ExAttr(ERoleExtraAttribute type, int value)

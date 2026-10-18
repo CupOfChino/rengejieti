@@ -94,7 +94,7 @@ namespace CustomBattleBg
                         continue;
                     }
                     DomainProfile profile = CustomBattleBgPlugin.Store.Find(ally.Data);
-                    if (profile == null || !profile.HasAnything)
+                    if (profile == null || !profile.HasAnyContent)
                     {
                         continue;
                     }
@@ -124,8 +124,8 @@ namespace CustomBattleBg
                 CustomBattleBgPlugin.LogInfo("战斗开始：由速度最慢的「" + name + "」（速度 " + slowestSpeed +
                     "）展开领域：" + (p != null ? p.DisplayName : "?"));
                 _domainOwnerKey = GetRoleKey(slowest.Data);
-                ApplyProfile(slowest.Data, p, "战斗开始");
-                DomainEffects.ApplyOnOpen(slowest, p, "战斗开始");
+                bool backgroundApplied = ApplyProfile(p, "战斗开始");
+                DomainEffects.ApplyOnOpen(slowest, p, "战斗开始", backgroundApplied);
             }
             catch (Exception e)
             {
@@ -170,7 +170,10 @@ namespace CustomBattleBg
         /// <summary>保证"原始 BGM"已经记录（一场战斗只记一次，记在第一次切换之前）。</summary>
         internal static void EnsureOriginRecorded()
         {
-            if (!_sessionActive)
+            // 只有确实在战斗里才开启/复用"本场战斗会话"。
+            // 外部模组在非战斗场景只切 BGM 时，不能把会话标记弄脏，
+            // 否则下一场战斗开始时不会重新记录、不会自动展开。
+            if (IsBattleActive() && !_sessionActive)
             {
                 _sessionActive = true;
                 _originRecorded = false;
@@ -182,36 +185,208 @@ namespace CustomBattleBg
             }
         }
 
+        /// <summary>当前是否真的有战斗场景和战斗相机（探索/大厅为 false）。</summary>
+        internal static bool IsBattleActive()
+        {
+            try
+            {
+                return BattleHelper.FightContent != null && BattleHelper.FightContent.Room != null;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        // ==================== 外部模组 API 的运行时入口（2026-10-18）====================
+
+        /// <summary>
+        /// 外部定义展开：不要求【领域】特质，也不要求角色有玩家配置。
+        /// force=false 时，同一个施法者 + 同一个定义已经在场就不重复展开；
+        /// force=true 时每次都重新应用背景/BGM并刷新领域效果。
+        /// </summary>
+        internal static bool ExpandExternal(DomainProfile profile, BattleRole self, string reason, bool force)
+        {
+            try
+            {
+                if (profile == null || self == null || self.Data == null)
+                {
+                    return false;
+                }
+                if (!IsBattleActive())
+                {
+                    CustomBattleBgPlugin.LogError("（" + reason + "）当前不在战斗中，不能展开战斗背景：" +
+                        profile.DisplayName);
+                    return false;
+                }
+
+                string key = "external:" + profile.ExternalOwner + "/" + profile.ExternalId + "/" +
+                             GetRoleKey(self.Data);
+                if (!force && key == _domainOwnerKey)
+                {
+                    CustomBattleBgPlugin.LogInfo("（" + reason + "）「" + profile.DisplayName +
+                        "」已经是当前领域，跳过重复展开");
+                    return true;
+                }
+
+                EnsureOriginRecorded();
+                _sessionActive = true;
+                _domainOwnerKey = key;
+                CustomBattleBgPlugin.LogInfo("（" + reason + "）外部领域展开：「" + profile.DisplayName +
+                    "」，施法者：" + DomainStore.SafeRoleName(self.Data));
+                bool backgroundApplied = ApplyProfile(profile, reason);
+                DomainEffects.ApplyOnOpen(self, profile, reason, backgroundApplied);
+                return true;
+            }
+            catch (Exception e)
+            {
+                CustomBattleBgPlugin.LogError("外部领域展开失败：" + e);
+                return false;
+            }
+        }
+
+        /// <summary>只切背景 + BGM，不挂领域状态、不结算领域效果。</summary>
+        internal static bool PlayVisual(DomainProfile profile, string reason)
+        {
+            try
+            {
+                if (profile == null || !profile.HasAnything)
+                {
+                    return false;
+                }
+                if (!IsBattleActive() || GetBattleCamera() == null)
+                {
+                    CustomBattleBgPlugin.LogError("（" + reason + "）当前不在战斗中，不能播放战斗背景：" +
+                        profile.DisplayName);
+                    return false;
+                }
+                EnsureOriginRecorded();
+                bool backgroundApplied;
+                bool videoShown = ApplyBackground(profile, reason, out backgroundApplied);
+                ApplyBgm(profile, reason, videoShown);
+                return backgroundApplied;
+            }
+            catch (Exception e)
+            {
+                CustomBattleBgPlugin.LogError("播放外部背景/BGM失败：" + e);
+                return false;
+            }
+        }
+
+        /// <summary>只切背景（BGM 保持不动）。</summary>
+        internal static bool PlayBackgroundOnly(DomainProfile profile, string reason)
+        {
+            try
+            {
+                if (profile == null || !profile.HasBackground)
+                {
+                    return false;
+                }
+                if (!IsBattleActive() || GetBattleCamera() == null)
+                {
+                    CustomBattleBgPlugin.LogError("（" + reason + "）当前不在战斗中，不能播放战斗背景：" +
+                        profile.DisplayName);
+                    return false;
+                }
+                EnsureOriginRecorded();
+                bool backgroundApplied;
+                ApplyBackground(profile, reason, out backgroundApplied);
+                return backgroundApplied;
+            }
+            catch (Exception e)
+            {
+                CustomBattleBgPlugin.LogError("播放外部背景失败：" + e);
+                return false;
+            }
+        }
+
+        /// <summary>只切 BGM；任意场景可用。战斗内会在战斗结束/手动停止时复原。</summary>
+        internal static bool PlayBgmOnly(DomainProfile profile, string reason)
+        {
+            try
+            {
+                if (profile == null || !profile.HasBgm)
+                {
+                    return false;
+                }
+                string path = CustomBattleBgPlugin.EnsureStore().ResolveBgmPath(profile);
+                if (string.IsNullOrEmpty(path) || !File.Exists(path))
+                {
+                    CustomBattleBgPlugin.LogError("（" + reason + "）BGM 文件不存在：" + path);
+                    return false;
+                }
+                EnsureOriginRecorded();
+                BattleBgm.SwitchTo(path, profile.BgmLoop);
+                CustomBattleBgPlugin.LogInfo("（" + reason + "）播放外部 BGM：" + profile.BgmFile);
+                return true;
+            }
+            catch (Exception e)
+            {
+                CustomBattleBgPlugin.LogError("播放外部 BGM 失败：" + e);
+                return false;
+            }
+        }
+
+        /// <summary>停止当前领域：移除效果、隐藏背景层、BGM 复原。</summary>
+        internal static bool StopPlayback(string reason)
+        {
+            try
+            {
+                DomainEffects.RemoveCurrent(reason);
+                BattleBgLayer.Hide();
+                BattleBgm.RestoreOrigin(reason);
+                _domainOwnerKey = "";
+                BattleBgm.ClearRecord();
+                _originRecorded = false;
+                if (!IsBattleActive())
+                {
+                    _sessionActive = false;
+                }
+                CustomBattleBgPlugin.LogInfo("（" + reason + "）已停止当前领域播放");
+                return true;
+            }
+            catch (Exception e)
+            {
+                CustomBattleBgPlugin.LogError("停止领域播放失败：" + e);
+                return false;
+            }
+        }
+
         /// <summary>把某个调查员的配置应用上去（背景 + BGM）。</summary>
-        internal static void ApplyProfile(RoleData roleData, DomainProfile profile, string reason)
+        internal static bool ApplyProfile(DomainProfile profile, string reason)
         {
             if (profile == null)
             {
                 CustomBattleBgPlugin.LogInfo("（" + reason + "）没有配置，跳过");
-                return;
+                return false;
             }
-            if (!profile.HasAnything)
+            if (!profile.HasAnyContent)
             {
-                CustomBattleBgPlugin.LogInfo("（" + reason + "）" + profile.DisplayName + " 没有配任何资源，跳过");
-                return;
+                CustomBattleBgPlugin.LogInfo("（" + reason + "）" + profile.DisplayName + " 没有配任何背景/BGM/效果，跳过");
+                return false;
             }
             EnsureOriginRecorded();
 
-            bool videoShown = ApplyBackground(profile, reason);
+            bool backgroundApplied;
+            bool videoShown = ApplyBackground(profile, reason, out backgroundApplied);
             ApplyBgm(profile, reason, videoShown);
+            return backgroundApplied;
         }
 
         /// <summary>应用背景；返回"这次是不是换了视频背景"（视频会接管音乐通道）。</summary>
-        private static bool ApplyBackground(DomainProfile profile, string reason)
+        private static bool ApplyBackground(DomainProfile profile, string reason, out bool backgroundApplied)
         {
+            backgroundApplied = false;
             try
             {
                 if (!profile.HasBackground)
                 {
                     CustomBattleBgPlugin.LogInfo("（" + reason + "）没有配置战斗背景，背景保持原样");
+                    // 没有背景可换，不阻止纯 BGM/效果/对话框领域继续表现。
+                    backgroundApplied = true;
                     return false;
                 }
-                string path = Path.Combine(CustomBattleBgPlugin.Store.BackgroundDir, profile.BgFile);
+                string path = CustomBattleBgPlugin.EnsureStore().ResolveBackgroundPath(profile);
                 if (!File.Exists(path))
                 {
                     CustomBattleBgPlugin.LogError("（" + reason + "）背景文件不存在，跳过背景切换：" + path);
@@ -226,7 +401,12 @@ namespace CustomBattleBg
                 bool isVideo = path.EndsWith(".mp4", StringComparison.OrdinalIgnoreCase);
                 // 「只占上半屏」只对视频生效；图片永远全屏铺满（用户 2026-10-01 口径）
                 bool useHalfScreen = isVideo && profile.HalfScreen;
-                BattleBgLayer.Show(cam, path, isVideo, useHalfScreen);
+                if (!BattleBgLayer.Show(cam, path, isVideo, useHalfScreen))
+                {
+                    CustomBattleBgPlugin.LogError("（" + reason + "）战斗背景层没有成功显示，跳过表现层");
+                    return false;
+                }
+                backgroundApplied = true;
                 CustomBattleBgPlugin.LogInfo("（" + reason + "）切换战斗背景：" + profile.BgFile +
                     (isVideo ? "（视频）" : "（图片）") + (useHalfScreen ? "（只占上半屏）" : ""));
                 return isVideo;
@@ -243,7 +423,7 @@ namespace CustomBattleBg
             try
             {
                 string path = profile.HasBgm
-                    ? Path.Combine(CustomBattleBgPlugin.Store.BgmDir, profile.BgmFile)
+                    ? CustomBattleBgPlugin.EnsureStore().ResolveBgmPath(profile)
                     : null;
                 if (path != null && File.Exists(path))
                 {
@@ -369,8 +549,8 @@ namespace CustomBattleBg
                 }
                 _domainOwnerKey = key;
                 CustomBattleBgPlugin.LogInfo("（" + reason + "）「" + name + "」展开领域：" + profile.DisplayName);
-                ApplyProfile(roleData, profile, reason);
-                DomainEffects.ApplyOnOpen(self, profile, reason);
+                bool backgroundApplied = ApplyProfile(profile, reason);
+                DomainEffects.ApplyOnOpen(self, profile, reason, backgroundApplied);
             }
             catch (Exception e)
             {
@@ -411,9 +591,15 @@ namespace CustomBattleBg
                 {
                     return;
                 }
+                // 外部模组预先绑定在技能 / 法术上的领域优先于角色自己的玩家配置；
+                // 同一条行动只触发最后注册的那个外部绑定。
+                if (DomainApi.TryTriggerActionBinding(data))
+                {
+                    return;
+                }
                 RoleData roleData = data.Self.Data;
                 DomainProfile profile = CustomBattleBgPlugin.Store.Find(roleData);
-                if (profile == null || !profile.HasAnything || profile.MountType == 0)
+                if (profile == null || !profile.HasAnyContent || profile.MountType == 0)
                 {
                     return;
                 }

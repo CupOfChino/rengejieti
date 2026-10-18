@@ -61,6 +61,19 @@ namespace DuoActionSlot
         private static readonly Dictionary<string, Func<BattleRole, int>> Providers =
             new Dictionary<string, Func<BattleRole, int>>();
 
+        private sealed class PresetRule
+        {
+            internal string SourceKey;
+            internal string RoleKey;
+            internal int ConfigId;
+            internal string RoleName;
+            internal int Extra;
+            internal string Identity;
+        }
+
+        private static readonly object PresetGate = new object();
+        private static readonly List<PresetRule> PresetRules = new List<PresetRule>();
+
         /// <summary>某个角色的槽数变化时触发（角色, 新槽数）。只在该模组重算时触发。</summary>
         public static event Action<BattleRole, int> SlotCountChanged;
 
@@ -85,7 +98,7 @@ namespace DuoActionSlot
             }
         }
 
-        /// <summary>额外行动槽数（不含基础 1 个）。</summary>
+        /// <summary>额外行动槽数（不含基础 1 个；含预设规则、运行时记账和动态提供者）。</summary>
         public static int GetExtraSlotCount(BattleRole role)
         {
             try
@@ -357,6 +370,192 @@ namespace DuoActionSlot
             }
         }
 
+        // ---------------- 预设角色 / 怪物（创作时登记，进战斗自动生效） ----------------
+
+        /// <summary>
+        /// 按调查员的稳定编号（RoleLibraryKey）预设额外行动槽。
+        /// 在插件 Awake / 角色创建时登记即可，不必等战斗里拿到 BattleRole。
+        /// 同一 sourceKey 对同一角色只应用一次（多条规则命中取最大值）。
+        /// </summary>
+        public static void SetExtraSlotCountForRoleKey(string sourceKey, string roleLibraryKey, int extra)
+        {
+            SetPresetRule(sourceKey, CleanKey(roleLibraryKey), 0, "", extra, "RoleKey");
+        }
+
+        /// <summary>
+        /// 按角色配置编号（RoleData.ConfigId）预设额外行动槽——怪物 / NPC 用这个。
+        /// 同样可以在战斗开始前登记。
+        /// </summary>
+        public static void SetExtraSlotCountForConfigId(string sourceKey, int configId, int extra)
+        {
+            if (configId <= 0)
+            {
+                DuoActionSlotPlugin.LogError("API 预设行动槽失败：ConfigId 必须大于 0");
+                return;
+            }
+            SetPresetRule(sourceKey, "", configId, "", extra, "ConfigId");
+        }
+
+        /// <summary>
+        /// 按角色名字预设额外行动槽。适合没有稳定编号的自建单位；
+        /// 同名角色会一起命中，正式内容优先用 RoleKey / ConfigId。
+        /// </summary>
+        public static void SetExtraSlotCountForRoleName(string sourceKey, string roleName, int extra)
+        {
+            SetPresetRule(sourceKey, "", 0, CleanKey(roleName), extra, "RoleName");
+        }
+
+        /// <summary>移除某个模组登记的全部预设规则；返回移除条数。</summary>
+        public static int RemovePresetExtraSlotCounts(string sourceKey)
+        {
+            sourceKey = CleanKey(sourceKey);
+            if (string.IsNullOrEmpty(sourceKey))
+            {
+                return 0;
+            }
+            int removed = 0;
+            lock (PresetGate)
+            {
+                for (int i = PresetRules.Count - 1; i >= 0; i--)
+                {
+                    if (string.Equals(PresetRules[i].SourceKey, sourceKey, StringComparison.Ordinal))
+                    {
+                        PresetRules.RemoveAt(i);
+                        removed++;
+                    }
+                }
+            }
+            if (removed > 0)
+            {
+                DuoActionSlotPlugin.LogInfo("API：移除预设行动槽 [" + sourceKey + "] 共 " + removed + " 条");
+            }
+            return removed;
+        }
+
+        /// <summary>只查询预设规则给出的额外槽数（不含运行时 API 记账和动态提供者）。</summary>
+        public static int GetPresetExtraSlotCount(BattleRole role)
+        {
+            try
+            {
+                return GetPresetCount(role);
+            }
+            catch (Exception)
+            {
+                return 0;
+            }
+        }
+
+        private static void SetPresetRule(string sourceKey, string roleKey, int configId,
+            string roleName, int extra, string kind)
+        {
+            try
+            {
+                sourceKey = CleanKey(sourceKey);
+                if (string.IsNullOrEmpty(sourceKey))
+                {
+                    DuoActionSlotPlugin.LogError("API 预设行动槽失败：sourceKey 不能为空");
+                    return;
+                }
+                extra = Math.Max(0, extra);
+                string match = kind == "RoleKey" ? roleKey :
+                               kind == "ConfigId" ? configId.ToString() : roleName;
+                if (string.IsNullOrEmpty(match) || match == "0")
+                {
+                    DuoActionSlotPlugin.LogError("API 预设行动槽失败：" + kind + " 不能为空");
+                    return;
+                }
+                string identity = sourceKey + "\u001f" + kind + "\u001f" + match;
+                lock (PresetGate)
+                {
+                    for (int i = PresetRules.Count - 1; i >= 0; i--)
+                    {
+                        if (PresetRules[i].Identity == identity)
+                        {
+                            PresetRules.RemoveAt(i);
+                        }
+                    }
+                    PresetRule rule = new PresetRule();
+                    rule.SourceKey = sourceKey;
+                    rule.RoleKey = roleKey;
+                    rule.ConfigId = configId;
+                    rule.RoleName = roleName;
+                    rule.Extra = extra;
+                    rule.Identity = identity;
+                    PresetRules.Add(rule);
+                }
+                DuoActionSlotPlugin.LogInfo("API：预设 " + kind + "=" + match + " 额外行动槽 [" +
+                    sourceKey + "] = " + extra + "（进入战斗 / 下一幕自动生效）");
+            }
+            catch (Exception e)
+            {
+                DuoActionSlotPlugin.LogError("API 预设行动槽失败：" + e.Message);
+            }
+        }
+
+        private static int GetPresetCount(BattleRole role)
+        {
+            if (role == null || role.Data == null)
+            {
+                return 0;
+            }
+            // 同一来源即使命中多条规则也只算一次，取最大值；不同来源叠加。
+            Dictionary<string, int> perSource = new Dictionary<string, int>();
+            lock (PresetGate)
+            {
+                for (int i = 0; i < PresetRules.Count; i++)
+                {
+                    PresetRule rule = PresetRules[i];
+                    if (!PresetMatches(rule, role))
+                    {
+                        continue;
+                    }
+                    int old;
+                    if (!perSource.TryGetValue(rule.SourceKey, out old) || rule.Extra > old)
+                    {
+                        perSource[rule.SourceKey] = rule.Extra;
+                    }
+                }
+            }
+            int total = 0;
+            foreach (int value in perSource.Values)
+            {
+                total += value;
+            }
+            return Math.Max(0, total);
+        }
+
+        private static bool PresetMatches(PresetRule rule, BattleRole role)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(rule.RoleKey) &&
+                    !string.Equals(role.Data.RoleLibraryKey, rule.RoleKey, StringComparison.Ordinal))
+                {
+                    return false;
+                }
+                if (rule.ConfigId != 0 && role.Data.ConfigId != rule.ConfigId)
+                {
+                    return false;
+                }
+                if (!string.IsNullOrEmpty(rule.RoleName) &&
+                    !string.Equals(role.Data.Name, rule.RoleName, StringComparison.Ordinal))
+                {
+                    return false;
+                }
+                return !string.IsNullOrEmpty(rule.RoleKey) || rule.ConfigId != 0 ||
+                       !string.IsNullOrEmpty(rule.RoleName);
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        private static string CleanKey(string value)
+        {
+            return value == null ? "" : value.Trim();
+        }
+
         // ---------------- 动态提供者 ----------------
 
         public static void RegisterSlotCountProvider(string sourceKey, Func<BattleRole, int> provider)
@@ -417,6 +616,7 @@ namespace DuoActionSlot
                     total += value;
                 }
             }
+            total += GetPresetCount(role);
             lock (Providers)
             {
                 foreach (KeyValuePair<string, Func<BattleRole, int>> pair in Providers)

@@ -18,7 +18,7 @@
 			"Localization_Des" : {
 				"TarKey" : "",
 				"SheetKey" : "",
-				"InputText" : "将只属于自己的战斗领域具象化。\n\n特质苏醒（进入战斗）时自动展开：切换战斗背景并播放自定义战斗BGM。\n战斗中也可以使用技艺「领域展开」重新展开一次。\n\n战斗结束后，背景与BGM都会恢复原样。",
+				"InputText" : "将只属于自己的战斗领域具象化。\n\n特质苏醒时，进入战斗自动展开：切换战斗背景并播放自定义战斗BGM。\n特质沉睡时不会在战斗开始自动播放，不影响挂载的行动。\n无论苏醒还是沉睡，都可以在幕间编辑领域。\n战斗中也可以使用技艺「领域展开」重新展开一次。\n\n战斗结束后，背景与BGM都会恢复原样。",
 				"Characteristic" : null
 			},
 			"BuffsLink" : [
@@ -46,7 +46,7 @@
 				"Localization_Functin" : {
 					"TarKey" : "",
 					"SheetKey" : "",
-					"InputText" : "不展开",
+					"InputText" : "不在战斗开始自动播放，不影响挂载的行动",
 					"Characteristic" : null
 				},
 				"Inherent" : [

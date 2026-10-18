@@ -107,10 +107,12 @@ namespace CustomBattleBg
             "Materialize a battle domain of your own.\n\n" +
             "Auto-expands when the trait is awake (on entering battle): switches the battle background " +
             "and plays your custom battle BGM.\n" +
+            "When asleep, it does not auto-play at battle start; mounted actions still work.\n" +
+            "You can edit the domain during interlude whether the trait is awake or asleep.\n" +
             "You can also re-expand it in battle with the skill \"Domain Expansion\".\n\n" +
             "The background and BGM are restored when the battle ends.";
-        internal const string TraitWake = "Auto-expand";
-        internal const string TraitSleepy = "No expansion";
+        internal const string TraitWake = "Auto-expand at battle start";
+        internal const string TraitSleepy = "No auto-play at battle start; mounted actions still work";
 
         internal const string SkillName = "Domain Expansion";
         internal const string SkillDes =
@@ -121,7 +123,8 @@ namespace CustomBattleBg
         internal const string EditVacatTitle = "Edit custom battle background & BGM";
         internal const string EditVacatDes =
             "Set this investigator's own battle background and battle BGM: an image/video background, " +
-            "an ogg/mp3 BGM, and whether the BGM loops.";
+            "an ogg/mp3 BGM, whether the BGM loops, and optional opening dialogue/sound. " +
+            "Can be edited whether the Domain trait is awake or asleep.";
         internal const string EditVacatEffect = "Open the Domain editor";
 
         internal const string AddVacatTitle = "Add Domain";
@@ -280,6 +283,11 @@ namespace CustomBattleBg
             { "循环播放", "Loop" },
             { "只占上半屏（仅视频生效，下方保留原来的背景）",
               "Top half only (video only; keeps the original background below)" },
+            { "开启时出现对话框", "Show dialogue on open" },
+            { "开启时音效", "Play sound on open" },
+            { "选择音效", "Choose sound" },
+            { "（苏醒状态自动触发，需要沉睡状态下才有作用）",
+              "(Auto-triggered while awake; mounted actions matter while asleep)" },
             { "选择文件", "Choose file" },
             { "清除", "Clear" },
             { "未选择", "Not set" },
@@ -305,10 +313,18 @@ namespace CustomBattleBg
               "Unsupported format: background allows mp4 / png / jpg only." },
             { "这个文件格式不对：BGM 只支持 ogg / mp3。",
               "Unsupported format: BGM allows ogg / mp3 only." },
+            { "这个文件格式不对：音效只支持 ogg / mp3 / wav。",
+              "Unsupported format: sound allows ogg / mp3 / wav only." },
             { "复制资源失败，看日志。", "Failed to copy the resource - check the log." },
             { "把这个角色自己的战斗背景和BGM删掉吗？", "Delete this investigator's background/BGM settings?" },
             { "没有选择背景。", "No background selected." },
             { "没有选择BGM。", "No BGM selected." },
+            { "没有选择音效。", "No sound selected." },
+            { "已选择音效：", "Sound selected: " },
+            { "从资源库选择展开音效", "Choose opening sound from the library" },
+            { "已从资源库选择音效：", "Sound chosen from library: " },
+            { "已勾选“开启时音效”，请先选择音效文件，或取消勾选。",
+              "Play sound on open is checked; choose a sound file or uncheck it." },
             { "已清除背景选择（文件不存在或被别的配置用着，没有删）。",
               "Background selection cleared (file missing or in use by another profile; not deleted)." },
             { "已清除BGM选择（文件不存在或被别的配置用着，没有删）。",
@@ -349,6 +365,14 @@ namespace CustomBattleBg
             "\n\n(There is no resource library yet; import it again to use it)",
             "已清除并删除背景文件：", "Cleared and deleted background file: ",
             "已清除并删除BGM文件：", "Cleared and deleted BGM file: ",
+            "清除会把这段音效文件一起删掉：", "Clearing will also delete this sound file: ",
+            "已清除并删除音效文件：", "Cleared and deleted sound file: ",
+            "已选择音效：", "Sound selected: ",
+            "已从资源库选择音效：", "Sound chosen from library: ",
+            "\n\n（删掉后要重新导入才能再用）",
+            "\n\n(You will need to import it again to use it)",
+            "已清除音效选择（文件不存在或被别的配置用着，没有删）。",
+            "Sound selection cleared (file missing or in use by another profile; not deleted).",
             "资源库里已经有同名文件：\n", "A file with the same name already exists in the asset folder:\n",
             "\n\n要覆盖它吗？（引用这个文件的配置会换成新内容）",
             "\n\nOverwrite it? (Profiles referencing this file will switch to the new content)",

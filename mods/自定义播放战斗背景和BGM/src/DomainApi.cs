@@ -1,5 +1,6 @@
 // 给其它模组用的扩展接口。
 //
+// 这个文件负责幕间入口；领域播放 / 注册 / 行动绑定在 DomainApiRuntime.cs。
 // 提供两件事：
 //   1. 开关幕间入口 —— 任何一个注册方说"关"（enabled = false），这个入口就不展示；
 //   2. 重写幕间入口 —— 注册一个回调，玩家点这条幕间入口时走你的实现，而不是本模组的默认行为。
@@ -16,7 +17,7 @@ using System.Text;
 
 namespace CustomBattleBg
 {
-    public static class DomainApi
+    public static partial class DomainApi
     {
         /// <summary>幕间入口：添加「领域」。</summary>
         public const string MenuAdd = "add";

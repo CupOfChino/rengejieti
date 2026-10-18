@@ -88,7 +88,11 @@ namespace CustomBattleBg
             }
         }
 
-        /// <summary>这个角色身上有没有【领域】特质（醒着）。</summary>
+        /// <summary>
+        /// 这个角色身上有没有【领域】特质。
+        /// 编辑/移除入口不看苏醒状态：沉睡只是"不在战斗开始自动播放"，
+        /// 「领域展开」技艺和挂载行动仍然可用。
+        /// </summary>
         internal static bool HasDomainTrait(RoleData role)
         {
             if (role == null)
@@ -102,7 +106,7 @@ namespace CustomBattleBg
                 {
                     return false;
                 }
-                return trait.CurrentState == ETraitState.Wake;
+                return true;
             }
             catch (Exception)
             {

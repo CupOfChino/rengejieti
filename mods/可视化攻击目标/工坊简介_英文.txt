@@ -16,7 +16,10 @@ Visualizes who is attacking whom: every action that has been locked in gets an a
 [*] Red: aimed at enemies (throw actions are always red)
 [*] Green: aimed at allies
 [*] Blue: interference actions (the vanilla non-damaging skills aimed at enemies)
-[*] Yellow: clash (two characters targeting each other)
+[*] Downward blue dashed: self-targeted actions (same start as other arrows, drawn beneath the action slot, pointing to the top of the character model)
+[*] Yellow: clash (attack vs attack)
+[*] Cyan: clash (technique vs technique)
+[*] Blue + red: clash between a technique and an attack action
 [/list]
 
 [h2]Notes[/h2]
@@ -24,6 +27,7 @@ Visualizes who is attacking whom: every action that has been locked in gets an a
 [*] Requires the BepInEx framework mod
 [*] Arrows only appear during the action-selection phase, and are all cleared once the round starts resolving
 [*] Arrows are a forecast: if the target dies, gets intercepted or covered, or is grappled before the action resolves, the actual target may change
+[*] Group ally buffs: green dashed arrows for allies, plus a blue downward arrow for the caster
 [/list]
 
 This build is visualization only. More iterations are on the way — stay tuned.

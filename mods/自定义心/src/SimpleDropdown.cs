@@ -40,7 +40,7 @@ namespace XinEditor
         }
 
         public SimpleDropdown(Transform owner, string name, string[] options,
-            float x, float y, float width, float height)
+            float x, float y, float width, float height, int fontSize = 22)
         {
             _options = options;
             _disabled = new bool[options.Length];
@@ -48,7 +48,7 @@ namespace XinEditor
             _itemLabels = new Text[options.Length];
             _index = 0;
 
-            _button = UIFactory.TextButton(owner, name, options.Length > 0 ? options[0] : "-", Toggle, false, 22);
+            _button = UIFactory.TextButton(owner, name, options.Length > 0 ? options[0] : "-", Toggle, false, fontSize);
             UIFactory.Place(_button.GetComponent<RectTransform>(), x, y, width, height);
             _buttonLabel = _button.transform.Find("Text").GetComponent<Text>();
 
@@ -155,6 +155,7 @@ namespace XinEditor
 
         private void Toggle()
         {
+            HeartSearchDropdown.CloseOpened();
             if (_listRoot.activeSelf)
             {
                 _listRoot.SetActive(false);
@@ -171,6 +172,15 @@ namespace XinEditor
             _opened = this;
             _listRoot.transform.SetAsLastSibling();
             _listRoot.SetActive(true);
+        }
+
+        internal static void CloseOpened()
+        {
+            if (_opened != null)
+            {
+                _opened._listRoot.SetActive(false);
+                _opened = null;
+            }
         }
 
         private void Pick(int index)

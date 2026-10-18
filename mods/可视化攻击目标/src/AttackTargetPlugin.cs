@@ -18,16 +18,17 @@ namespace AttackTargetVisualizer
     /// 箭头那部分不改游戏原有界面、不改数据、不碰存档，拔掉插件就等于没装；
     /// 私货那部分只对自己那几个编号（88xxxx）动手。
     /// </summary>
-    [BepInPlugin(Guid, "可视化攻击目标", "0.2.0")]
+    [BepInPlugin(Guid, "可视化攻击目标", "0.2.3")]
     public class AttackTargetPlugin : BaseUnityPlugin
     {
         public const string Guid = "codex.depersonal.attacktargetvisualizer";
 
         /// <summary>
-        /// 箭头画布的排序值。游戏自己的行动槽牌子在 "UI" 层用 0，
-        /// 我们取 -1 → 箭头压在战斗画面之上、牌子之下（跟边狱巴士一个观感）。
+        /// 普通箭头画布的初始排序值。真正显示前由 ArrowLayer 对齐到行动槽画布 +10；
+        /// 自指向箭头单独用一张 -1 的画布，压在行动槽下面。
         /// </summary>
         private const int SortingOrder = -1;
+        private const int SelfSortingOrder = -1;
 
         internal static ManualLogSource Log;
 
@@ -92,31 +93,49 @@ namespace AttackTargetVisualizer
                 UIRoot.AddCanvas(go, SortingOrder);
                 canvas.sortingOrder = SortingOrder;
 
-                GameObject child = new GameObject("Arrows", typeof(RectTransform));
-                child.transform.SetParent(go.transform, false);
-                RectTransform rt = (RectTransform)child.transform;
-                rt.anchorMin = Vector2.zero;
-                rt.anchorMax = Vector2.one;
-                rt.offsetMin = Vector2.zero;
-                rt.offsetMax = Vector2.zero;
-                rt.pivot = new Vector2(0.5f, 0.5f);
-                rt.localScale = Vector3.one;
+                ArrowGraphic graphic = CreateArrowGraphic(go, "Arrows");
 
-                ArrowGraphic graphic = child.AddComponent<ArrowGraphic>();
-                graphic.raycastTarget = false;
-                graphic.color = Color.white;
+                // 自指向箭头单独一张画布：起点和普通箭头一样取槽框顶边，
+                // 但排序值低于行动槽，线段穿过牌子的部分会被牌子遮住。
+                GameObject goSelf = new GameObject("AttackTargetSelfArrowLayer", typeof(RectTransform));
+                goSelf.transform.SetParent(uiRoot.Trans_ChildElement, false);
+                Canvas selfCanvas = goSelf.AddComponent<Canvas>();
+                goSelf.AddComponent<CanvasScaler>();
+                UIRoot.AddCanvas(goSelf, SelfSortingOrder);
+                selfCanvas.sortingOrder = SelfSortingOrder;
+                ArrowGraphic selfGraphic = CreateArrowGraphic(goSelf, "SelfArrows");
 
                 _layer = go.AddComponent<ArrowLayer>();
                 _layer.Graphic = graphic;
                 _layer.Canvas = canvas;
+                _layer.SelfGraphic = selfGraphic;
+                _layer.SelfCanvas = selfCanvas;
 
-                Log.LogInfo("箭头画布已建立（sortingOrder=" + SortingOrder + "）");
+                Log.LogInfo("箭头画布已建立（普通=" + SortingOrder + "，自指向=" + SelfSortingOrder + "）");
             }
             catch (Exception e)
             {
-            _createFailed = true;
+                _createFailed = true;
                 Log.LogError("建立箭头画布失败：" + e);
             }
+        }
+
+        private static ArrowGraphic CreateArrowGraphic(GameObject parent, string name)
+        {
+            GameObject child = new GameObject(name, typeof(RectTransform));
+            child.transform.SetParent(parent.transform, false);
+            RectTransform rt = (RectTransform)child.transform;
+            rt.anchorMin = Vector2.zero;
+            rt.anchorMax = Vector2.one;
+            rt.offsetMin = Vector2.zero;
+            rt.offsetMax = Vector2.zero;
+            rt.pivot = new Vector2(0.5f, 0.5f);
+            rt.localScale = Vector3.one;
+
+            ArrowGraphic graphic = child.AddComponent<ArrowGraphic>();
+            graphic.raycastTarget = false;
+            graphic.color = Color.white;
+            return graphic;
         }
 
         internal static void LogInfo(string msg)

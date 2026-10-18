@@ -34,6 +34,7 @@ namespace XinEditor
         private ConfigEntry<bool> _debugAutoHeart;
         private float _timer;
         private bool _startupDone;
+        private bool _preloadStarted;
 
         private void Awake()
         {
@@ -121,6 +122,11 @@ namespace XinEditor
                 _startupDone = true;
                 EnsureAllRegistered();
                 XinText.ApplyDataOverlay();
+                if (!_preloadStarted)
+                {
+                    _preloadStarted = true;
+                    StartCoroutine(HeartBuffCatalog.PreloadAllBuffsCo());
+                }
                 LogRoles();
                 if (_debugAutoHeart != null && _debugAutoHeart.Value && Store.Hearts.Count == 0)
                 {
@@ -158,12 +164,14 @@ namespace XinEditor
             {
                 HeartDefinition h = Store.Hearts[i];
                 int before = h.BuffId;
+                int beforeEffect1 = h.Effect1BuffId;
+                int beforeEffect2 = h.Effect2BuffId;
                 int id = HeartBuffBuilder.EnsureRegistered(h);
                 if (id == 0)
                 {
                     allOk = false;
                 }
-                else if (id != before)
+                else if (id != before || h.Effect1BuffId != beforeEffect1 || h.Effect2BuffId != beforeEffect2)
                 {
                     Store.Save(h);
                 }
@@ -242,7 +250,7 @@ namespace XinEditor
                 h.Stats.Add(new HeartStat(HeartStatType.DamageBonus, 5));
                 h.Stats.Add(new HeartStat(HeartStatType.DamageReduce, 2));
                 h.Stats.Add(new HeartStat(HeartStatType.Occultism, 20));
-                h.BuffId = Store.AllocateBuffId();
+                h.BuffId = Store.AllocateBuffId(h);
                 Store.Save(h);
                 int id = HeartBuffBuilder.EnsureRegistered(h);
                 LogInfo("调试用测试心已生成给「" + h.RoleName + "」：" + h.DisplayName + "，状态编号 " + id);

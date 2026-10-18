@@ -16,13 +16,14 @@ using HarmonyLib;
 
 namespace CustomBattleBg
 {
-    [BepInPlugin(Guid, "自定义播放战斗背景和BGM", "0.1.0")]
+    [BepInPlugin(Guid, "自定义播放战斗背景和BGM", "0.2.0")]
     public class CustomBattleBgPlugin : BaseUnityPlugin
     {
         public const string Guid = "codex.depersonal.custombattlebg";
 
         internal static ManualLogSource Log;
         internal static DomainStore Store;
+        private static readonly object StoreGate = new object();
 
         /// <summary>图片背景左右摇晃的幅度（uv 单位，0 = 不晃）。</summary>
         internal static float SwayAmplitude = DomainConstants.BgSwayAmplitude;
@@ -44,19 +45,21 @@ namespace CustomBattleBg
         private void Awake()
         {
             Log = Logger;
-            Store = new DomainStore();
             try
             {
-                Store.Load();
+                EnsureStore();
             }
             catch (Exception e)
             {
                 LogError("读领域配置失败：" + e);
             }
 
-            LogInfo("插件已加载，现有领域配置 " + Store.Profiles.Count + " 条");
-            LogInfo("资源目录：" + Store.ModRoot);
-            LogInfo("数据文件：" + Store.FilePath);
+            if (Store != null)
+            {
+                LogInfo("插件已加载，现有领域配置 " + Store.Profiles.Count + " 条");
+                LogInfo("资源目录：" + Store.ModRoot);
+                LogInfo("数据文件：" + Store.FilePath);
+            }
 
             SwayAmplitude = Config.Bind("背景摇晃", "幅度", DomainConstants.BgSwayAmplitude,
                 "图片背景左右缓慢摇晃的幅度（uv 单位；0 = 不晃，0.005~0.02 比较自然；视频不受影响）").Value;
@@ -90,6 +93,24 @@ namespace CustomBattleBg
             catch (Exception e)
             {
                 LogError("挂钩子失败：" + e);
+            }
+        }
+
+        /// <summary>
+        /// 取配置仓库；其它模组可能比我们更早调用 DomainApi，所以不能在 Awake 里
+        /// 无条件重新 new 一个，否则会把提前注册的运行时状态绕过。
+        /// </summary>
+        internal static DomainStore EnsureStore()
+        {
+            lock (StoreGate)
+            {
+                if (Store == null)
+                {
+                    DomainStore store = new DomainStore();
+                    store.Load();
+                    Store = store;
+                }
+                return Store;
             }
         }
 

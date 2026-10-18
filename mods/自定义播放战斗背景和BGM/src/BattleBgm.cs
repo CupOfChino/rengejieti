@@ -206,8 +206,8 @@ namespace CustomBattleBg
             }
         }
 
-        /// <summary>战斗结束：当前 BGM 与记录值不同才复原。</summary>
-        internal static void RestoreOrigin()
+        /// <summary>当前 BGM 与记录值不同才复原。默认用于战斗结束，也可由外部 API 停止播放时调用。</summary>
+        internal static void RestoreOrigin(string reason = "战斗结束")
         {
             BattleBgm inst = _instance;
             if (inst == null)
@@ -226,14 +226,14 @@ namespace CustomBattleBg
                 if (!changed)
                 {
                     inst.ClearCustom();
-                    CustomBattleBgPlugin.LogInfo("战斗结束：BGM 没有变化，无需复原");
+                    CustomBattleBgPlugin.LogInfo(reason + "：BGM 没有变化，无需复原");
                     return;
                 }
                 if (!inst._hasOrigin || string.IsNullOrEmpty(inst._originKey))
                 {
                     // 记不到原始 BGM（进战斗时本来就没有），交给游戏自己的流程
                     inst.ClearCustom();
-                    CustomBattleBgPlugin.LogInfo("战斗结束：没有可复原的 BGM 记录，交给游戏处理");
+                    CustomBattleBgPlugin.LogInfo(reason + "：没有可复原的 BGM 记录，交给游戏处理");
                     return;
                 }
 
@@ -249,7 +249,7 @@ namespace CustomBattleBg
                 data.Volume = 1f;
                 mgr.SetBgm(data);
                 inst.ClearCustom();
-                CustomBattleBgPlugin.LogInfo("战斗结束：BGM 已复原到 [" + inst._originType + "] " + inst._originKey);
+                CustomBattleBgPlugin.LogInfo(reason + "：BGM 已复原到 [" + inst._originType + "] " + inst._originKey);
             }
             catch (Exception e)
             {
@@ -341,7 +341,7 @@ namespace CustomBattleBg
                 {
                     CustomBattleBgPlugin.LogInfo("自定义 BGM 播放结束，切回原有的战斗 BGM");
                     _customActive = false;
-                    RestoreOrigin();
+                    RestoreOrigin("自定义 BGM 播放结束");
                 }
             }
             catch (Exception)

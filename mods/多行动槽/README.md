@@ -55,6 +55,10 @@
   `IsExecuting` / `IsSlotChosen` / `IsSlotExecuted` / `IsSlotSkipped` /
   `GetSlotData`（槽的行为数据）/ `GetSlotAnchor`（槽的 UI 节点）/ `GetSlotInfos`（全部槽快照）；
 - 修改：`SetExtraSlotCount` / `AddExtraSlotCount` / `RemoveExtraSlotCount`（按 `sourceKey` 记账）；
+- **预设角色/怪物**：`SetExtraSlotCountForRoleKey`（调查员存档编号）/
+  `SetExtraSlotCountForConfigId`（怪物配置编号）/ `SetExtraSlotCountForRoleName`（名字兜底）——
+  在插件初始化或角色创作时登记，进入战斗自动生效，不需要每场手动找 `BattleRole`；
+  `RemovePresetExtraSlotCounts` 清理，`GetPresetExtraSlotCount` 查询预设部分；
 - 动态提供者：`RegisterSlotCountProvider` / `UnregisterSlotCountProvider`（每幕重算时调用一次）；
 - 事件：`SlotCountChanged`（槽数变化）/ `SlotChosen`（某槽选好行动）/ `SlotExecuted`（某槽执行完）。
 

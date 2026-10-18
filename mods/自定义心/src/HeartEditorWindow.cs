@@ -15,8 +15,8 @@ namespace XinEditor
 {
     internal class HeartEditorWindow : MonoBehaviour
     {
-        private const float PanelWidth = 680f;
-        private const float PanelHeight = 576f;
+        private const float PanelWidth = 840f;
+        private const float PanelHeight = 820f;
         private const float SideWidth = 400f;
         private const int MaxSideRows = 9;
 
@@ -45,6 +45,11 @@ namespace XinEditor
         private UnityAction _confirmNo;
         private InputField[] _value = new InputField[HeartConstants.MaxExtraStats];
         private Text[] _unit = new Text[HeartConstants.MaxExtraStats];
+        private SimpleDropdown[] _effectTargets = new SimpleDropdown[HeartConstants.MaxEffects];
+        private SimpleDropdown[] _effectTriggers = new SimpleDropdown[HeartConstants.MaxEffects];
+        private HeartSearchDropdown[] _effectBuffs = new HeartSearchDropdown[HeartConstants.MaxEffects];
+        private InputField[] _effectLayers = new InputField[HeartConstants.MaxEffects];
+        private bool _effectWarningConfirmed;
         private Text _hint;
         private Transform _sideList;
         private readonly List<GameObject> _sideRows = new List<GameObject>();
@@ -81,6 +86,8 @@ namespace XinEditor
             {
                 return;
             }
+            HeartSearchDropdown.CloseOpened();
+            SimpleDropdown.CloseOpened();
             _instance.RestoreNavigation();
             if (_instance._canvasGo != null)
             {
@@ -174,6 +181,33 @@ namespace XinEditor
 
             // 兜底：把还没换过来的固定标签再过一遍（英文环境）
             XinText.LocalizeTree(go.transform);
+            StartCoroutine(WarmUpEffectDropdowns());
+        }
+
+        /// <summary>
+        /// 状态下拉框有几百项；在窗口建好后分帧预建列表项，避免第一次点开时集中创建导致卡顿。
+        /// </summary>
+        private System.Collections.IEnumerator WarmUpEffectDropdowns()
+        {
+            yield return null;
+            bool working = true;
+            while (working)
+            {
+                working = false;
+                for (int i = 0; i < HeartConstants.MaxEffects; i++)
+                {
+                    if (_effectBuffs[i] != null && !_effectBuffs[i].IsFullyBuilt)
+                    {
+                        _effectBuffs[i].BuildChunk(40);
+                        working = true;
+                    }
+                }
+                if (working)
+                {
+                    yield return null;
+                }
+            }
+            XinEditorPlugin.LogInfo("心效果下拉框预构建完成");
         }
 
         private static void CenterPanel(RectTransform rt, float x, float width, float height)
@@ -235,6 +269,76 @@ namespace XinEditor
             UIFactory.Place(rollNote.rectTransform, 296f, y, 380f, 46f);
             y += 56f;
 
+            // ---- 心效果（可选，两条）----
+            Text effectTitle = UIFactory.Label(panel, "EffectTitle",
+                "心效果（可选，最多两条；填了会在保存时提示）", 20, TextAnchor.MiddleLeft);
+            effectTitle.color = UIFactory.HintColor;
+            UIFactory.Place(effectTitle.rectTransform, 24f, y, PanelWidth - 48f, 30f);
+            y += 30f;
+
+            Text effectNotice = UIFactory.Label(panel, "EffectNotice",
+                "本效果建议谨慎搭配，出错可能导致战斗无法进行，建议完成后找一场战斗测试一下",
+                18, TextAnchor.MiddleLeft);
+            effectNotice.color = new Color(1f, 0.55f, 0.35f, 1f);
+            UIFactory.Place(effectNotice.rectTransform, 24f, y, PanelWidth - 48f, 38f);
+            y += 42f;
+
+            List<HeartBuffChoice> buffOptions = HeartBuffCatalog.BuildOptions();
+            string[] targetOptions = new string[]
+            {
+                XinText.T("自己", "Self"),
+                XinText.T("所有友方", "All allies"),
+                XinText.T("仅限友方", "Allies only"),
+                XinText.T("单个敌人", "One enemy"),
+                XinText.T("所有敌人", "All enemies")
+            };
+            string[] triggerOptions = new string[]
+            {
+                XinText.T("行动轮开始", "Round start"),
+                XinText.T("行动轮结束", "Round end"),
+                XinText.T("攻击命中后", "After a hit"),
+                XinText.T("行动前", "Before an action"),
+                XinText.T("行动后", "After an action")
+            };
+
+            for (int i = 0; i < HeartConstants.MaxEffects; i++)
+            {
+                int row = i;
+
+                Text targetLabel = UIFactory.Label(panel, "EffectTargetLabel" + i,
+                    "目标", 18, TextAnchor.MiddleLeft);
+                UIFactory.Place(targetLabel.rectTransform, 24f, y, 44f, 42f);
+                _effectTargets[i] = new SimpleDropdown(panel, "EffectTarget" + i,
+                    targetOptions, 70f, y, 104f, 42f, 18);
+
+                Text triggerLabel = UIFactory.Label(panel, "EffectTriggerLabel" + i,
+                    "触发", 18, TextAnchor.MiddleLeft);
+                UIFactory.Place(triggerLabel.rectTransform, 184f, y, 44f, 42f);
+                _effectTriggers[i] = new SimpleDropdown(panel, "EffectTrigger" + i,
+                    triggerOptions, 230f, y, 116f, 42f, 18);
+
+                Text buffLabel = UIFactory.Label(panel, "EffectBuffLabel" + i,
+                    "施加/获得", 18, TextAnchor.MiddleLeft);
+                UIFactory.Place(buffLabel.rectTransform, 352f, y, 92f, 42f);
+                _effectBuffs[i] = new HeartSearchDropdown(panel, "EffectBuff" + i,
+                    new List<HeartBuffChoice>(buffOptions), 446f, y, 256f, 42f);
+                _effectBuffs[i].OnChanged = delegate(int index) { OnEffectBuffChanged(row); };
+
+                Text layerLabel = UIFactory.Label(panel, "EffectLayerLabel" + i,
+                    "层数", 18, TextAnchor.MiddleLeft);
+                UIFactory.Place(layerLabel.rectTransform, 708f, y, 42f, 42f);
+                _effectLayers[i] = UIFactory.TextInput(panel, "EffectLayers" + i, "0", true);
+                _effectLayers[i].characterLimit = 5;
+                UIFactory.Place(_effectLayers[i].GetComponent<RectTransform>(), 752f, y, 64f, 42f);
+                _effectLayers[i].onValueChanged.AddListener(delegate(string text)
+                {
+                    OnEffectLayerInput(row, text);
+                });
+
+                y += 46f;
+            }
+            y += 8f;
+
             _hint = UIFactory.Label(panel, "Hint", "", 22, TextAnchor.UpperLeft);
             _hint.color = UIFactory.HintColor;
             UIFactory.Place(_hint.rectTransform, 24f, y, PanelWidth - 48f, 56f);
@@ -281,6 +385,9 @@ namespace XinEditor
                 _def.RoleName = "调查员";
             }
 
+            HideConfirm();
+            HeartSearchDropdown.CloseOpened();
+            SimpleDropdown.CloseOpened();
             _title.text = XinText.L("修改「心」buff —— " + _def.RoleName);
             _namePrefix.text = XinText.L("心（" + _def.RoleName + "）——");
             _suffix.text = _def.Suffix;
@@ -291,6 +398,42 @@ namespace XinEditor
                 _pick[i].SetIndex(stat == null ? 0 : (int)stat.Type + 1, false);
                 _value[i].text = stat == null ? "" : stat.Value.ToString(CultureInfo.InvariantCulture);
                 RefreshUnit(i);
+            }
+            _effectWarningConfirmed = false;
+            for (int i = 0; i < HeartConstants.MaxEffects; i++)
+            {
+                HeartEffect effect = _def.GetEffect(i);
+                int target = effect != null ? (int)effect.Target : 0;
+                int trigger = effect != null ? (int)effect.Trigger : 0;
+                int type = effect != null ? effect.EffectType : 0;
+                if (target < 0 || target > (int)HeartEffectTarget.AllEnemies)
+                {
+                    target = 0;
+                }
+                if (trigger < 0 || trigger > (int)HeartEffectTrigger.ActionEnd)
+                {
+                    trigger = 0;
+                }
+                _effectTargets[i].SetIndex(target, false);
+                _effectTriggers[i].SetIndex(trigger, false);
+                if (type != 0)
+                {
+                    // 订阅状态可能变了：保存过的项如果不在当前列表里，补一条显示出来。
+                    string label = HeartEffectText.EffectName(type);
+                    if (type >= HeartConstants.EffectBuffOffset)
+                    {
+                        label = XinText.T("【状态】", "[Buff] ") + label;
+                    }
+                    _effectBuffs[i].EnsureOption(label, type);
+                }
+                else
+                {
+                    _effectBuffs[i].SelectByValue(0);
+                }
+                _effectLayers[i].text = effect != null && effect.IsConfigured
+                    ? effect.Layers.ToString(CultureInfo.InvariantCulture)
+                    : "";
+                _effectLayers[i].interactable = type != 0;
             }
             _hint.text = _isNew ? XinText.L("这个角色还没有自定义心，填好后点保存就会生成一颗。") : "";
             RebuildSideList();
@@ -335,6 +478,107 @@ namespace XinEditor
             }
             RefreshUnit(row);
             RefreshDisabledOptions();
+        }
+
+        private void OnEffectBuffChanged(int row)
+        {
+            if (row < 0 || row >= HeartConstants.MaxEffects)
+            {
+                return;
+            }
+            HeartBuffChoice choice = _effectBuffs[row].Current;
+            bool hasBuff = choice != null && choice.Value != 0;
+            _effectLayers[row].interactable = hasBuff;
+            if (!hasBuff)
+            {
+                _effectLayers[row].text = "";
+            }
+            else if (string.IsNullOrEmpty((_effectLayers[row].text ?? "").Trim()))
+            {
+                _effectLayers[row].text = "1";
+            }
+        }
+
+        private void OnEffectLayerInput(int row, string text)
+        {
+            if (row < 0 || row >= HeartConstants.MaxEffects || _effectLayers[row] == null)
+            {
+                return;
+            }
+            string clean = "";
+            if (!string.IsNullOrEmpty(text))
+            {
+                for (int i = 0; i < text.Length && clean.Length < 5; i++)
+                {
+                    char c = text[i];
+                    if (c >= '0' && c <= '9')
+                    {
+                        clean += c;
+                    }
+                }
+            }
+            if (clean != text)
+            {
+                _effectLayers[row].text = clean;
+            }
+        }
+
+        /// <summary>读取并校验两条效果；返回 null 表示已经给出错误提示、不要保存。</summary>
+        private HeartEffect[] ReadEffects()
+        {
+            HeartEffect[] effects = new HeartEffect[HeartConstants.MaxEffects];
+            for (int i = 0; i < HeartConstants.MaxEffects; i++)
+            {
+                int target = Mathf.Clamp(_effectTargets[i].Index, 0, (int)HeartEffectTarget.AllEnemies);
+                int trigger = Mathf.Clamp(_effectTriggers[i].Index, 0, (int)HeartEffectTrigger.ActionEnd);
+                HeartBuffChoice choice = _effectBuffs[i].Current;
+                int type = choice != null ? choice.Value : 0;
+                int layers = 0;
+
+                if (type != 0)
+                {
+                    if (!int.TryParse((_effectLayers[i].text ?? "").Trim(), out layers) || layers <= 0)
+                    {
+                        _hint.text = XinText.T(
+                            "第 " + (i + 1) + " 条效果选了状态，层数要填一个大于 0 的整数。",
+                            "Effect " + (i + 1) + " has a buff selected; layers must be a positive integer.");
+                        return null;
+                    }
+                    if (layers > HeartConstants.MaxEffectLayers)
+                    {
+                        layers = HeartConstants.MaxEffectLayers;
+                    }
+
+                    if (!HeartEffectPreset.IsSupported(type))
+                    {
+                        if (type < HeartConstants.EffectBuffOffset)
+                        {
+                            _hint.text = XinText.T(
+                                "第 " + (i + 1) + " 条效果的类型无效。",
+                                "Effect " + (i + 1) + " has an invalid type.");
+                            return null;
+                        }
+                        int buffId = type - HeartConstants.EffectBuffOffset;
+                        if (buffId == _def.BuffId || buffId == _def.Effect1BuffId || buffId == _def.Effect2BuffId)
+                        {
+                            _hint.text = XinText.T(
+                                "第 " + (i + 1) + " 条效果不能选这颗心自己的状态（会递归）。",
+                                "Effect " + (i + 1) + " cannot target this Shin's own buff (recursion).");
+                            return null;
+                        }
+                        if (!HeartBuffCatalog.ValidateBuff(buffId))
+                        {
+                            _hint.text = XinText.T(
+                                "第 " + (i + 1) + " 条效果选中的状态不存在，可能对应的模组没有启用；已拦截保存。",
+                                "Effect " + (i + 1) + " references a missing buff (its mod may be disabled); save was blocked.");
+                            return null;
+                        }
+                    }
+                }
+                effects[i] = new HeartEffect((HeartEffectTarget)target,
+                    (HeartEffectTrigger)trigger, type, layers);
+            }
+            return effects;
         }
 
         /// <summary>
@@ -669,6 +913,10 @@ namespace XinEditor
         {
             try
             {
+                // 确认弹窗回调会重新进来一次：只在这一次跳过警告，失败后下次保存仍会提示。
+                bool effectWarningConfirmed = _effectWarningConfirmed;
+                _effectWarningConfirmed = false;
+
                 int speed;
                 if (!int.TryParse((_speed.text ?? "").Trim(), out speed) || speed < 1 || speed > 100)
                 {
@@ -727,9 +975,42 @@ namespace XinEditor
                     return;
                 }
 
+                HeartEffect[] effects = ReadEffects();
+                if (effects == null)
+                {
+                    return;
+                }
+                bool hasEffects = (effects[0] != null && effects[0].IsConfigured) ||
+                                  (effects[1] != null && effects[1].IsConfigured);
+                if (hasEffects && !effectWarningConfirmed)
+                {
+                    ShowConfirm(
+                        XinText.T(
+                            "你给「心」自定义了附加效果（数据相关）。\n\n" +
+                            "这些数据不保证正确：如果某个状态不存在或效果导致游戏出错，本模组只会跳过" +
+                            "这一条效果（心本身的数值与规则不受影响），不会帮你修复。\n\n确定保存吗？",
+                            "You have configured extra Shin effects (data-related).\n\n" +
+                            "These values are not guaranteed to be valid. If a buff is missing or an effect " +
+                            "causes an error, this mod will only skip that effect; the Shin itself is unaffected. " +
+                            "It will not repair the data for you.\n\nSave anyway?"),
+                        delegate
+                        {
+                            _effectWarningConfirmed = true;
+                            OnSave();   // 确认后重新走一遍保存流程
+                        },
+                        delegate
+                        {
+                            _effectWarningConfirmed = false;
+                            _hint.text = XinText.T("已取消保存（数据没有改动）。",
+                                "Save cancelled (nothing was changed).");
+                        });
+                    return;
+                }
                 _def.Suffix = suffix;
                 _def.Speed = speed;
                 _def.Stats = stats;
+                _def.Effect1 = effects[0];
+                _def.Effect2 = effects[1];
                 // 编号空着的话（旧数据或没取到），保存时按名字补上，保证下次进游戏能认出来
                 if (string.IsNullOrEmpty(_def.RoleKey))
                 {
@@ -748,10 +1029,11 @@ namespace XinEditor
                 }
                 if (_def.BuffId <= 0)
                 {
-                    _def.BuffId = XinEditorPlugin.Store.AllocateBuffId();
+                    _def.BuffId = XinEditorPlugin.Store.AllocateBuffId(_def);
                 }
                 XinEditorPlugin.Store.Save(_def);
                 HeartBuffBuilder.Rebuild(_def);
+                XinEditorPlugin.Store.Save(_def);   // Rebuild 可能分配了预设效果的隐藏状态编号
                 _isNew = false;
             _hint.text = XinText.L("已保存：" + display + "\n改动在下一场战斗生效。");
                 RebuildSideList();
@@ -777,7 +1059,16 @@ namespace XinEditor
                 RefreshUnit(i);
             }
             RefreshDisabledOptions();
-            _hint.text = XinText.L("已填回默认心的数值（伤害+2、速度+20、减伤1）。名字不动，点保存才生效。");
+            for (int i = 0; i < HeartConstants.MaxEffects; i++)
+            {
+                _effectTargets[i].SetIndex(0, false);
+                _effectTriggers[i].SetIndex(0, false);
+                _effectBuffs[i].SelectByValue(0);
+                _effectLayers[i].text = "";
+                _effectLayers[i].interactable = false;
+            }
+            _effectWarningConfirmed = false;
+            _hint.text = XinText.L("已填回默认心的数值（伤害+2、速度+20、减伤1），附加效果已清空。名字不动，点保存才生效。");
         }
 
         private void RebuildSideList()

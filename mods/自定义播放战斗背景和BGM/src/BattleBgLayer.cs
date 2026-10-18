@@ -113,6 +113,8 @@ namespace CustomBattleBg
             catch (Exception e)
             {
                 CustomBattleBgPlugin.LogError("显示战斗背景失败：" + e);
+                try { HideInternal(); }
+                catch (Exception) { }
                 return false;
             }
         }

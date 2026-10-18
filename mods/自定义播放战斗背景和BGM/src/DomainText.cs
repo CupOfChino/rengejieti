@@ -123,7 +123,7 @@ namespace CustomBattleBg
         internal const string EditVacatTitle = "Edit custom battle background & BGM";
         internal const string EditVacatDes =
             "Set this investigator's own battle background and battle BGM: an image/video background, " +
-            "an ogg/mp3 BGM, whether the BGM loops, and optional opening dialogue/sound. " +
+            "an ogg/mp3 BGM, whether the BGM loops, and optional opening screen text/sound. " +
             "Can be edited whether the Domain trait is awake or asleep.";
         internal const string EditVacatEffect = "Open the Domain editor";
 
@@ -283,7 +283,7 @@ namespace CustomBattleBg
             { "循环播放", "Loop" },
             { "只占上半屏（仅视频生效，下方保留原来的背景）",
               "Top half only (video only; keeps the original background below)" },
-            { "开启时出现对话框", "Show dialogue on open" },
+            { "开启时出现头顶文字", "Show head text on open" },
             { "开启时音效", "Play sound on open" },
             { "选择音效", "Choose sound" },
             { "（苏醒状态自动触发，需要沉睡状态下才有作用）",

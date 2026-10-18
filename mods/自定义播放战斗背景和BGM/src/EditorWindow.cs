@@ -298,7 +298,7 @@ namespace CustomBattleBg
 
             // 领域展开时的表现（2026-10-18）
             _dialogBox = UIFactory.Checkbox(panel, "DialogBox", 148f, y, 36f, OnToggleOpenDialog);
-            Text dialogLabel = UIFactory.Label(panel, "DialogLabel", "开启时出现对话框", 20, TextAnchor.MiddleLeft);
+            Text dialogLabel = UIFactory.Label(panel, "DialogLabel", "开启时出现头顶文字", 20, TextAnchor.MiddleLeft);
             UIFactory.Place(dialogLabel.rectTransform, 192f, y, 300f, 36f);
             y += 46f;
 

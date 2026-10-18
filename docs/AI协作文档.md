@@ -1226,16 +1226,70 @@ CurAddEle = null;
   `DomainStore.AllocateBuffId()` 分配；`DomainApi.IsBuffIdInUse()` 防止两边撞号。
 - 非战斗调用 `PlayBgm` 时只记录一份原始 BGM，不会把战斗会话标记弄脏；
   `StopPlayback` 负责复原。完整示例见 mod 的 `接口文档.md`。
-- **展开对话框/音效（2026-10-18）**：`DomainProfile` 新增
+- **展开文字框/音效（2026-10-18）**：`DomainProfile` 新增
   `ShowOpenDialog / PlayOpenSound / SfxFile / RuntimeDialogSuffix`，外部
   `DomainDefinition` 对应 `ShowDialogOnOpen / PlaySoundOnOpen / SoundPath / DialogSuffix`；
   音效放资源库 `Sfx`（ogg/mp3/wav），播放走 `AudioManager.PlaySound(clip,...)` 的 SFX 通道。
-  对话框走 `RoleModel.ShowDialog`，固定文本「领域展开——后缀」，`DialogBoxData.Time = 2.5`；
+  最终稳定方案是自定义 `DomainTextBoxOverlay`：角色头顶文字（当前不画黑色底框）、
+  按 `Text` preferred size 自动排版，底边锚在 `RoleModel.Trans_Head` 上方；
+  整个屏幕再叠一张纯网格径向暗角（中心透明、边缘黑），随文字约 2.5 秒淡入淡出。
+  独立 ScreenSpaceOverlay Canvas 使用 `overrideSorting = true`、`sortingLayerName = "UI"`、
+  `sortingOrder = 30000`，所以战斗开始、行动槽 HUD 还在时也会盖在行动槽上面；不拦截鼠标。
   后缀用 `BaseMeshEffect` 按可见字符区间做逐字交错上下浮动（相位 `i * π`），不依赖旧版 Text
-  不支持的动态富文本标签。表现层在 `DomainEffects.ApplyOnOpen` 里触发，失败不影响背景/BGM/效果。
+  不支持的动态富文本标签。
+
+**表现尝试记录（不要重复踩坑）**：
+
+1. `RoleModel.ShowDialog(DialogBoxData)`：角色头像对话框，已实现过；它不是用户想要的“黑底文字框”。
+2. `GamePlayEvent.TimeLine.ShowBlackScreenOption` → `UIScreenTipPanel.AutoShowTip(ScreenTipData)`：
+   原版全屏黑屏文字提示。已实现过，会整屏变黑，不符合“保留战斗画面 + 黑框文字”的目标；
+   但该参考仍保留，后续做黑屏剧情/秒杀演出时可复用。
+3. 《谎言与欺诈》夜魔：模块在 `GameModules\HUANGYANYUQIZHA`，战斗场景在
+   `GameModules\ZHANDOUCHANGJING\Room\YEMOZHANDOU.txt`；技能 `MonsterBattleSkill\29.txt`
+   「黑暗拥抱」实际用 `ShowHUDTextOption` 显示“桀桀桀桀桀”（HUD 文本），
+   `MonsterBattleSkill\32.txt`「层层恐惧」是黑暗恐惧 buff。夜魔并没有一个可直接复用的
+   “黑色文字框”效果，因此最终采用自定义 overlay。
+4. 最终方案：`DomainTextBoxOverlay` 只保留角色头顶文字 + 边缘暗角，不再绘制黑色底框；
+   `SoftEllipseGraphic` 已从代码中删除。定位优先取技能牌 / 编辑行动牌的上边框中点，
+   没有行动框时再取 `RoleModel.Trans_Head`（模型顶边）。
+
+表现层在 `DomainEffects.ApplyOnOpen` 里触发，失败不影响背景/BGM/效果。
+外部模组不注册领域也可以调用 `DomainApi.ShowHeadText(requester, text, caster, duration)` /
+`ShowHeadTextForRole(...)` 在任意时机给角色头顶弹文字；`HideHeadText` 主动关闭。
+
+**渲染踩坑（重要）**：第一版用 `RawImage` + 运行时 RGBA 纹理画椭圆底，实机出现“文字有、黑框没有”；
+第二版改成 `Image + Sprite.Create(...)` 仍然没有黑底；第三版用
+`SoftEllipseGraphic : MaskableGraphic` 纯网格（32×16 规则网格、按椭圆距离计算顶点 alpha）依旧不显示，
+并且启用后会把文字一起弄没。用户已决定停止黑底实验，稳定版只保留文字 + 边缘暗角，
+`SoftEllipseGraphic` 已删除。`EdgeVignetteGraphic : MaskableGraphic` 画全屏暗角是已验证可用的，
+后续不要再把椭圆网格重新加回来。
+Canvas 使用能显示文字/暗角的 **Screen Space - Overlay**；不要擅自切到 Screen Space - Camera，
+实测会让整个 Canvas 的文字和网格一起消失。
+
+**行动框定位（2026-10-18 修正）**：HUD 的 `GetWorldCorners` 结果属于 HUD 自己的 Canvas，
+不能直接交给战斗相机做 `WorldToScreenPoint`。正确做法照抄
+`mods\可视化攻击目标\src\ArrowLayer.cs` 的 `TryGetSlotAnchor / TopCenterOf`：
+先 `hud.GetComponent<Canvas>()` 取 `worldCamera`，再用
+`RectTransformUtility.WorldToScreenPoint(hudCam, (corners[1] + corners[2]) * 0.5f)` 转屏幕坐标；
+Screen Space - Overlay 时 `worldCamera == null`，换算结果仍正确。技能牌优先取
+`Anim_SkillShow` → `Button_SkillIcon` → `Trans_SkillShow`，编辑行动牌取 `Trans_EditorAction`。
+
+**工坊其它模组调研（2026-10-18）**：
+
+- `3801731500` 可视化攻击目标：有可参考的 `ArrowGraphic : MaskableGraphic`，但只画箭头，没有文字气泡；
+- `3229419762` 蠕形之海、`3343752458` 旧日余辉：技能/事件里确有 `ShowBlackScreenOption`，但它是
+  `UIScreenTipPanel` 全屏黑屏文字，不是角色头顶框；
+- `3149119351` 诡舰迷踪、`3252047536` 逆转召唤、`3381413249` 是谁杀了知更鸟等：
+  主要用 `ShowHUDTextOption` / `NpcEachDialogOption`，即 HUD 文本或角色头像对话；
+- 角色/模型/伙伴类模组（`3031614456`、`3305525765`、`3413045383`、`3422602415`、`3810060135` 等）
+  基本是纯数据/模型资源，没有自定义文字气泡 UI；
+- 当前工坊内没有可直接复用的“角色头顶黑色椭圆文字框”实现。
 - **特质醒/睡口径**：`DomainMenu.HasDomainTrait` 只检查特质是否存在，幕间编辑不受沉睡影响；
   战斗开始自动展开仍由 `HasAwakeTrait` 判定。沉睡描述已改为
   “不在战斗开始自动播放，不影响挂载的行动”。
+- **表现层触发条件**：`DomainBattle.ApplyProfile` 返回背景是否真正应用成功（无背景配置视为成功）；
+  `DomainEffects.ApplyOnOpen(..., showPresentation)` 只在该值为 true 时播放文字框/音效。
+  这样背景文件缺失、战斗相机缺失或图片加载失败时不会出现“背景没换却有文字框”。
 
 ## 27. 「多行动槽」：动战斗核心流程的七个关键点（2026-10-04，做 `mods\多行动槽` 挖出来的）
 

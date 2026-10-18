@@ -57,13 +57,13 @@ namespace CustomBattleBg
         public static readonly string[] BgmExtensions = new string[] { ".ogg", ".mp3" };
         public static readonly string[] SfxExtensions = new string[] { ".ogg", ".mp3", ".wav" };
 
-        /// <summary>领域展开对话框的自动关闭时间（0 = 等玩家点击）。</summary>
+        /// <summary>领域展开文字框的自动关闭时间。</summary>
         public const float OpenDialogDuration = 2.5f;
 
-        /// <summary>对话框里领域后缀的上下浮动幅度（像素）。</summary>
+        /// <summary>文字框里领域后缀的上下浮动幅度（像素）。</summary>
         public const float OpenDialogFloatAmplitude = 6f;
 
-        /// <summary>对话框里领域后缀上下浮动一个来回的秒数。</summary>
+        /// <summary>文字框里领域后缀上下浮动一个来回的秒数。</summary>
         public const float OpenDialogFloatPeriod = 1.2f;
 
         /// <summary>背景图片/视频的推荐分辨率文案。</summary>
@@ -132,7 +132,7 @@ namespace CustomBattleBg
         /// <summary>BGM 是否循环。</summary>
         public bool BgmLoop = true;
 
-        /// <summary>展开成功时是否显示角色对话框。</summary>
+        /// <summary>展开成功时是否显示角色头顶文字 + 边缘暗角。</summary>
         public bool ShowOpenDialog = false;
 
         /// <summary>展开成功时是否播放一次音效。</summary>
@@ -218,7 +218,7 @@ namespace CustomBattleBg
             get { return ShowOpenDialog || PlayOpenSound; }
         }
 
-        /// <summary>有没有任何可展开的内容（背景 / BGM / 领域效果 / 展开对话框或音效）。</summary>
+        /// <summary>有没有任何可展开的内容（背景 / BGM / 领域效果 / 展开文字框或音效）。</summary>
         public bool HasAnyContent
         {
             get { return HasAnything || HasAnyEffectData || HasOpeningPresentation; }

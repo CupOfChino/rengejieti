@@ -1,15 +1,13 @@
 // 领域展开时的表现层：
-//   · 可选角色对话框（游戏原版 RoleModel.ShowDialog）；
+//   · 可选角色头顶文字 + 边缘暗角（DomainTextBoxOverlay；黑底实验已放弃，尝试记录见协作文档）；
 //   · 可选一次性音效（走 AudioManager 的 SFX 通道）；
-//   · 对话框里的领域后缀单独做交错上下浮动（BaseMeshEffect，不依赖 Text 富文本动画标签）。
+//   · 文字框里的领域后缀单独做交错上下浮动（BaseMeshEffect，不依赖 Text 富文本动画标签）。
 //
 // 这一层只负责播放表现，任何异常都只写日志；背景/BGM/领域效果逻辑照常继续。
 
 using System;
 using System.Collections;
-using System.Threading.Tasks;
 using Game;
-using GamePlayEvent.TimeLine;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -27,7 +25,7 @@ namespace CustomBattleBg
                 }
                 if (profile.ShowOpenDialog)
                 {
-                    ShowDialog(caster, profile, reason);
+                    ShowTextBox(caster, profile, reason);
                 }
                 if (profile.PlayOpenSound)
                 {
@@ -40,91 +38,26 @@ namespace CustomBattleBg
             }
         }
 
-        private static void ShowDialog(BattleRole caster, DomainProfile profile, string reason)
+        private static void ShowTextBox(BattleRole caster, DomainProfile profile, string reason)
         {
             try
             {
-                if (caster.Model == null)
-                {
-                    CustomBattleBgPlugin.LogError("显示领域对话框失败：角色没有 Model");
-                    return;
-                }
                 string suffix = GetDialogSuffix(profile);
                 if (string.IsNullOrEmpty(suffix))
                 {
                     suffix = "领域";
                 }
                 string prefix = DomainText.T("领域展开", "Domain Expansion");
-                string content = "<b><color=#000000>" + EscapeRichText(prefix) + "</color></b>——" +
+                // 黑屏文字框的默认文字色是浅色，前缀不要再压成黑色；用加粗表示强调。
+                string content = "<b>" + EscapeRichText(prefix) + "</b>——" +
                                  "<b><color=#FF0000>" + EscapeRichText(suffix) + "</color></b>";
-
-                DialogBoxData data = new DialogBoxData();
-                data.ShowType = UIDialogBoxElement.EType.Dialog;
-                data.Type = DialogBoxData.EType.Dialog;
-                data.Localization_DesKey = new LocalizationKeyData();
-                data.Localization_DesKey.TarKey = "";
-                data.Localization_DesKey.SheetKey = "";
-                data.Localization_DesKey.InputText = content;
-                // 原版 DialogBoxData.Time = 0 表示等待点击；这里没有外部默认时长，
-                // 按用户口径给 2.5 秒自动关闭，避免领域展开卡住战斗。
-                data.Time = DomainConstants.OpenDialogDuration;
-                data.IsCloseVoice = true;
-
-                RoleModel model = caster.Model;
-                CustomBattleBgPlugin.LogInfo("（" + reason + "）显示领域对话框：「" + prefix + "——" + suffix + "」");
-                Task task = model.ShowDialog(data, false);
-                DomainPresentationRunner runner = DomainPresentationRunner.Ensure();
-                if (runner != null)
-                {
-                    runner.StartCoroutine(AttachFloatCo(model, prefix, prefix.Length + 2,
-                        VisibleLength(suffix), data.Time + 3.0f));
-                }
-                // 不 await 在这里等玩家点击/自动关闭；否则领域效果链会被对话框阻塞。
-                ObserveDialogTask(task, reason);
+                CustomBattleBgPlugin.LogInfo("（" + reason + "）显示领域文字框：「" + prefix + "——" + suffix + "」");
+                DomainTextBoxOverlay.Show(content, prefix, prefix.Length + 2,
+                    VisibleLength(suffix), caster, DomainConstants.OpenDialogDuration);
             }
             catch (Exception e)
             {
-                CustomBattleBgPlugin.LogError("显示领域对话框失败：" + e);
-            }
-        }
-
-        private static async void ObserveDialogTask(Task task, string reason)
-        {
-            try
-            {
-                if (task != null)
-                {
-                    await task;
-                }
-            }
-            catch (Exception e)
-            {
-                CustomBattleBgPlugin.LogError("领域对话框播放出错（" + reason + "）：" + e.Message);
-            }
-        }
-
-        private static IEnumerator AttachFloatCo(RoleModel model, string expectedPrefix,
-            int startChar, int charCount, float lifetime)
-        {
-            float remain = 5.0f;
-            while (remain > 0f)
-            {
-                UIDialogBoxElement dialog = model != null ? model.DialogBox : null;
-                if (dialog != null && dialog.gameObject != null &&
-                    dialog.gameObject.activeInHierarchy && dialog.Text_Content != null &&
-                    !string.IsNullOrEmpty(dialog.Text_Content.text) &&
-                    dialog.Text_Content.text.Contains(expectedPrefix))
-                {
-                    DomainDialogFloatEffect fx = dialog.Text_Content.GetComponent<DomainDialogFloatEffect>();
-                    if (fx == null)
-                    {
-                        fx = dialog.Text_Content.gameObject.AddComponent<DomainDialogFloatEffect>();
-                    }
-                    fx.Configure(dialog.Text_Content, expectedPrefix, startChar, charCount, lifetime);
-                    yield break;
-                }
-                remain -= Time.unscaledDeltaTime;
-                yield return null;
+                CustomBattleBgPlugin.LogError("显示领域文字框失败：" + e);
             }
         }
 
@@ -171,7 +104,7 @@ namespace CustomBattleBg
             {
                 return "";
             }
-            return value.Replace("<", "＜").Replace(">", "＞");
+            return value.Replace("<", "＜").Replace(">", "＞").Replace("|", "｜");
         }
 
         private static int VisibleLength(string value)
@@ -202,7 +135,7 @@ namespace CustomBattleBg
         }
     }
 
-    /// <summary>给对话框文本的指定字符区间做交错上下浮动。</summary>
+    /// <summary>给文字框文本的指定字符区间做交错上下浮动。</summary>
     internal class DomainDialogFloatEffect : BaseMeshEffect
     {
         private Text _text;
@@ -307,7 +240,7 @@ namespace CustomBattleBg
         }
     }
 
-    /// <summary>协程宿主（音效加载/播放、对话框浮动挂载）。</summary>
+    /// <summary>协程宿主（音效加载/播放、文字框浮动挂载）。</summary>
     internal class DomainPresentationRunner : MonoBehaviour
     {
         private static DomainPresentationRunner _instance;

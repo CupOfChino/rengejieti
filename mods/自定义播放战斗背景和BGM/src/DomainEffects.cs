@@ -66,8 +66,8 @@ namespace CustomBattleBg
                 _owner = caster;
                 _broken = false;
 
-                // 展开表现（对话框/音效）独立于效果结算，失败也只写日志。
-                // 背景实际替换失败时不播放，避免"领域已经展开过、背景没变却又出现对话框"。
+                // 展开表现（特殊文字框/音效）独立于效果结算，失败也只写日志。
+                // 背景实际替换失败时不播放，避免"领域已经展开过、背景没变却又出现文字框"。
                 if (showPresentation)
                 {
                     DomainPresentation.PlayOnOpen(caster, p, reason);

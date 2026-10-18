@@ -12,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using Game;
+using UnityEngine;
 
 namespace CustomBattleBg
 {
@@ -72,7 +73,7 @@ namespace CustomBattleBg
         /// <summary>BGM 是否循环。</summary>
         public bool BgmLoop = true;
 
-        /// <summary>展开成功时是否显示角色对话框。</summary>
+        /// <summary>展开成功时是否显示角色头顶文字 + 边缘暗角。</summary>
         public bool ShowDialogOnOpen = false;
 
         /// <summary>对话框里使用的领域后缀；留空时用 DisplayName。</summary>
@@ -316,7 +317,7 @@ namespace CustomBattleBg
                 CustomBattleBgPlugin.LogInfo("已注册外部领域：「" + requester + "/" + id + "」→ " + displayName +
                     "，背景=" + (profile.HasBackground ? profile.BgFile : "(无)") +
                     "，BGM=" + (profile.HasBgm ? profile.BgmFile : "(无)") +
-                    "，展开表现=" + (profile.HasOpeningPresentation ? "对话框/音效" : "(无)"));
+                    "，展开表现=" + (profile.HasOpeningPresentation ? "文字框/音效" : "(无)"));
                 return true;
             }
             catch (Exception e)
@@ -437,6 +438,73 @@ namespace CustomBattleBg
             RegisteredDomain registered = FindDomain(requester, id);
             return registered != null &&
                    DomainBattle.PlayBgmOnly(registered.Profile, SafeReason(reason, "外部 API 播放BGM"));
+        }
+
+        /// <summary>
+        /// 在任意时机给一个战斗角色显示头顶文字（有行动框时在行动框上方，否则在模型顶边上方）。
+        /// 不要求先注册领域，也不要求领域正在生效；适合技能、事件、状态触发时使用。
+        /// </summary>
+        public static bool ShowHeadText(string requester, string text, BattleRole caster,
+            float duration = DomainConstants.OpenDialogDuration)
+        {
+            try
+            {
+                requester = Clean(requester);
+                if (string.IsNullOrEmpty(requester))
+                {
+                    requester = "未知模组";
+                }
+                if (caster == null || string.IsNullOrEmpty(text))
+                {
+                    CustomBattleBgPlugin.LogError("显示头顶文字框失败：caster / text 不能为空");
+                    return false;
+                }
+                CustomBattleBgPlugin.LogInfo("「" + requester + "」请求显示头顶文字框");
+                DomainTextBoxOverlay.Show(text, null, 0, 0, caster,
+                    Mathf.Clamp(duration, 0.5f, 30f));
+                return true;
+            }
+            catch (Exception e)
+            {
+                CustomBattleBgPlugin.LogError("显示头顶文字框失败：" + e);
+                return false;
+            }
+        }
+
+        /// <summary>只有 RoleData、没有 BattleRole 时的便捷重载。</summary>
+        public static bool ShowHeadTextForRole(string requester, string text, RoleData caster,
+            float duration = DomainConstants.OpenDialogDuration)
+        {
+            try
+            {
+                if (caster == null || caster.Role == null)
+                {
+                    CustomBattleBgPlugin.LogError("显示头顶文字框失败：RoleData 没有关联的 BattleRole");
+                    return false;
+                }
+                return ShowHeadText(requester, text, caster.Role, duration);
+            }
+            catch (Exception e)
+            {
+                CustomBattleBgPlugin.LogError("显示头顶文字框失败：" + e);
+                return false;
+            }
+        }
+
+        /// <summary>立刻隐藏当前头顶文字框。</summary>
+        public static bool HideHeadText(string requester = "")
+        {
+            try
+            {
+                DomainTextBoxOverlay.Hide();
+                CustomBattleBgPlugin.LogInfo("头顶文字框被「" + Clean(requester) + "」隐藏");
+                return true;
+            }
+            catch (Exception e)
+            {
+                CustomBattleBgPlugin.LogError("隐藏头顶文字框失败：" + e);
+                return false;
+            }
         }
 
         /// <summary>停止当前领域：移除效果、隐藏背景、BGM 复原。</summary>

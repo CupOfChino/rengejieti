@@ -271,7 +271,7 @@ mods\自定义战斗背景和BGM\            ← mod 根目录（测试期可能
 
 | 日期 | 内容 |
 | --- | --- |
-| 2026-10-18 | **展开表现 + 沉睡口径**：编辑窗在“作用于敌方”下新增「开启时出现对话框」「开启时音效」；对话框显示「领域展开——后缀」，后缀红体加粗并逐字交错上下浮动，约 2.5 秒自动关闭；音效支持 `ogg/mp3/wav`，走游戏 SFX 通道、展开时播放一次；外部 `DomainDefinition` 同步增加 `ShowDialogOnOpen / DialogSuffix / PlaySoundOnOpen / SoundPath`。特质沉睡描述改为“不在战斗开始自动播放，不影响挂载的行动”，幕间编辑改为只检查特质是否存在，不再看醒/睡 |
+| 2026-10-18 | **展开表现 + 沉睡口径**：编辑窗在“作用于敌方”下新增「开启时出现头顶文字」「开启时音效」；稳定版显示角色头顶文字 + 画面边缘暗角，不绘制黑色底框（`RawImage`、`Image+Sprite`、`SoftEllipseGraphic` 纯网格三种尝试均失败，椭圆类已删除）。文字按 preferred size 排版，有行动框时位于行动框上边框中点上方，没有行动框时位于模型顶边上方；显示「领域展开——后缀」，后缀红体加粗并逐字交错上下浮动，约 2.5 秒自动关闭；独立 Canvas 排序在行动槽 HUD 之上；公开 `ShowHeadText / ShowHeadTextForRole / HideHeadText`；音效支持 `ogg/mp3/wav`，走游戏 SFX 通道、展开时播放一次；外部 `DomainDefinition` 同步增加 `ShowDialogOnOpen / DialogSuffix / PlaySoundOnOpen / SoundPath`。特质沉睡描述改为“不在战斗开始自动播放，不影响挂载的行动”，幕间编辑改为只检查特质是否存在，不再看醒/睡。`CustomBattleBg.dll` 170496 字节，编译通过并已安装到工坊测试宿主 |
 | 2026-10-18 | 对外领域运行时 API：`DomainDefinition` 注册外部背景/BGM/效果；`ExpandDomain` 可在任意战斗方法直接展开（不要求特质/玩家配置）；`PlayVisual / PlayBackground / PlayBgm / StopPlayback`；`BindAction` 把领域预绑定到技能/法术；`GetCurrentDomain` 查询当前领域。资源支持绝对路径或 `AssetRoot` 相对路径；领域效果按施法者阵营结算，怪物也能用。接口文档已重写 |
 | 2026-09-30 | 立项：需求理解稿 + 可行性调研（背景叠加方案 / BGM 通道 / 文件选择器 / 视频 / 触发时机 / 分辨率建议） |
 | 2026-09-30 | 用户确认：领域展开=新增技艺、同时只执行最慢的一名、右→左展开 1 秒、mod 落 `mods\自定义播放战斗背景和BGM`、要带添加/移除特质入口、测试宿主用 2919360679 |
@@ -461,15 +461,16 @@ mods\自定义战斗背景和BGM\            ← mod 根目录（测试期可能
 
 **描述配色**：负面状态描述包 `<color=#FF5555>`（红），正面/中性保持默认白（游戏描述本身支持富文本，855.txt 就是例子）。
 
-### 9.10 展开对话框 + 音效（2026-10-18）
+### 9.10 展开头顶文字 + 暗角 + 音效（2026-10-18）
 
 用户口径：
 
-1. 编辑窗在「作用于敌方」这一排下面新增「开启时出现对话框」「开启时音效」；
+1. 编辑窗在「作用于敌方」这一排下面新增「开启时出现头顶文字」「开启时音效」；
 2. 音效从资源库选择（新增 `Sfx` 目录，支持 `ogg/mp3/wav`），展开成功时播放一次；
-3. 角色对话框显示「领域展开——领域后缀」，其中「领域展开」黑体加粗，后缀红体加粗；
+3. 在角色头顶显示「领域展开——领域后缀」，
+   其中「领域展开」加粗（保留文字框默认浅色），后缀红体加粗；
 4. 后缀按字符交错上下浮动（例：`无量空处` 四个字一个一个向上/向下交替）；
-5. 对话框没有原版持续时间时给 2~3 秒，有默认就跟随默认 —— 本实现使用 `DialogBoxData.Time = 2.5`。
+5. 文字显示约 2.5 秒自动淡出。
 
 实现要点：
 
@@ -477,9 +478,24 @@ mods\自定义战斗背景和BGM\            ← mod 根目录（测试期可能
 | --- | --- |
 | 数据 | `DomainProfile` 增加 `ShowOpenDialog / PlayOpenSound / SfxFile / RuntimeDialogSuffix`；外部 `DomainDefinition` 对应 `ShowDialogOnOpen / PlaySoundOnOpen / SoundPath / DialogSuffix` |
 | 资源 | `DomainConstants.SfxFolderName = "Sfx"`、`SfxExtensions = {ogg,mp3,wav}`；`DomainStore` 负责 Sfx 目录、存读、删除与引用保护；`AssetImporter.PickSfx` 负责导入 |
-| 对话框 | `DomainPresentation` 用 `GamePlayEvent.TimeLine.DialogBoxData` + `RoleModel.ShowDialog`；`IsCloseVoice=true`，`Time=2.5`；不 await 任务，避免阻塞领域效果链 |
-| 浮动 | `DomainDialogFloatEffect : BaseMeshEffect` 挂到 `UIDialogBoxElement.Text_Content`；按可见字符索引把后缀每字的 4 个顶点做 `sin(t + i*π)` 纵向偏移，逐字交错；约 5.5 秒后自毁（覆盖对话框生命周期） |
+| 头顶文字 | `DomainPresentation` 调用自定义 `DomainTextBoxOverlay`：按 `Text` preferred size 自动排版；有行动框时贴行动框上边框中点上方，没有时锚在 `RoleModel.Trans_Head` 上方；HUD 坐标用其所属 Canvas 的 `worldCamera` 换算，不能交给战斗相机；Canvas 使用 Screen Space - Overlay、`sortingOrder=30000`，自动淡入淡出；不拦截鼠标。只绘制文字 + 边缘暗角，不绘制黑色底框 |
+| 暗角 | `EdgeVignetteGraphic : MaskableGraphic` 用 16×16 纯网格生成径向渐变，中心透明、边缘/四角黑色，随文字淡入淡出 |
+| 浮动 | `DomainDialogFloatEffect : BaseMeshEffect` 挂到 `DomainTextBoxOverlay` 的 `Text`；按可见字符索引把后缀每字的 4 个顶点做 `sin(t + i*π)` 纵向偏移，逐字交错；随文字结束 |
 | 音效 | `MediaLoader.LoadAudioClip` 从磁盘加载，`AudioManager.PlaySound(clip,1,false)` 走 SFX 混音组；播放完销毁临时 clip |
 | 触发 | `DomainEffects.ApplyOnOpenAsync` 在领域成功展开后调用 `DomainPresentation.PlayOnOpen`；背景/BGM/效果失败不影响表现层，表现失败也不影响战斗 |
 
-注意：`DialogBoxData` 在 `GamePlayEvent.TimeLine` 命名空间（不是全局）；`Text_Content` 是 UnityEngine.UI.Text，旧版 Text 不支持动态 `<voffset>`，因此采用网格效果而不是富文本动画标签。
+**参考尝试记录**：
+
+- `RoleModel.ShowDialog`：角色头像对话框，已实现过，不是想要的效果；
+- `UIScreenTipPanel.AutoShowTip(ScreenTipData)`：原版 `ShowBlackScreenOption` 使用的全屏黑屏提示，已实现过，也不是想要的效果；
+- 《谎言与欺诈》夜魔：战斗场景在 `GameModules\ZHANDOUCHANGJING\Room\YEMOZHANDOU.txt`；其技能 `MonsterBattleSkill\29.txt`「黑暗拥抱」实际用的是 `ShowHUDTextOption`（HUD 文本“桀桀桀桀桀”），不是独立文字框，
+  `MonsterBattleSkill\32.txt`「层层恐惧」是黑暗恐惧 buff；因此最终没有强行复用上述两种表现，稳定版先只保留头顶文字 + 暗角。
+
+外部模组不注册领域也可以调用 `DomainApi.ShowHeadText(requester, text, caster, duration)` /
+`ShowHeadTextForRole(...)` 在任意时机给角色头顶弹文字；`HideHeadText` 可主动关闭。
+
+补充：文字/音效只在**背景实际替换成功**时播放。`DomainBattle.ApplyProfile` 现在返回背景是否成功应用
+（没有配置背景时视为成功），`DomainEffects.ApplyOnOpen` 用这个结果决定是否调用表现层；背景文件缺失、
+战斗相机不可用或图片加载失败时不会出现"背景没变但对话框出现了"的情况。效果结算仍按原容错逻辑独立进行。
+
+旧尝试备忘：`DialogBoxData` 在 `GamePlayEvent.TimeLine` 命名空间（不是全局）；`Text_Content` 是 UnityEngine.UI.Text，旧版 Text 不支持动态 `<voffset>`，所以即使复用角色对话框，也要用网格效果而不是富文本动画标签。当前最终方案已不再使用 `DialogBoxData`。

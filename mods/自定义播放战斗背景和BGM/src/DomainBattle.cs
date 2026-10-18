@@ -370,6 +370,10 @@ namespace CustomBattleBg
             bool backgroundApplied;
             bool videoShown = ApplyBackground(profile, reason, out backgroundApplied);
             ApplyBgm(profile, reason, videoShown);
+            if (!backgroundApplied)
+            {
+                CustomBattleBgPlugin.LogInfo("（" + reason + "）背景没有成功应用，跳过对话框/展开音效");
+            }
             return backgroundApplied;
         }
 

@@ -327,6 +327,7 @@ namespace XinEditor
                     XinEditorPlugin.LogError("生成心效果失败（第 " + (i + 1) + " 条），已跳过：" + e.Message);
                 }
             }
+            AddEffectCleanup(cfg, def);
 
             // 回合开始：精神值正常才扣 1 点维持；处于衰弱/衰竭则解除
             cfg.Events.Add(MakeSanCostEvent());
@@ -338,6 +339,54 @@ namespace XinEditor
             cfg.Events.Add(MakeLifeStateClearEvent());
             cfg.Events.Add(MakeBattleEndEvent());
             return cfg;
+        }
+
+        /// <summary>
+        /// 心 buff 被移除时清理它施加给自己/友方的状态。
+        /// 这个清理选项放在一个 Stable 事件里，平时不做事；BuffData.RemoveBuff 会遍历
+        /// Config.Events 调用 TriggerRemoveOpts，因此能覆盖战斗结束、衰弱解除、倒下和手动移除。
+        /// </summary>
+        private static void AddEffectCleanup(BuffTableData cfg, HeartDefinition def)
+        {
+            try
+            {
+                HeartEffectCleanupOption cleanup = new HeartEffectCleanupOption();
+                for (int i = 0; i < HeartConstants.MaxEffects; i++)
+                {
+                    HeartEffect effect = def.GetEffect(i);
+                    if (effect == null || !effect.IsConfigured)
+                    {
+                        continue;
+                    }
+                    // 只清自己/友方；敌人的 debuff 保留自己的生命周期。
+                    if (effect.Target != HeartEffectTarget.Self &&
+                        effect.Target != HeartEffectTarget.AllAllies &&
+                        effect.Target != HeartEffectTarget.AlliesOnly)
+                    {
+                        continue;
+                    }
+                    int buffId = ResolveEffectBuffId(def, i, effect);
+                    if (buffId <= 0)
+                    {
+                        continue;
+                    }
+                    cleanup.Add(buffId, MapEffectTarget(effect.Target, effect.Trigger));
+                }
+
+                if (cleanup.Entries.Count == 0)
+                {
+                    return;
+                }
+                BuffEventData ev = new BuffEventData();
+                ev.EBuffTrigger = EBuffTriggerType.Stable;
+                ev.Funcs.Add(cleanup);
+                cfg.Events.Add(ev);
+                XinEditorPlugin.LogInfo("心效果清理已挂：" + cleanup.Entries.Count + " 条（仅自己/友方）");
+            }
+            catch (Exception e)
+            {
+                XinEditorPlugin.LogError("挂心效果清理失败，已跳过清理：" + e);
+            }
         }
 
         // ==================== 附加效果 ====================

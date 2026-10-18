@@ -1365,3 +1365,8 @@ CurAddEle = null;
 **幕间入口的特质判断（2026-10-18 用户口径）**：`HeartMenu.HasHeartTrait` 只判断
 `role.GetTraitData(880901) != null`，**不要**再要求 `CurrentState == ETraitState.Wake`。
 特质沉睡时仍然允许打开「修改当前角色【心】」编辑窗；添加/移除入口也统一按“有没有特质”判断。
+
+**心效果自清理（2026-10-18）**：心附加效果给自己/友方的状态，通过
+`HeartEffectCleanupOption` 挂在心的一个 `Stable` 事件里；`BuffData.RemoveBuff` 会遍历
+所有 `Config.Events.Funcs` 执行 `TriggerRemoveOpts`，所以心解除/倒下/战斗结束/手动移除都会走
+`OnRemove`，按状态 ID 移除全部层数。敌人效果不主动清；同一状态如果有别的来源也会被一起清掉。

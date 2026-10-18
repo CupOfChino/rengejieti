@@ -33,6 +33,7 @@ A DIY Limbus Company buff for Depersonalization: Shin (the "heart" buff).
 [*] If a buff and layer count are filled in, saving shows a one-time "data-related, use at your own risk" confirmation
 [*] "One enemy" means the enemy that was just hit for the after-hit trigger; for other triggers one living enemy is chosen at random
 [*] If the selected buff is missing (its mod is disabled or removed), saving is blocked. At runtime a broken effect is skipped; the Shin itself is unaffected
+[*] When Shin ends (battle end, Weakness/Collapse removal, death, manual removal), self/allied effects are removed by buff ID at all layers; enemy effects keep their normal debuff lifecycle
 [*] With "Custom Battle Background & BGM" enabled, its eight layer-based presets (physical/magic damage up, guard, down, vulnerable) also appear; each layer is 10%
 [/list]
 

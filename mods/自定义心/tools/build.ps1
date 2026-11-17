@@ -80,7 +80,14 @@ foreach ($dir in @($GameManaged, $BepInExCore)) {
 }
 foreach ($s in $sources) { $cscArgs += $s.FullName }
 
-& $Dotnet exec @cscArgs 2>&1 | Select-Object -Last 30
+# 全量引用的绝对路径会超过 Windows 命令行长度限制，改用 Roslyn 响应文件。
+$responseDir = Join-Path $ModRoot 'temp\build'
+New-Item -ItemType Directory -Force -Path $responseDir | Out-Null
+$responseFile = Join-Path $responseDir 'XinEditor.rsp'
+$responseLines = $cscArgs[1..($cscArgs.Count - 1)] | Where-Object { $_ -ne '-noconfig' } |
+  ForEach-Object { '"' + $_ + '"' }
+[System.IO.File]::WriteAllLines($responseFile, [string[]]$responseLines, [System.Text.UTF8Encoding]::new($false))
+& $Dotnet exec $Csc -noconfig ('@' + $responseFile) 2>&1 | Select-Object -Last 30
 if ($LASTEXITCODE -ne 0) { throw "编译失败" }
 
 $dll = Get-Item -LiteralPath $OutDll

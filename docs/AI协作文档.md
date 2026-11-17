@@ -161,6 +161,36 @@ powershell -File "tools\uninstall_test.ps1" -ModName 跑团卡特质包
 上传：游戏内「众创/编辑模组」导入 `mods\<模组名>\Project_Depersonal` 走上传流程，
 成功后 `Uploader` 的 `FileId` 会被写成真实工坊 ID。
 
+**工坊上传踩坑（2026-10-18）**：`Uploader` 是游戏用 ES3 保存的 JSON，描述文本里如果出现
+`\“` / `\”` 这类非法 JSON 转义，`GetUploadFilePath` 会读取失败，`CurrentUploadData` 变成 null；
+`UpLoadItem()` 随后会 new 一个 `FileId = 0` 的对象，于是**把更新误走成“创建新物品”**。
+现象是原条目更新报 `Failed to download manifest` / `Access Denied`，随后工坊里多出一个没有内容的新 ID。
+修复：只保留合法转义（中文引号直接写 `“”`，不要在前面加反斜杠），确认
+`Get-Content Uploader -Raw | ConvertFrom-Json` 能通过，再把 `FileId` 改回原条目。
+另外，`SearchAndGenerateConfigFile` 提示缺少 `<mod>\Resource` 只是跳过额外资源扫描，
+不会阻止上传；项目自带资源在 `Project_Depersonal\Assets\Resources\` 下时是正常的。
+
+**工坊隐藏条目的 `Access Denied`（2026-10-18）**：Steamworks 文档明确，Workshop 物品在作者
+同意《Steam 创意工坊法律协议》前会**默认隐藏**。游戏的 `CreateWorkshopItem` 会检查
+`m_bUserNeedsToAcceptWorkshopLegalAgreement` 并提示，但 `UpdateWinWorkshopItem` **没有检查**，
+所以更新已存在条目时只会得到 `Access Denied`，标题/描述也改不了。处理：登录作者账号打开
+`https://steamcommunity.com/workshop/workshoplegalagreement/` 接受协议，再刷新条目页；
+如果协议已接受仍隐藏，才考虑审核/举报/DMCA，联系 Steam 支持或游戏开发者。
+
+**独立工坊上传器（2026-10-18）**：游戏上传界面会把 `Uploader` 描述里的 `\“` / `\”` 原样写回，
+导致下一次 `ESCheckValid` 读取失败并新建物品。`tools-external\workshop_uploader` 里有可复用的
+Steamworks.NET 控制台上传器：先修正 `Uploader`（合法 JSON、FileId 指向旧条目），再用
+`WorkshopUploader.exe <内容目录> <Uploader路径> <旧itemId>` 上传；它会直接 `StartItemUpdate`
+旧条目并打印 `SubmitItemUpdateResult_t`。本次已用该工具把「自定义心」成功更新到 `3801085814`
+（manifest `4138376817386004355`）。工具依赖游戏的 `com.rlabrecque.steamworks.net.dll` 和
+`steam_api64.dll`，所以放在 `tools-external`，不要放进要上传的 mod 内容目录。
+
+**隐藏/审核条目的更新限制（2026-10-18）**：如果工坊条目被 Steam 或游戏开发者置于隐藏/审核状态，
+`StartItemUpdate` 和内容上传仍可能推进（Steam 日志会出现新的 ManifestID），但最后的
+`SubmitItemUpdate` 会返回 `k_EResultAccessDenied`，条目的 `time_updated`/manifest 不会变化。
+这不是本地网络或 Uploader 代码能绕过的；必须由条目所有者、游戏开发者或 Steam 客服解除隐藏/完成审核。
+此时反复重试无意义，也不要为了绕过而新建重复物品（订阅和收藏不会迁移）。
+
 ## 6. 资料优先级
 
 1. 游戏本体数据表 `Depersonalization-Release_Data\StreamingAssets\Game\`（最权威）
@@ -1424,3 +1454,11 @@ Screen Space - Overlay 时 `worldCamera == null`，换算结果仍正确。技�
 `HeartEffectCleanupOption` 挂在心的一个 `Stable` 事件里；`BuffData.RemoveBuff` 会遍历
 所有 `Config.Events.Funcs` 执行 `TriggerRemoveOpts`，所以心解除/倒下/战斗结束/手动移除都会走
 `OnRemove`，按状态 ID 移除全部层数。敌人效果不主动清；同一状态如果有别的来源也会被一起清掉。
+
+## 30. 「自定义心」外观编辑器（2026-11-18，0.2.1）
+
+当前规则见[自定义心-外观编辑器.md](自定义心-外观编辑器.md)。自动拟合已停用，统一默认X=0.05、Y=0.05、宽高缩放均0.30。
+用户明确：按调查员分别保存；原点使用原始特效播放挂点(0,0)，不是人物中心。预览、战斗使用同一局部坐标。
+模态弹窗提供待机人物、动态心焰、固定坐标轴、独立宽高和居中的应用/重置按钮；保存默认可点，成功弹出确认，确认后关闭两层弹窗回原面板。草稿可叉号/Esc关闭不保存，原面板数值草稿保留。
+幕间角色自身RoleLibraryKey可能为空，须经HeartVisualRoleKey从角色库解析稳定编号，不能因此把保存按钮置灰。实现另见HeartVisualSettings.cs、HeartVisualEditor.cs、HeartVisualPreview.cs和旧文件名HeartFxWidthFitter.cs。40项检查及用户实测通过；验证入口为`mods/自定义心/tools/test_visuals.ps1`。
+2026-11-18已用独立上传器更新原工坊物品3801085814，manifest=3068979684825246233。发布时显式锁定旧编号，干净暂存包只含Project_Depersonal/plugins/Uploader；上传器先`--dry-run`校验，再提交并通过线上API核对。详见外观编辑器文档发布记录。

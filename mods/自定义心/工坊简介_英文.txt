@@ -70,3 +70,11 @@ Finally pulled it off: by feeding the first and last frames to an AI video gener
 
 [h2]About the assets[/h2]
 Feel free to reuse them — just help spread the word about this mod. After all, I stayed up from the evening until past 3 a.m. recreating Shin's effect. qwq
+
+[h2]Shin appearance editor (0.2.1)[/h2]
+[list]
+[*] Open "Shin appearance" in the custom Shin editor to preview the investigator's idle model and animated flame.
+[*] Adjust position X/Y and width/height independently. Axes stay fixed at the original effect anchor (0,0).
+[*] Defaults: width/height 0.30, X/Y 0.05. Apply updates the preview; Reset restores defaults.
+[*] Settings are saved per investigator. Confirm a successful save to return; X closes without saving the draft.
+[/list]

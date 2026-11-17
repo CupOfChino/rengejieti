@@ -51,6 +51,7 @@ namespace XinEditor
         private InputField[] _effectLayers = new InputField[HeartConstants.MaxEffects];
         private bool _effectWarningConfirmed;
         private Text _hint;
+        private HeartVisualEditor _visualWindow;
         private Transform _sideList;
         private readonly List<GameObject> _sideRows = new List<GameObject>();
 
@@ -88,6 +89,8 @@ namespace XinEditor
             }
             HeartSearchDropdown.CloseOpened();
             SimpleDropdown.CloseOpened();
+            if (_instance._visualWindow != null && _instance._visualWindow.IsOpen)
+                _instance._visualWindow.Close(false);
             _instance.RestoreNavigation();
             if (_instance._canvasGo != null)
             {
@@ -350,6 +353,44 @@ namespace XinEditor
             UIFactory.Place(reset.GetComponent<RectTransform>(), 196f, y, 210f, 48f);
             Button close = UIFactory.TextButton(panel, "Close", "关闭", CloseWindow, false, 24);
             UIFactory.Place(close.GetComponent<RectTransform>(), PanelWidth - 184f, y, 160f, 48f);
+            Button visual = UIFactory.TextButton(panel, "EditVisual", XinText.T("特效大小和位置", "Shin appearance"),
+                OpenVisualEditor, false, 21);
+            UIFactory.Place(visual.GetComponent<RectTransform>(), 418f, y, 226f, 48f);
+        }
+
+        private void OpenVisualEditor()
+        {
+            if (_role == null || _rolling) return;
+            HeartSearchDropdown.CloseOpened();
+            SimpleDropdown.CloseOpened();
+            if (EventSystem.current != null) EventSystem.current.SetSelectedGameObject(null);
+            if (_visualWindow == null)
+                _visualWindow = HeartVisualEditor.Create(_canvasGo.transform, delegate(bool saved) {
+                    SetVisualModalBlocked(false);
+                    if (saved)
+                    {
+                        _hint.text = XinText.T("保存成功。", "Saved successfully.");
+                    }
+                });
+            SetVisualModalBlocked(true);
+            try { _visualWindow.Open(_role); }
+            catch (Exception e)
+            {
+                _visualWindow.Close(false);
+                SetVisualModalBlocked(false);
+                _hint.text = XinText.T("打开特效编辑器失败，请查看日志。", "Could not open the appearance editor. Check the log.");
+                XinEditorPlugin.LogError("打开心外观编辑器失败：" + e);
+            }
+        }
+
+        private void SetVisualModalBlocked(bool blocked)
+        {
+            foreach (GameObject panel in new[] { _panelGo, _sideGo })
+            {
+                if (panel == null) continue;
+                CanvasGroup group = panel.GetComponent<CanvasGroup>() ?? panel.AddComponent<CanvasGroup>();
+                group.interactable = !blocked;
+            }
         }
 
         private void BuildSide(Transform side)
@@ -368,6 +409,7 @@ namespace XinEditor
             {
                 return;
             }
+            if (_visualWindow != null && _visualWindow.IsOpen) _visualWindow.Close(false);
             _role = role;
             _def = XinEditorPlugin.Store.Find(role);
             _isNew = _def == null;
@@ -462,7 +504,8 @@ namespace XinEditor
                 SuppressNavigation();
                 if (Input.GetKeyDown(KeyCode.Escape))
                 {
-                    CloseWindow();
+                    if (_visualWindow != null && _visualWindow.IsOpen) _visualWindow.HandleEscape();
+                    else CloseWindow();
                 }
             }
             catch (Exception)

@@ -18,18 +18,20 @@ using MOD;
 
 namespace XinEditor
 {
-    [BepInPlugin(Guid, "自定义心", "0.1.0")]
+    [BepInPlugin(Guid, "自定义心", "0.2.1")]
     public class XinEditorPlugin : BaseUnityPlugin
     {
         public const string Guid = "codex.depersonal.xineditor";
 
         internal static ManualLogSource Log;
         internal static HeartStore Store;
+        internal static HeartVisualStore VisualStore;
 
         /// <summary>心用的帧动画特效（数据包里 Game/ExtraAnim/&lt;名字&gt;.txt）。</summary>
         internal static string FrameEffectName = "xin_glow";
         internal static string FrameEffectAnim = "idle";
         internal static int FrameEffectPoint = 2;   // 2 = 身体正中（图层由特效配置里的 SortOrder 压到角色下面）
+        internal static bool EnableHeartVisuals = true;
 
         private ConfigEntry<bool> _debugAutoHeart;
         private float _timer;
@@ -48,6 +50,17 @@ namespace XinEditor
             {
                 LogError("读自定义心数据失败：" + e);
             }
+            try
+            {
+                VisualStore = new HeartVisualStore(System.IO.Path.Combine(UnityEngine.Application.persistentDataPath,
+                    "XinEditor", "visuals.cfg"));
+                VisualStore.Load();
+            }
+            catch (Exception e)
+            {
+                VisualStore = null;
+                LogError("读心外观配置失败：" + e);
+            }
 
             _debugAutoHeart = Config.Bind("调试", "自动生成测试心", false,
                 "开发期开关：开启后，如果一条自定义心都没有，会自动给大厅第一个调查员生成一颗测试心。平时保持关闭。");
@@ -57,6 +70,8 @@ namespace XinEditor
             FrameEffectAnim = Config.Bind("特效", "帧动画名", "idle", "帧动画里的动画名").Value;
             FrameEffectPoint = Config.Bind("特效", "播放位置", 2,
                 "0 无 / 1 头顶 / 2 正中 / 3 底部 / 4 身前 / 5 身后").Value;
+            EnableHeartVisuals = Config.Bind("特效", "启用外观参数", true,
+                "使用统一默认外观或调查员保存的外观参数；在编辑窗中调整位置和宽高。旧版按模型宽度缩放配置已停用。修改后重启游戏。").Value;
 
             LogInfo("插件已加载，现有自定义心 " + Store.Hearts.Count + " 条");
             LogInfo("数据文件：" + Store.FilePath);
@@ -72,6 +87,7 @@ namespace XinEditor
                 PatchOne(harmony, typeof(Patch_KeyboardEventManager_MoveDir));
                 PatchOne(harmony, typeof(Patch_InputModule_Move));
                 PatchOne(harmony, typeof(Patch_InputModule_Submit));
+                PatchOne(harmony, typeof(Patch_RoleModel_PlayHeartFx));
                 LogInfo("钩子挂载结束");
             }
             catch (Exception e)

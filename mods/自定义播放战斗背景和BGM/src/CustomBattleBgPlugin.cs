@@ -16,7 +16,7 @@ using HarmonyLib;
 
 namespace CustomBattleBg
 {
-    [BepInPlugin(Guid, "自定义播放战斗背景和BGM", "0.2.0")]
+    [BepInPlugin(Guid, "自定义播放战斗背景和BGM", "0.2.1")]
     public class CustomBattleBgPlugin : BaseUnityPlugin
     {
         public const string Guid = "codex.depersonal.custombattlebg";
@@ -37,6 +37,7 @@ namespace CustomBattleBg
         /// <summary>"只占上半屏"模式下视频上下黑边的比例（0.05 = 上下各留 5%）。</summary>
         internal static float VideoHalfEdge = DomainConstants.VideoHalfEdge;
 
+        private static bool _gameConfigLoaded;
         private float _timer;
         private bool _startupDone;
         private float _preloadTimer;
@@ -78,6 +79,7 @@ namespace CustomBattleBg
             try
             {
                 Harmony harmony = new Harmony(Guid);
+                PatchOne(harmony, typeof(Patch_EndLoadConfigData));
                 PatchOne(harmony, typeof(Patch_InterludeVacation));
                 PatchOne(harmony, typeof(Patch_UpdateVacationInfo));
                 PatchOne(harmony, typeof(Patch_BattleRole_TriggerBuffs));
@@ -130,65 +132,55 @@ namespace CustomBattleBg
 
         private void Update()
         {
-            _timer += UnityEngine.Time.unscaledDeltaTime;
-            if (_startupDone)
-            {
-                // 游戏就绪后等 5 秒再开始后台预加载状态表（避开启动争资源）
-                if (!_preloadStarted)
-                {
-                    _preloadTimer += UnityEngine.Time.unscaledDeltaTime;
-                    if (_preloadTimer >= 5f)
-                    {
-                        _preloadStarted = true;
-                        LogInfo("开始后台预加载状态表（第一次用编辑器就不用等了）…");
-                        StartCoroutine(DomainBuffBuilder.PreloadAllBuffsCo());
-                    }
-                }
-                // 语言能在游戏设置里随时改，隔一会儿重贴一次英文文案
-                if (_timer >= 10f)
-                {
-                    _timer = 0f;
-                    DomainText.ApplyDataOverlay();
-                }
-                return;
-            }
-            if (_timer < 3f)
+            if (!_gameConfigLoaded)
             {
                 return;
             }
-            _timer = 0f;
-
-            try
+            if (!_startupDone)
             {
-                if (!IsGameReady())
-                {
-                    return;
-                }
                 _startupDone = true;
-                DomainText.ApplyDataOverlay();
-                LogInfo(DomainApi.DescribeStates());
-                LogRoles();
+                try
+                {
+                    LogInfo("游戏配置已加载，开始初始化领域数据");
+                    DomainText.ApplyDataOverlay();
+                    LogInfo(DomainApi.DescribeStates());
+                    LogRoles();
+                }
+                catch (Exception e)
+                {
+                    LogError("初始化出错：" + e);
+                }
+                return;
             }
-            catch (Exception e)
+
+            // 游戏就绪后等 5 秒再开始后台预加载状态表，避开启动争资源。
+            if (!_preloadStarted)
             {
-                LogError("初始化出错：" + e);
+                _preloadTimer += UnityEngine.Time.unscaledDeltaTime;
+                if (_preloadTimer >= 5f)
+                {
+                    _preloadStarted = true;
+                    LogInfo("开始后台预加载状态表（第一次用编辑器就不用等了）…");
+                    StartCoroutine(DomainBuffBuilder.PreloadAllBuffsCo());
+                }
+            }
+
+            // 玩家可以在设置里切换语言，定期刷新英文文案。
+            _timer += UnityEngine.Time.unscaledDeltaTime;
+            if (_timer >= 10f)
+            {
+                _timer = 0f;
+                DomainText.ApplyDataOverlay();
             }
         }
 
-        private static bool IsGameReady()
+        [HarmonyPatch(typeof(WorkshopHelper), nameof(WorkshopHelper.EndLoadConfigData))]
+        private static class Patch_EndLoadConfigData
         {
-            try
+            private static void Postfix()
             {
-                if (!Singleton<ResManager>.HasInstance)
-                {
-                    return false;
-                }
-                TraitResFactory factory = Singleton<ResManager>.Instance.TraitFactory;
-                return factory != null && factory.All.Count > 0;
-            }
-            catch (Exception)
-            {
-                return false;
+                // 此前访问 BaseFactory.All 可能把半张表缓存到整局游戏结束。
+                _gameConfigLoaded = true;
             }
         }
 

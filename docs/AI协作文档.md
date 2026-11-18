@@ -144,6 +144,14 @@
    （正则插回去即可，参考 `mods\可视化攻击目标\tools\make_baihehua_item.ps1` 末尾那两段：
    `Data` 一个、`EquipmentConfigData` 一个），或者干脆**别走 JSON 往返，直接对原文件做文本级替换**。
 
+### 建卡特质页空白（2026-11-18）
+
+- `Player.log` 中 `UICharGenPanel._ReFreshTraits()[0x00085]` 越界时，先核对对应版本的程序集。当前版本在这一步从可创建的「遭遇」特质中抽默认项，候选为空会中断整个建卡初始化。页面顶部 `5/5` 是初始显示值。
+- 原版 `StreamingAssets/Game/Trait` 有 16 个可创建的遭遇，其中第一条在当前目录枚举顺序的第 104 个文件。游戏的 `BaseFactory<T>.All` 会缓存首次读到的非空列表，`AddItem` 不刷新该缓存。插件应在配置表加载完成后再访问 `All`，可参考 `WorkshopHelper.EndLoadConfigData` 的后置钩子。
+- 本次重点排查工坊 `3810876729`「自定义播放战斗背景和BGM」0.2.0。其 `CustomBattleBgPlugin.IsGameReady` 每三秒用 `TraitFactory.All.Count` 判断就绪，插件日志显示初始化早于配置加载结束。源码在 `mods/自定义播放战斗背景和BGM/src/CustomBattleBgPlugin.cs`。只停用这一项并重启后，用户实测特质页恢复。
+
+- 0.2.1 移除 `IsGameReady` 轮询，改为收到 `WorkshopHelper.EndLoadConfigData` 后置通知后再初始化。已有的英文文案刷新和背景状态表预加载也从配置完成后开始。用模组内 `tools/build.ps1` 编译并将 `plugins/CustomBattleBg.dll` 同步到本机工坊目录。重启后日志确认 0.2.1 在配置加载结束后才初始化，状态表预加载完成，用户确认建卡特质页恢复。修复版已更新工坊原条目 `3810876729`，线上 manifest 为 `3174035637484380731`，更新说明为「修复了bug」。
+
 ## 5. 改 / 测 / 发
 
 ```powershell

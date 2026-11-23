@@ -1,0 +1,45 @@
+{
+  "Data": {
+    "__type": "BaseSheetData,Assembly-CSharp",
+    "value": {
+      "__type": "MOD.BuffTableData,Assembly-CSharp",
+      "Id": 885132,
+      "Name": {
+        "TarKey": "",
+        "SheetKey": "",
+        "InputText": "震颤",
+        "Characteristic": null
+      },
+      "Des": {
+        "TarKey": "",
+        "SheetKey": "",
+        "InputText": "大行动轮结束后扣 1 层。引爆时增加层数的三分之一的眩晕值（向上取整，单次最多为意志的三分之一），再扣 1 层。眩晕值达到意志时眩晕一轮并清空，眩晕期间只显示引爆数值。",
+        "Characteristic": null
+      },
+      "IconPathReference": {
+        "ReferenceType": 1007,
+        "Key": "valenna_tremor_icon"
+      },
+      "BuffType": 4,
+      "BuffEffectType": 2,
+      "OverlayType": 1,
+      "IsShowUI": true,
+      "IsDeathClear": true,
+      "FxPlayType": 0,
+      "PlayFxInBattle": true,
+      "PlayFxInExplore": false,
+      "UseFxPrefab": {
+        "UseFrameEffect": false,
+        "FxPath": null
+      },
+      "Arrts": [],
+      "Events": [],
+      "LayerCount": {
+        "Value": "1"
+      },
+      "OverrideInitLayer": true,
+      "InitLayer": 1,
+      "MaxLayer": 0
+    }
+  }
+}

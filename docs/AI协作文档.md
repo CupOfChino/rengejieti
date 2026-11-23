@@ -1050,6 +1050,50 @@ num += OffHandWeapon.ExtraContinuousAttackCount.Value + OffHandWeapon.ExtraConti
 荆棘 `880006` = 自定义 `EffectShow`（FXSkillHit_Puncture + weapon_knife）。
 两边都改了 `tools\make_zanghua_item.ps1` / `make_jingji_item.ps1`，**改数据必须连着脚本一起改**（见 18.3.2）。
 
+**瓦伦娜演出测试（2026-11-21）**
+
+- 独立工程见[模组说明](../mods/boss战%20瓦伦希娜/README.md)。基础数据优先用 111] 的《卡14-瓦伦娜》，游戏接口核对本机程序集，演出参数和本地参考素材索引见[招式演出分段](../mods/boss战%20瓦伦希娜/招式演出分段.md)。
+- 本机版本的 `UIBattlePanel._heroRole` 是指向 `BattleHelper.BattleHeroInfo` 的属性。在 `_SetSkillSelectButtonElement` 筛选专属攻击时直接读取 `BattleHeroInfo`。演出只暂移角色模型，用原生命中事件结算，结束时恢复模型位置。
+- 0.1.1 实机能读到伙伴和插件，但日志缺少预加载演出绑定。0.2.0 改从 `BattleActiveBehaviorData.TriggeOptionEffect` 的成功事件触发。编辑器预览为 `valenna_arc_preview`，测试模型为 `valenna_test_model`。
+- 0.2.0 的实机日志确认测试模型载入，技能 885123 开始播片。0.2.1 先更新切割攻击，网格刀光和编辑器预览都从 `src/BladeRibbonProfile.cs` 获取截面与展开参数。
+- 0.2.2 参考模组下 `valencina_ref/params/参数说明.md` 的分层做法。切割攻击在挥刀期间启动主刀光，命中节点负责结算、火星与余弧。柔光只叠在刀光附近，可随轮廓一起调。
+- 0.2.3 挂载用户提供的立绘和首领目录 `1314_Thumb_FatherAppearance` 的 SD 帧。头像键为 `valenna_portrait`，模型仍用 `valenna_test_model`。原图映射在 `tools/build_presentation.ps1`，脚下落点、朝向、头像显示范围及读档时的默认头像刷新在 `src/ValennaAppearance.cs`。
+- 0.3.0 以 `video/39860503251-1-192.mp4` 从 00:23 起的八条演出为准。人物动作直接切换已有姿势。工坊 1379 侧参数用于对照图层和帧时序，制作用 `E:\lim` 的刀光、噪声、闪光及烟火遮罩。
+- `src/StrikeProfiles.cs` 是招式顺序、阶段和测试伤害的共同数据源。`tools/SlashFramePainter.cs` 生成 `valenna_arc_preview` 序列，同一批帧嵌入 DLL。先按本地特效浏览器自查指南核对亮刃、余弧、交叉闪光与色彩，再在实机确认位移、受击和清理。[招式演出分段](../mods/boss战%20瓦伦希娜/招式演出分段.md) [特效浏览器自查](../tools/vfx-editor/Agent自查指南.md)
+- 0.3.1 接入模组 `resource` 的 30 张用户整理单图，并从已有首领素材补齐「处置」的 6 张回撤与举枪帧。姿势对应文件与脚下落点在 `src/ValennaPoses.cs`，构建脚本把同一份坐标输出到模型目录的 `pose-pivots.json`，供本地特效浏览器对齐逐帧切图。修改切图时同时检查游戏材质引用、动作轨和原片对照。
+- 0.3.2 按用户逐帧指正调整三招。切割攻击约 1.00 秒保持挑斩收势。尖端打击 1.01 秒后仰、1.08 秒中段直刺、1.41 秒末段直刺。处置约 2.50 秒至少三束，中束粗亮，两侧快进快退。突刺、举枪蓄光和枪刃余光的帧在 `tools/SlashFramePainter.cs`，浏览器工程中的重点分镜在 `temp/特效浏览器/原片对照`。
+- 0.3.3 优先使用模组内 `resource/可能的粒子和材质` 生成外围剑气、红色碎片、白火星和命中序列。切割攻击 0.20 秒沿用握柄起手，0.64 秒用 `skill1_3.png`。人物周围的黄色火焰由现有「心」状态绘制，末段的枪口蓄光是独立序列。反手斩在浏览器里用同一序列开启纵向镜像。
+- 0.4.12 的七招动作顺序已经由玩家逐帧对齐。调整演出时优先对照原片的亮刃、余风和命中叠层，预知保留，处置身上的黄焰归「心」状态。原片绝对帧号、分镜对照和遮罩分工见[主动招式光效](../mods/boss战%20瓦伦希娜/招式演出分段.md#0412-主动招式光效)。新增帧序列时同步修改 `build_presentation.ps1` 的动画注册、`build.ps1` 的内嵌目录和 `StrikeArt.cs` 的加载、释放。
+- 处置最外层剑风已获玩家认可。处置亮度在 `SlashFramePainter.Draw(..., execution: true)` 和 `PaintExecutionBlade` 内单独校准。枪口环的色样取自「自定义心」的成品 PNG，蓄力和开火后的环使用同一组尺寸。[处置逐帧记录](../mods/boss战%20瓦伦希娜/招式演出分段.md#0413-处置亮刃和枪口环)
+- 七招换姿要同时核对 `StrikeProfiles.cs` 的命中前后时长与 `build_presentation.ps1` 的动作间隔、停留权重。相邻动作若用了同一张姿势图，应合并计算可见时长。穿过靶影后还会定姿，`PassMoveTime` 单独计命中后的移动窗口。参考原片用目标距离和人物高度辨认停身，镜头缩放会改变屏幕距离。普通攻击主副刃用 `valenna_attack_sweep`、`valenna_attack_companion`，第 12 帧起接通用尾帧。原片边界、遮挡和亮刃检查方法见[七招动作占比与亮刃](../mods/boss战%20瓦伦希娜/招式演出分段.md#0414-七招动作占比与亮刃)。
+- `StrikeRepeats.cs` 的续刺相对首发出光计时，`TurningSweeps.cs` 的回扫相对换姿计时。转刀可能早于末斩起光。对照参考时连续查看上下刺线、前后刃的交替与余光重叠。需要强化少数重斩时，`valenna_peak_sweep` 只替换这几刀的主刃，普通帧和处置帧各自独立。[连刺、转刀与斩击强光](../mods/boss战%20瓦伦希娜/招式演出分段.md#0415-连刺转刀与斩击强光)
+- **换姿与脚步**。尖端和子弹贯穿的两张刺姿仅前手不同，两张都要带位移。伸手前踏、收手轻退，停姿时站稳。转刀的收力、发力和落势各有不同方向和步幅。`StrikeFootwork.Step` 按实际显示的切图决定落脚；改动作顺序先核对用户认定的原片帧。持续运动每五个实际渲染帧留一张当前身影，换姿立即留旧影，同帧只出一张。检查脚下用动态预览，检查刀光层次用固定站位分镜。[换姿落脚与起手时序](../mods/boss战%20瓦伦希娜/招式演出分段.md#0416-换姿落脚与起手时序)
+- 0.3.4 以原片第 728 与 751 帧复核切割攻击的左眼、鞘口和暗红尖弧。左眼在刘海下，预闪坐标和脚下落点共用 `ValennaPoses.cs`，浏览器从 `pose-pivots.json` 按同一姿势换挂点。校正首斩和举刀收势，随后按原片低扫、直刺与拦击阶段检查七招。切割分层和原片帧号见模组内 `招式演出分段.md`，本机巴士状态图见 `状态图标索引.md`。
+
+- 0.3.5 逐帧复核八招的亮刃、余焰和旋转。切割、解兔、解鹿和「洞穿」的主副刃须各自对齐，尖端打击用长短双刺，解象与处置各有从近竖到横扫的过渡。改起点、错时、宽度和转向在 `StrikeProfiles.cs`，从短刃沿弧长出的遮罩在 `SlashFramePainter.cs`。浏览器使用同一组贴图、倍率与平滑转向参数。浏览器工程与保存检查图共用 32 层上限。关键帧号和图见模组内 `招式演出分段.md`。
+
+- 0.3.6 攻击栏按当前行动槽角色是否拥有「巴勒莫之剑」885141 筛选。数据表的 `ShowCheck` 与按钮层同时限制七项主动技，旧测试行用于兼容。伙伴入场时朝左。残影取姿势透明度，切图时保留上帧位置。
+- `ValennaPrescience.cs` 在原版生成临时骰后加奖惩骰，在 `ActionEffectProcess` 按目标累计闪避结果，等同一个敌人的 `BattleActiveBehaviorData.Run` 完了再判定一次解兔反击。低层阈值按扣 5 层之前检查。连段成功继承同一组奖励，失败后下一段重新发动。战斗 `RoundStart` 和探索 Buff 的地图回合事件分别回层，两个状态表用 `OverrideInitLayer` 设为 30 与 0。眼标动画与状态图标独立，朝向和透明度跟随实际闪避。详见模组内 `README.md`。
+
+- 0.3.7 把反击与发放挂在「预知」特质 `885142`，充能、闪避奖惩和「加速的未来」挂在预知眼装备 `885112`。`ValennaEyeEquipment.cs` 走 `EnterModule` 和入战入口，查装备与背包后使用原版 `EquipItem` 穿戴护具栏（`EEquipType.Cloth`）。神话、绑定和不可卸写进物品数据。`ValennaPrescience.cs` 在受击和直接伤害入口共用命中记录，同一次命中只扣一次。`AcceleratedFuture.cs` 叠层后由招式入口保留整招倍率，解兔跳过倍率与清层。装备图标取 `饰品-9256.webp`，状态图标取 `加速的未来.webp`，原图路径及登记键见模组内 `状态图标索引.md`。
+
+- 0.4.0 将“大行动轮开始”对齐到选择行动前的原版 `BeforeRoundStart`，该事件在首轮 `LookStage` 和以后各轮 `PreprepareStage` 触发。原版 `RoundStart` 已在行动选择后。`ValennaHunt.cs` 在每第 3 轮的 `ResultStage` 完成后决定是否安排补标，下一大行动轮实际开始时施加。处置条件同时走按钮遮罩、目标过滤和提交后的再校验。七项招式配置与预知数值仍在 `StrikeProfiles.cs`。
+- 普通与灼热震颤的配置及代理入口见 `ValennaTremor.cs`。原生燃烧为 104，原生昏迷为 101。雷横默工坊号 `3587695213`，运行时查四张状态表 686122775、68612299、68614495、68612256 来决定是否调用它的状态。本模组的兜底引爆在目标模型中心短暂显示图标，血条下只在累计眩晕值大于 0 时显示数字。本地预览工程及数值详见瓦伦娜模组 `README.md`。
+- `ValennaPrescience.cs` 等全部分段的后处理完成才统计本次闪避和攻击。原版部分 `ActionEffectProcess` 调用按回调推进。攻击、呼吸法和狩猎伤害改在实际 `SetDamage` 取值，狩猎与未来累计小数，避免 1 点测试分段被逐段向上取整。暴击数字按命中范围定位 HUD，池化数字重置字号。其余装备、初始特质和旧伙伴升级见 `ValennaKit.cs` 与 `tools/build_data.ps1`。
+- 0.4.2 把扫刃、气流、碎屑与收势余风错开。最外侧暗红尖弧随原刀光向外卷，在亮刃消失后继续渐隐。`SweepFrames` 从 24 改为 26 时同步更新了浏览器素材 ID 和各层时长。浏览器大小输入上限为 650，长直刺用现有横纵比例保持实际尺寸。调参和修改前后关键帧见[招式演出分段](../mods/boss战%20瓦伦希娜/招式演出分段.md#042-逐帧复查)。
+- 0.4.3 由 `tools/IdleBreathPainter.cs` 生成原生待机图帧，`src/ValennaPoses.cs` 共用呼吸变形和眼、鞘、脚点坐标。`pose-pivots.json` 中的 `referenceIdle` 保留浏览器旧工程的模型引用。切割攻击保留 1.47 秒的举刀与外圈，之后才接下放和回握。`StrikeEffects.Advance` 先推进人物位移再重算已有挂件，保持新刀光的起扫年龄。 [待机与出招衔接](../mods/boss战%20瓦伦希娜/招式演出分段.md#043-待机与出招衔接)
+- 0.4.4 收势首帧匹配对应招式的末帧，提前结束的连段接通用回握。处置的 `gun` 像素坐标由 `ValennaPoses.cs` 写进 `pose-pivots.json`。运行时和浏览器用同一挂点在举枪后播放蓄光。调举枪停留时长时核对 `AimLead` 以及开火时人物是否已切到持枪帧。[其余招式的收势](../mods/boss战%20瓦伦希娜/招式演出分段.md#044-其余招式的收势)
+
+- 0.4.6 修复了启动和入本。Harmony 补丁类中的 `Prepare` 会被识别为初始化钩子，普通异步方法用业务名称。特质的 `CreateEvent.Inherent` 不能有空项，补给 `ResultFuncs` 的枚举键按 ES3 原样写裸整数。带 `UniqueKey` 的装备实例用派生 ID，去重与识别使用配置 `ItemId`。幕间和入本按实有资料修复旧伙伴，移除重复特质时撤销其独立来源的数值。
+- 瓦伦娜的头像实际导出 64×64，供同行者小卡和人物详情按原生尺寸显示。海琳娜、调查员的原版待机精灵为 49–56 像素、64 像素每单位，瓦伦娜统一用 550 像素每单位，左侧伙伴朝右。`StrikeProfiles.PlaybackRate` 给整条招式演出提速，闪避眼标的渐隐单独计时。
+
+- 0.4.7 在 `StrikeCue.PassDistance` 按人物高度指定穿身距离。`StrikeSequence` 在每段接触处结算伤害，处置举铳时按穿身后的反向使用枪口挂点。人物动画、位移与招式特效同用 `StrikeProfiles.PlaybackRate`。命中红线由 `SlashFramePainter.DrawHitLine` 生成，角度和渐隐由 `StrikeEffects` 控制。浏览器固定站位，仅用于比对光效。
+
+- 0.4.9 的 `BeatPause`、处置起手和开火定势把实际秒数乘以 `PlaybackRate` 后写入分镜。停顿中 `StrikeEffects.Advance` 继续推进，余风的后半单独延长。位移残影在 `SamplePose` 按距离采样。处置的 `ExecutionBladeTip` 按平剑切图脚点换算，`PlayExecutionFinish` 控制回身、靠近、插入和开火。`valenna_finish_*` 动作表按用户指定的切图分段，`SweepPoseLead` 以 30 帧分镜为基准提前两帧播放刀光。处置起手圆环和切割红风由 `SlashFramePainter` 独立生成，亮粒和圆环共用轮廓半径。解象的蓄刺汇光、直刃和末斩余风在 `StrikeEffects` 内分开设置。两次转身横斩和中间的竖剑回旋由 `build_presentation.ps1` 的 `valenna_elephant_*` 动作表编排。横斩以 `skill2_10.png` 接 `skill2_11.png` 翻动披风，归位用末帧斩姿。原生 `PlaySpriteAnimation.Play` 会把帧间隔改成 0.1 秒，`ValennaAppearance.KeepPoseInterval` 只为瓦伦娜切图恢复动作表的间隔和首帧时长。调整动作表或绘制资源后重跑 `build_presentation.ps1` 和 `build.ps1`。 [动作与分镜索引](../mods/boss战%20瓦伦希娜/招式演出分段.md#049-停顿与位移)
+- 0.4.10 的 `LeadCue` 按斩击或直刺在换姿前接浅风，`MotionFlashFrames` 只给参考里有前闪的节拍加亮，仍走原伤害节点。处置起手的 `ExecutionOpeningTail` 延展刀光帧序列的后半段。人物、效果和位移恢复 5/3 倍，三个停顿按实际秒数换算。0.4.15 的续刺和旋刃让解象分镜超出原有 48 层，编辑器共用的 `animation.mjs/maxLayers` 已扩至 64，导入与检查共用此值。[原片帧号与时序](../mods/boss战%20瓦伦希娜/招式演出分段.md#0410-换姿前的光效)
+- 0.4.11 修复战斗重开后的演出。原版 `GameWorld.ReloadRoleOnRestartBattle` 调用 `SwitchRoleModel`，会停用 `RoleModel` 组件，切图播放器仍可用。`StrikeSequence.HasSprite` 检查渲染对象，`UninstallOnRestart` 前释放旧演出，并用参战数据引用识别重开后的角色。命中将目标置为死亡时先清理招式、恢复动作方，再等待原版死亡与命中回调。
+- 瓦伦娜的职业显示沿用伙伴卡的 `RoleData.ProfessionName` 入口，`ValennaAppearance.PartnerProfessionName` 按伙伴 ID 885101 返回「蜘蛛巢 拇指父辈」。新旧伙伴卡共享该入口，职业成长仍走伙伴配置。
+
 ### 23.2 插件层（次选）：手工构造 `EffectShowData` 的两个静默坑
 
 只有**先发攻击（插件自己造的白送一击）和吸血回血**这类"不走武器表现链"的伤害才需要插件自己播
@@ -1470,3 +1514,53 @@ Screen Space - Overlay 时 `worldCamera == null`，换算结果仍正确。技�
 模态弹窗提供待机人物、动态心焰、固定坐标轴、独立宽高和居中的应用/重置按钮；保存默认可点，成功弹出确认，确认后关闭两层弹窗回原面板。草稿可叉号/Esc关闭不保存，原面板数值草稿保留。
 幕间角色自身RoleLibraryKey可能为空，须经HeartVisualRoleKey从角色库解析稳定编号，不能因此把保存按钮置灰。实现另见HeartVisualSettings.cs、HeartVisualEditor.cs、HeartVisualPreview.cs和旧文件名HeartFxWidthFitter.cs。40项检查及用户实测通过；验证入口为`mods/自定义心/tools/test_visuals.ps1`。
 2026-11-18已用独立上传器更新原工坊物品3801085814，manifest=3068979684825246233。发布时显式锁定旧编号，干净暂存包只含Project_Depersonal/plugins/Uploader；上传器先`--dry-run`校验，再提交并通过线上API核对。详见外观编辑器文档发布记录。
+
+## 32. 杀戮尖塔2「Valencina」工坊素材提取（2026-11-22）
+
+用于给 `mods/boss战 瓦伦希娜` 做 boss 演出的对照参考。工坊条目 **3747747045**「Valencina」0.10.4（AppID 2868840），内容在
+`E:\SteamLibrary\steamapps\workshop\content\2868840\3747747045\`：`Valencina.pck`（Godot 4.5.1，292MB）、`Valencina.dll`、`compat\` 三个版本分支。
+
+**成品位置**：`mods\boss战 瓦伦希娜\valencina_ref\`（已在该 mod 的 `.gitignore` 排除，不参与上传）。
+入口文档 `valencina_ref\README.md`，参数读法 `valencina_ref\params\参数说明.md`。
+`valencina_ref\preview\` 里有贴图总览和 3 份粒子轨迹图（S1/S7/1306_S4，每格一个 canvas，蓝→黄→红为时间序）；
+`params\particles\` 是同样的粒子中心点数据（按 canvas 归一化到 0–1），可直接拿来量刀光扫过的角度和弧长。
+
+### 32.1 这套模组的角色与素材分布
+
+- **1306 = `thumb_disciple`（瓦伦希娜侧）**，1379 = `thumb_father`（Boss 侧）。两者各有 `animations\native\<id>\character.res`、`spine.res`、`native_fx\*`。
+- 特效贴图在 `native_fx\<序号>\` 的 `material.res` 里引用（`raw_tex_0..3`），纹理文件按 sha1 命名，必须先查材质表才能知道哪张图属于哪层。
+- 角色帧/卡绘/敌人逐帧在 `Valencina\images\...`；原图在 pck 里都是 `.ctex`（WebP 容器）。
+- 演出数据分两层：`stage\shows\*.json`（逻辑分段、命中时间）与 `stage\bake\*.bake`（30fps 逐帧数值）。两者时间轴要分开读。
+
+### 32.2 格式要点（以后还要解别的 Godot 4 PCK 时照这个来）
+
+- **PCK v3**：头 `GDPC` + u32(3) + 引擎 4.5.1 + `pack_flags=2`（相对基址）+ `file_base=128` + `dir_offset`（本包在 0x11703980）+ file_count。
+  目录项 = `u32 path_len(含 4 字节对齐)` + path + `u64 offset` + `u64 size` + `md5[16]` + `u32 flags`；文件真实位置 = file_base + offset。
+  脚本 `temp\pck\pck_index.py`，索引产物 `temp\pck\index.json`。**注意**：v3 的目录项比旧版多一个 `u32 flags`，少了会全体错位。
+- **`.ctex`**：`GST2` + version + u32 w/h + data_format + mipmap_limit + 3×u32 保留；36 字节后是内层
+  `u32 data_format + u16 w/h + u32 mipmaps + u32 format`，随后 `u32 size` + WebP 字节（2D 无损）。
+  最省事的转 PNG 方式是 Godot 4.5.1 无头加载：`--headless --script export.gd`，脚本里 `ProjectSettings.load_resource_pack(pck, true)` 后 `ResourceLoader.load` + `Image.save_png`。
+  工具在 `tools-external\godot\Godot_v4.5.1-stable_win64_console.exe`，脚本 `C:\Users\huawei\AppData\Local\Temp\godot_tool\export.gd`（可重建）。
+- **`.res`（RSCC）**：`RSCC` + `u32 cmode(=2 zstd)` + `u32 block_size(4096)` + `u32 解压后总长` +
+  块数 × `u32 压缩长` + 各块 zstd 数据 + 尾部 `RSCC`。解压后是压缩版 `RSRC`（省略了 4 字节 `RSRC` 头），
+  从 `big_endian/use_real64/ver_major/ver_minor/ver_format` 开始，接着是类名、import 偏移、flags、uid、11 个保留字、
+  字符串表、外部资源表、内部资源表、各资源属性。**二进制变体编号和 `Variant::Type` 不是一套**：`STRING=5, COLOR=20, OBJECT=24, DICTIONARY=26, ARRAY=30, VECTOR4=50, PROJECTION=52`。
+  解析器 `temp\pck\rsrc.py`（含 zstd 解压与全部变体）。材质资源挂了 C# 脚本（`NativeParticleCanvasDefinition.cs`），标准 Godot 加载会因缺少脚本类型失败，直接解 RSRC 更快。
+- **`.bake`**：raw deflate（`zlib.decompress(data, -15)`），magic `1262568022`、version 2；头里有 show id、近/远目标位、canvas 定义、
+  事件、音频 cue、帧数组（body/spines/mangs/canvas 粒子）。帧率固定 30fps。事件 kind：`0 GiveDamage`、`1 TweenMove`、`2 HitChecker`、`3 EndChecker`、`4 CameraShake`、`5 Knockback`、`6 Fire`、`7 MangChanged`。
+  解码器 `temp\pck\bake_decode.py`，摘要脚本 `bake_summaries.py`。
+
+### 32.3 可复用的脚本与产物
+
+| 脚本 | 用途 |
+| --- | --- |
+| `temp\pck\pck_index.py` | 列 PCK 全部文件，写 index.json |
+| `temp\pck\rsrc.py` | RSCC/RSRC 解压与属性解析（zstd 用 MSYS2 的 libzstd.dll） |
+| `temp\pck\bake_decode.py` | bake 逐帧解码 |
+| `temp\pck\bake_summaries.py` | 27 份 bake 的帧时间线/事件/粒子摘要 |
+| `temp\pck\build_ref.py` | 组装 `valencina_ref`（贴图分类、shader 去重、spine/character 参数、清单） |
+| `temp\pck\params_build.py` | 生成 shader_uniforms、attack_timeline、material_textures |
+
+注意：`valencina_ref` 约 140MB（其中 `textures\monsters` 79MB、`cards` 47MB），只放本地；要清理直接删这个目录即可，
+`temp\pck` 里有可重跑的脚本。原模组作者资源版权自负，别直接打进要公开发布的 mod。
+

@@ -1,0 +1,139 @@
+{
+  "Data": {
+    "__type": "BaseSheetData,Assembly-CSharp",
+    "value": {
+      "__type": "MOD.TraitData,Assembly-CSharp",
+      "Id": 885147,
+      "Type": 3,
+      "CanRepeate": false,
+      "IsCanCreateGet": false,
+      "Localization_Name": {
+        "TarKey": "",
+        "SheetKey": "",
+        "InputText": "梦中的黄金票券",
+        "Characteristic": null
+      },
+      "Localization_Des": {
+        "TarKey": "",
+        "SheetKey": "",
+        "InputText": "侦察和感知各 +5。",
+        "Characteristic": null
+      },
+      "BuffsLink": [],
+      "Terms": [],
+      "CreateEvent": {
+        "Localization_Functin": {
+          "TarKey": "",
+          "SheetKey": "",
+          "InputText": "",
+          "Characteristic": null
+        },
+        "Inherent": [
+          {
+            "__type": "MOD.TraitEvent.ChangeRoleValueDataOption,Assembly-CSharp",
+            "TargetType": 1,
+            "Datas": [
+              {
+                "IsTrackSource": true,
+                "RoleAttr": {
+                  "Type": 0,
+                  "Value": null,
+                  "IsRatio": false,
+                  "Ratio": 0
+                },
+                "RoleExAttr": {
+                  "Type": 0,
+                  "Value": null,
+                  "IsRatio": false,
+                  "Ratio": 0
+                },
+                "RoleSkill": {
+                  "Type": 301,
+                  "Value": "5",
+                  "IsRatio": false,
+                  "Ratio": 0
+                },
+                "RoleSystemAttr": {
+                  "Type": 0,
+                  "Value": null,
+                  "IsRatio": false,
+                  "Ratio": 0
+                },
+                "ExDiceData": {
+                  "ExploreSkill": {
+                    "Type": 0,
+                    "ChangeAll": false,
+                    "IsTemp": false,
+                    "Value": 0
+                  },
+                  "HeroAttribute": {
+                    "Type": 0,
+                    "ChangeAll": false,
+                    "IsTemp": false,
+                    "Value": 0
+                  },
+                  "ExtraAttribute": {
+                    "Type": 0,
+                    "ChangeAll": false,
+                    "IsTemp": false,
+                    "Value": 0
+                  }
+                }
+              },
+              {
+                "IsTrackSource": true,
+                "RoleAttr": {
+                  "Type": 0,
+                  "Value": null,
+                  "IsRatio": false,
+                  "Ratio": 0
+                },
+                "RoleExAttr": {
+                  "Type": 0,
+                  "Value": null,
+                  "IsRatio": false,
+                  "Ratio": 0
+                },
+                "RoleSkill": {
+                  "Type": 302,
+                  "Value": "5",
+                  "IsRatio": false,
+                  "Ratio": 0
+                },
+                "RoleSystemAttr": {
+                  "Type": 0,
+                  "Value": null,
+                  "IsRatio": false,
+                  "Ratio": 0
+                },
+                "ExDiceData": {
+                  "ExploreSkill": {
+                    "Type": 0,
+                    "ChangeAll": false,
+                    "IsTemp": false,
+                    "Value": 0
+                  },
+                  "HeroAttribute": {
+                    "Type": 0,
+                    "ChangeAll": false,
+                    "IsTemp": false,
+                    "Value": 0
+                  },
+                  "ExtraAttribute": {
+                    "Type": 0,
+                    "ChangeAll": false,
+                    "IsTemp": false,
+                    "Value": 0
+                  }
+                }
+              }
+            ],
+            "IsRemove": false
+          }
+        ],
+        "Triggers": []
+      },
+      "WakeEvent": null
+    }
+  }
+}

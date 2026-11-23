@@ -1,0 +1,37 @@
+{
+  "Data": {
+    "__type": "BaseSheetData,Assembly-CSharp",
+    "value": {
+      "__type": "CustomSpriteConfigData,Assembly-CSharp",
+      "EffectName": "valenna_hunt_glow",
+      "AnimationList": [
+        {
+          "AnimName": "idle",
+          "IsLoop": false,
+          "ExtraAnims": [
+            {
+              "AnimSprite": {
+                "ReferenceType": 1023,
+                "Key": "valenna_hunt_glow_00"
+              },
+              "IsInternal": false,
+              "ResLoadPath": null,
+              "UseAtals": false,
+              "SpriteName": null,
+              "ShowCount": 1
+            }
+          ]
+        }
+      ],
+      "AnimSpeed": 0.033333335,
+      "AnimSize": {
+        "y": 0.55,
+        "x": 0.55
+      },
+      "SortName": "Chara",
+      "SortOrder": 50,
+      "DefaultPlayAnim": "idle",
+      "UseLightEffect": false
+    }
+  }
+}

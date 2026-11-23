@@ -1,0 +1,97 @@
+{
+  "Data": {
+    "__type": "BaseSheetData,Assembly-CSharp",
+    "value": {
+      "__type": "MOD.TraitData,Assembly-CSharp",
+      "Id": 885145,
+      "Type": 4,
+      "CanRepeate": false,
+      "IsCanCreateGet": false,
+      "Localization_Name": {
+        "TarKey": "",
+        "SheetKey": "",
+        "InputText": "战争英雄——瓦伦娜",
+        "Characteristic": null
+      },
+      "Localization_Des": {
+        "TarKey": "",
+        "SheetKey": "",
+        "InputText": "意志 +10，精神值上限 +15。",
+        "Characteristic": null
+      },
+      "BuffsLink": [],
+      "Terms": [],
+      "CreateEvent": {
+        "Localization_Functin": {
+          "TarKey": "",
+          "SheetKey": "",
+          "InputText": "",
+          "Characteristic": null
+        },
+        "Inherent": [
+          {
+            "__type": "MOD.TraitEvent.ChangeRoleValueDataOption,Assembly-CSharp",
+            "TargetType": 1,
+            "Datas": [
+              {
+                "IsTrackSource": true,
+                "RoleAttr": {
+                  "Type": 4,
+                  "Value": "10",
+                  "IsRatio": false,
+                  "Ratio": 0
+                },
+                "RoleExAttr": {
+                  "Type": 0,
+                  "Value": null,
+                  "IsRatio": false,
+                  "Ratio": 0
+                },
+                "RoleSkill": {
+                  "Type": 0,
+                  "Value": null,
+                  "IsRatio": false,
+                  "Ratio": 0
+                },
+                "RoleSystemAttr": {
+                  "Type": 0,
+                  "Value": null,
+                  "IsRatio": false,
+                  "Ratio": 0
+                },
+                "ExDiceData": {
+                  "ExploreSkill": {
+                    "Type": 0,
+                    "ChangeAll": false,
+                    "IsTemp": false,
+                    "Value": 0
+                  },
+                  "HeroAttribute": {
+                    "Type": 0,
+                    "ChangeAll": false,
+                    "IsTemp": false,
+                    "Value": 0
+                  },
+                  "ExtraAttribute": {
+                    "Type": 0,
+                    "ChangeAll": false,
+                    "IsTemp": false,
+                    "Value": 0
+                  }
+                }
+              }
+            ],
+            "IsRemove": false
+          },
+          {
+            "__type": "MOD.TraitEvent.ChangeMaxRoleValueDataOption,Assembly-CSharp",
+            "ExtraAttr": 102,
+            "AddValue": "15"
+          }
+        ],
+        "Triggers": []
+      },
+      "WakeEvent": null
+    }
+  }
+}

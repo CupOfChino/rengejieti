@@ -1,0 +1,45 @@
+{
+  "Data": {
+    "__type": "BaseSheetData,Assembly-CSharp",
+    "value": {
+      "__type": "MOD.BuffTableData,Assembly-CSharp",
+      "Id": 885137,
+      "Name": {
+        "TarKey": "",
+        "SheetKey": "",
+        "InputText": "加速弹",
+        "Characteristic": null
+      },
+      "Des": {
+        "TarKey": "",
+        "SheetKey": "",
+        "InputText": "入战获得 10 发。上限 10，下限 0，打空后仍显示，战斗结束后清除。",
+        "Characteristic": null
+      },
+      "IconPathReference": {
+        "ReferenceType": 1007,
+        "Key": "valenna_accel_bullet_icon"
+      },
+      "BuffType": 4,
+      "BuffEffectType": 3,
+      "OverlayType": 1,
+      "IsShowUI": true,
+      "IsDeathClear": false,
+      "FxPlayType": 0,
+      "PlayFxInBattle": true,
+      "PlayFxInExplore": false,
+      "UseFxPrefab": {
+        "UseFrameEffect": false,
+        "FxPath": null
+      },
+      "Arrts": [],
+      "Events": [],
+      "LayerCount": {
+        "Value": "1"
+      },
+      "OverrideInitLayer": true,
+      "InitLayer": 10,
+      "MaxLayer": 10
+    }
+  }
+}

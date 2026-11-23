@@ -1,0 +1,30 @@
+{
+  "Data": {
+    "__type": "BaseSheetData,Assembly-CSharp",
+    "value": {
+      "__type": "MOD.TraitData,Assembly-CSharp",
+      "Id": 885144,
+      "Type": 4,
+      "CanRepeate": false,
+      "IsCanCreateGet": false,
+      "Localization_Name": {
+        "TarKey": "",
+        "SheetKey": "",
+        "InputText": "伯纳特利家族之耻",
+        "Characteristic": null
+      },
+      "Localization_Des": {
+        "TarKey": "",
+        "SheetKey": "",
+        "InputText": "进剧本时获得 1000 资金，进剧本及通关时补满雪茄和伏特加。进入战斗时获得 10 发加速弹。",
+        "Characteristic": null
+      },
+      "BuffsLink": [
+        885137
+      ],
+      "Terms": [],
+      "CreateEvent": null,
+      "WakeEvent": null
+    }
+  }
+}

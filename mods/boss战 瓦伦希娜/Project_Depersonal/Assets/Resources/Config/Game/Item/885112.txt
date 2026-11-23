@@ -1,0 +1,148 @@
+{
+  "Data": {
+    "__type": "MOD.ItemData,Assembly-CSharp",
+    "value": {
+      "IconPath": "UI/Textures/Icon/Item/valenna_eye_equip_icon",
+      "ItemId": 885112,
+      "UniqueKey": "valenna_precognition_eye",
+      "ItemName": {
+        "TarKey": "",
+        "SheetKey": "",
+        "InputText": "预知眼",
+        "Characteristic": null
+      },
+      "ItemDes": {
+        "TarKey": "",
+        "SheetKey": "",
+        "InputText": "带有外接导线的义眼。",
+        "Characteristic": null
+      },
+      "ItemEffectDes": {
+        "TarKey": "",
+        "SheetKey": "",
+        "InputText": "装备在护具栏，装备后无法卸下。充能上限 30。回合初回 5 层，命中或发动辅助闪避扣 5 层。闪避成功继承奖励骰，失败后下段可重新发动。过热期间闪避加 1 颗惩罚骰，每回合初积累 10 层，满 30 层恢复。未过热时成功闪避获得加速的未来。",
+        "Characteristic": null
+      },
+      "IconPathReference": {
+        "ReferenceType": 1004,
+        "Key": "valenna_eye_equip_icon"
+      },
+      "Price": 0,
+      "ChargingCount": 0,
+      "ReplaceChargingConfig": [],
+      "AutoDestruct": false,
+      "Disassemble": {
+        "Items": {
+          "Type": 7,
+          "Ids": []
+        },
+        "PartsCount": 0
+      },
+      "IsCantDisboard": true,
+      "DesignTag": 1,
+      "TagList": [],
+      "ItemAttrValue": [
+        3,
+        6
+      ],
+      "MythicalId": 0,
+      "ItemType": 3,
+      "ItemStaticAffixList": [],
+      "ItemDynamicAffixList": [],
+      "IsBindCharacter": true,
+      "BuffsLink": [
+        885135,
+        885136,
+        885138
+      ],
+      "Terms": [],
+      "ConfigData": [],
+      "EquipmentConfigData": {
+        "__type": "MOD.EquipConfigData,Assembly-CSharp",
+        "EquipType": 2,
+        "ShowConfirmEquipPopup": false,
+        "ConfirmEquipDesc": {
+          "TarKey": "",
+          "SheetKey": "",
+          "InputText": "",
+          "Characteristic": null
+        },
+        "InfoDatas": [],
+        "EnableOverrideDesc": true,
+        "OverrideDesc": {
+          "TarKey": "",
+          "SheetKey": "",
+          "InputText": "装备在护具栏，装备后无法卸下。充能上限 30。回合初回 5 层，命中或发动辅助闪避扣 5 层。闪避成功继承奖励骰，失败后下段可重新发动。过热期间闪避加 1 颗惩罚骰，每回合初积累 10 层，满 30 层恢复。未过热时成功闪避获得加速的未来。",
+          "Characteristic": null
+        },
+        "Arrts": [],
+        "Skills": [],
+        "Def": {
+          "FxPath": null,
+          "PointType": 0,
+          "AudioClip": {
+            "AudioRes": null,
+            "AudioReference": {
+              "ReferenceType": 0,
+              "Key": null
+            },
+            "Volume": 1,
+            "FadeTime": 1
+          },
+          "ArmorValue": 0
+        }
+      },
+      "ThrowConfigData": {
+        "CanThrowOnNoCharge": false,
+        "PlayThrowAnim": false,
+        "ThrowAnimtorName": null,
+        "ThrowSpriteAnimName": null,
+        "DiceCheckType": 1,
+        "ResultCheckType": 1,
+        "ExploreSkill": 201,
+        "UseTag": 1002,
+        "LimitType": 1,
+        "TargetSelect": 0,
+        "CanSelectDeathRole": false,
+        "TargetFilter": {
+          "RoleFilter": [],
+          "EnableMaxMinFilter": false,
+          "Attribute": 0,
+          "Skill": 0,
+          "ExtraAttr": 0,
+          "MaxMinType": 0,
+          "EnableDistanceFilter": false,
+          "DistanceFilterType": 0,
+          "EnableBuffLayerFilter": false,
+          "BuffId": 0,
+          "BuffLayerMaxMinType": 0
+        },
+        "FxPath": null,
+        "PointType": 0,
+        "AudioClip": {
+          "AudioRes": null,
+          "AudioReference": {
+            "ReferenceType": 0,
+            "Key": null
+          },
+          "Volume": 1,
+          "FadeTime": 1
+        },
+        "UsageCheck": [],
+        "ConfigResultFuncs": null,
+        "ResultFuncs": {},
+        "EnableOverrideDesc": false,
+        "OverrideDesc": {
+          "TarKey": null,
+          "SheetKey": "",
+          "InputText": null,
+          "Characteristic": null
+        },
+        "IgnoreInfoDesc": false
+      },
+      "GetItemOpts": [],
+      "EndingOpts": [],
+      "EditorSheetKey": null
+    }
+  }
+}

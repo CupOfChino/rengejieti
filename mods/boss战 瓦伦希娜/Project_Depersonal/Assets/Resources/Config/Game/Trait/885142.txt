@@ -1,0 +1,28 @@
+{
+  "Data": {
+    "__type": "BaseSheetData,Assembly-CSharp",
+    "value": {
+      "__type": "MOD.TraitData,Assembly-CSharp",
+      "Id": 885142,
+      "Type": 3,
+      "CanRepeate": false,
+      "IsCanCreateGet": false,
+      "Localization_Name": {
+        "TarKey": "",
+        "SheetKey": "",
+        "InputText": "预知",
+        "Characteristic": null
+      },
+      "Localization_Des": {
+        "TarKey": "",
+        "SheetKey": "",
+        "InputText": "完整闪避一个敌人的攻击行动后，以解兔反击该敌人。进入剧本或战斗时获得并穿戴预知眼。",
+        "Characteristic": null
+      },
+      "BuffsLink": [],
+      "Terms": [],
+      "CreateEvent": null,
+      "WakeEvent": null
+    }
+  }
+}

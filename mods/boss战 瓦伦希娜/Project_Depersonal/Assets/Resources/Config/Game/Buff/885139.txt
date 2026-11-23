@@ -1,0 +1,39 @@
+{
+  "Data": {
+    "__type": "BaseSheetData,Assembly-CSharp",
+    "value": {
+      "__type": "MOD.BuffTableData,Assembly-CSharp",
+      "Id": 885139,
+      "Name": {
+        "TarKey": "",
+        "SheetKey": "",
+        "InputText": "狩猎目标",
+        "Characteristic": null
+      },
+      "Des": {
+        "TarKey": "",
+        "SheetKey": "",
+        "InputText": "受到标记者的伤害 +20%，速度 -50，最多减至 10。只有被标记的目标可以成为处置的目标。",
+        "Characteristic": null
+      },
+      "IconPathReference": {
+        "ReferenceType": 1007,
+        "Key": "valenna_hunting_prey_icon"
+      },
+      "BuffType": 4,
+      "BuffEffectType": 2,
+      "OverlayType": 2,
+      "IsShowUI": true,
+      "IsDeathClear": true,
+      "FxPlayType": 0,
+      "PlayFxInBattle": true,
+      "PlayFxInExplore": false,
+      "UseFxPrefab": {
+        "UseFrameEffect": false,
+        "FxPath": null
+      },
+      "Arrts": [],
+      "Events": []
+    }
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "Data": {
+    "__type": "BaseSheetData,Assembly-CSharp",
+    "value": {
+      "__type": "MOD.BuffTableData,Assembly-CSharp",
+      "Id": 885148,
+      "Name": {
+        "TarKey": "",
+        "SheetKey": "",
+        "InputText": "震颤引爆",
+        "Characteristic": null
+      },
+      "Des": {
+        "TarKey": "",
+        "SheetKey": "",
+        "InputText": "引爆目标身上的震颤或灼热·震颤。",
+        "Characteristic": null
+      },
+      "IconPathReference": {
+        "ReferenceType": 1007,
+        "Key": "valenna_tremor_burst_icon"
+      },
+      "BuffType": 4,
+      "BuffEffectType": 2,
+      "OverlayType": 3,
+      "IsShowUI": false,
+      "IsDeathClear": true,
+      "Duration": 0,
+      "PlayFxInBattle": false,
+      "PlayFxInExplore": false,
+      "UseFxPrefab": {
+        "UseFrameEffect": false,
+        "FxPath": null
+      },
+      "Arrts": [],
+      "Events": []
+    }
+  }
+}

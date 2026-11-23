@@ -1,0 +1,39 @@
+{
+  "Data": {
+    "__type": "BaseSheetData,Assembly-CSharp",
+    "value": {
+      "__type": "MOD.BuffTableData,Assembly-CSharp",
+      "Id": 885150,
+      "Name": {
+        "TarKey": "",
+        "SheetKey": "",
+        "InputText": "醉酒",
+        "Characteristic": null
+      },
+      "Des": {
+        "TarKey": "",
+        "SheetKey": "",
+        "InputText": "12 小时内进行检定获得 1 颗惩罚骰。",
+        "Characteristic": null
+      },
+      "IconPathReference": {
+        "ReferenceType": 1007,
+        "Key": "icon_buff_meihuo"
+      },
+      "BuffType": 4,
+      "BuffEffectType": 2,
+      "OverlayType": 3,
+      "IsShowUI": true,
+      "IsDeathClear": true,
+      "Duration": 0,
+      "PlayFxInBattle": false,
+      "PlayFxInExplore": false,
+      "UseFxPrefab": {
+        "UseFrameEffect": false,
+        "FxPath": null
+      },
+      "Arrts": [],
+      "Events": []
+    }
+  }
+}

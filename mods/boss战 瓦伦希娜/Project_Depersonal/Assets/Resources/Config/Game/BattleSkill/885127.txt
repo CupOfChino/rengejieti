@@ -1,0 +1,139 @@
+{
+  "Data": {
+    "__type": "BaseSheetData,Assembly-CSharp",
+    "value": {
+      "__type": "MOD.BattleSkillTableData,Assembly-CSharp",
+      "Id": 885127,
+      "IsCover": false,
+      "Name": {
+        "TarKey": "",
+        "SheetKey": "",
+        "InputText": "我很荣幸用这颗子弹把你贯穿",
+        "Characteristic": null
+      },
+      "IsOverrideName": false,
+      "OverrideNames": [],
+      "Description": {
+        "TarKey": "",
+        "SheetKey": "",
+        "InputText": "首刺和两次枪刃直闪结算伤害，最后冲出一圈红金余光。 命中 3 次，每次基础伤害 1。",
+        "Characteristic": null
+      },
+      "EffectDesc": {
+        "TarKey": "",
+        "SheetKey": "",
+        "InputText": "",
+        "Characteristic": null
+      },
+      "Comment": null,
+      "IsMonster": false,
+      "ShowPriority": 5,
+      "SkillType": 1,
+      "ActionType": 1,
+      "TriggerWeaponType": 0,
+      "IsMachiningSkill": true,
+      "IsUseItem": false,
+      "CannotBeCancelled": false,
+      "HideInSkillSelectList": false,
+      "CanShowInUnselectSkillList": true,
+      "BuffsLink": [
+        885137
+      ],
+      "Terms": [],
+      "UseCustomIcon": false,
+      "BattleSkillIcon": "",
+      "BattleSkillIconReference": {
+        "ReferenceType": 0,
+        "Key": null
+      },
+      "MonsterSkillIcon": null,
+      "MonsterSkillIconReference": {
+        "ReferenceType": 0,
+        "Key": null
+      },
+      "UseCustomSkillElementIcon": false,
+      "CustomSkillElementIconPath": "UI/Textures/Atlas/BattlePanel/NewBattlePanel/BattlePanel_actionLimit/battlePanel_actionUnlimit_knife",
+      "CustomSkillElementIconReference": {
+        "ReferenceType": 1006,
+        "Key": "battlePanel_actionUnlimit_knife"
+      },
+      "ShowCheck": [
+        {
+          "__type": "BattleSkillEvent.FilterCheck,Assembly-CSharp",
+          "FilterType": 3,
+          "SelfTraitFilter": {
+            "TraitFilter": [
+              {
+                "FilterType": 0,
+                "TraitId": 885141,
+                "Not": false
+              }
+            ]
+          },
+          "CompareType": 3,
+          "CompareValue": 0
+        }
+      ],
+      "AnyCheckReach": false,
+      "UseItemTargetType": false,
+      "TargetSelectDatas": [
+        {
+          "Checks": [],
+          "TargetType": 2,
+          "TargetId": 0,
+          "UseWeaponTargetType": false,
+          "RandomSelectTarget": false,
+          "CanChooseDeathRole": false
+        }
+      ],
+      "UseWeaponSelectCount": false,
+      "MaxSelectCount": 1,
+      "NeedDice": false,
+      "UseWeaponDiceConfig": false,
+      "DiceType": 1,
+      "DiceCheckType": 1,
+      "ResultCheckType": 1,
+      "UseWeaponAttackEffectType": false,
+      "UseCustomAttackEffectType": false,
+      "UseThrowItemEffectType": false,
+      "AttackEffectType": 0,
+      "IgnoreSelfDice": false,
+      "IgnoreTargetDice": false,
+      "DiceConfig": null,
+      "SkillValue": 0,
+      "NeedDamage": false,
+      "DirectDamage": false,
+      "UseWeaponDamage": false,
+      "CustomDamage": {
+        "DamageType": 0,
+        "AttackType": 0,
+        "AddAttrs": [],
+        "Value": "1",
+        "DB_Bonus": 0,
+        "UseCommonEffect": false,
+        "EffectShow": {
+          "Duration": 0,
+          "EffectShows": []
+        }
+      },
+      "DamageValueType": 1,
+      "IsCritical": false,
+      "DamageRatio": 1,
+      "DisableOffhandWeapon": true,
+      "EffectList": [
+        {
+          "Trigger": 5,
+          "EffectChecks": [],
+          "EffectOption": [],
+          "AnyCheckReach": false
+        }
+      ],
+      "BindingCharacter": false,
+      "BindingHero": false,
+      "BindingCharacterId": 0,
+      "BindingCharacters": false,
+      "BindingDataList": [],
+      "EditorSheetKey": null
+    }
+  }
+}

@@ -1,0 +1,2279 @@
+{
+  "ResourceReferenceConfigure": {
+    "__type": "ResourceReferenceConfigure,Assembly-CSharp",
+    "value": {
+      "ResourceMap": {
+        1001: [
+          {
+            "Key": "valenna_portrait",
+            "Path": "Resources/Texture/HeadIcon/valenna_portrait",
+            "Ext": ".png"
+          }
+        ],
+        1004: [
+          {
+            "Key": "valenna_cap_icon",
+            "Path": "Resources/Texture/ItemIcon/valenna_cap_icon",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_cutlass_icon",
+            "Path": "Resources/Texture/ItemIcon/valenna_cutlass_icon",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_eye_equip_icon",
+            "Path": "Resources/Texture/ItemIcon/valenna_eye_equip_icon",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_gunblade_icon",
+            "Path": "Resources/Texture/ItemIcon/valenna_gunblade_icon",
+            "Ext": ".png"
+          }
+        ],
+        1007: [
+          {
+            "Key": "valenna_accel_bullet_icon",
+            "Path": "Resources/Texture/BuffIcon/valenna_accel_bullet_icon",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_accelerated_future_icon",
+            "Path": "Resources/Texture/BuffIcon/valenna_accelerated_future_icon",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_breath_icon",
+            "Path": "Resources/Texture/BuffIcon/valenna_breath_icon",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_burn_icon",
+            "Path": "Resources/Texture/BuffIcon/valenna_burn_icon",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_eye_charge_icon",
+            "Path": "Resources/Texture/BuffIcon/valenna_eye_charge_icon",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_eye_overheat_icon",
+            "Path": "Resources/Texture/BuffIcon/valenna_eye_overheat_icon",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_hunting_prey_icon",
+            "Path": "Resources/Texture/BuffIcon/valenna_hunting_prey_icon",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_ignition_icon",
+            "Path": "Resources/Texture/BuffIcon/valenna_ignition_icon",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_tremor_burst_icon",
+            "Path": "Resources/Texture/BuffIcon/valenna_tremor_burst_icon",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_tremor_icon",
+            "Path": "Resources/Texture/BuffIcon/valenna_tremor_icon",
+            "Ext": ".png"
+          }
+        ],
+        1018: [
+          {
+            "Key": "valenna_pose_aim_double",
+            "Path": "Resources/Texture/Charator/valenna_test_model/valenna_pose_aim_double",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_pose_aim",
+            "Path": "Resources/Texture/Charator/valenna_test_model/valenna_pose_aim",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_pose_cross_out1",
+            "Path": "Resources/Texture/Charator/valenna_test_model/valenna_pose_cross_out1",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_pose_cross_out2",
+            "Path": "Resources/Texture/Charator/valenna_test_model/valenna_pose_cross_out2",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_pose_cross",
+            "Path": "Resources/Texture/Charator/valenna_test_model/valenna_pose_cross",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_pose_cut_lower",
+            "Path": "Resources/Texture/Charator/valenna_test_model/valenna_pose_cut_lower",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_pose_dash1",
+            "Path": "Resources/Texture/Charator/valenna_test_model/valenna_pose_dash1",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_pose_dash2",
+            "Path": "Resources/Texture/Charator/valenna_test_model/valenna_pose_dash2",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_pose_dodge",
+            "Path": "Resources/Texture/Charator/valenna_test_model/valenna_pose_dodge",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_pose_draw",
+            "Path": "Resources/Texture/Charator/valenna_test_model/valenna_pose_draw",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_pose_fallen",
+            "Path": "Resources/Texture/Charator/valenna_test_model/valenna_pose_fallen",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_pose_finish_aim",
+            "Path": "Resources/Texture/Charator/valenna_test_model/valenna_pose_finish_aim",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_pose_finish_back1",
+            "Path": "Resources/Texture/Charator/valenna_test_model/valenna_pose_finish_back1",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_pose_finish_back2",
+            "Path": "Resources/Texture/Charator/valenna_test_model/valenna_pose_finish_back2",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_pose_finish_cut",
+            "Path": "Resources/Texture/Charator/valenna_test_model/valenna_pose_finish_cut",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_pose_finish_dash",
+            "Path": "Resources/Texture/Charator/valenna_test_model/valenna_pose_finish_dash",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_pose_finish_fire",
+            "Path": "Resources/Texture/Charator/valenna_test_model/valenna_pose_finish_fire",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_pose_finish_guard",
+            "Path": "Resources/Texture/Charator/valenna_test_model/valenna_pose_finish_guard",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_pose_finish_kick",
+            "Path": "Resources/Texture/Charator/valenna_test_model/valenna_pose_finish_kick",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_pose_finish_low",
+            "Path": "Resources/Texture/Charator/valenna_test_model/valenna_pose_finish_low",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_pose_finish_retreat1",
+            "Path": "Resources/Texture/Charator/valenna_test_model/valenna_pose_finish_retreat1",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_pose_finish_retreat2",
+            "Path": "Resources/Texture/Charator/valenna_test_model/valenna_pose_finish_retreat2",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_pose_finish_spin",
+            "Path": "Resources/Texture/Charator/valenna_test_model/valenna_pose_finish_spin",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_pose_finish_stand1",
+            "Path": "Resources/Texture/Charator/valenna_test_model/valenna_pose_finish_stand1",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_pose_finish_stand2",
+            "Path": "Resources/Texture/Charator/valenna_test_model/valenna_pose_finish_stand2",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_pose_finish_stand3",
+            "Path": "Resources/Texture/Charator/valenna_test_model/valenna_pose_finish_stand3",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_pose_finish_turn",
+            "Path": "Resources/Texture/Charator/valenna_test_model/valenna_pose_finish_turn",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_pose_finish_wind1",
+            "Path": "Resources/Texture/Charator/valenna_test_model/valenna_pose_finish_wind1",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_pose_finish_wind2",
+            "Path": "Resources/Texture/Charator/valenna_test_model/valenna_pose_finish_wind2",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_pose_guard",
+            "Path": "Resources/Texture/Charator/valenna_test_model/valenna_pose_guard",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_pose_hurt",
+            "Path": "Resources/Texture/Charator/valenna_test_model/valenna_pose_hurt",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_pose_idle_breath_01",
+            "Path": "Resources/Texture/Charator/valenna_test_model/valenna_pose_idle_breath_01",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_pose_idle_breath_02",
+            "Path": "Resources/Texture/Charator/valenna_test_model/valenna_pose_idle_breath_02",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_pose_idle_breath_03",
+            "Path": "Resources/Texture/Charator/valenna_test_model/valenna_pose_idle_breath_03",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_pose_idle_breath_04",
+            "Path": "Resources/Texture/Charator/valenna_test_model/valenna_pose_idle_breath_04",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_pose_idle_breath_05",
+            "Path": "Resources/Texture/Charator/valenna_test_model/valenna_pose_idle_breath_05",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_pose_idle_breath_06",
+            "Path": "Resources/Texture/Charator/valenna_test_model/valenna_pose_idle_breath_06",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_pose_idle_breath_07",
+            "Path": "Resources/Texture/Charator/valenna_test_model/valenna_pose_idle_breath_07",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_pose_idle_breath_08",
+            "Path": "Resources/Texture/Charator/valenna_test_model/valenna_pose_idle_breath_08",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_pose_idle_breath_09",
+            "Path": "Resources/Texture/Charator/valenna_test_model/valenna_pose_idle_breath_09",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_pose_idle_breath_10",
+            "Path": "Resources/Texture/Charator/valenna_test_model/valenna_pose_idle_breath_10",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_pose_idle_breath_11",
+            "Path": "Resources/Texture/Charator/valenna_test_model/valenna_pose_idle_breath_11",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_pose_idle_breath_12",
+            "Path": "Resources/Texture/Charator/valenna_test_model/valenna_pose_idle_breath_12",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_pose_idle_breath_13",
+            "Path": "Resources/Texture/Charator/valenna_test_model/valenna_pose_idle_breath_13",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_pose_idle_breath_14",
+            "Path": "Resources/Texture/Charator/valenna_test_model/valenna_pose_idle_breath_14",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_pose_idle_breath_15",
+            "Path": "Resources/Texture/Charator/valenna_test_model/valenna_pose_idle_breath_15",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_pose_idle_breath_16",
+            "Path": "Resources/Texture/Charator/valenna_test_model/valenna_pose_idle_breath_16",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_pose_idle_breath_17",
+            "Path": "Resources/Texture/Charator/valenna_test_model/valenna_pose_idle_breath_17",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_pose_idle_breath_18",
+            "Path": "Resources/Texture/Charator/valenna_test_model/valenna_pose_idle_breath_18",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_pose_idle_breath_19",
+            "Path": "Resources/Texture/Charator/valenna_test_model/valenna_pose_idle_breath_19",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_pose_idle_breath_20",
+            "Path": "Resources/Texture/Charator/valenna_test_model/valenna_pose_idle_breath_20",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_pose_idle_breath_21",
+            "Path": "Resources/Texture/Charator/valenna_test_model/valenna_pose_idle_breath_21",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_pose_idle_breath_22",
+            "Path": "Resources/Texture/Charator/valenna_test_model/valenna_pose_idle_breath_22",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_pose_idle_breath_23",
+            "Path": "Resources/Texture/Charator/valenna_test_model/valenna_pose_idle_breath_23",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_pose_idle",
+            "Path": "Resources/Texture/Charator/valenna_test_model/valenna_pose_idle",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_pose_rise_end",
+            "Path": "Resources/Texture/Charator/valenna_test_model/valenna_pose_rise_end",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_pose_rise",
+            "Path": "Resources/Texture/Charator/valenna_test_model/valenna_pose_rise",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_pose_thrust_out1",
+            "Path": "Resources/Texture/Charator/valenna_test_model/valenna_pose_thrust_out1",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_pose_thrust_out2",
+            "Path": "Resources/Texture/Charator/valenna_test_model/valenna_pose_thrust_out2",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_pose_thrust_ready",
+            "Path": "Resources/Texture/Charator/valenna_test_model/valenna_pose_thrust_ready",
+            "Ext": ".png"
+          }
+        ],
+        1023: [
+          {
+            "Key": "valenna_aim_frame_00",
+            "Path": "Resources/Texture/Effect/valenna_aim_charge/idle/valenna_aim_frame_00",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_aim_frame_01",
+            "Path": "Resources/Texture/Effect/valenna_aim_charge/idle/valenna_aim_frame_01",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_aim_frame_02",
+            "Path": "Resources/Texture/Effect/valenna_aim_charge/idle/valenna_aim_frame_02",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_aim_frame_03",
+            "Path": "Resources/Texture/Effect/valenna_aim_charge/idle/valenna_aim_frame_03",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_aim_frame_04",
+            "Path": "Resources/Texture/Effect/valenna_aim_charge/idle/valenna_aim_frame_04",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_aim_frame_05",
+            "Path": "Resources/Texture/Effect/valenna_aim_charge/idle/valenna_aim_frame_05",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_aim_frame_06",
+            "Path": "Resources/Texture/Effect/valenna_aim_charge/idle/valenna_aim_frame_06",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_aim_frame_07",
+            "Path": "Resources/Texture/Effect/valenna_aim_charge/idle/valenna_aim_frame_07",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_aim_frame_08",
+            "Path": "Resources/Texture/Effect/valenna_aim_charge/idle/valenna_aim_frame_08",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_aim_frame_09",
+            "Path": "Resources/Texture/Effect/valenna_aim_charge/idle/valenna_aim_frame_09",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_aim_frame_10",
+            "Path": "Resources/Texture/Effect/valenna_aim_charge/idle/valenna_aim_frame_10",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_aim_frame_11",
+            "Path": "Resources/Texture/Effect/valenna_aim_charge/idle/valenna_aim_frame_11",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_slash_frame_00",
+            "Path": "Resources/Texture/Effect/valenna_arc_preview/idle/valenna_slash_frame_00",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_slash_frame_01",
+            "Path": "Resources/Texture/Effect/valenna_arc_preview/idle/valenna_slash_frame_01",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_slash_frame_02",
+            "Path": "Resources/Texture/Effect/valenna_arc_preview/idle/valenna_slash_frame_02",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_slash_frame_03",
+            "Path": "Resources/Texture/Effect/valenna_arc_preview/idle/valenna_slash_frame_03",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_slash_frame_04",
+            "Path": "Resources/Texture/Effect/valenna_arc_preview/idle/valenna_slash_frame_04",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_slash_frame_05",
+            "Path": "Resources/Texture/Effect/valenna_arc_preview/idle/valenna_slash_frame_05",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_slash_frame_06",
+            "Path": "Resources/Texture/Effect/valenna_arc_preview/idle/valenna_slash_frame_06",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_slash_frame_07",
+            "Path": "Resources/Texture/Effect/valenna_arc_preview/idle/valenna_slash_frame_07",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_slash_frame_08",
+            "Path": "Resources/Texture/Effect/valenna_arc_preview/idle/valenna_slash_frame_08",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_slash_frame_09",
+            "Path": "Resources/Texture/Effect/valenna_arc_preview/idle/valenna_slash_frame_09",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_slash_frame_10",
+            "Path": "Resources/Texture/Effect/valenna_arc_preview/idle/valenna_slash_frame_10",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_slash_frame_11",
+            "Path": "Resources/Texture/Effect/valenna_arc_preview/idle/valenna_slash_frame_11",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_slash_frame_12",
+            "Path": "Resources/Texture/Effect/valenna_arc_preview/idle/valenna_slash_frame_12",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_slash_frame_13",
+            "Path": "Resources/Texture/Effect/valenna_arc_preview/idle/valenna_slash_frame_13",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_slash_frame_14",
+            "Path": "Resources/Texture/Effect/valenna_arc_preview/idle/valenna_slash_frame_14",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_slash_frame_15",
+            "Path": "Resources/Texture/Effect/valenna_arc_preview/idle/valenna_slash_frame_15",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_slash_frame_16",
+            "Path": "Resources/Texture/Effect/valenna_arc_preview/idle/valenna_slash_frame_16",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_slash_frame_17",
+            "Path": "Resources/Texture/Effect/valenna_arc_preview/idle/valenna_slash_frame_17",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_slash_frame_18",
+            "Path": "Resources/Texture/Effect/valenna_arc_preview/idle/valenna_slash_frame_18",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_slash_frame_19",
+            "Path": "Resources/Texture/Effect/valenna_arc_preview/idle/valenna_slash_frame_19",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_slash_frame_20",
+            "Path": "Resources/Texture/Effect/valenna_arc_preview/idle/valenna_slash_frame_20",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_slash_frame_21",
+            "Path": "Resources/Texture/Effect/valenna_arc_preview/idle/valenna_slash_frame_21",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_slash_frame_22",
+            "Path": "Resources/Texture/Effect/valenna_arc_preview/idle/valenna_slash_frame_22",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_slash_frame_23",
+            "Path": "Resources/Texture/Effect/valenna_arc_preview/idle/valenna_slash_frame_23",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_slash_frame_24",
+            "Path": "Resources/Texture/Effect/valenna_arc_preview/idle/valenna_slash_frame_24",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_slash_frame_25",
+            "Path": "Resources/Texture/Effect/valenna_arc_preview/idle/valenna_slash_frame_25",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_attack_companion_00",
+            "Path": "Resources/Texture/Effect/valenna_attack_companion/idle/valenna_attack_companion_00",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_attack_companion_01",
+            "Path": "Resources/Texture/Effect/valenna_attack_companion/idle/valenna_attack_companion_01",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_attack_companion_02",
+            "Path": "Resources/Texture/Effect/valenna_attack_companion/idle/valenna_attack_companion_02",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_attack_companion_03",
+            "Path": "Resources/Texture/Effect/valenna_attack_companion/idle/valenna_attack_companion_03",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_attack_companion_04",
+            "Path": "Resources/Texture/Effect/valenna_attack_companion/idle/valenna_attack_companion_04",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_attack_companion_05",
+            "Path": "Resources/Texture/Effect/valenna_attack_companion/idle/valenna_attack_companion_05",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_attack_companion_06",
+            "Path": "Resources/Texture/Effect/valenna_attack_companion/idle/valenna_attack_companion_06",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_attack_companion_07",
+            "Path": "Resources/Texture/Effect/valenna_attack_companion/idle/valenna_attack_companion_07",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_attack_companion_08",
+            "Path": "Resources/Texture/Effect/valenna_attack_companion/idle/valenna_attack_companion_08",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_attack_companion_09",
+            "Path": "Resources/Texture/Effect/valenna_attack_companion/idle/valenna_attack_companion_09",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_attack_companion_10",
+            "Path": "Resources/Texture/Effect/valenna_attack_companion/idle/valenna_attack_companion_10",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_attack_companion_11",
+            "Path": "Resources/Texture/Effect/valenna_attack_companion/idle/valenna_attack_companion_11",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_attack_slash_00",
+            "Path": "Resources/Texture/Effect/valenna_attack_sweep/idle/valenna_attack_slash_00",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_attack_slash_01",
+            "Path": "Resources/Texture/Effect/valenna_attack_sweep/idle/valenna_attack_slash_01",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_attack_slash_02",
+            "Path": "Resources/Texture/Effect/valenna_attack_sweep/idle/valenna_attack_slash_02",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_attack_slash_03",
+            "Path": "Resources/Texture/Effect/valenna_attack_sweep/idle/valenna_attack_slash_03",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_attack_slash_04",
+            "Path": "Resources/Texture/Effect/valenna_attack_sweep/idle/valenna_attack_slash_04",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_attack_slash_05",
+            "Path": "Resources/Texture/Effect/valenna_attack_sweep/idle/valenna_attack_slash_05",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_attack_slash_06",
+            "Path": "Resources/Texture/Effect/valenna_attack_sweep/idle/valenna_attack_slash_06",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_attack_slash_07",
+            "Path": "Resources/Texture/Effect/valenna_attack_sweep/idle/valenna_attack_slash_07",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_attack_slash_08",
+            "Path": "Resources/Texture/Effect/valenna_attack_sweep/idle/valenna_attack_slash_08",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_attack_slash_09",
+            "Path": "Resources/Texture/Effect/valenna_attack_sweep/idle/valenna_attack_slash_09",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_attack_slash_10",
+            "Path": "Resources/Texture/Effect/valenna_attack_sweep/idle/valenna_attack_slash_10",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_attack_slash_11",
+            "Path": "Resources/Texture/Effect/valenna_attack_sweep/idle/valenna_attack_slash_11",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_companion_frame_00",
+            "Path": "Resources/Texture/Effect/valenna_companion_sweep/idle/valenna_companion_frame_00",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_companion_frame_01",
+            "Path": "Resources/Texture/Effect/valenna_companion_sweep/idle/valenna_companion_frame_01",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_companion_frame_02",
+            "Path": "Resources/Texture/Effect/valenna_companion_sweep/idle/valenna_companion_frame_02",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_companion_frame_03",
+            "Path": "Resources/Texture/Effect/valenna_companion_sweep/idle/valenna_companion_frame_03",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_companion_frame_04",
+            "Path": "Resources/Texture/Effect/valenna_companion_sweep/idle/valenna_companion_frame_04",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_companion_frame_05",
+            "Path": "Resources/Texture/Effect/valenna_companion_sweep/idle/valenna_companion_frame_05",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_companion_frame_06",
+            "Path": "Resources/Texture/Effect/valenna_companion_sweep/idle/valenna_companion_frame_06",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_companion_frame_07",
+            "Path": "Resources/Texture/Effect/valenna_companion_sweep/idle/valenna_companion_frame_07",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_companion_frame_08",
+            "Path": "Resources/Texture/Effect/valenna_companion_sweep/idle/valenna_companion_frame_08",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_companion_frame_09",
+            "Path": "Resources/Texture/Effect/valenna_companion_sweep/idle/valenna_companion_frame_09",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_companion_frame_10",
+            "Path": "Resources/Texture/Effect/valenna_companion_sweep/idle/valenna_companion_frame_10",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_companion_frame_11",
+            "Path": "Resources/Texture/Effect/valenna_companion_sweep/idle/valenna_companion_frame_11",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_companion_frame_12",
+            "Path": "Resources/Texture/Effect/valenna_companion_sweep/idle/valenna_companion_frame_12",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_companion_frame_13",
+            "Path": "Resources/Texture/Effect/valenna_companion_sweep/idle/valenna_companion_frame_13",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_companion_frame_14",
+            "Path": "Resources/Texture/Effect/valenna_companion_sweep/idle/valenna_companion_frame_14",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_cutting_wind_00",
+            "Path": "Resources/Texture/Effect/valenna_cutting_wind/idle/valenna_cutting_wind_00",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_cutting_wind_01",
+            "Path": "Resources/Texture/Effect/valenna_cutting_wind/idle/valenna_cutting_wind_01",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_cutting_wind_02",
+            "Path": "Resources/Texture/Effect/valenna_cutting_wind/idle/valenna_cutting_wind_02",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_cutting_wind_03",
+            "Path": "Resources/Texture/Effect/valenna_cutting_wind/idle/valenna_cutting_wind_03",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_cutting_wind_04",
+            "Path": "Resources/Texture/Effect/valenna_cutting_wind/idle/valenna_cutting_wind_04",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_cutting_wind_05",
+            "Path": "Resources/Texture/Effect/valenna_cutting_wind/idle/valenna_cutting_wind_05",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_cutting_wind_06",
+            "Path": "Resources/Texture/Effect/valenna_cutting_wind/idle/valenna_cutting_wind_06",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_cutting_wind_07",
+            "Path": "Resources/Texture/Effect/valenna_cutting_wind/idle/valenna_cutting_wind_07",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_cutting_wind_08",
+            "Path": "Resources/Texture/Effect/valenna_cutting_wind/idle/valenna_cutting_wind_08",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_cutting_wind_09",
+            "Path": "Resources/Texture/Effect/valenna_cutting_wind/idle/valenna_cutting_wind_09",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_cutting_wind_10",
+            "Path": "Resources/Texture/Effect/valenna_cutting_wind/idle/valenna_cutting_wind_10",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_cutting_wind_11",
+            "Path": "Resources/Texture/Effect/valenna_cutting_wind/idle/valenna_cutting_wind_11",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_cutting_wind_12",
+            "Path": "Resources/Texture/Effect/valenna_cutting_wind/idle/valenna_cutting_wind_12",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_cutting_wind_13",
+            "Path": "Resources/Texture/Effect/valenna_cutting_wind/idle/valenna_cutting_wind_13",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_cutting_wind_14",
+            "Path": "Resources/Texture/Effect/valenna_cutting_wind/idle/valenna_cutting_wind_14",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_cutting_wind_15",
+            "Path": "Resources/Texture/Effect/valenna_cutting_wind/idle/valenna_cutting_wind_15",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_cutting_wind_16",
+            "Path": "Resources/Texture/Effect/valenna_cutting_wind/idle/valenna_cutting_wind_16",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_cutting_wind_17",
+            "Path": "Resources/Texture/Effect/valenna_cutting_wind/idle/valenna_cutting_wind_17",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_cutting_wind_18",
+            "Path": "Resources/Texture/Effect/valenna_cutting_wind/idle/valenna_cutting_wind_18",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_cutting_wind_19",
+            "Path": "Resources/Texture/Effect/valenna_cutting_wind/idle/valenna_cutting_wind_19",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_cutting_wind_20",
+            "Path": "Resources/Texture/Effect/valenna_cutting_wind/idle/valenna_cutting_wind_20",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_cutting_wind_21",
+            "Path": "Resources/Texture/Effect/valenna_cutting_wind/idle/valenna_cutting_wind_21",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_elephant_wind_00",
+            "Path": "Resources/Texture/Effect/valenna_elephant_wind/idle/valenna_elephant_wind_00",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_elephant_wind_01",
+            "Path": "Resources/Texture/Effect/valenna_elephant_wind/idle/valenna_elephant_wind_01",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_elephant_wind_02",
+            "Path": "Resources/Texture/Effect/valenna_elephant_wind/idle/valenna_elephant_wind_02",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_elephant_wind_03",
+            "Path": "Resources/Texture/Effect/valenna_elephant_wind/idle/valenna_elephant_wind_03",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_elephant_wind_04",
+            "Path": "Resources/Texture/Effect/valenna_elephant_wind/idle/valenna_elephant_wind_04",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_elephant_wind_05",
+            "Path": "Resources/Texture/Effect/valenna_elephant_wind/idle/valenna_elephant_wind_05",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_elephant_wind_06",
+            "Path": "Resources/Texture/Effect/valenna_elephant_wind/idle/valenna_elephant_wind_06",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_elephant_wind_07",
+            "Path": "Resources/Texture/Effect/valenna_elephant_wind/idle/valenna_elephant_wind_07",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_elephant_wind_08",
+            "Path": "Resources/Texture/Effect/valenna_elephant_wind/idle/valenna_elephant_wind_08",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_elephant_wind_09",
+            "Path": "Resources/Texture/Effect/valenna_elephant_wind/idle/valenna_elephant_wind_09",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_elephant_wind_10",
+            "Path": "Resources/Texture/Effect/valenna_elephant_wind/idle/valenna_elephant_wind_10",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_elephant_wind_11",
+            "Path": "Resources/Texture/Effect/valenna_elephant_wind/idle/valenna_elephant_wind_11",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_elephant_wind_12",
+            "Path": "Resources/Texture/Effect/valenna_elephant_wind/idle/valenna_elephant_wind_12",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_elephant_wind_13",
+            "Path": "Resources/Texture/Effect/valenna_elephant_wind/idle/valenna_elephant_wind_13",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_elephant_wind_14",
+            "Path": "Resources/Texture/Effect/valenna_elephant_wind/idle/valenna_elephant_wind_14",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_elephant_wind_15",
+            "Path": "Resources/Texture/Effect/valenna_elephant_wind/idle/valenna_elephant_wind_15",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_elephant_wind_16",
+            "Path": "Resources/Texture/Effect/valenna_elephant_wind/idle/valenna_elephant_wind_16",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_elephant_wind_17",
+            "Path": "Resources/Texture/Effect/valenna_elephant_wind/idle/valenna_elephant_wind_17",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_elephant_wind_18",
+            "Path": "Resources/Texture/Effect/valenna_elephant_wind/idle/valenna_elephant_wind_18",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_elephant_wind_19",
+            "Path": "Resources/Texture/Effect/valenna_elephant_wind/idle/valenna_elephant_wind_19",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_elephant_wind_20",
+            "Path": "Resources/Texture/Effect/valenna_elephant_wind/idle/valenna_elephant_wind_20",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_elephant_wind_21",
+            "Path": "Resources/Texture/Effect/valenna_elephant_wind/idle/valenna_elephant_wind_21",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_elephant_wind_22",
+            "Path": "Resources/Texture/Effect/valenna_elephant_wind/idle/valenna_elephant_wind_22",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_elephant_wind_23",
+            "Path": "Resources/Texture/Effect/valenna_elephant_wind/idle/valenna_elephant_wind_23",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_elephant_wind_24",
+            "Path": "Resources/Texture/Effect/valenna_elephant_wind/idle/valenna_elephant_wind_24",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_elephant_wind_25",
+            "Path": "Resources/Texture/Effect/valenna_elephant_wind/idle/valenna_elephant_wind_25",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_elephant_wind_26",
+            "Path": "Resources/Texture/Effect/valenna_elephant_wind/idle/valenna_elephant_wind_26",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_elephant_wind_27",
+            "Path": "Resources/Texture/Effect/valenna_elephant_wind/idle/valenna_elephant_wind_27",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_elephant_wind_28",
+            "Path": "Resources/Texture/Effect/valenna_elephant_wind/idle/valenna_elephant_wind_28",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_elephant_wind_29",
+            "Path": "Resources/Texture/Effect/valenna_elephant_wind/idle/valenna_elephant_wind_29",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_elephant_wind_30",
+            "Path": "Resources/Texture/Effect/valenna_elephant_wind/idle/valenna_elephant_wind_30",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_elephant_wind_31",
+            "Path": "Resources/Texture/Effect/valenna_elephant_wind/idle/valenna_elephant_wind_31",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_elephant_wind_32",
+            "Path": "Resources/Texture/Effect/valenna_elephant_wind/idle/valenna_elephant_wind_32",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_elephant_wind_33",
+            "Path": "Resources/Texture/Effect/valenna_elephant_wind/idle/valenna_elephant_wind_33",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_execution_companion_00",
+            "Path": "Resources/Texture/Effect/valenna_execution_companion/idle/valenna_execution_companion_00",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_execution_companion_01",
+            "Path": "Resources/Texture/Effect/valenna_execution_companion/idle/valenna_execution_companion_01",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_execution_companion_02",
+            "Path": "Resources/Texture/Effect/valenna_execution_companion/idle/valenna_execution_companion_02",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_execution_companion_03",
+            "Path": "Resources/Texture/Effect/valenna_execution_companion/idle/valenna_execution_companion_03",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_execution_companion_04",
+            "Path": "Resources/Texture/Effect/valenna_execution_companion/idle/valenna_execution_companion_04",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_execution_companion_05",
+            "Path": "Resources/Texture/Effect/valenna_execution_companion/idle/valenna_execution_companion_05",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_execution_companion_06",
+            "Path": "Resources/Texture/Effect/valenna_execution_companion/idle/valenna_execution_companion_06",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_execution_companion_07",
+            "Path": "Resources/Texture/Effect/valenna_execution_companion/idle/valenna_execution_companion_07",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_execution_companion_08",
+            "Path": "Resources/Texture/Effect/valenna_execution_companion/idle/valenna_execution_companion_08",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_execution_companion_09",
+            "Path": "Resources/Texture/Effect/valenna_execution_companion/idle/valenna_execution_companion_09",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_execution_companion_10",
+            "Path": "Resources/Texture/Effect/valenna_execution_companion/idle/valenna_execution_companion_10",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_execution_companion_11",
+            "Path": "Resources/Texture/Effect/valenna_execution_companion/idle/valenna_execution_companion_11",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_execution_companion_12",
+            "Path": "Resources/Texture/Effect/valenna_execution_companion/idle/valenna_execution_companion_12",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_execution_companion_13",
+            "Path": "Resources/Texture/Effect/valenna_execution_companion/idle/valenna_execution_companion_13",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_execution_slash_00",
+            "Path": "Resources/Texture/Effect/valenna_execution_sweep/idle/valenna_execution_slash_00",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_execution_slash_01",
+            "Path": "Resources/Texture/Effect/valenna_execution_sweep/idle/valenna_execution_slash_01",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_execution_slash_02",
+            "Path": "Resources/Texture/Effect/valenna_execution_sweep/idle/valenna_execution_slash_02",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_execution_slash_03",
+            "Path": "Resources/Texture/Effect/valenna_execution_sweep/idle/valenna_execution_slash_03",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_execution_slash_04",
+            "Path": "Resources/Texture/Effect/valenna_execution_sweep/idle/valenna_execution_slash_04",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_execution_slash_05",
+            "Path": "Resources/Texture/Effect/valenna_execution_sweep/idle/valenna_execution_slash_05",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_execution_slash_06",
+            "Path": "Resources/Texture/Effect/valenna_execution_sweep/idle/valenna_execution_slash_06",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_execution_slash_07",
+            "Path": "Resources/Texture/Effect/valenna_execution_sweep/idle/valenna_execution_slash_07",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_execution_slash_08",
+            "Path": "Resources/Texture/Effect/valenna_execution_sweep/idle/valenna_execution_slash_08",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_execution_slash_09",
+            "Path": "Resources/Texture/Effect/valenna_execution_sweep/idle/valenna_execution_slash_09",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_execution_slash_10",
+            "Path": "Resources/Texture/Effect/valenna_execution_sweep/idle/valenna_execution_slash_10",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_execution_slash_11",
+            "Path": "Resources/Texture/Effect/valenna_execution_sweep/idle/valenna_execution_slash_11",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_execution_slash_12",
+            "Path": "Resources/Texture/Effect/valenna_execution_sweep/idle/valenna_execution_slash_12",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_execution_slash_13",
+            "Path": "Resources/Texture/Effect/valenna_execution_sweep/idle/valenna_execution_slash_13",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_execution_wave_00",
+            "Path": "Resources/Texture/Effect/valenna_execution_wave/idle/valenna_execution_wave_00",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_execution_wave_01",
+            "Path": "Resources/Texture/Effect/valenna_execution_wave/idle/valenna_execution_wave_01",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_execution_wave_02",
+            "Path": "Resources/Texture/Effect/valenna_execution_wave/idle/valenna_execution_wave_02",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_execution_wave_03",
+            "Path": "Resources/Texture/Effect/valenna_execution_wave/idle/valenna_execution_wave_03",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_execution_wave_04",
+            "Path": "Resources/Texture/Effect/valenna_execution_wave/idle/valenna_execution_wave_04",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_execution_wave_05",
+            "Path": "Resources/Texture/Effect/valenna_execution_wave/idle/valenna_execution_wave_05",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_execution_wave_06",
+            "Path": "Resources/Texture/Effect/valenna_execution_wave/idle/valenna_execution_wave_06",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_execution_wave_07",
+            "Path": "Resources/Texture/Effect/valenna_execution_wave/idle/valenna_execution_wave_07",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_execution_wave_08",
+            "Path": "Resources/Texture/Effect/valenna_execution_wave/idle/valenna_execution_wave_08",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_execution_wave_09",
+            "Path": "Resources/Texture/Effect/valenna_execution_wave/idle/valenna_execution_wave_09",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_execution_wave_10",
+            "Path": "Resources/Texture/Effect/valenna_execution_wave/idle/valenna_execution_wave_10",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_execution_wave_11",
+            "Path": "Resources/Texture/Effect/valenna_execution_wave/idle/valenna_execution_wave_11",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_execution_wave_12",
+            "Path": "Resources/Texture/Effect/valenna_execution_wave/idle/valenna_execution_wave_12",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_execution_wave_13",
+            "Path": "Resources/Texture/Effect/valenna_execution_wave/idle/valenna_execution_wave_13",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_execution_wave_14",
+            "Path": "Resources/Texture/Effect/valenna_execution_wave/idle/valenna_execution_wave_14",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_execution_wave_15",
+            "Path": "Resources/Texture/Effect/valenna_execution_wave/idle/valenna_execution_wave_15",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_execution_wave_16",
+            "Path": "Resources/Texture/Effect/valenna_execution_wave/idle/valenna_execution_wave_16",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_execution_wave_17",
+            "Path": "Resources/Texture/Effect/valenna_execution_wave/idle/valenna_execution_wave_17",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_execution_wave_18",
+            "Path": "Resources/Texture/Effect/valenna_execution_wave/idle/valenna_execution_wave_18",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_execution_wave_19",
+            "Path": "Resources/Texture/Effect/valenna_execution_wave/idle/valenna_execution_wave_19",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_execution_wave_20",
+            "Path": "Resources/Texture/Effect/valenna_execution_wave/idle/valenna_execution_wave_20",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_execution_wave_21",
+            "Path": "Resources/Texture/Effect/valenna_execution_wave/idle/valenna_execution_wave_21",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_execution_wave_22",
+            "Path": "Resources/Texture/Effect/valenna_execution_wave/idle/valenna_execution_wave_22",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_execution_wave_23",
+            "Path": "Resources/Texture/Effect/valenna_execution_wave/idle/valenna_execution_wave_23",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_execution_wave_24",
+            "Path": "Resources/Texture/Effect/valenna_execution_wave/idle/valenna_execution_wave_24",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_execution_wave_25",
+            "Path": "Resources/Texture/Effect/valenna_execution_wave/idle/valenna_execution_wave_25",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_execution_wave_26",
+            "Path": "Resources/Texture/Effect/valenna_execution_wave/idle/valenna_execution_wave_26",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_execution_wave_27",
+            "Path": "Resources/Texture/Effect/valenna_execution_wave/idle/valenna_execution_wave_27",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_eye_frame_00",
+            "Path": "Resources/Texture/Effect/valenna_eye_glint/idle/valenna_eye_frame_00",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_eye_frame_01",
+            "Path": "Resources/Texture/Effect/valenna_eye_glint/idle/valenna_eye_frame_01",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_eye_frame_02",
+            "Path": "Resources/Texture/Effect/valenna_eye_glint/idle/valenna_eye_frame_02",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_eye_frame_03",
+            "Path": "Resources/Texture/Effect/valenna_eye_glint/idle/valenna_eye_frame_03",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_eye_frame_04",
+            "Path": "Resources/Texture/Effect/valenna_eye_glint/idle/valenna_eye_frame_04",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_eye_frame_05",
+            "Path": "Resources/Texture/Effect/valenna_eye_glint/idle/valenna_eye_frame_05",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_eye_frame_06",
+            "Path": "Resources/Texture/Effect/valenna_eye_glint/idle/valenna_eye_frame_06",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_eye_frame_07",
+            "Path": "Resources/Texture/Effect/valenna_eye_glint/idle/valenna_eye_frame_07",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_eye_frame_08",
+            "Path": "Resources/Texture/Effect/valenna_eye_glint/idle/valenna_eye_frame_08",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_eye_frame_09",
+            "Path": "Resources/Texture/Effect/valenna_eye_glint/idle/valenna_eye_frame_09",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_eye_frame_10",
+            "Path": "Resources/Texture/Effect/valenna_eye_glint/idle/valenna_eye_frame_10",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_pierce_frame_00",
+            "Path": "Resources/Texture/Effect/valenna_finish_pierce/idle/valenna_pierce_frame_00",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_pierce_frame_01",
+            "Path": "Resources/Texture/Effect/valenna_finish_pierce/idle/valenna_pierce_frame_01",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_pierce_frame_02",
+            "Path": "Resources/Texture/Effect/valenna_finish_pierce/idle/valenna_pierce_frame_02",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_pierce_frame_03",
+            "Path": "Resources/Texture/Effect/valenna_finish_pierce/idle/valenna_pierce_frame_03",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_pierce_frame_04",
+            "Path": "Resources/Texture/Effect/valenna_finish_pierce/idle/valenna_pierce_frame_04",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_pierce_frame_05",
+            "Path": "Resources/Texture/Effect/valenna_finish_pierce/idle/valenna_pierce_frame_05",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_pierce_frame_06",
+            "Path": "Resources/Texture/Effect/valenna_finish_pierce/idle/valenna_pierce_frame_06",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_pierce_frame_07",
+            "Path": "Resources/Texture/Effect/valenna_finish_pierce/idle/valenna_pierce_frame_07",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_pierce_frame_08",
+            "Path": "Resources/Texture/Effect/valenna_finish_pierce/idle/valenna_pierce_frame_08",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_pierce_frame_09",
+            "Path": "Resources/Texture/Effect/valenna_finish_pierce/idle/valenna_pierce_frame_09",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_pierce_frame_10",
+            "Path": "Resources/Texture/Effect/valenna_finish_pierce/idle/valenna_pierce_frame_10",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_foreseen_mark_00",
+            "Path": "Resources/Texture/Effect/valenna_foreseen_mark/idle/valenna_foreseen_mark_00",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_ground_flame_frame_00",
+            "Path": "Resources/Texture/Effect/valenna_ground_flame/idle/valenna_ground_flame_frame_00",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_ground_flame_frame_01",
+            "Path": "Resources/Texture/Effect/valenna_ground_flame/idle/valenna_ground_flame_frame_01",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_ground_flame_frame_02",
+            "Path": "Resources/Texture/Effect/valenna_ground_flame/idle/valenna_ground_flame_frame_02",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_ground_flame_frame_03",
+            "Path": "Resources/Texture/Effect/valenna_ground_flame/idle/valenna_ground_flame_frame_03",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_ground_flame_frame_04",
+            "Path": "Resources/Texture/Effect/valenna_ground_flame/idle/valenna_ground_flame_frame_04",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_ground_flame_frame_05",
+            "Path": "Resources/Texture/Effect/valenna_ground_flame/idle/valenna_ground_flame_frame_05",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_ground_flame_frame_06",
+            "Path": "Resources/Texture/Effect/valenna_ground_flame/idle/valenna_ground_flame_frame_06",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_ground_flame_frame_07",
+            "Path": "Resources/Texture/Effect/valenna_ground_flame/idle/valenna_ground_flame_frame_07",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_ground_flame_frame_08",
+            "Path": "Resources/Texture/Effect/valenna_ground_flame/idle/valenna_ground_flame_frame_08",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_ground_flame_frame_09",
+            "Path": "Resources/Texture/Effect/valenna_ground_flame/idle/valenna_ground_flame_frame_09",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_ground_flame_frame_10",
+            "Path": "Resources/Texture/Effect/valenna_ground_flame/idle/valenna_ground_flame_frame_10",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_ground_flame_frame_11",
+            "Path": "Resources/Texture/Effect/valenna_ground_flame/idle/valenna_ground_flame_frame_11",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_ground_flame_frame_12",
+            "Path": "Resources/Texture/Effect/valenna_ground_flame/idle/valenna_ground_flame_frame_12",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_ground_flame_frame_13",
+            "Path": "Resources/Texture/Effect/valenna_ground_flame/idle/valenna_ground_flame_frame_13",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_ground_flame_frame_14",
+            "Path": "Resources/Texture/Effect/valenna_ground_flame/idle/valenna_ground_flame_frame_14",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_ground_flame_frame_15",
+            "Path": "Resources/Texture/Effect/valenna_ground_flame/idle/valenna_ground_flame_frame_15",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_ground_flame_frame_16",
+            "Path": "Resources/Texture/Effect/valenna_ground_flame/idle/valenna_ground_flame_frame_16",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_ground_flame_frame_17",
+            "Path": "Resources/Texture/Effect/valenna_ground_flame/idle/valenna_ground_flame_frame_17",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_ground_flame_frame_18",
+            "Path": "Resources/Texture/Effect/valenna_ground_flame/idle/valenna_ground_flame_frame_18",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_ground_flame_frame_19",
+            "Path": "Resources/Texture/Effect/valenna_ground_flame/idle/valenna_ground_flame_frame_19",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_wake_frame_00",
+            "Path": "Resources/Texture/Effect/valenna_gun_wake/idle/valenna_wake_frame_00",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_wake_frame_01",
+            "Path": "Resources/Texture/Effect/valenna_gun_wake/idle/valenna_wake_frame_01",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_wake_frame_02",
+            "Path": "Resources/Texture/Effect/valenna_gun_wake/idle/valenna_wake_frame_02",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_wake_frame_03",
+            "Path": "Resources/Texture/Effect/valenna_gun_wake/idle/valenna_wake_frame_03",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_wake_frame_04",
+            "Path": "Resources/Texture/Effect/valenna_gun_wake/idle/valenna_wake_frame_04",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_wake_frame_05",
+            "Path": "Resources/Texture/Effect/valenna_gun_wake/idle/valenna_wake_frame_05",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_wake_frame_06",
+            "Path": "Resources/Texture/Effect/valenna_gun_wake/idle/valenna_wake_frame_06",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_wake_frame_07",
+            "Path": "Resources/Texture/Effect/valenna_gun_wake/idle/valenna_wake_frame_07",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_wake_frame_08",
+            "Path": "Resources/Texture/Effect/valenna_gun_wake/idle/valenna_wake_frame_08",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_wake_frame_09",
+            "Path": "Resources/Texture/Effect/valenna_gun_wake/idle/valenna_wake_frame_09",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_wake_frame_10",
+            "Path": "Resources/Texture/Effect/valenna_gun_wake/idle/valenna_wake_frame_10",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_wake_frame_11",
+            "Path": "Resources/Texture/Effect/valenna_gun_wake/idle/valenna_wake_frame_11",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_wake_frame_12",
+            "Path": "Resources/Texture/Effect/valenna_gun_wake/idle/valenna_wake_frame_12",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_wake_frame_13",
+            "Path": "Resources/Texture/Effect/valenna_gun_wake/idle/valenna_wake_frame_13",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_wake_frame_14",
+            "Path": "Resources/Texture/Effect/valenna_gun_wake/idle/valenna_wake_frame_14",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_wake_frame_15",
+            "Path": "Resources/Texture/Effect/valenna_gun_wake/idle/valenna_wake_frame_15",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_execution_frame",
+            "Path": "Resources/Texture/Effect/valenna_hunt_marker/idle/valenna_execution_frame",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_hunt_glow_00",
+            "Path": "Resources/Texture/Effect/valenna_hunt_marker/idle/valenna_hunt_glow_00",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_hunt_swords_00",
+            "Path": "Resources/Texture/Effect/valenna_hunt_marker/idle/valenna_hunt_swords_00",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_scorch_burst_icon",
+            "Path": "Resources/Texture/Effect/valenna_hunt_marker/idle/valenna_scorch_burst_icon",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_tremor_burst_icon",
+            "Path": "Resources/Texture/Effect/valenna_hunt_marker/idle/valenna_tremor_burst_icon",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_impact_frame_00",
+            "Path": "Resources/Texture/Effect/valenna_impact_fx/idle/valenna_impact_frame_00",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_impact_frame_01",
+            "Path": "Resources/Texture/Effect/valenna_impact_fx/idle/valenna_impact_frame_01",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_impact_frame_02",
+            "Path": "Resources/Texture/Effect/valenna_impact_fx/idle/valenna_impact_frame_02",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_impact_frame_03",
+            "Path": "Resources/Texture/Effect/valenna_impact_fx/idle/valenna_impact_frame_03",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_impact_frame_04",
+            "Path": "Resources/Texture/Effect/valenna_impact_fx/idle/valenna_impact_frame_04",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_impact_frame_05",
+            "Path": "Resources/Texture/Effect/valenna_impact_fx/idle/valenna_impact_frame_05",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_impact_frame_06",
+            "Path": "Resources/Texture/Effect/valenna_impact_fx/idle/valenna_impact_frame_06",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_impact_frame_07",
+            "Path": "Resources/Texture/Effect/valenna_impact_fx/idle/valenna_impact_frame_07",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_impact_frame_08",
+            "Path": "Resources/Texture/Effect/valenna_impact_fx/idle/valenna_impact_frame_08",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_impact_frame_09",
+            "Path": "Resources/Texture/Effect/valenna_impact_fx/idle/valenna_impact_frame_09",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_impact_frame_10",
+            "Path": "Resources/Texture/Effect/valenna_impact_fx/idle/valenna_impact_frame_10",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_impact_frame_11",
+            "Path": "Resources/Texture/Effect/valenna_impact_fx/idle/valenna_impact_frame_11",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_impact_frame_12",
+            "Path": "Resources/Texture/Effect/valenna_impact_fx/idle/valenna_impact_frame_12",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_impact_frame_13",
+            "Path": "Resources/Texture/Effect/valenna_impact_fx/idle/valenna_impact_frame_13",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_impact_frame_14",
+            "Path": "Resources/Texture/Effect/valenna_impact_fx/idle/valenna_impact_frame_14",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_impact_frame_15",
+            "Path": "Resources/Texture/Effect/valenna_impact_fx/idle/valenna_impact_frame_15",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_impact_frame_16",
+            "Path": "Resources/Texture/Effect/valenna_impact_fx/idle/valenna_impact_frame_16",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_impact_frame_17",
+            "Path": "Resources/Texture/Effect/valenna_impact_fx/idle/valenna_impact_frame_17",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_long_thrust_frame_00",
+            "Path": "Resources/Texture/Effect/valenna_long_thrust/idle/valenna_long_thrust_frame_00",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_long_thrust_frame_01",
+            "Path": "Resources/Texture/Effect/valenna_long_thrust/idle/valenna_long_thrust_frame_01",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_long_thrust_frame_02",
+            "Path": "Resources/Texture/Effect/valenna_long_thrust/idle/valenna_long_thrust_frame_02",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_long_thrust_frame_03",
+            "Path": "Resources/Texture/Effect/valenna_long_thrust/idle/valenna_long_thrust_frame_03",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_long_thrust_frame_04",
+            "Path": "Resources/Texture/Effect/valenna_long_thrust/idle/valenna_long_thrust_frame_04",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_long_thrust_frame_05",
+            "Path": "Resources/Texture/Effect/valenna_long_thrust/idle/valenna_long_thrust_frame_05",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_long_thrust_frame_06",
+            "Path": "Resources/Texture/Effect/valenna_long_thrust/idle/valenna_long_thrust_frame_06",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_long_thrust_frame_07",
+            "Path": "Resources/Texture/Effect/valenna_long_thrust/idle/valenna_long_thrust_frame_07",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_long_thrust_frame_08",
+            "Path": "Resources/Texture/Effect/valenna_long_thrust/idle/valenna_long_thrust_frame_08",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_parry_frame_00",
+            "Path": "Resources/Texture/Effect/valenna_parry_fx/idle/valenna_parry_frame_00",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_parry_frame_01",
+            "Path": "Resources/Texture/Effect/valenna_parry_fx/idle/valenna_parry_frame_01",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_parry_frame_02",
+            "Path": "Resources/Texture/Effect/valenna_parry_fx/idle/valenna_parry_frame_02",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_parry_frame_03",
+            "Path": "Resources/Texture/Effect/valenna_parry_fx/idle/valenna_parry_frame_03",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_parry_frame_04",
+            "Path": "Resources/Texture/Effect/valenna_parry_fx/idle/valenna_parry_frame_04",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_parry_frame_05",
+            "Path": "Resources/Texture/Effect/valenna_parry_fx/idle/valenna_parry_frame_05",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_parry_frame_06",
+            "Path": "Resources/Texture/Effect/valenna_parry_fx/idle/valenna_parry_frame_06",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_parry_frame_07",
+            "Path": "Resources/Texture/Effect/valenna_parry_fx/idle/valenna_parry_frame_07",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_parry_frame_08",
+            "Path": "Resources/Texture/Effect/valenna_parry_fx/idle/valenna_parry_frame_08",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_parry_frame_09",
+            "Path": "Resources/Texture/Effect/valenna_parry_fx/idle/valenna_parry_frame_09",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_peak_slash_00",
+            "Path": "Resources/Texture/Effect/valenna_peak_sweep/idle/valenna_peak_slash_00",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_peak_slash_01",
+            "Path": "Resources/Texture/Effect/valenna_peak_sweep/idle/valenna_peak_slash_01",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_peak_slash_02",
+            "Path": "Resources/Texture/Effect/valenna_peak_sweep/idle/valenna_peak_slash_02",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_peak_slash_03",
+            "Path": "Resources/Texture/Effect/valenna_peak_sweep/idle/valenna_peak_slash_03",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_peak_slash_04",
+            "Path": "Resources/Texture/Effect/valenna_peak_sweep/idle/valenna_peak_slash_04",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_peak_slash_05",
+            "Path": "Resources/Texture/Effect/valenna_peak_sweep/idle/valenna_peak_slash_05",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_peak_slash_06",
+            "Path": "Resources/Texture/Effect/valenna_peak_sweep/idle/valenna_peak_slash_06",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_peak_slash_07",
+            "Path": "Resources/Texture/Effect/valenna_peak_sweep/idle/valenna_peak_slash_07",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_peak_slash_08",
+            "Path": "Resources/Texture/Effect/valenna_peak_sweep/idle/valenna_peak_slash_08",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_peak_slash_09",
+            "Path": "Resources/Texture/Effect/valenna_peak_sweep/idle/valenna_peak_slash_09",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_peak_slash_10",
+            "Path": "Resources/Texture/Effect/valenna_peak_sweep/idle/valenna_peak_slash_10",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_peak_slash_11",
+            "Path": "Resources/Texture/Effect/valenna_peak_sweep/idle/valenna_peak_slash_11",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_ghost_aim_double",
+            "Path": "Resources/Texture/Effect/valenna_pose_echoes/valenna_ghost_aim_double",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_ghost_aim",
+            "Path": "Resources/Texture/Effect/valenna_pose_echoes/valenna_ghost_aim",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_ghost_cross_out1",
+            "Path": "Resources/Texture/Effect/valenna_pose_echoes/valenna_ghost_cross_out1",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_ghost_cross_out2",
+            "Path": "Resources/Texture/Effect/valenna_pose_echoes/valenna_ghost_cross_out2",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_ghost_cross",
+            "Path": "Resources/Texture/Effect/valenna_pose_echoes/valenna_ghost_cross",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_ghost_cut_lower",
+            "Path": "Resources/Texture/Effect/valenna_pose_echoes/valenna_ghost_cut_lower",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_ghost_dash1",
+            "Path": "Resources/Texture/Effect/valenna_pose_echoes/valenna_ghost_dash1",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_ghost_dash2",
+            "Path": "Resources/Texture/Effect/valenna_pose_echoes/valenna_ghost_dash2",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_ghost_dodge",
+            "Path": "Resources/Texture/Effect/valenna_pose_echoes/valenna_ghost_dodge",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_ghost_draw",
+            "Path": "Resources/Texture/Effect/valenna_pose_echoes/valenna_ghost_draw",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_ghost_fallen",
+            "Path": "Resources/Texture/Effect/valenna_pose_echoes/valenna_ghost_fallen",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_ghost_finish_aim",
+            "Path": "Resources/Texture/Effect/valenna_pose_echoes/valenna_ghost_finish_aim",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_ghost_finish_back1",
+            "Path": "Resources/Texture/Effect/valenna_pose_echoes/valenna_ghost_finish_back1",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_ghost_finish_back2",
+            "Path": "Resources/Texture/Effect/valenna_pose_echoes/valenna_ghost_finish_back2",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_ghost_finish_cut",
+            "Path": "Resources/Texture/Effect/valenna_pose_echoes/valenna_ghost_finish_cut",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_ghost_finish_dash",
+            "Path": "Resources/Texture/Effect/valenna_pose_echoes/valenna_ghost_finish_dash",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_ghost_finish_fire",
+            "Path": "Resources/Texture/Effect/valenna_pose_echoes/valenna_ghost_finish_fire",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_ghost_finish_guard",
+            "Path": "Resources/Texture/Effect/valenna_pose_echoes/valenna_ghost_finish_guard",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_ghost_finish_kick",
+            "Path": "Resources/Texture/Effect/valenna_pose_echoes/valenna_ghost_finish_kick",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_ghost_finish_low",
+            "Path": "Resources/Texture/Effect/valenna_pose_echoes/valenna_ghost_finish_low",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_ghost_finish_retreat1",
+            "Path": "Resources/Texture/Effect/valenna_pose_echoes/valenna_ghost_finish_retreat1",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_ghost_finish_retreat2",
+            "Path": "Resources/Texture/Effect/valenna_pose_echoes/valenna_ghost_finish_retreat2",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_ghost_finish_spin",
+            "Path": "Resources/Texture/Effect/valenna_pose_echoes/valenna_ghost_finish_spin",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_ghost_finish_stand1",
+            "Path": "Resources/Texture/Effect/valenna_pose_echoes/valenna_ghost_finish_stand1",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_ghost_finish_stand2",
+            "Path": "Resources/Texture/Effect/valenna_pose_echoes/valenna_ghost_finish_stand2",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_ghost_finish_stand3",
+            "Path": "Resources/Texture/Effect/valenna_pose_echoes/valenna_ghost_finish_stand3",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_ghost_finish_turn",
+            "Path": "Resources/Texture/Effect/valenna_pose_echoes/valenna_ghost_finish_turn",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_ghost_finish_wind1",
+            "Path": "Resources/Texture/Effect/valenna_pose_echoes/valenna_ghost_finish_wind1",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_ghost_finish_wind2",
+            "Path": "Resources/Texture/Effect/valenna_pose_echoes/valenna_ghost_finish_wind2",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_ghost_guard",
+            "Path": "Resources/Texture/Effect/valenna_pose_echoes/valenna_ghost_guard",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_ghost_hurt",
+            "Path": "Resources/Texture/Effect/valenna_pose_echoes/valenna_ghost_hurt",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_ghost_idle",
+            "Path": "Resources/Texture/Effect/valenna_pose_echoes/valenna_ghost_idle",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_ghost_rise_end",
+            "Path": "Resources/Texture/Effect/valenna_pose_echoes/valenna_ghost_rise_end",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_ghost_rise",
+            "Path": "Resources/Texture/Effect/valenna_pose_echoes/valenna_ghost_rise",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_ghost_thrust_out1",
+            "Path": "Resources/Texture/Effect/valenna_pose_echoes/valenna_ghost_thrust_out1",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_ghost_thrust_out2",
+            "Path": "Resources/Texture/Effect/valenna_pose_echoes/valenna_ghost_thrust_out2",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_ghost_thrust_ready",
+            "Path": "Resources/Texture/Effect/valenna_pose_echoes/valenna_ghost_thrust_ready",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_sheath_frame_00",
+            "Path": "Resources/Texture/Effect/valenna_sheath_glint/idle/valenna_sheath_frame_00",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_sheath_frame_01",
+            "Path": "Resources/Texture/Effect/valenna_sheath_glint/idle/valenna_sheath_frame_01",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_sheath_frame_02",
+            "Path": "Resources/Texture/Effect/valenna_sheath_glint/idle/valenna_sheath_frame_02",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_sheath_frame_03",
+            "Path": "Resources/Texture/Effect/valenna_sheath_glint/idle/valenna_sheath_frame_03",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_sheath_frame_04",
+            "Path": "Resources/Texture/Effect/valenna_sheath_glint/idle/valenna_sheath_frame_04",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_sheath_frame_05",
+            "Path": "Resources/Texture/Effect/valenna_sheath_glint/idle/valenna_sheath_frame_05",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_sheath_frame_06",
+            "Path": "Resources/Texture/Effect/valenna_sheath_glint/idle/valenna_sheath_frame_06",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_sheath_frame_07",
+            "Path": "Resources/Texture/Effect/valenna_sheath_glint/idle/valenna_sheath_frame_07",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_sheath_frame_08",
+            "Path": "Resources/Texture/Effect/valenna_sheath_glint/idle/valenna_sheath_frame_08",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_sheath_frame_09",
+            "Path": "Resources/Texture/Effect/valenna_sheath_glint/idle/valenna_sheath_frame_09",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_shot_frame_00",
+            "Path": "Resources/Texture/Effect/valenna_shot/idle/valenna_shot_frame_00",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_shot_frame_01",
+            "Path": "Resources/Texture/Effect/valenna_shot/idle/valenna_shot_frame_01",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_shot_frame_02",
+            "Path": "Resources/Texture/Effect/valenna_shot/idle/valenna_shot_frame_02",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_shot_frame_03",
+            "Path": "Resources/Texture/Effect/valenna_shot/idle/valenna_shot_frame_03",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_shot_frame_04",
+            "Path": "Resources/Texture/Effect/valenna_shot/idle/valenna_shot_frame_04",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_shot_frame_05",
+            "Path": "Resources/Texture/Effect/valenna_shot/idle/valenna_shot_frame_05",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_shot_frame_06",
+            "Path": "Resources/Texture/Effect/valenna_shot/idle/valenna_shot_frame_06",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_shot_frame_07",
+            "Path": "Resources/Texture/Effect/valenna_shot/idle/valenna_shot_frame_07",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_shot_frame_08",
+            "Path": "Resources/Texture/Effect/valenna_shot/idle/valenna_shot_frame_08",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_twin_thrust_frame_00",
+            "Path": "Resources/Texture/Effect/valenna_twin_thrust/idle/valenna_twin_thrust_frame_00",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_twin_thrust_frame_01",
+            "Path": "Resources/Texture/Effect/valenna_twin_thrust/idle/valenna_twin_thrust_frame_01",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_twin_thrust_frame_02",
+            "Path": "Resources/Texture/Effect/valenna_twin_thrust/idle/valenna_twin_thrust_frame_02",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_twin_thrust_frame_03",
+            "Path": "Resources/Texture/Effect/valenna_twin_thrust/idle/valenna_twin_thrust_frame_03",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_twin_thrust_frame_04",
+            "Path": "Resources/Texture/Effect/valenna_twin_thrust/idle/valenna_twin_thrust_frame_04",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_twin_thrust_frame_05",
+            "Path": "Resources/Texture/Effect/valenna_twin_thrust/idle/valenna_twin_thrust_frame_05",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_twin_thrust_frame_06",
+            "Path": "Resources/Texture/Effect/valenna_twin_thrust/idle/valenna_twin_thrust_frame_06",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_twin_thrust_frame_07",
+            "Path": "Resources/Texture/Effect/valenna_twin_thrust/idle/valenna_twin_thrust_frame_07",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_twin_thrust_frame_08",
+            "Path": "Resources/Texture/Effect/valenna_twin_thrust/idle/valenna_twin_thrust_frame_08",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_twin_thrust_frame_09",
+            "Path": "Resources/Texture/Effect/valenna_twin_thrust/idle/valenna_twin_thrust_frame_09",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_flame_0",
+            "Path": "Resources/Texture/Effect/valenna_vfx/valenna_flame_0",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_flame_1",
+            "Path": "Resources/Texture/Effect/valenna_vfx/valenna_flame_1",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_flame_2",
+            "Path": "Resources/Texture/Effect/valenna_vfx/valenna_flame_2",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_flame_3",
+            "Path": "Resources/Texture/Effect/valenna_vfx/valenna_flame_3",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_flare",
+            "Path": "Resources/Texture/Effect/valenna_vfx/valenna_flare",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_hit_line",
+            "Path": "Resources/Texture/Effect/valenna_vfx/valenna_hit_line",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_shard",
+            "Path": "Resources/Texture/Effect/valenna_vfx/valenna_shard",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_smoke",
+            "Path": "Resources/Texture/Effect/valenna_vfx/valenna_smoke",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_streak",
+            "Path": "Resources/Texture/Effect/valenna_vfx/valenna_streak",
+            "Ext": ".png"
+          }
+        ]
+      }
+    }
+  }
+}

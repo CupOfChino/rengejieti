@@ -1,0 +1,218 @@
+{
+  "Data": {
+    "__type": "PartnerData,Assembly-CSharp",
+    "value": {
+      "HeadCoverIcon": {
+        "ReferenceType": 1001,
+        "Key": "valenna_portrait"
+      },
+      "PartnerId": 885101,
+      "MythicalItemList": [],
+      "MagicUnlockList": [],
+      "EndingKeys": [],
+      "ExItems": [],
+      "ModuleKey": "",
+      "CharacterId": 0,
+      "UseNamePool": false,
+      "CharacterName": {
+        "TarKey": "",
+        "SheetKey": "",
+        "InputText": "瓦伦娜",
+        "Characteristic": null
+      },
+      "CharacterNamePool": [],
+      "CharacterDes": {
+        "TarKey": "",
+        "SheetKey": "",
+        "InputText": "持铳刃的近战伙伴，习得巴勒莫之剑。",
+        "Characteristic": null
+      },
+      "CharacterIconReference": {
+        "ReferenceType": 1001,
+        "Key": "valenna_portrait"
+      },
+      "ModelPathReference": {
+        "ReferenceType": 10002,
+        "Key": "valenna_test_model"
+      },
+      "RoleModeName": "valenna_test_model",
+      "BattleTips": [],
+      "Strength": 60,
+      "Dexterity": 60,
+      "Intelligence": 50,
+      "WillPower": 50,
+      "Constitution": 60,
+      "HP_Extra": 0,
+      "MP_Extra": 0,
+      "DB_Extra": null,
+      "WalkSpeed": 1,
+      "Dodge_Extra": 0,
+      "Speed_Extra": 0,
+      "Gold": 0,
+      "Bullets": 0,
+      "MoonLightStone": 0,
+      "Components": 0,
+      "Luck": 50,
+      "Armor": 0,
+      "AutoRecoverHp": 0,
+      "AutoRecoverMp": 0,
+      "SkillSets": [
+        {
+          "Id": 101,
+          "Value": 80
+        },
+        {
+          "Id": 102,
+          "Value": 65
+        },
+        {
+          "Id": 201,
+          "Value": 60
+        },
+        {
+          "Id": 203,
+          "Value": 40
+        },
+        {
+          "Id": 301,
+          "Value": 50
+        },
+        {
+          "Id": 302,
+          "Value": 50
+        },
+        {
+          "Id": 403,
+          "Value": 50
+        },
+        {
+          "Id": 405,
+          "Value": 35
+        },
+        {
+          "Id": 501,
+          "Value": 30
+        },
+        {
+          "Id": 502,
+          "Value": 20
+        },
+        {
+          "Id": 601,
+          "Value": 30
+        },
+        {
+          "Id": 603,
+          "Value": 30
+        }
+      ],
+      "ItemBagList": {
+        "Type": 7,
+        "Ids": []
+      },
+      "ItemEquipmentList": {
+        "Type": 7,
+        "Ids": []
+      },
+      "ItemWeaponList": {
+        "Type": 7,
+        "Ids": []
+      },
+      "ItemBagBindList": {
+        "Type": 7,
+        "Ids": [
+          885114,
+          885115
+        ]
+      },
+      "ItemEquipmentBindList": {
+        "Type": 7,
+        "Ids": [
+          885116
+        ]
+      },
+      "ItemWeaponBindList": {
+        "Type": 7,
+        "Ids": [
+          885111,
+          885113
+        ]
+      },
+      "BaseWeapon": 100,
+      "ItemPoolList": {
+        "Type": 7,
+        "Ids": []
+      },
+      "MinItemCount": 0,
+      "MaxItemCount": 0,
+      "Magiclist": {
+        "Type": 6,
+        "Ids": []
+      },
+      "Bufflist": {
+        "Type": 5,
+        "Ids": []
+      },
+      "Specialist": {
+        "Type": 2,
+        "Ids": [
+          885141,
+          885142,
+          885143,
+          885144,
+          885145,
+          885146,
+          885147
+        ]
+      },
+      "CharacterSkillList": {
+        "Type": 8,
+        "Ids": [
+          885121,
+          885124,
+          885127,
+          885125,
+          885126,
+          885128,
+          885129
+        ]
+      },
+      "MonsterSkillList": {
+        "Type": 9,
+        "Ids": []
+      },
+      "Career": {
+        "Type": 1,
+        "Id": 5
+      },
+      "AlarmDistance": 0,
+      "CharacterType": 5,
+      "CharacterTags": [],
+      "CustomTags": [],
+      "BattleClueOption": null,
+      "CanControlInBattle": true,
+      "AI": {
+        "CommonActions": [
+          {
+            "IsMonster": false,
+            "IsMagic": false,
+            "IsItemUsage": false,
+            "IsThrowItem": false,
+            "Name": "切割攻击",
+            "Id": 885121,
+            "RandomUseItem": false,
+            "ItemId": 0,
+            "ItemConfigIndex": -1,
+            "PreferData": null
+          }
+        ],
+        "FixedOrderAction": false,
+        "RandomAction": false,
+        "ReserveAfterSelect": false,
+        "Strategys": []
+      },
+      "EditorSheetKey": null,
+      "DefaultUnLock": true
+    }
+  }
+}

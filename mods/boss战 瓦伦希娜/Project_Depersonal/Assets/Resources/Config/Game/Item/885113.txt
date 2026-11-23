@@ -1,0 +1,126 @@
+{
+  "Data": {
+    "__type": "MOD.ItemData,Assembly-CSharp",
+    "value": {
+      "IconPath": "UI/Textures/Icon/Item/valenna_cutlass_icon",
+      "ItemId": 885113,
+      "UniqueKey": "valenna_cutlass",
+      "ItemName": {
+        "TarKey": "",
+        "SheetKey": "",
+        "InputText": "巴勒莫——切斩刀",
+        "Characteristic": null
+      },
+      "ItemDes": {
+        "TarKey": "",
+        "SheetKey": "",
+        "InputText": "伯纳特利家族的单手近战武器，以斗殴检定攻击单体。",
+        "Characteristic": null
+      },
+      "ItemEffectDes": {
+        "TarKey": "",
+        "SheetKey": "",
+        "InputText": "",
+        "Characteristic": null
+      },
+      "IconPathReference": {
+        "ReferenceType": 1004,
+        "Key": "valenna_cutlass_icon"
+      },
+      "Price": 0,
+      "ChargingCount": 0,
+      "ReplaceChargingConfig": [],
+      "AutoDestruct": false,
+      "Disassemble": {
+        "Items": {
+          "Type": 0,
+          "Ids": []
+        },
+        "PartsCount": 0
+      },
+      "IsCantDisboard": false,
+      "DesignTag": 2,
+      "TagList": [],
+      "ItemAttrValue": [],
+      "MythicalId": 0,
+      "ItemType": 2,
+      "ItemStaticAffixList": [],
+      "ItemDynamicAffixList": [],
+      "IsBindCharacter": false,
+      "BuffsLink": [],
+      "Terms": [],
+      "ConfigData": [],
+      "EquipmentConfigData": {
+        "__type": "MOD.WeaponConfigData,Assembly-CSharp",
+        "WeaponTypes": [
+          2
+        ],
+        "CheckSkill": 101,
+        "UniteCheckSkill": 0,
+        "DiceCheckType": 1,
+        "ResultCheckType": 1,
+        "DoubleWeapon": false,
+        "TargetSelect": 2,
+        "AttackType": 1,
+        "DifferentRondom": false,
+        "RandomCount": 0,
+        "AttackCount": 1,
+        "ContinuousAttackCount": 1,
+        "Damage": {
+          "DamageType": 0,
+          "AttackType": 0,
+          "AddAttrs": [],
+          "Value": "2D4",
+          "DB_Bonus": 0,
+          "WithSuckBlood": false,
+          "SuckBloodRatio": 0,
+          "UseCommonEffect": true,
+          "CommonEffectId": 4,
+          "EffectShow": {
+            "Duration": 0,
+            "EffectShows": []
+          },
+          "IsDirectDeath": false,
+          "IsNotBlock": false
+        },
+        "NeedReloadEffect": false,
+        "ReloadEffect": 3,
+        "ShowConfirmEquipPopup": false,
+        "ConfirmEquipDesc": {
+          "TarKey": null,
+          "SheetKey": "",
+          "InputText": null,
+          "Characteristic": null
+        },
+        "InfoDatas": [],
+        "EnableOverrideDesc": true,
+        "OverrideDesc": {
+          "TarKey": "",
+          "SheetKey": "",
+          "InputText": "基础伤害 2D4。",
+          "Characteristic": null
+        },
+        "Arrts": [],
+        "Skills": [],
+        "Def": {
+          "FxPath": "Effect/",
+          "PointType": 0,
+          "AudioClip": {
+            "AudioRes": null,
+            "AudioReference": {
+              "ReferenceType": 0,
+              "Key": null
+            },
+            "Volume": 1,
+            "FadeTime": 1
+          },
+          "ArmorValue": 0
+        }
+      },
+      "ThrowConfigData": null,
+      "GetItemOpts": [],
+      "EndingOpts": [],
+      "EditorSheetKey": null
+    }
+  }
+}

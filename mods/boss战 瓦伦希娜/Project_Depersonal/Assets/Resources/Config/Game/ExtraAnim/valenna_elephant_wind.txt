@@ -1,0 +1,400 @@
+{
+  "Data": {
+    "__type": "BaseSheetData,Assembly-CSharp",
+    "value": {
+      "__type": "CustomSpriteConfigData,Assembly-CSharp",
+      "EffectName": "valenna_elephant_wind",
+      "AnimationList": [
+        {
+          "AnimName": "idle",
+          "IsLoop": false,
+          "ExtraAnims": [
+            {
+              "AnimSprite": {
+                "ReferenceType": 1023,
+                "Key": "valenna_elephant_wind_00"
+              },
+              "IsInternal": false,
+              "ResLoadPath": null,
+              "UseAtals": false,
+              "SpriteName": null,
+              "ShowCount": 1
+            },
+            {
+              "AnimSprite": {
+                "ReferenceType": 1023,
+                "Key": "valenna_elephant_wind_01"
+              },
+              "IsInternal": false,
+              "ResLoadPath": null,
+              "UseAtals": false,
+              "SpriteName": null,
+              "ShowCount": 1
+            },
+            {
+              "AnimSprite": {
+                "ReferenceType": 1023,
+                "Key": "valenna_elephant_wind_02"
+              },
+              "IsInternal": false,
+              "ResLoadPath": null,
+              "UseAtals": false,
+              "SpriteName": null,
+              "ShowCount": 1
+            },
+            {
+              "AnimSprite": {
+                "ReferenceType": 1023,
+                "Key": "valenna_elephant_wind_03"
+              },
+              "IsInternal": false,
+              "ResLoadPath": null,
+              "UseAtals": false,
+              "SpriteName": null,
+              "ShowCount": 1
+            },
+            {
+              "AnimSprite": {
+                "ReferenceType": 1023,
+                "Key": "valenna_elephant_wind_04"
+              },
+              "IsInternal": false,
+              "ResLoadPath": null,
+              "UseAtals": false,
+              "SpriteName": null,
+              "ShowCount": 1
+            },
+            {
+              "AnimSprite": {
+                "ReferenceType": 1023,
+                "Key": "valenna_elephant_wind_05"
+              },
+              "IsInternal": false,
+              "ResLoadPath": null,
+              "UseAtals": false,
+              "SpriteName": null,
+              "ShowCount": 1
+            },
+            {
+              "AnimSprite": {
+                "ReferenceType": 1023,
+                "Key": "valenna_elephant_wind_06"
+              },
+              "IsInternal": false,
+              "ResLoadPath": null,
+              "UseAtals": false,
+              "SpriteName": null,
+              "ShowCount": 1
+            },
+            {
+              "AnimSprite": {
+                "ReferenceType": 1023,
+                "Key": "valenna_elephant_wind_07"
+              },
+              "IsInternal": false,
+              "ResLoadPath": null,
+              "UseAtals": false,
+              "SpriteName": null,
+              "ShowCount": 1
+            },
+            {
+              "AnimSprite": {
+                "ReferenceType": 1023,
+                "Key": "valenna_elephant_wind_08"
+              },
+              "IsInternal": false,
+              "ResLoadPath": null,
+              "UseAtals": false,
+              "SpriteName": null,
+              "ShowCount": 1
+            },
+            {
+              "AnimSprite": {
+                "ReferenceType": 1023,
+                "Key": "valenna_elephant_wind_09"
+              },
+              "IsInternal": false,
+              "ResLoadPath": null,
+              "UseAtals": false,
+              "SpriteName": null,
+              "ShowCount": 1
+            },
+            {
+              "AnimSprite": {
+                "ReferenceType": 1023,
+                "Key": "valenna_elephant_wind_10"
+              },
+              "IsInternal": false,
+              "ResLoadPath": null,
+              "UseAtals": false,
+              "SpriteName": null,
+              "ShowCount": 1
+            },
+            {
+              "AnimSprite": {
+                "ReferenceType": 1023,
+                "Key": "valenna_elephant_wind_11"
+              },
+              "IsInternal": false,
+              "ResLoadPath": null,
+              "UseAtals": false,
+              "SpriteName": null,
+              "ShowCount": 1
+            },
+            {
+              "AnimSprite": {
+                "ReferenceType": 1023,
+                "Key": "valenna_elephant_wind_12"
+              },
+              "IsInternal": false,
+              "ResLoadPath": null,
+              "UseAtals": false,
+              "SpriteName": null,
+              "ShowCount": 1
+            },
+            {
+              "AnimSprite": {
+                "ReferenceType": 1023,
+                "Key": "valenna_elephant_wind_13"
+              },
+              "IsInternal": false,
+              "ResLoadPath": null,
+              "UseAtals": false,
+              "SpriteName": null,
+              "ShowCount": 1
+            },
+            {
+              "AnimSprite": {
+                "ReferenceType": 1023,
+                "Key": "valenna_elephant_wind_14"
+              },
+              "IsInternal": false,
+              "ResLoadPath": null,
+              "UseAtals": false,
+              "SpriteName": null,
+              "ShowCount": 1
+            },
+            {
+              "AnimSprite": {
+                "ReferenceType": 1023,
+                "Key": "valenna_elephant_wind_15"
+              },
+              "IsInternal": false,
+              "ResLoadPath": null,
+              "UseAtals": false,
+              "SpriteName": null,
+              "ShowCount": 1
+            },
+            {
+              "AnimSprite": {
+                "ReferenceType": 1023,
+                "Key": "valenna_elephant_wind_16"
+              },
+              "IsInternal": false,
+              "ResLoadPath": null,
+              "UseAtals": false,
+              "SpriteName": null,
+              "ShowCount": 1
+            },
+            {
+              "AnimSprite": {
+                "ReferenceType": 1023,
+                "Key": "valenna_elephant_wind_17"
+              },
+              "IsInternal": false,
+              "ResLoadPath": null,
+              "UseAtals": false,
+              "SpriteName": null,
+              "ShowCount": 1
+            },
+            {
+              "AnimSprite": {
+                "ReferenceType": 1023,
+                "Key": "valenna_elephant_wind_18"
+              },
+              "IsInternal": false,
+              "ResLoadPath": null,
+              "UseAtals": false,
+              "SpriteName": null,
+              "ShowCount": 1
+            },
+            {
+              "AnimSprite": {
+                "ReferenceType": 1023,
+                "Key": "valenna_elephant_wind_19"
+              },
+              "IsInternal": false,
+              "ResLoadPath": null,
+              "UseAtals": false,
+              "SpriteName": null,
+              "ShowCount": 1
+            },
+            {
+              "AnimSprite": {
+                "ReferenceType": 1023,
+                "Key": "valenna_elephant_wind_20"
+              },
+              "IsInternal": false,
+              "ResLoadPath": null,
+              "UseAtals": false,
+              "SpriteName": null,
+              "ShowCount": 1
+            },
+            {
+              "AnimSprite": {
+                "ReferenceType": 1023,
+                "Key": "valenna_elephant_wind_21"
+              },
+              "IsInternal": false,
+              "ResLoadPath": null,
+              "UseAtals": false,
+              "SpriteName": null,
+              "ShowCount": 1
+            },
+            {
+              "AnimSprite": {
+                "ReferenceType": 1023,
+                "Key": "valenna_elephant_wind_22"
+              },
+              "IsInternal": false,
+              "ResLoadPath": null,
+              "UseAtals": false,
+              "SpriteName": null,
+              "ShowCount": 1
+            },
+            {
+              "AnimSprite": {
+                "ReferenceType": 1023,
+                "Key": "valenna_elephant_wind_23"
+              },
+              "IsInternal": false,
+              "ResLoadPath": null,
+              "UseAtals": false,
+              "SpriteName": null,
+              "ShowCount": 1
+            },
+            {
+              "AnimSprite": {
+                "ReferenceType": 1023,
+                "Key": "valenna_elephant_wind_24"
+              },
+              "IsInternal": false,
+              "ResLoadPath": null,
+              "UseAtals": false,
+              "SpriteName": null,
+              "ShowCount": 1
+            },
+            {
+              "AnimSprite": {
+                "ReferenceType": 1023,
+                "Key": "valenna_elephant_wind_25"
+              },
+              "IsInternal": false,
+              "ResLoadPath": null,
+              "UseAtals": false,
+              "SpriteName": null,
+              "ShowCount": 1
+            },
+            {
+              "AnimSprite": {
+                "ReferenceType": 1023,
+                "Key": "valenna_elephant_wind_26"
+              },
+              "IsInternal": false,
+              "ResLoadPath": null,
+              "UseAtals": false,
+              "SpriteName": null,
+              "ShowCount": 1
+            },
+            {
+              "AnimSprite": {
+                "ReferenceType": 1023,
+                "Key": "valenna_elephant_wind_27"
+              },
+              "IsInternal": false,
+              "ResLoadPath": null,
+              "UseAtals": false,
+              "SpriteName": null,
+              "ShowCount": 1
+            },
+            {
+              "AnimSprite": {
+                "ReferenceType": 1023,
+                "Key": "valenna_elephant_wind_28"
+              },
+              "IsInternal": false,
+              "ResLoadPath": null,
+              "UseAtals": false,
+              "SpriteName": null,
+              "ShowCount": 1
+            },
+            {
+              "AnimSprite": {
+                "ReferenceType": 1023,
+                "Key": "valenna_elephant_wind_29"
+              },
+              "IsInternal": false,
+              "ResLoadPath": null,
+              "UseAtals": false,
+              "SpriteName": null,
+              "ShowCount": 1
+            },
+            {
+              "AnimSprite": {
+                "ReferenceType": 1023,
+                "Key": "valenna_elephant_wind_30"
+              },
+              "IsInternal": false,
+              "ResLoadPath": null,
+              "UseAtals": false,
+              "SpriteName": null,
+              "ShowCount": 1
+            },
+            {
+              "AnimSprite": {
+                "ReferenceType": 1023,
+                "Key": "valenna_elephant_wind_31"
+              },
+              "IsInternal": false,
+              "ResLoadPath": null,
+              "UseAtals": false,
+              "SpriteName": null,
+              "ShowCount": 1
+            },
+            {
+              "AnimSprite": {
+                "ReferenceType": 1023,
+                "Key": "valenna_elephant_wind_32"
+              },
+              "IsInternal": false,
+              "ResLoadPath": null,
+              "UseAtals": false,
+              "SpriteName": null,
+              "ShowCount": 1
+            },
+            {
+              "AnimSprite": {
+                "ReferenceType": 1023,
+                "Key": "valenna_elephant_wind_33"
+              },
+              "IsInternal": false,
+              "ResLoadPath": null,
+              "UseAtals": false,
+              "SpriteName": null,
+              "ShowCount": 1
+            }
+          ]
+        }
+      ],
+      "AnimSpeed": 0.033333335,
+      "AnimSize": {
+        "y": 4.35,
+        "x": 4.35
+      },
+      "SortName": "Chara",
+      "SortOrder": 50,
+      "DefaultPlayAnim": "idle",
+      "UseLightEffect": false
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "Uploader": {
+    "__type": "UGCUploaderData,Assembly-CSharp",
+    "value": {
+      "FileId": 0,
+      "Title": "boss战 瓦伦希娜",
+      "Description": "瓦伦娜的伙伴和攻击演出原型。",
+      "PreviewPath": "",
+      "ContentPath": "",
+      "Visibility": 0,
+      "Tags": ["Chinese"],
+      "KeyValueTags": {},
+      "ChangeNote": "伙伴攻击演出"
+    }
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "Data": {
+    "__type": "BaseSheetData,Assembly-CSharp",
+    "value": {
+      "__type": "MOD.TraitData,Assembly-CSharp",
+      "Id": 885143,
+      "Type": 3,
+      "CanRepeate": false,
+      "IsCanCreateGet": false,
+      "Localization_Name": {
+        "TarKey": "",
+        "SheetKey": "",
+        "InputText": "狩猎时刻",
+        "Characteristic": null
+      },
+      "Localization_Des": {
+        "TarKey": "",
+        "SheetKey": "",
+        "InputText": "开战时标记一名敌人。标记者受到自己的伤害 +20%，速度 -50，最多减至 10。处置只可选择标记目标，击杀后立即换标。每 3 个行动轮结束时若无标记，在下轮开始重新指定。击杀自己的标记时，人类敌人意志检定失败会陷入恐惧。",
+        "Characteristic": null
+      },
+      "BuffsLink": [
+        885139,
+        128
+      ],
+      "Terms": [],
+      "CreateEvent": null,
+      "WakeEvent": null
+    }
+  }
+}

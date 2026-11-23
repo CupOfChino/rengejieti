@@ -1,0 +1,269 @@
+{
+  "Data": {
+    "__type": "MOD.ItemData,Assembly-CSharp",
+    "value": {
+      "IconPath": "UI/Textures/Icon/Item/icon_item_huangjinfengmijiu",
+      "ItemId": 885115,
+      "UniqueKey": "valenna_vodka",
+      "ItemName": {
+        "TarKey": "",
+        "SheetKey": "",
+        "InputText": "高浓度伏特加",
+        "Characteristic": null
+      },
+      "ItemDes": {
+        "TarKey": "",
+        "SheetKey": "",
+        "InputText": "饮用后恢复 1D4 精神值，12 小时内检定获得 1 颗惩罚骰。",
+        "Characteristic": null
+      },
+      "ItemEffectDes": {
+        "TarKey": "",
+        "SheetKey": "",
+        "InputText": "饮用后恢复 1D4 精神值，12 小时内检定获得 1 颗惩罚骰。",
+        "Characteristic": null
+      },
+      "IconPathReference": {
+        "ReferenceType": 1004,
+        "Key": "icon_item_huangjinfengmijiu"
+      },
+      "Price": 0,
+      "ChargingCount": 1,
+      "ReplaceChargingConfig": [],
+      "AutoDestruct": true,
+      "Disassemble": {
+        "Items": {
+          "Type": 0,
+          "Ids": []
+        },
+        "PartsCount": 0
+      },
+      "IsCantDisboard": false,
+      "DesignTag": 1,
+      "TagList": [],
+      "ItemAttrValue": [
+        3,
+        6
+      ],
+      "MythicalId": 18,
+      "ItemType": 1,
+      "ItemStaticAffixList": [],
+      "ItemDynamicAffixList": [],
+      "IsBindCharacter": false,
+      "BuffsLink": [
+        885150
+      ],
+      "Terms": [],
+      "ConfigData": [
+        {
+          "ExploreSkill": 0,
+          "UseTag": 1002,
+          "LimitType": 2,
+          "TargetSelect": 1,
+          "CanSelectDeathRole": false,
+          "TargetFilter": {
+            "RoleFilter": [],
+            "EnableMaxMinFilter": false,
+            "Attribute": 0,
+            "Skill": 0,
+            "ExtraAttr": 0,
+            "MaxMinType": 0,
+            "EnableDistanceFilter": false,
+            "DistanceFilterType": 0,
+            "EnableBuffLayerFilter": false,
+            "BuffId": 0,
+            "BuffLayerMaxMinType": 0
+          },
+          "FxPath": null,
+          "PointType": 0,
+          "AudioClip": {
+            "AudioRes": null,
+            "AudioReference": {
+              "ReferenceType": 0,
+              "Key": null
+            },
+            "Volume": 1,
+            "FadeTime": 1
+          },
+          "UsageCheck": [
+            {
+              "__type": "ItemEvent.ItemCharingCheck,Assembly-CSharp",
+              "CharingCount": 0,
+              "CompareType": 3
+            }
+          ],
+          "ConfigResultFuncs": null,
+          "ResultFuncs": {
+            2: [
+              {
+                "__type": "MOD.Item_ChargingOption,Assembly-CSharp",
+                "IsSelf": true,
+                "ItemId": 0,
+                "CalculateType": 3,
+                "Value": 1,
+                "EnableReplaceConfig": false,
+                "SourceKey": null
+              },
+              {
+                "__type": "MOD.Item_RoleAttrOption,Assembly-CSharp",
+                "Datas": [
+                  {
+                    "IsTrackSource": false,
+                    "RoleAttr": {
+                      "Type": 0,
+                      "Value": null,
+                      "IsRatio": false,
+                      "Ratio": 0
+                    },
+                    "RoleExAttr": {
+                      "Type": 102,
+                      "Value": "1D4",
+                      "IsRatio": false,
+                      "Ratio": 0
+                    },
+                    "RoleSkill": {
+                      "Type": 0,
+                      "Value": null,
+                      "IsRatio": false,
+                      "Ratio": 0
+                    },
+                    "RoleSystemAttr": {
+                      "Type": 0,
+                      "Value": null,
+                      "IsRatio": false,
+                      "Ratio": 0
+                    },
+                    "ExDiceData": {
+                      "ExploreSkill": {
+                        "Type": 0,
+                        "ChangeAll": false,
+                        "IsTemp": false,
+                        "Value": 0
+                      },
+                      "HeroAttribute": {
+                        "Type": 0,
+                        "ChangeAll": false,
+                        "IsTemp": false,
+                        "Value": 0
+                      },
+                      "ExtraAttribute": {
+                        "Type": 0,
+                        "ChangeAll": false,
+                        "IsTemp": false,
+                        "Value": 0
+                      }
+                    }
+                  }
+                ],
+                "IsRemove": false,
+                "SourceKey": null
+              },
+              {
+                "__type": "MOD.Item_AddBuffOption,Assembly-CSharp",
+                "BuffList": [
+                  885150
+                ],
+                "AddToHero": false,
+                "AddToSource": false,
+                "AddToAttackTarget": false,
+                "SourceKey": null
+              }
+            ]
+          },
+          "EnableOverrideDesc": true,
+          "OverrideDesc": {
+            "TarKey": "",
+            "SheetKey": "",
+            "InputText": "饮用后恢复 1D4 精神值，12 小时内检定获得 1 颗惩罚骰。",
+            "Characteristic": null
+          },
+          "IgnoreInfoDesc": false
+        }
+      ],
+      "EquipmentConfigData": {
+        "ShowConfirmEquipPopup": false,
+        "ConfirmEquipDesc": {
+          "TarKey": null,
+          "SheetKey": "",
+          "InputText": null,
+          "Characteristic": null
+        },
+        "InfoDatas": [],
+        "EnableOverrideDesc": false,
+        "OverrideDesc": {
+          "TarKey": null,
+          "SheetKey": "",
+          "InputText": null,
+          "Characteristic": null
+        },
+        "Arrts": [],
+        "Skills": [],
+        "Def": {
+          "FxPath": null,
+          "PointType": 0,
+          "AudioClip": {
+            "AudioRes": null,
+            "AudioReference": {
+              "ReferenceType": 0,
+              "Key": null
+            },
+            "Volume": 1,
+            "FadeTime": 1
+          },
+          "ArmorValue": 0
+        }
+      },
+      "ThrowConfigData": {
+        "CanThrowOnNoCharge": false,
+        "PlayThrowAnim": false,
+        "ThrowAnimtorName": null,
+        "ThrowSpriteAnimName": null,
+        "DiceCheckType": 1,
+        "ResultCheckType": 1,
+        "ExploreSkill": 201,
+        "UseTag": 1002,
+        "LimitType": 1,
+        "TargetSelect": 0,
+        "CanSelectDeathRole": false,
+        "TargetFilter": {
+          "RoleFilter": [],
+          "EnableMaxMinFilter": false,
+          "Attribute": 0,
+          "Skill": 0,
+          "ExtraAttr": 0,
+          "MaxMinType": 0,
+          "EnableDistanceFilter": false,
+          "DistanceFilterType": 0,
+          "EnableBuffLayerFilter": false,
+          "BuffId": 0,
+          "BuffLayerMaxMinType": 0
+        },
+        "FxPath": null,
+        "PointType": 0,
+        "AudioClip": {
+          "AudioRes": null,
+          "AudioReference": {
+            "ReferenceType": 0,
+            "Key": null
+          },
+          "Volume": 1,
+          "FadeTime": 1
+        },
+        "UsageCheck": [],
+        "ConfigResultFuncs": null,
+        "ResultFuncs": {},
+        "EnableOverrideDesc": false,
+        "OverrideDesc": {
+          "TarKey": null,
+          "SheetKey": "",
+          "InputText": null,
+          "Characteristic": null
+        },
+        "IgnoreInfoDesc": false
+      },
+      "GetItemOpts": [],
+      "EndingOpts": [],
+      "EditorSheetKey": null
+    }
+  }
+}

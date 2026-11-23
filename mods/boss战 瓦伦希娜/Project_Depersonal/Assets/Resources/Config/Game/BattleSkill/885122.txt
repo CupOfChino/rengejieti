@@ -1,0 +1,126 @@
+{
+  "Data": {
+    "__type": "BaseSheetData,Assembly-CSharp",
+    "value": {
+      "__type": "MOD.BattleSkillTableData,Assembly-CSharp",
+      "Id": 885122,
+      "IsCover": false,
+      "Name": {
+        "TarKey": "",
+        "SheetKey": "",
+        "InputText": "回焰",
+        "Characteristic": null
+      },
+      "IsOverrideName": false,
+      "OverrideNames": [],
+      "Description": {
+        "TarKey": "",
+        "SheetKey": "",
+        "InputText": "近身挑斩后顺势回斩。 命中 2 次，每次基础伤害 1。",
+        "Characteristic": null
+      },
+      "EffectDesc": {
+        "TarKey": "",
+        "SheetKey": "",
+        "InputText": "",
+        "Characteristic": null
+      },
+      "Comment": null,
+      "IsMonster": false,
+      "ShowPriority": 2,
+      "SkillType": 1,
+      "ActionType": 1,
+      "TriggerWeaponType": 0,
+      "IsMachiningSkill": true,
+      "IsUseItem": false,
+      "CannotBeCancelled": false,
+      "HideInSkillSelectList": true,
+      "CanShowInUnselectSkillList": true,
+      "BuffsLink": [
+        885133,
+        885134,
+        885135,
+        885136
+      ],
+      "Terms": [],
+      "UseCustomIcon": false,
+      "BattleSkillIcon": "",
+      "BattleSkillIconReference": {
+        "ReferenceType": 0,
+        "Key": null
+      },
+      "MonsterSkillIcon": null,
+      "MonsterSkillIconReference": {
+        "ReferenceType": 0,
+        "Key": null
+      },
+      "UseCustomSkillElementIcon": false,
+      "CustomSkillElementIconPath": "UI/Textures/Atlas/BattlePanel/NewBattlePanel/BattlePanel_actionLimit/battlePanel_actionUnlimit_knife",
+      "CustomSkillElementIconReference": {
+        "ReferenceType": 1006,
+        "Key": "battlePanel_actionUnlimit_knife"
+      },
+      "ShowCheck": [],
+      "AnyCheckReach": false,
+      "UseItemTargetType": false,
+      "TargetSelectDatas": [
+        {
+          "Checks": [],
+          "TargetType": 2,
+          "TargetId": 0,
+          "UseWeaponTargetType": false,
+          "RandomSelectTarget": false,
+          "CanChooseDeathRole": false
+        }
+      ],
+      "UseWeaponSelectCount": false,
+      "MaxSelectCount": 1,
+      "NeedDice": false,
+      "UseWeaponDiceConfig": false,
+      "DiceType": 1,
+      "DiceCheckType": 1,
+      "ResultCheckType": 1,
+      "UseWeaponAttackEffectType": false,
+      "UseCustomAttackEffectType": false,
+      "UseThrowItemEffectType": false,
+      "AttackEffectType": 0,
+      "IgnoreSelfDice": false,
+      "IgnoreTargetDice": false,
+      "DiceConfig": null,
+      "SkillValue": 0,
+      "NeedDamage": false,
+      "DirectDamage": false,
+      "UseWeaponDamage": false,
+      "CustomDamage": {
+        "DamageType": 0,
+        "AttackType": 0,
+        "AddAttrs": [],
+        "Value": "1",
+        "DB_Bonus": 0,
+        "UseCommonEffect": false,
+        "EffectShow": {
+          "Duration": 0,
+          "EffectShows": []
+        }
+      },
+      "DamageValueType": 1,
+      "IsCritical": false,
+      "DamageRatio": 1,
+      "DisableOffhandWeapon": true,
+      "EffectList": [
+        {
+          "Trigger": 5,
+          "EffectChecks": [],
+          "EffectOption": [],
+          "AnyCheckReach": false
+        }
+      ],
+      "BindingCharacter": false,
+      "BindingHero": false,
+      "BindingCharacterId": 0,
+      "BindingCharacters": false,
+      "BindingDataList": [],
+      "EditorSheetKey": null
+    }
+  }
+}

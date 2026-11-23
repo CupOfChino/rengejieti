@@ -1,0 +1,158 @@
+{
+  "Data": {
+    "__type": "BaseSheetData,Assembly-CSharp",
+    "value": {
+      "__type": "CustomSpriteConfigData,Assembly-CSharp",
+      "EffectName": "valenna_aim_charge",
+      "AnimationList": [
+        {
+          "AnimName": "idle",
+          "IsLoop": false,
+          "ExtraAnims": [
+            {
+              "AnimSprite": {
+                "ReferenceType": 1023,
+                "Key": "valenna_aim_frame_00"
+              },
+              "IsInternal": false,
+              "ResLoadPath": null,
+              "UseAtals": false,
+              "SpriteName": null,
+              "ShowCount": 1
+            },
+            {
+              "AnimSprite": {
+                "ReferenceType": 1023,
+                "Key": "valenna_aim_frame_01"
+              },
+              "IsInternal": false,
+              "ResLoadPath": null,
+              "UseAtals": false,
+              "SpriteName": null,
+              "ShowCount": 1
+            },
+            {
+              "AnimSprite": {
+                "ReferenceType": 1023,
+                "Key": "valenna_aim_frame_02"
+              },
+              "IsInternal": false,
+              "ResLoadPath": null,
+              "UseAtals": false,
+              "SpriteName": null,
+              "ShowCount": 1
+            },
+            {
+              "AnimSprite": {
+                "ReferenceType": 1023,
+                "Key": "valenna_aim_frame_03"
+              },
+              "IsInternal": false,
+              "ResLoadPath": null,
+              "UseAtals": false,
+              "SpriteName": null,
+              "ShowCount": 1
+            },
+            {
+              "AnimSprite": {
+                "ReferenceType": 1023,
+                "Key": "valenna_aim_frame_04"
+              },
+              "IsInternal": false,
+              "ResLoadPath": null,
+              "UseAtals": false,
+              "SpriteName": null,
+              "ShowCount": 1
+            },
+            {
+              "AnimSprite": {
+                "ReferenceType": 1023,
+                "Key": "valenna_aim_frame_05"
+              },
+              "IsInternal": false,
+              "ResLoadPath": null,
+              "UseAtals": false,
+              "SpriteName": null,
+              "ShowCount": 1
+            },
+            {
+              "AnimSprite": {
+                "ReferenceType": 1023,
+                "Key": "valenna_aim_frame_06"
+              },
+              "IsInternal": false,
+              "ResLoadPath": null,
+              "UseAtals": false,
+              "SpriteName": null,
+              "ShowCount": 1
+            },
+            {
+              "AnimSprite": {
+                "ReferenceType": 1023,
+                "Key": "valenna_aim_frame_07"
+              },
+              "IsInternal": false,
+              "ResLoadPath": null,
+              "UseAtals": false,
+              "SpriteName": null,
+              "ShowCount": 1
+            },
+            {
+              "AnimSprite": {
+                "ReferenceType": 1023,
+                "Key": "valenna_aim_frame_08"
+              },
+              "IsInternal": false,
+              "ResLoadPath": null,
+              "UseAtals": false,
+              "SpriteName": null,
+              "ShowCount": 1
+            },
+            {
+              "AnimSprite": {
+                "ReferenceType": 1023,
+                "Key": "valenna_aim_frame_09"
+              },
+              "IsInternal": false,
+              "ResLoadPath": null,
+              "UseAtals": false,
+              "SpriteName": null,
+              "ShowCount": 1
+            },
+            {
+              "AnimSprite": {
+                "ReferenceType": 1023,
+                "Key": "valenna_aim_frame_10"
+              },
+              "IsInternal": false,
+              "ResLoadPath": null,
+              "UseAtals": false,
+              "SpriteName": null,
+              "ShowCount": 1
+            },
+            {
+              "AnimSprite": {
+                "ReferenceType": 1023,
+                "Key": "valenna_aim_frame_11"
+              },
+              "IsInternal": false,
+              "ResLoadPath": null,
+              "UseAtals": false,
+              "SpriteName": null,
+              "ShowCount": 1
+            }
+          ]
+        }
+      ],
+      "AnimSpeed": 0.033333335,
+      "AnimSize": {
+        "y": 0.49,
+        "x": 0.75
+      },
+      "SortName": "Chara",
+      "SortOrder": 50,
+      "DefaultPlayAnim": "idle",
+      "UseLightEffect": false
+    }
+  }
+}

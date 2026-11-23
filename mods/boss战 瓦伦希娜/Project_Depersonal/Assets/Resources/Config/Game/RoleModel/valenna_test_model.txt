@@ -1,0 +1,3118 @@
+{
+  "Data": {
+    "__type": "RoleModelData,Assembly-CSharp",
+    "value": {
+      "ModelName": "valenna_test_model",
+      "MoveStates": [
+        {
+          "MoveType": 1,
+          "Anim": null,
+          "MoveSound": {
+            "IntervalTime": 0.6,
+            "AudioData": {
+              "AudioRes": "Sound/Audio/FX/Footsteps/FOOTSTEP_Trainers_Wood_Boards_Walk_RR1_mono",
+              "AudioReference": {
+                "ReferenceType": 2,
+                "Key": "FOOTSTEP_Trainers_Wood_Boards_Walk_RR1_mono"
+              },
+              "Volume": 1,
+              "FadeTime": 0
+            }
+          }
+        },
+        {
+          "MoveType": 2,
+          "Anim": null,
+          "MoveSound": {
+            "IntervalTime": 0.4,
+            "AudioData": {
+              "AudioRes": "Sound/Audio/FX/Footsteps/FOOTSTEP_Trainers_Wood_Boards_Walk_RR6_mono",
+              "AudioReference": {
+                "ReferenceType": 2,
+                "Key": "FOOTSTEP_Trainers_Wood_Boards_Walk_RR6_mono"
+              },
+              "Volume": 1,
+              "FadeTime": 0
+            }
+          }
+        }
+      ],
+      "Speaker": "瓦伦娜",
+      "HeadIcons": [
+        {
+          "MatchParames": [],
+          "Type": 0,
+          "Offset": {
+            "y": 0,
+            "x": 0
+          },
+          "Icon": null,
+          "IconResference": {
+            "ReferenceType": 1001,
+            "Key": "valenna_portrait"
+          }
+        }
+      ],
+      "PointPosDatas": [
+        {
+          "AnimKeys": [
+            "idle",
+            "battle_idle",
+            "walk",
+            "move",
+            "attack",
+            "guard",
+            "gethit",
+            "hurt",
+            "dodge",
+            "valenna_prescience_dodge",
+            "death",
+            "valenna_draw",
+            "valenna_draw_885121",
+            "valenna_draw_885124",
+            "valenna_draw_885127",
+            "valenna_draw_885125",
+            "valenna_draw_885126",
+            "valenna_draw_885128",
+            "valenna_finish_draw",
+            "valenna_dash",
+            "valenna_cut_approach",
+            "valenna_rise",
+            "valenna_cut_rise",
+            "valenna_crosscut",
+            "valenna_cut_crosscut",
+            "valenna_rabbit_open",
+            "valenna_rabbit_sweep",
+            "valenna_deer_open",
+            "valenna_deer_first_sweep",
+            "valenna_deer_raise",
+            "valenna_deer_spin",
+            "valenna_deer_sweep",
+            "valenna_elephant_prepare",
+            "valenna_elephant_thrust",
+            "valenna_elephant_volley",
+            "valenna_elephant_first_sweep",
+            "valenna_elephant_spin",
+            "valenna_elephant_sweep",
+            "valenna_orbit",
+            "valenna_thrust",
+            "valenna_point_recoil",
+            "valenna_thrust_brace",
+            "valenna_rabbit_brace",
+            "valenna_point_pass",
+            "valenna_rabbit_pass",
+            "valenna_bullet_thrust",
+            "valenna_bullet_double",
+            "valenna_bullet_recoil",
+            "valenna_bullet_shot",
+            "valenna_bullet_pass",
+            "valenna_guard",
+            "valenna_muzzle",
+            "valenna_volley",
+            "valenna_recover",
+            "valenna_thrust_recover",
+            "valenna_dive_recover",
+            "valenna_elephant_hold",
+            "valenna_deer_recover",
+            "valenna_finish_recover",
+            "valenna_cut_recover",
+            "valenna_finish_turn",
+            "valenna_finish_turn_slash",
+            "valenna_finish_sweep",
+            "valenna_finish_raise",
+            "valenna_finish_spin",
+            "valenna_finish_low",
+            "valenna_finish_thrust",
+            "valenna_finish_brace",
+            "valenna_finish_insert",
+            "valenna_finish_pin",
+            "valenna_finish_volley"
+          ],
+          "HeadPos": {
+            "x": 0,
+            "y": 0.74,
+            "z": 0
+          },
+          "CenterPos": {
+            "x": 0,
+            "y": 0.43,
+            "z": 0
+          },
+          "BasePos": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "Col_Center": {
+            "x": 0,
+            "y": 0.4,
+            "z": 0
+          },
+          "Col_Size": {
+            "x": 0.34,
+            "y": 0.8,
+            "z": 0
+          },
+          "Shadow_Pos": {
+            "x": 0,
+            "y": 0.01,
+            "z": 0
+          },
+          "Shadow_Size": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          },
+          "ExtendPointActive": false
+        },
+        {
+          "AnimKeys": [
+            "death"
+          ],
+          "HeadPos": {
+            "x": 0.411,
+            "y": 0.208,
+            "z": 0
+          },
+          "CenterPos": {
+            "x": 0,
+            "y": 0.081,
+            "z": 0
+          },
+          "BasePos": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "Col_Center": {
+            "x": 0,
+            "y": 0.4,
+            "z": 0
+          },
+          "Col_Size": {
+            "x": 0.34,
+            "y": 0.8,
+            "z": 0
+          },
+          "Shadow_Pos": {
+            "x": 0.0308,
+            "y": 0.0616,
+            "z": 0
+          },
+          "Shadow_Size": {
+            "x": 2.046731,
+            "y": 0.9585925,
+            "z": 1
+          },
+          "ExtendPointActive": false
+        }
+      ],
+      "AnimationList": [
+        {
+          "Key": "idle",
+          "IsLoop": true,
+          "IsUseOldMode": false,
+          "IntervalTime": 0.125,
+          "Sprites": null,
+          "SpriteDatas": [
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_idle"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_idle_breath_01"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_idle_breath_02"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_idle_breath_03"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_idle_breath_04"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_idle_breath_05"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_idle_breath_06"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_idle_breath_07"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_idle_breath_08"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_idle_breath_09"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_idle_breath_10"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_idle_breath_11"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_idle_breath_12"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_idle_breath_13"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_idle_breath_14"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_idle_breath_15"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_idle_breath_16"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_idle_breath_17"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_idle_breath_18"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_idle_breath_19"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_idle_breath_20"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_idle_breath_21"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_idle_breath_22"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_idle_breath_23"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            }
+          ]
+        },
+        {
+          "Key": "battle_idle",
+          "IsLoop": true,
+          "IsUseOldMode": false,
+          "IntervalTime": 0.125,
+          "Sprites": null,
+          "SpriteDatas": [
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_idle"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_idle_breath_01"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_idle_breath_02"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_idle_breath_03"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_idle_breath_04"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_idle_breath_05"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_idle_breath_06"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_idle_breath_07"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_idle_breath_08"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_idle_breath_09"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_idle_breath_10"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_idle_breath_11"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_idle_breath_12"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_idle_breath_13"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_idle_breath_14"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_idle_breath_15"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_idle_breath_16"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_idle_breath_17"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_idle_breath_18"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_idle_breath_19"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_idle_breath_20"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_idle_breath_21"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_idle_breath_22"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_idle_breath_23"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            }
+          ]
+        },
+        {
+          "Key": "walk",
+          "IsLoop": true,
+          "IsUseOldMode": false,
+          "IntervalTime": 0.12,
+          "Sprites": null,
+          "SpriteDatas": [
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_dash1"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_dash2"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            }
+          ]
+        },
+        {
+          "Key": "move",
+          "IsLoop": true,
+          "IsUseOldMode": false,
+          "IntervalTime": 0.09,
+          "Sprites": null,
+          "SpriteDatas": [
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_dash1"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_dash2"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            }
+          ]
+        },
+        {
+          "Key": "attack",
+          "IsLoop": false,
+          "IsUseOldMode": false,
+          "IntervalTime": 0.08,
+          "Sprites": null,
+          "SpriteDatas": [
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_draw"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_rise"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_guard"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            }
+          ]
+        },
+        {
+          "Key": "guard",
+          "IsLoop": false,
+          "IsUseOldMode": false,
+          "IntervalTime": 0.24,
+          "Sprites": null,
+          "SpriteDatas": [
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_guard"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            }
+          ]
+        },
+        {
+          "Key": "gethit",
+          "IsLoop": false,
+          "IsUseOldMode": false,
+          "IntervalTime": 0.11,
+          "Sprites": null,
+          "SpriteDatas": [
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_hurt"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_guard"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            }
+          ]
+        },
+        {
+          "Key": "hurt",
+          "IsLoop": false,
+          "IsUseOldMode": false,
+          "IntervalTime": 0.11,
+          "Sprites": null,
+          "SpriteDatas": [
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_hurt"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_guard"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            }
+          ]
+        },
+        {
+          "Key": "dodge",
+          "IsLoop": false,
+          "IsUseOldMode": false,
+          "IntervalTime": 0.12,
+          "Sprites": null,
+          "SpriteDatas": [
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_dodge"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_idle"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            }
+          ]
+        },
+        {
+          "Key": "valenna_prescience_dodge",
+          "IsLoop": true,
+          "IsUseOldMode": false,
+          "IntervalTime": 0.12,
+          "Sprites": null,
+          "SpriteDatas": [
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_dodge"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            }
+          ]
+        },
+        {
+          "Key": "death",
+          "IsLoop": false,
+          "IsUseOldMode": false,
+          "IntervalTime": 0.16,
+          "Sprites": null,
+          "SpriteDatas": [
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_fallen"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            }
+          ]
+        },
+        {
+          "Key": "valenna_draw",
+          "IsLoop": false,
+          "IsUseOldMode": false,
+          "IntervalTime": 0.09000000357627869,
+          "Sprites": null,
+          "SpriteDatas": [
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_idle"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_draw"
+              },
+              "ShowCount": 4,
+              "ActiveChild": false,
+              "ChildSprites": []
+            }
+          ]
+        },
+        {
+          "Key": "valenna_draw_885121",
+          "IsLoop": false,
+          "IsUseOldMode": false,
+          "IntervalTime": 0.043921567499637604,
+          "Sprites": null,
+          "SpriteDatas": [
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_idle"
+              },
+              "ShowCount": 5,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_draw"
+              },
+              "ShowCount": 10,
+              "ActiveChild": false,
+              "ChildSprites": []
+            }
+          ]
+        },
+        {
+          "Key": "valenna_draw_885124",
+          "IsLoop": false,
+          "IsUseOldMode": false,
+          "IntervalTime": 0.037922702729701996,
+          "Sprites": null,
+          "SpriteDatas": [
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_idle"
+              },
+              "ShowCount": 5,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_draw"
+              },
+              "ShowCount": 12,
+              "ActiveChild": false,
+              "ChildSprites": []
+            }
+          ]
+        },
+        {
+          "Key": "valenna_draw_885127",
+          "IsLoop": false,
+          "IsUseOldMode": false,
+          "IntervalTime": 0.028521502390503883,
+          "Sprites": null,
+          "SpriteDatas": [
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_idle"
+              },
+              "ShowCount": 4,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_draw"
+              },
+              "ShowCount": 13,
+              "ActiveChild": false,
+              "ChildSprites": []
+            }
+          ]
+        },
+        {
+          "Key": "valenna_draw_885125",
+          "IsLoop": false,
+          "IsUseOldMode": false,
+          "IntervalTime": 0.04273223876953125,
+          "Sprites": null,
+          "SpriteDatas": [
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_idle"
+              },
+              "ShowCount": 2,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_draw"
+              },
+              "ShowCount": 2,
+              "ActiveChild": false,
+              "ChildSprites": []
+            }
+          ]
+        },
+        {
+          "Key": "valenna_draw_885126",
+          "IsLoop": false,
+          "IsUseOldMode": false,
+          "IntervalTime": 0.02738095261156559,
+          "Sprites": null,
+          "SpriteDatas": [
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_idle"
+              },
+              "ShowCount": 4,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_draw"
+              },
+              "ShowCount": 10,
+              "ActiveChild": false,
+              "ChildSprites": []
+            }
+          ]
+        },
+        {
+          "Key": "valenna_draw_885128",
+          "IsLoop": false,
+          "IsUseOldMode": false,
+          "IntervalTime": 0.024010024964809418,
+          "Sprites": null,
+          "SpriteDatas": [
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_idle"
+              },
+              "ShowCount": 4,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_draw"
+              },
+              "ShowCount": 10,
+              "ActiveChild": false,
+              "ChildSprites": []
+            }
+          ]
+        },
+        {
+          "Key": "valenna_finish_draw",
+          "IsLoop": false,
+          "IsUseOldMode": false,
+          "IntervalTime": 0.027672255411744118,
+          "Sprites": null,
+          "SpriteDatas": [
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_idle"
+              },
+              "ShowCount": 4,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_draw"
+              },
+              "ShowCount": 5,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_finish_back1"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_finish_back2"
+              },
+              "ShowCount": 27,
+              "ActiveChild": false,
+              "ChildSprites": []
+            }
+          ]
+        },
+        {
+          "Key": "valenna_dash",
+          "IsLoop": true,
+          "IsUseOldMode": false,
+          "IntervalTime": 0.07,
+          "Sprites": null,
+          "SpriteDatas": [
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_dash1"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_dash2"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            }
+          ]
+        },
+        {
+          "Key": "valenna_cut_approach",
+          "IsLoop": false,
+          "IsUseOldMode": false,
+          "IntervalTime": 0.07999999821186066,
+          "Sprites": null,
+          "SpriteDatas": [
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_dash2"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            }
+          ]
+        },
+        {
+          "Key": "valenna_rise",
+          "IsLoop": false,
+          "IsUseOldMode": false,
+          "IntervalTime": 0.05,
+          "Sprites": null,
+          "SpriteDatas": [
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_dash2"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_rise"
+              },
+              "ShowCount": 2,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_rise_end"
+              },
+              "ShowCount": 9,
+              "ActiveChild": false,
+              "ChildSprites": []
+            }
+          ]
+        },
+        {
+          "Key": "valenna_cut_rise",
+          "IsLoop": false,
+          "IsUseOldMode": false,
+          "IntervalTime": 0.04,
+          "Sprites": null,
+          "SpriteDatas": [
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_dash2"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_rise"
+              },
+              "ShowCount": 12,
+              "ActiveChild": false,
+              "ChildSprites": []
+            }
+          ]
+        },
+        {
+          "Key": "valenna_crosscut",
+          "IsLoop": false,
+          "IsUseOldMode": false,
+          "IntervalTime": 0.05,
+          "Sprites": null,
+          "SpriteDatas": [
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_dash2"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_cross"
+              },
+              "ShowCount": 2,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_cross_out1"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_cross_out2"
+              },
+              "ShowCount": 10,
+              "ActiveChild": false,
+              "ChildSprites": []
+            }
+          ]
+        },
+        {
+          "Key": "valenna_cut_crosscut",
+          "IsLoop": false,
+          "IsUseOldMode": false,
+          "IntervalTime": 0.16,
+          "Sprites": null,
+          "SpriteDatas": [
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_dash2"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            }
+          ]
+        },
+        {
+          "Key": "valenna_rabbit_open",
+          "IsLoop": false,
+          "IsUseOldMode": false,
+          "IntervalTime": 0.02,
+          "Sprites": null,
+          "SpriteDatas": [
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_dash2"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_rise"
+              },
+              "ShowCount": 11,
+              "ActiveChild": false,
+              "ChildSprites": []
+            }
+          ]
+        },
+        {
+          "Key": "valenna_rabbit_sweep",
+          "IsLoop": false,
+          "IsUseOldMode": false,
+          "IntervalTime": 0.035,
+          "Sprites": null,
+          "SpriteDatas": [
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_finish_dash"
+              },
+              "ShowCount": 2,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_finish_spin"
+              },
+              "ShowCount": 10,
+              "ActiveChild": false,
+              "ChildSprites": []
+            }
+          ]
+        },
+        {
+          "Key": "valenna_deer_open",
+          "IsLoop": false,
+          "IsUseOldMode": false,
+          "IntervalTime": 0.018,
+          "Sprites": null,
+          "SpriteDatas": [
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_finish_turn"
+              },
+              "ShowCount": 2,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_finish_cut"
+              },
+              "ShowCount": 8,
+              "ActiveChild": false,
+              "ChildSprites": []
+            }
+          ]
+        },
+        {
+          "Key": "valenna_deer_first_sweep",
+          "IsLoop": false,
+          "IsUseOldMode": false,
+          "IntervalTime": 0.0182,
+          "Sprites": null,
+          "SpriteDatas": [
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_cross"
+              },
+              "ShowCount": 5,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_cross_out1"
+              },
+              "ShowCount": 6,
+              "ActiveChild": false,
+              "ChildSprites": []
+            }
+          ]
+        },
+        {
+          "Key": "valenna_deer_raise",
+          "IsLoop": false,
+          "IsUseOldMode": false,
+          "IntervalTime": 0.0185,
+          "Sprites": null,
+          "SpriteDatas": [
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_dash2"
+              },
+              "ShowCount": 3,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_rise"
+              },
+              "ShowCount": 10,
+              "ActiveChild": false,
+              "ChildSprites": []
+            }
+          ]
+        },
+        {
+          "Key": "valenna_deer_spin",
+          "IsLoop": false,
+          "IsUseOldMode": false,
+          "IntervalTime": 0.02,
+          "Sprites": null,
+          "SpriteDatas": [
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_finish_guard"
+              },
+              "ShowCount": 2,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_finish_dash"
+              },
+              "ShowCount": 2,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_finish_spin"
+              },
+              "ShowCount": 2,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_finish_low"
+              },
+              "ShowCount": 2,
+              "ActiveChild": false,
+              "ChildSprites": []
+            }
+          ]
+        },
+        {
+          "Key": "valenna_deer_sweep",
+          "IsLoop": false,
+          "IsUseOldMode": false,
+          "IntervalTime": 0.0185,
+          "Sprites": null,
+          "SpriteDatas": [
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_cross"
+              },
+              "ShowCount": 5,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_cross_out1"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_cross_out2"
+              },
+              "ShowCount": 39,
+              "ActiveChild": false,
+              "ChildSprites": []
+            }
+          ]
+        },
+        {
+          "Key": "valenna_elephant_prepare",
+          "IsLoop": false,
+          "IsUseOldMode": false,
+          "IntervalTime": 0.019,
+          "Sprites": null,
+          "SpriteDatas": [
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_thrust_out1"
+              },
+              "ShowCount": 2,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_thrust_out2"
+              },
+              "ShowCount": 9,
+              "ActiveChild": false,
+              "ChildSprites": []
+            }
+          ]
+        },
+        {
+          "Key": "valenna_elephant_thrust",
+          "IsLoop": false,
+          "IsUseOldMode": false,
+          "IntervalTime": 0.0186,
+          "Sprites": null,
+          "SpriteDatas": [
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_aim"
+              },
+              "ShowCount": 3,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_aim_double"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_aim"
+              },
+              "ShowCount": 10,
+              "ActiveChild": false,
+              "ChildSprites": []
+            }
+          ]
+        },
+        {
+          "Key": "valenna_elephant_volley",
+          "IsLoop": false,
+          "IsUseOldMode": false,
+          "IntervalTime": 0.0188,
+          "Sprites": null,
+          "SpriteDatas": [
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_aim"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_aim_double"
+              },
+              "ShowCount": 3,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_aim"
+              },
+              "ShowCount": 21,
+              "ActiveChild": false,
+              "ChildSprites": []
+            }
+          ]
+        },
+        {
+          "Key": "valenna_elephant_first_sweep",
+          "IsLoop": false,
+          "IsUseOldMode": false,
+          "IntervalTime": 0.0188,
+          "Sprites": null,
+          "SpriteDatas": [
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_finish_low"
+              },
+              "ShowCount": 3,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_finish_turn"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_finish_cut"
+              },
+              "ShowCount": 2,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_cross"
+              },
+              "ShowCount": 2,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_cross_out1"
+              },
+              "ShowCount": 2,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_cross_out2"
+              },
+              "ShowCount": 7,
+              "ActiveChild": false,
+              "ChildSprites": []
+            }
+          ]
+        },
+        {
+          "Key": "valenna_elephant_spin",
+          "IsLoop": false,
+          "IsUseOldMode": false,
+          "IntervalTime": 0.019,
+          "Sprites": null,
+          "SpriteDatas": [
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_rise"
+              },
+              "ShowCount": 4,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_cross"
+              },
+              "ShowCount": 3,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_finish_spin"
+              },
+              "ShowCount": 2,
+              "ActiveChild": false,
+              "ChildSprites": []
+            }
+          ]
+        },
+        {
+          "Key": "valenna_elephant_sweep",
+          "IsLoop": false,
+          "IsUseOldMode": false,
+          "IntervalTime": 0.0188,
+          "Sprites": null,
+          "SpriteDatas": [
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_finish_low"
+              },
+              "ShowCount": 4,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_finish_turn"
+              },
+              "ShowCount": 4,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_cross"
+              },
+              "ShowCount": 3,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_cross_out1"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_cross_out2"
+              },
+              "ShowCount": 45,
+              "ActiveChild": false,
+              "ChildSprites": []
+            }
+          ]
+        },
+        {
+          "Key": "valenna_orbit",
+          "IsLoop": false,
+          "IsUseOldMode": false,
+          "IntervalTime": 0.06,
+          "Sprites": null,
+          "SpriteDatas": [
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_finish_cut"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_finish_turn"
+              },
+              "ShowCount": 2,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_finish_guard"
+              },
+              "ShowCount": 8,
+              "ActiveChild": false,
+              "ChildSprites": []
+            }
+          ]
+        },
+        {
+          "Key": "valenna_thrust",
+          "IsLoop": false,
+          "IsUseOldMode": false,
+          "IntervalTime": 0.02,
+          "Sprites": null,
+          "SpriteDatas": [
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_aim"
+              },
+              "ShowCount": 4,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_aim_double"
+              },
+              "ShowCount": 4,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_aim"
+              },
+              "ShowCount": 4,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_aim_double"
+              },
+              "ShowCount": 4,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_aim"
+              },
+              "ShowCount": 11,
+              "ActiveChild": false,
+              "ChildSprites": []
+            }
+          ]
+        },
+        {
+          "Key": "valenna_point_recoil",
+          "IsLoop": false,
+          "IsUseOldMode": false,
+          "IntervalTime": 0.025,
+          "Sprites": null,
+          "SpriteDatas": [
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_aim"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_thrust_out2"
+              },
+              "ShowCount": 9,
+              "ActiveChild": false,
+              "ChildSprites": []
+            }
+          ]
+        },
+        {
+          "Key": "valenna_thrust_brace",
+          "IsLoop": false,
+          "IsUseOldMode": false,
+          "IntervalTime": 0.3333333432674408,
+          "Sprites": null,
+          "SpriteDatas": [
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_cross"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            }
+          ]
+        },
+        {
+          "Key": "valenna_rabbit_brace",
+          "IsLoop": false,
+          "IsUseOldMode": false,
+          "IntervalTime": 0.3333333432674408,
+          "Sprites": null,
+          "SpriteDatas": [
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_finish_spin"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            }
+          ]
+        },
+        {
+          "Key": "valenna_point_pass",
+          "IsLoop": false,
+          "IsUseOldMode": false,
+          "IntervalTime": 0.03,
+          "Sprites": null,
+          "SpriteDatas": [
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_cross"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_aim"
+              },
+              "ShowCount": 16,
+              "ActiveChild": false,
+              "ChildSprites": []
+            }
+          ]
+        },
+        {
+          "Key": "valenna_rabbit_pass",
+          "IsLoop": false,
+          "IsUseOldMode": false,
+          "IntervalTime": 0.04,
+          "Sprites": null,
+          "SpriteDatas": [
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_finish_spin"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_aim"
+              },
+              "ShowCount": 14,
+              "ActiveChild": false,
+              "ChildSprites": []
+            }
+          ]
+        },
+        {
+          "Key": "valenna_bullet_thrust",
+          "IsLoop": false,
+          "IsUseOldMode": false,
+          "IntervalTime": 0.0425,
+          "Sprites": null,
+          "SpriteDatas": [
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_aim"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_aim_double"
+              },
+              "ShowCount": 2,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_aim"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            }
+          ]
+        },
+        {
+          "Key": "valenna_bullet_double",
+          "IsLoop": false,
+          "IsUseOldMode": false,
+          "IntervalTime": 0.02,
+          "Sprites": null,
+          "SpriteDatas": [
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_aim"
+              },
+              "ShowCount": 4,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_aim_double"
+              },
+              "ShowCount": 5,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_aim"
+              },
+              "ShowCount": 4,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_aim_double"
+              },
+              "ShowCount": 4,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_aim"
+              },
+              "ShowCount": 4,
+              "ActiveChild": false,
+              "ChildSprites": []
+            }
+          ]
+        },
+        {
+          "Key": "valenna_bullet_recoil",
+          "IsLoop": false,
+          "IsUseOldMode": false,
+          "IntervalTime": 0.028,
+          "Sprites": null,
+          "SpriteDatas": [
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_aim"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_thrust_out2"
+              },
+              "ShowCount": 5,
+              "ActiveChild": false,
+              "ChildSprites": []
+            }
+          ]
+        },
+        {
+          "Key": "valenna_bullet_shot",
+          "IsLoop": false,
+          "IsUseOldMode": false,
+          "IntervalTime": 0.02,
+          "Sprites": null,
+          "SpriteDatas": [
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_aim"
+              },
+              "ShowCount": 5,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_aim_double"
+              },
+              "ShowCount": 4,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_aim"
+              },
+              "ShowCount": 12,
+              "ActiveChild": false,
+              "ChildSprites": []
+            }
+          ]
+        },
+        {
+          "Key": "valenna_bullet_pass",
+          "IsLoop": false,
+          "IsUseOldMode": false,
+          "IntervalTime": 0.025,
+          "Sprites": null,
+          "SpriteDatas": [
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_cross"
+              },
+              "ShowCount": 3,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_cross_out1"
+              },
+              "ShowCount": 3,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_cross_out2"
+              },
+              "ShowCount": 42,
+              "ActiveChild": false,
+              "ChildSprites": []
+            }
+          ]
+        },
+        {
+          "Key": "valenna_guard",
+          "IsLoop": false,
+          "IsUseOldMode": false,
+          "IntervalTime": 0.1,
+          "Sprites": null,
+          "SpriteDatas": [
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_guard"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_guard"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_draw"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            }
+          ]
+        },
+        {
+          "Key": "valenna_muzzle",
+          "IsLoop": false,
+          "IsUseOldMode": false,
+          "IntervalTime": 0.05,
+          "Sprites": null,
+          "SpriteDatas": [
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_thrust_ready"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_aim"
+              },
+              "ShowCount": 2,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_aim_double"
+              },
+              "ShowCount": 2,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_aim"
+              },
+              "ShowCount": 7,
+              "ActiveChild": false,
+              "ChildSprites": []
+            }
+          ]
+        },
+        {
+          "Key": "valenna_volley",
+          "IsLoop": false,
+          "IsUseOldMode": false,
+          "IntervalTime": 0.06,
+          "Sprites": null,
+          "SpriteDatas": [
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_aim"
+              },
+              "ShowCount": 2,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_aim_double"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_aim"
+              },
+              "ShowCount": 2,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_aim_double"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_thrust_out2"
+              },
+              "ShowCount": 5,
+              "ActiveChild": false,
+              "ChildSprites": []
+            }
+          ]
+        },
+        {
+          "Key": "valenna_recover",
+          "IsLoop": false,
+          "IsUseOldMode": false,
+          "IntervalTime": 0.12,
+          "Sprites": null,
+          "SpriteDatas": [
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_draw"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_idle"
+              },
+              "ShowCount": 3,
+              "ActiveChild": false,
+              "ChildSprites": []
+            }
+          ]
+        },
+        {
+          "Key": "valenna_thrust_recover",
+          "IsLoop": false,
+          "IsUseOldMode": false,
+          "IntervalTime": 0.11,
+          "Sprites": null,
+          "SpriteDatas": [
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_aim"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_draw"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_idle"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            }
+          ]
+        },
+        {
+          "Key": "valenna_dive_recover",
+          "IsLoop": false,
+          "IsUseOldMode": false,
+          "IntervalTime": 0.11,
+          "Sprites": null,
+          "SpriteDatas": [
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_cross_out2"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_draw"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_idle"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            }
+          ]
+        },
+        {
+          "Key": "valenna_elephant_hold",
+          "IsLoop": false,
+          "IsUseOldMode": false,
+          "IntervalTime": 0.43000001460313797,
+          "Sprites": null,
+          "SpriteDatas": [
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_cross_out2"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            }
+          ]
+        },
+        {
+          "Key": "valenna_deer_recover",
+          "IsLoop": false,
+          "IsUseOldMode": false,
+          "IntervalTime": 0.09,
+          "Sprites": null,
+          "SpriteDatas": [
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_cross_out2"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_cut_lower"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_draw"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_idle"
+              },
+              "ShowCount": 2,
+              "ActiveChild": false,
+              "ChildSprites": []
+            }
+          ]
+        },
+        {
+          "Key": "valenna_finish_recover",
+          "IsLoop": false,
+          "IsUseOldMode": false,
+          "IntervalTime": 0.08,
+          "Sprites": null,
+          "SpriteDatas": [
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_finish_fire"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_draw"
+              },
+              "ShowCount": 2,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_idle"
+              },
+              "ShowCount": 2,
+              "ActiveChild": false,
+              "ChildSprites": []
+            }
+          ]
+        },
+        {
+          "Key": "valenna_cut_recover",
+          "IsLoop": false,
+          "IsUseOldMode": false,
+          "IntervalTime": 0.16,
+          "Sprites": null,
+          "SpriteDatas": [
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_rise"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_idle"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            }
+          ]
+        },
+        {
+          "Key": "valenna_finish_turn",
+          "IsLoop": false,
+          "IsUseOldMode": false,
+          "IntervalTime": 0.03333333507180214,
+          "Sprites": null,
+          "SpriteDatas": [
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_finish_cut"
+              },
+              "ShowCount": 2,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_finish_low"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_finish_turn"
+              },
+              "ShowCount": 2,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_dash2"
+              },
+              "ShowCount": 4,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_rise"
+              },
+              "ShowCount": 12,
+              "ActiveChild": false,
+              "ChildSprites": []
+            }
+          ]
+        },
+        {
+          "Key": "valenna_finish_turn_slash",
+          "IsLoop": false,
+          "IsUseOldMode": false,
+          "IntervalTime": 0.03333333507180214,
+          "Sprites": null,
+          "SpriteDatas": [
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_finish_low"
+              },
+              "ShowCount": 2,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_finish_turn"
+              },
+              "ShowCount": 2,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_finish_cut"
+              },
+              "ShowCount": 3,
+              "ActiveChild": false,
+              "ChildSprites": []
+            }
+          ]
+        },
+        {
+          "Key": "valenna_finish_sweep",
+          "IsLoop": false,
+          "IsUseOldMode": false,
+          "IntervalTime": 0.03333333507180214,
+          "Sprites": null,
+          "SpriteDatas": [
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_cross"
+              },
+              "ShowCount": 2,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_cross_out1"
+              },
+              "ShowCount": 5,
+              "ActiveChild": false,
+              "ChildSprites": []
+            }
+          ]
+        },
+        {
+          "Key": "valenna_finish_raise",
+          "IsLoop": false,
+          "IsUseOldMode": false,
+          "IntervalTime": 0.03333333507180214,
+          "Sprites": null,
+          "SpriteDatas": [
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_dash2"
+              },
+              "ShowCount": 4,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_rise"
+              },
+              "ShowCount": 5,
+              "ActiveChild": false,
+              "ChildSprites": []
+            }
+          ]
+        },
+        {
+          "Key": "valenna_finish_spin",
+          "IsLoop": false,
+          "IsUseOldMode": false,
+          "IntervalTime": 0.03333333507180214,
+          "Sprites": null,
+          "SpriteDatas": [
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_cross"
+              },
+              "ShowCount": 4,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_finish_spin"
+              },
+              "ShowCount": 4,
+              "ActiveChild": false,
+              "ChildSprites": []
+            }
+          ]
+        },
+        {
+          "Key": "valenna_finish_low",
+          "IsLoop": false,
+          "IsUseOldMode": false,
+          "IntervalTime": 0.05,
+          "Sprites": null,
+          "SpriteDatas": [
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_finish_spin"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_finish_low"
+              },
+              "ShowCount": 2,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_finish_dash"
+              },
+              "ShowCount": 2,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_finish_cut"
+              },
+              "ShowCount": 6,
+              "ActiveChild": false,
+              "ChildSprites": []
+            }
+          ]
+        },
+        {
+          "Key": "valenna_finish_thrust",
+          "IsLoop": false,
+          "IsUseOldMode": false,
+          "IntervalTime": 0.03333333507180214,
+          "Sprites": null,
+          "SpriteDatas": [
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_finish_low"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_cross"
+              },
+              "ShowCount": 3,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_finish_dash"
+              },
+              "ShowCount": 12,
+              "ActiveChild": false,
+              "ChildSprites": []
+            }
+          ]
+        },
+        {
+          "Key": "valenna_finish_brace",
+          "IsLoop": false,
+          "IsUseOldMode": false,
+          "IntervalTime": 0.3333333432674408,
+          "Sprites": null,
+          "SpriteDatas": [
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_finish_low"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            }
+          ]
+        },
+        {
+          "Key": "valenna_finish_insert",
+          "IsLoop": false,
+          "IsUseOldMode": false,
+          "IntervalTime": 0.07726495712995529,
+          "Sprites": null,
+          "SpriteDatas": [
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_finish_low"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            },
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_finish_aim"
+              },
+              "ShowCount": 5,
+              "ActiveChild": false,
+              "ChildSprites": []
+            }
+          ]
+        },
+        {
+          "Key": "valenna_finish_pin",
+          "IsLoop": false,
+          "IsUseOldMode": false,
+          "IntervalTime": 0.3333333432674408,
+          "Sprites": null,
+          "SpriteDatas": [
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_finish_aim"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            }
+          ]
+        },
+        {
+          "Key": "valenna_finish_volley",
+          "IsLoop": false,
+          "IsUseOldMode": false,
+          "IntervalTime": 1.1033333241939545,
+          "Sprites": null,
+          "SpriteDatas": [
+            {
+              "Sprite": null,
+              "AnimSprite": {
+                "ReferenceType": 1018,
+                "Key": "valenna_pose_finish_fire"
+              },
+              "ShowCount": 1,
+              "ActiveChild": false,
+              "ChildSprites": []
+            }
+          ]
+        }
+      ],
+      "DefaultName": "idle",
+      "CurrentPlayAnimKey": "idle",
+      "IsAwakePlay": true,
+      "AnimSpeed": 1,
+      "IsRandomNoise": false,
+      "DeathOpts": [],
+      "ShadowSize": {
+        "x": 1,
+        "y": 1
+      },
+      "ShadowPos": {
+        "x": 0,
+        "y": 0.01
+      },
+      "BackPos": {
+        "x": -0.17,
+        "y": 0.4
+      },
+      "BasePos": {
+        "x": 0,
+        "y": 0
+      },
+      "CenterPos": {
+        "x": 0,
+        "y": 0.4
+      },
+      "FrontPos": {
+        "x": 0.17,
+        "y": 0.4
+      },
+      "HeadPos": {
+        "x": 0,
+        "y": 0.8
+      },
+      "ModelBoxColiderSize": {
+        "x": 0.34,
+        "y": 0.8
+      },
+      "ModelBoxColiderCenter": {
+        "x": 0,
+        "y": 0.4
+      },
+      "IsShowPre": true,
+      "PreAnimName": null,
+      "EditorSheetKey": null
+    }
+  }
+}

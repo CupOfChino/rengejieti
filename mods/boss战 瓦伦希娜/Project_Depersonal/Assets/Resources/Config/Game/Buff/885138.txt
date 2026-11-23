@@ -1,0 +1,45 @@
+{
+  "Data": {
+    "__type": "BaseSheetData,Assembly-CSharp",
+    "value": {
+      "__type": "MOD.BuffTableData,Assembly-CSharp",
+      "Id": 885138,
+      "Name": {
+        "TarKey": "",
+        "SheetKey": "",
+        "InputText": "加速的未来",
+        "Characteristic": null
+      },
+      "Des": {
+        "TarKey": "",
+        "SheetKey": "",
+        "InputText": "闪避成功且预知眼未过热时获得一层，最多 5 层。每层使斗殴、运动各 +2，下一次主动攻击伤害 +5%，攻击后清空。解兔不享受增伤且保留层数。",
+        "Characteristic": null
+      },
+      "IconPathReference": {
+        "ReferenceType": 1007,
+        "Key": "valenna_accelerated_future_icon"
+      },
+      "BuffType": 4,
+      "BuffEffectType": 1,
+      "OverlayType": 1,
+      "IsShowUI": true,
+      "IsDeathClear": true,
+      "FxPlayType": 0,
+      "PlayFxInBattle": true,
+      "PlayFxInExplore": false,
+      "UseFxPrefab": {
+        "UseFrameEffect": false,
+        "FxPath": null
+      },
+      "Arrts": [],
+      "Events": [],
+      "LayerCount": {
+        "Value": "1"
+      },
+      "OverrideInitLayer": true,
+      "InitLayer": 1,
+      "MaxLayer": 5
+    }
+  }
+}

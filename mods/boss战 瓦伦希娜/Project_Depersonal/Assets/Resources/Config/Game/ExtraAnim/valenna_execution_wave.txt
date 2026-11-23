@@ -1,0 +1,334 @@
+{
+  "Data": {
+    "__type": "BaseSheetData,Assembly-CSharp",
+    "value": {
+      "__type": "CustomSpriteConfigData,Assembly-CSharp",
+      "EffectName": "valenna_execution_wave",
+      "AnimationList": [
+        {
+          "AnimName": "idle",
+          "IsLoop": false,
+          "ExtraAnims": [
+            {
+              "AnimSprite": {
+                "ReferenceType": 1023,
+                "Key": "valenna_execution_wave_00"
+              },
+              "IsInternal": false,
+              "ResLoadPath": null,
+              "UseAtals": false,
+              "SpriteName": null,
+              "ShowCount": 1
+            },
+            {
+              "AnimSprite": {
+                "ReferenceType": 1023,
+                "Key": "valenna_execution_wave_01"
+              },
+              "IsInternal": false,
+              "ResLoadPath": null,
+              "UseAtals": false,
+              "SpriteName": null,
+              "ShowCount": 1
+            },
+            {
+              "AnimSprite": {
+                "ReferenceType": 1023,
+                "Key": "valenna_execution_wave_02"
+              },
+              "IsInternal": false,
+              "ResLoadPath": null,
+              "UseAtals": false,
+              "SpriteName": null,
+              "ShowCount": 1
+            },
+            {
+              "AnimSprite": {
+                "ReferenceType": 1023,
+                "Key": "valenna_execution_wave_03"
+              },
+              "IsInternal": false,
+              "ResLoadPath": null,
+              "UseAtals": false,
+              "SpriteName": null,
+              "ShowCount": 1
+            },
+            {
+              "AnimSprite": {
+                "ReferenceType": 1023,
+                "Key": "valenna_execution_wave_04"
+              },
+              "IsInternal": false,
+              "ResLoadPath": null,
+              "UseAtals": false,
+              "SpriteName": null,
+              "ShowCount": 1
+            },
+            {
+              "AnimSprite": {
+                "ReferenceType": 1023,
+                "Key": "valenna_execution_wave_05"
+              },
+              "IsInternal": false,
+              "ResLoadPath": null,
+              "UseAtals": false,
+              "SpriteName": null,
+              "ShowCount": 1
+            },
+            {
+              "AnimSprite": {
+                "ReferenceType": 1023,
+                "Key": "valenna_execution_wave_06"
+              },
+              "IsInternal": false,
+              "ResLoadPath": null,
+              "UseAtals": false,
+              "SpriteName": null,
+              "ShowCount": 1
+            },
+            {
+              "AnimSprite": {
+                "ReferenceType": 1023,
+                "Key": "valenna_execution_wave_07"
+              },
+              "IsInternal": false,
+              "ResLoadPath": null,
+              "UseAtals": false,
+              "SpriteName": null,
+              "ShowCount": 1
+            },
+            {
+              "AnimSprite": {
+                "ReferenceType": 1023,
+                "Key": "valenna_execution_wave_08"
+              },
+              "IsInternal": false,
+              "ResLoadPath": null,
+              "UseAtals": false,
+              "SpriteName": null,
+              "ShowCount": 1
+            },
+            {
+              "AnimSprite": {
+                "ReferenceType": 1023,
+                "Key": "valenna_execution_wave_09"
+              },
+              "IsInternal": false,
+              "ResLoadPath": null,
+              "UseAtals": false,
+              "SpriteName": null,
+              "ShowCount": 1
+            },
+            {
+              "AnimSprite": {
+                "ReferenceType": 1023,
+                "Key": "valenna_execution_wave_10"
+              },
+              "IsInternal": false,
+              "ResLoadPath": null,
+              "UseAtals": false,
+              "SpriteName": null,
+              "ShowCount": 1
+            },
+            {
+              "AnimSprite": {
+                "ReferenceType": 1023,
+                "Key": "valenna_execution_wave_11"
+              },
+              "IsInternal": false,
+              "ResLoadPath": null,
+              "UseAtals": false,
+              "SpriteName": null,
+              "ShowCount": 1
+            },
+            {
+              "AnimSprite": {
+                "ReferenceType": 1023,
+                "Key": "valenna_execution_wave_12"
+              },
+              "IsInternal": false,
+              "ResLoadPath": null,
+              "UseAtals": false,
+              "SpriteName": null,
+              "ShowCount": 1
+            },
+            {
+              "AnimSprite": {
+                "ReferenceType": 1023,
+                "Key": "valenna_execution_wave_13"
+              },
+              "IsInternal": false,
+              "ResLoadPath": null,
+              "UseAtals": false,
+              "SpriteName": null,
+              "ShowCount": 1
+            },
+            {
+              "AnimSprite": {
+                "ReferenceType": 1023,
+                "Key": "valenna_execution_wave_14"
+              },
+              "IsInternal": false,
+              "ResLoadPath": null,
+              "UseAtals": false,
+              "SpriteName": null,
+              "ShowCount": 1
+            },
+            {
+              "AnimSprite": {
+                "ReferenceType": 1023,
+                "Key": "valenna_execution_wave_15"
+              },
+              "IsInternal": false,
+              "ResLoadPath": null,
+              "UseAtals": false,
+              "SpriteName": null,
+              "ShowCount": 1
+            },
+            {
+              "AnimSprite": {
+                "ReferenceType": 1023,
+                "Key": "valenna_execution_wave_16"
+              },
+              "IsInternal": false,
+              "ResLoadPath": null,
+              "UseAtals": false,
+              "SpriteName": null,
+              "ShowCount": 1
+            },
+            {
+              "AnimSprite": {
+                "ReferenceType": 1023,
+                "Key": "valenna_execution_wave_17"
+              },
+              "IsInternal": false,
+              "ResLoadPath": null,
+              "UseAtals": false,
+              "SpriteName": null,
+              "ShowCount": 1
+            },
+            {
+              "AnimSprite": {
+                "ReferenceType": 1023,
+                "Key": "valenna_execution_wave_18"
+              },
+              "IsInternal": false,
+              "ResLoadPath": null,
+              "UseAtals": false,
+              "SpriteName": null,
+              "ShowCount": 1
+            },
+            {
+              "AnimSprite": {
+                "ReferenceType": 1023,
+                "Key": "valenna_execution_wave_19"
+              },
+              "IsInternal": false,
+              "ResLoadPath": null,
+              "UseAtals": false,
+              "SpriteName": null,
+              "ShowCount": 1
+            },
+            {
+              "AnimSprite": {
+                "ReferenceType": 1023,
+                "Key": "valenna_execution_wave_20"
+              },
+              "IsInternal": false,
+              "ResLoadPath": null,
+              "UseAtals": false,
+              "SpriteName": null,
+              "ShowCount": 1
+            },
+            {
+              "AnimSprite": {
+                "ReferenceType": 1023,
+                "Key": "valenna_execution_wave_21"
+              },
+              "IsInternal": false,
+              "ResLoadPath": null,
+              "UseAtals": false,
+              "SpriteName": null,
+              "ShowCount": 1
+            },
+            {
+              "AnimSprite": {
+                "ReferenceType": 1023,
+                "Key": "valenna_execution_wave_22"
+              },
+              "IsInternal": false,
+              "ResLoadPath": null,
+              "UseAtals": false,
+              "SpriteName": null,
+              "ShowCount": 1
+            },
+            {
+              "AnimSprite": {
+                "ReferenceType": 1023,
+                "Key": "valenna_execution_wave_23"
+              },
+              "IsInternal": false,
+              "ResLoadPath": null,
+              "UseAtals": false,
+              "SpriteName": null,
+              "ShowCount": 1
+            },
+            {
+              "AnimSprite": {
+                "ReferenceType": 1023,
+                "Key": "valenna_execution_wave_24"
+              },
+              "IsInternal": false,
+              "ResLoadPath": null,
+              "UseAtals": false,
+              "SpriteName": null,
+              "ShowCount": 1
+            },
+            {
+              "AnimSprite": {
+                "ReferenceType": 1023,
+                "Key": "valenna_execution_wave_25"
+              },
+              "IsInternal": false,
+              "ResLoadPath": null,
+              "UseAtals": false,
+              "SpriteName": null,
+              "ShowCount": 1
+            },
+            {
+              "AnimSprite": {
+                "ReferenceType": 1023,
+                "Key": "valenna_execution_wave_26"
+              },
+              "IsInternal": false,
+              "ResLoadPath": null,
+              "UseAtals": false,
+              "SpriteName": null,
+              "ShowCount": 1
+            },
+            {
+              "AnimSprite": {
+                "ReferenceType": 1023,
+                "Key": "valenna_execution_wave_27"
+              },
+              "IsInternal": false,
+              "ResLoadPath": null,
+              "UseAtals": false,
+              "SpriteName": null,
+              "ShowCount": 1
+            }
+          ]
+        }
+      ],
+      "AnimSpeed": 0.033333335,
+      "AnimSize": {
+        "y": 4.35,
+        "x": 4.35
+      },
+      "SortName": "Chara",
+      "SortOrder": 50,
+      "DefaultPlayAnim": "idle",
+      "UseLightEffect": false
+    }
+  }
+}

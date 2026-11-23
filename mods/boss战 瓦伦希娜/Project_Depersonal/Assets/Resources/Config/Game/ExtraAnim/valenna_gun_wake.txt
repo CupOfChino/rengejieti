@@ -1,0 +1,202 @@
+{
+  "Data": {
+    "__type": "BaseSheetData,Assembly-CSharp",
+    "value": {
+      "__type": "CustomSpriteConfigData,Assembly-CSharp",
+      "EffectName": "valenna_gun_wake",
+      "AnimationList": [
+        {
+          "AnimName": "idle",
+          "IsLoop": false,
+          "ExtraAnims": [
+            {
+              "AnimSprite": {
+                "ReferenceType": 1023,
+                "Key": "valenna_wake_frame_00"
+              },
+              "IsInternal": false,
+              "ResLoadPath": null,
+              "UseAtals": false,
+              "SpriteName": null,
+              "ShowCount": 1
+            },
+            {
+              "AnimSprite": {
+                "ReferenceType": 1023,
+                "Key": "valenna_wake_frame_01"
+              },
+              "IsInternal": false,
+              "ResLoadPath": null,
+              "UseAtals": false,
+              "SpriteName": null,
+              "ShowCount": 1
+            },
+            {
+              "AnimSprite": {
+                "ReferenceType": 1023,
+                "Key": "valenna_wake_frame_02"
+              },
+              "IsInternal": false,
+              "ResLoadPath": null,
+              "UseAtals": false,
+              "SpriteName": null,
+              "ShowCount": 1
+            },
+            {
+              "AnimSprite": {
+                "ReferenceType": 1023,
+                "Key": "valenna_wake_frame_03"
+              },
+              "IsInternal": false,
+              "ResLoadPath": null,
+              "UseAtals": false,
+              "SpriteName": null,
+              "ShowCount": 1
+            },
+            {
+              "AnimSprite": {
+                "ReferenceType": 1023,
+                "Key": "valenna_wake_frame_04"
+              },
+              "IsInternal": false,
+              "ResLoadPath": null,
+              "UseAtals": false,
+              "SpriteName": null,
+              "ShowCount": 1
+            },
+            {
+              "AnimSprite": {
+                "ReferenceType": 1023,
+                "Key": "valenna_wake_frame_05"
+              },
+              "IsInternal": false,
+              "ResLoadPath": null,
+              "UseAtals": false,
+              "SpriteName": null,
+              "ShowCount": 1
+            },
+            {
+              "AnimSprite": {
+                "ReferenceType": 1023,
+                "Key": "valenna_wake_frame_06"
+              },
+              "IsInternal": false,
+              "ResLoadPath": null,
+              "UseAtals": false,
+              "SpriteName": null,
+              "ShowCount": 1
+            },
+            {
+              "AnimSprite": {
+                "ReferenceType": 1023,
+                "Key": "valenna_wake_frame_07"
+              },
+              "IsInternal": false,
+              "ResLoadPath": null,
+              "UseAtals": false,
+              "SpriteName": null,
+              "ShowCount": 1
+            },
+            {
+              "AnimSprite": {
+                "ReferenceType": 1023,
+                "Key": "valenna_wake_frame_08"
+              },
+              "IsInternal": false,
+              "ResLoadPath": null,
+              "UseAtals": false,
+              "SpriteName": null,
+              "ShowCount": 1
+            },
+            {
+              "AnimSprite": {
+                "ReferenceType": 1023,
+                "Key": "valenna_wake_frame_09"
+              },
+              "IsInternal": false,
+              "ResLoadPath": null,
+              "UseAtals": false,
+              "SpriteName": null,
+              "ShowCount": 1
+            },
+            {
+              "AnimSprite": {
+                "ReferenceType": 1023,
+                "Key": "valenna_wake_frame_10"
+              },
+              "IsInternal": false,
+              "ResLoadPath": null,
+              "UseAtals": false,
+              "SpriteName": null,
+              "ShowCount": 1
+            },
+            {
+              "AnimSprite": {
+                "ReferenceType": 1023,
+                "Key": "valenna_wake_frame_11"
+              },
+              "IsInternal": false,
+              "ResLoadPath": null,
+              "UseAtals": false,
+              "SpriteName": null,
+              "ShowCount": 1
+            },
+            {
+              "AnimSprite": {
+                "ReferenceType": 1023,
+                "Key": "valenna_wake_frame_12"
+              },
+              "IsInternal": false,
+              "ResLoadPath": null,
+              "UseAtals": false,
+              "SpriteName": null,
+              "ShowCount": 1
+            },
+            {
+              "AnimSprite": {
+                "ReferenceType": 1023,
+                "Key": "valenna_wake_frame_13"
+              },
+              "IsInternal": false,
+              "ResLoadPath": null,
+              "UseAtals": false,
+              "SpriteName": null,
+              "ShowCount": 1
+            },
+            {
+              "AnimSprite": {
+                "ReferenceType": 1023,
+                "Key": "valenna_wake_frame_14"
+              },
+              "IsInternal": false,
+              "ResLoadPath": null,
+              "UseAtals": false,
+              "SpriteName": null,
+              "ShowCount": 1
+            },
+            {
+              "AnimSprite": {
+                "ReferenceType": 1023,
+                "Key": "valenna_wake_frame_15"
+              },
+              "IsInternal": false,
+              "ResLoadPath": null,
+              "UseAtals": false,
+              "SpriteName": null,
+              "ShowCount": 1
+            }
+          ]
+        }
+      ],
+      "AnimSpeed": 0.033333335,
+      "AnimSize": {
+        "y": 1.19,
+        "x": 3.72
+      },
+      "SortName": "Chara",
+      "SortOrder": 50,
+      "DefaultPlayAnim": "idle",
+      "UseLightEffect": false
+    }
+  }
+}

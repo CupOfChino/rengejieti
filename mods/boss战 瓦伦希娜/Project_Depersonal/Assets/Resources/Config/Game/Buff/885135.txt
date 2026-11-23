@@ -1,0 +1,45 @@
+{
+  "Data": {
+    "__type": "BaseSheetData,Assembly-CSharp",
+    "value": {
+      "__type": "MOD.BuffTableData,Assembly-CSharp",
+      "Id": 885135,
+      "Name": {
+        "TarKey": "",
+        "SheetKey": "",
+        "InputText": "预知眼",
+        "Characteristic": null
+      },
+      "Des": {
+        "TarKey": "",
+        "SheetKey": "",
+        "InputText": "上限 30 层。战斗或探索回合开始回 5 层。触发预知或受到攻击命中时扣 5 层，归零后进入过热。",
+        "Characteristic": null
+      },
+      "IconPathReference": {
+        "ReferenceType": 1007,
+        "Key": "valenna_eye_charge_icon"
+      },
+      "BuffType": 4,
+      "BuffEffectType": 1,
+      "OverlayType": 1,
+      "IsShowUI": true,
+      "IsDeathClear": true,
+      "FxPlayType": 0,
+      "PlayFxInBattle": true,
+      "PlayFxInExplore": false,
+      "UseFxPrefab": {
+        "UseFrameEffect": false,
+        "FxPath": null
+      },
+      "Arrts": [],
+      "Events": [],
+      "LayerCount": {
+        "Value": "1"
+      },
+      "OverrideInitLayer": true,
+      "InitLayer": 30,
+      "MaxLayer": 30
+    }
+  }
+}

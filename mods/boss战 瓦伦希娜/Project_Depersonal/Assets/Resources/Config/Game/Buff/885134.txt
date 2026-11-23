@@ -1,0 +1,45 @@
+{
+  "Data": {
+    "__type": "BaseSheetData,Assembly-CSharp",
+    "value": {
+      "__type": "MOD.BuffTableData,Assembly-CSharp",
+      "Id": 885134,
+      "Name": {
+        "TarKey": "",
+        "SheetKey": "",
+        "InputText": "灼热·震颤",
+        "Characteristic": null
+      },
+      "Des": {
+        "TarKey": "",
+        "SheetKey": "",
+        "InputText": "由震颤转化，新增震颤层数会并入。除了普通引爆效果，还会造成燃烧与震颤层数之和的一半的爆炸伤害，并分别扣除二者原层数的三分之一（向下取整）。大行动轮结束后扣 1 层。",
+        "Characteristic": null
+      },
+      "IconPathReference": {
+        "ReferenceType": 1007,
+        "Key": "valenna_ignition_icon"
+      },
+      "BuffType": 4,
+      "BuffEffectType": 2,
+      "OverlayType": 1,
+      "IsShowUI": true,
+      "IsDeathClear": true,
+      "FxPlayType": 0,
+      "PlayFxInBattle": true,
+      "PlayFxInExplore": false,
+      "UseFxPrefab": {
+        "UseFrameEffect": false,
+        "FxPath": null
+      },
+      "Arrts": [],
+      "Events": [],
+      "LayerCount": {
+        "Value": "1"
+      },
+      "OverrideInitLayer": true,
+      "InitLayer": 0,
+      "MaxLayer": 0
+    }
+  }
+}

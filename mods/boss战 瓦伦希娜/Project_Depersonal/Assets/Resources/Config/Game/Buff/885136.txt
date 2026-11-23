@@ -1,0 +1,45 @@
+{
+  "Data": {
+    "__type": "BaseSheetData,Assembly-CSharp",
+    "value": {
+      "__type": "MOD.BuffTableData,Assembly-CSharp",
+      "Id": 885136,
+      "Name": {
+        "TarKey": "",
+        "SheetKey": "",
+        "InputText": "预知眼·过热",
+        "Characteristic": null
+      },
+      "Des": {
+        "TarKey": "",
+        "SheetKey": "",
+        "InputText": "过热期间闪避获得 1 颗惩罚骰。战斗或探索回合开始积累 10 层，达到 30 层转回预知眼。",
+        "Characteristic": null
+      },
+      "IconPathReference": {
+        "ReferenceType": 1007,
+        "Key": "valenna_eye_overheat_icon"
+      },
+      "BuffType": 4,
+      "BuffEffectType": 2,
+      "OverlayType": 1,
+      "IsShowUI": true,
+      "IsDeathClear": true,
+      "FxPlayType": 0,
+      "PlayFxInBattle": true,
+      "PlayFxInExplore": false,
+      "UseFxPrefab": {
+        "UseFrameEffect": false,
+        "FxPath": null
+      },
+      "Arrts": [],
+      "Events": [],
+      "LayerCount": {
+        "Value": "1"
+      },
+      "OverrideInitLayer": true,
+      "InitLayer": 0,
+      "MaxLayer": 30
+    }
+  }
+}

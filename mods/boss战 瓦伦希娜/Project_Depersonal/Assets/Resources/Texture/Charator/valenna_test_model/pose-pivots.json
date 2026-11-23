@@ -1,0 +1,499 @@
+{
+  "valenna_pose_idle.png": {
+    "x": 199,
+    "y": 473,
+    "eye": {
+      "x": 187,
+      "y": 119
+    },
+    "sheath": {
+      "x": 279,
+      "y": 249
+    }
+  },
+  "valenna_pose_dash1.png": {
+    "x": 220,
+    "y": 399,
+    "eye": {
+      "x": 86,
+      "y": 124
+    },
+    "sheath": {
+      "x": 246,
+      "y": 190
+    }
+  },
+  "valenna_pose_guard.png": {
+    "x": 240,
+    "y": 566,
+    "eye": {
+      "x": 210,
+      "y": 235
+    }
+  },
+  "valenna_pose_dodge.png": {
+    "x": 210,
+    "y": 477,
+    "eye": {
+      "x": 207,
+      "y": 119
+    }
+  },
+  "valenna_pose_hurt.png": {
+    "x": 206,
+    "y": 470
+  },
+  "valenna_pose_fallen.png": {
+    "x": 166,
+    "y": 409
+  },
+  "valenna_pose_draw.png": {
+    "x": 201,
+    "y": 474,
+    "eye": {
+      "x": 189,
+      "y": 119
+    },
+    "sheath": {
+      "x": 279,
+      "y": 249
+    }
+  },
+  "valenna_pose_dash2.png": {
+    "x": 253,
+    "y": 563,
+    "eye": {
+      "x": 135,
+      "y": 251
+    },
+    "sheath": {
+      "x": 324,
+      "y": 343
+    }
+  },
+  "valenna_pose_rise.png": {
+    "x": 285,
+    "y": 660
+  },
+  "valenna_pose_rise_end.png": {
+    "x": 300,
+    "y": 660
+  },
+  "valenna_pose_cut_lower.png": {
+    "x": 452,
+    "y": 478
+  },
+  "valenna_pose_thrust_ready.png": {
+    "x": 201,
+    "y": 474
+  },
+  "valenna_pose_aim.png": {
+    "x": 572,
+    "y": 362,
+    "gun": {
+      "x": 301,
+      "y": 134
+    }
+  },
+  "valenna_pose_aim_double.png": {
+    "x": 657,
+    "y": 362,
+    "gun": {
+      "x": 303,
+      "y": 70
+    }
+  },
+  "valenna_pose_thrust_out1.png": {
+    "x": 388,
+    "y": 420,
+    "gun": {
+      "x": 428,
+      "y": 214
+    }
+  },
+  "valenna_pose_thrust_out2.png": {
+    "x": 390,
+    "y": 391,
+    "gun": {
+      "x": 421,
+      "y": 190
+    }
+  },
+  "valenna_pose_cross.png": {
+    "x": 193,
+    "y": 452
+  },
+  "valenna_pose_cross_out1.png": {
+    "x": 327,
+    "y": 495
+  },
+  "valenna_pose_cross_out2.png": {
+    "x": 282,
+    "y": 495
+  },
+  "valenna_pose_finish_back1.png": {
+    "x": 423,
+    "y": 476,
+    "sheath": {
+      "x": 294,
+      "y": 313
+    }
+  },
+  "valenna_pose_finish_back2.png": {
+    "x": 423,
+    "y": 476,
+    "sheath": {
+      "x": 294,
+      "y": 313
+    }
+  },
+  "valenna_pose_finish_wind1.png": {
+    "x": 304,
+    "y": 551
+  },
+  "valenna_pose_finish_wind2.png": {
+    "x": 304,
+    "y": 551
+  },
+  "valenna_pose_finish_cut.png": {
+    "x": 264,
+    "y": 425
+  },
+  "valenna_pose_finish_turn.png": {
+    "x": 430,
+    "y": 460
+  },
+  "valenna_pose_finish_guard.png": {
+    "x": 211,
+    "y": 443
+  },
+  "valenna_pose_finish_dash.png": {
+    "x": 316,
+    "y": 415
+  },
+  "valenna_pose_finish_spin.png": {
+    "x": 421,
+    "y": 473
+  },
+  "valenna_pose_finish_low.png": {
+    "x": 348,
+    "y": 466
+  },
+  "valenna_pose_finish_retreat1.png": {
+    "x": 392,
+    "y": 489
+  },
+  "valenna_pose_finish_retreat2.png": {
+    "x": 348,
+    "y": 450
+  },
+  "valenna_pose_finish_stand1.png": {
+    "x": 408,
+    "y": 467
+  },
+  "valenna_pose_finish_stand2.png": {
+    "x": 419,
+    "y": 467
+  },
+  "valenna_pose_finish_stand3.png": {
+    "x": 421,
+    "y": 467
+  },
+  "valenna_pose_finish_kick.png": {
+    "x": 698,
+    "y": 467
+  },
+  "valenna_pose_finish_aim.png": {
+    "x": 695,
+    "y": 467,
+    "gun": {
+      "x": 532,
+      "y": 161
+    }
+  },
+  "valenna_pose_finish_fire.png": {
+    "x": 681,
+    "y": 467,
+    "gun": {
+      "x": 532,
+      "y": 161
+    }
+  },
+  "referenceIdle": "valenna_pose_idle.png",
+  "valenna_pose_idle_breath_01.png": {
+    "x": 199,
+    "y": 473,
+    "eye": {
+      "x": 187,
+      "y": 119
+    },
+    "sheath": {
+      "x": 279,
+      "y": 249
+    }
+  },
+  "valenna_pose_idle_breath_02.png": {
+    "x": 199,
+    "y": 473,
+    "eye": {
+      "x": 187,
+      "y": 119
+    },
+    "sheath": {
+      "x": 279,
+      "y": 249
+    }
+  },
+  "valenna_pose_idle_breath_03.png": {
+    "x": 199,
+    "y": 473,
+    "eye": {
+      "x": 188,
+      "y": 120
+    },
+    "sheath": {
+      "x": 279,
+      "y": 249
+    }
+  },
+  "valenna_pose_idle_breath_04.png": {
+    "x": 199,
+    "y": 473,
+    "eye": {
+      "x": 188,
+      "y": 121
+    },
+    "sheath": {
+      "x": 279,
+      "y": 249
+    }
+  },
+  "valenna_pose_idle_breath_05.png": {
+    "x": 199,
+    "y": 473,
+    "eye": {
+      "x": 188,
+      "y": 121
+    },
+    "sheath": {
+      "x": 279,
+      "y": 249
+    }
+  },
+  "valenna_pose_idle_breath_06.png": {
+    "x": 199,
+    "y": 473,
+    "eye": {
+      "x": 188,
+      "y": 122
+    },
+    "sheath": {
+      "x": 279,
+      "y": 249
+    }
+  },
+  "valenna_pose_idle_breath_07.png": {
+    "x": 199,
+    "y": 473,
+    "eye": {
+      "x": 188,
+      "y": 123
+    },
+    "sheath": {
+      "x": 279,
+      "y": 249
+    }
+  },
+  "valenna_pose_idle_breath_08.png": {
+    "x": 199,
+    "y": 473,
+    "eye": {
+      "x": 188,
+      "y": 124
+    },
+    "sheath": {
+      "x": 279,
+      "y": 249
+    }
+  },
+  "valenna_pose_idle_breath_09.png": {
+    "x": 199,
+    "y": 473,
+    "eye": {
+      "x": 188,
+      "y": 124
+    },
+    "sheath": {
+      "x": 279,
+      "y": 249
+    }
+  },
+  "valenna_pose_idle_breath_10.png": {
+    "x": 199,
+    "y": 473,
+    "eye": {
+      "x": 187,
+      "y": 125
+    },
+    "sheath": {
+      "x": 279,
+      "y": 249
+    }
+  },
+  "valenna_pose_idle_breath_11.png": {
+    "x": 199,
+    "y": 473,
+    "eye": {
+      "x": 187,
+      "y": 125
+    },
+    "sheath": {
+      "x": 279,
+      "y": 249
+    }
+  },
+  "valenna_pose_idle_breath_12.png": {
+    "x": 199,
+    "y": 473,
+    "eye": {
+      "x": 187,
+      "y": 125
+    },
+    "sheath": {
+      "x": 279,
+      "y": 249
+    }
+  },
+  "valenna_pose_idle_breath_13.png": {
+    "x": 199,
+    "y": 473,
+    "eye": {
+      "x": 187,
+      "y": 125
+    },
+    "sheath": {
+      "x": 279,
+      "y": 249
+    }
+  },
+  "valenna_pose_idle_breath_14.png": {
+    "x": 199,
+    "y": 473,
+    "eye": {
+      "x": 187,
+      "y": 125
+    },
+    "sheath": {
+      "x": 279,
+      "y": 249
+    }
+  },
+  "valenna_pose_idle_breath_15.png": {
+    "x": 199,
+    "y": 473,
+    "eye": {
+      "x": 186,
+      "y": 124
+    },
+    "sheath": {
+      "x": 279,
+      "y": 249
+    }
+  },
+  "valenna_pose_idle_breath_16.png": {
+    "x": 199,
+    "y": 473,
+    "eye": {
+      "x": 186,
+      "y": 124
+    },
+    "sheath": {
+      "x": 279,
+      "y": 249
+    }
+  },
+  "valenna_pose_idle_breath_17.png": {
+    "x": 199,
+    "y": 473,
+    "eye": {
+      "x": 186,
+      "y": 123
+    },
+    "sheath": {
+      "x": 279,
+      "y": 249
+    }
+  },
+  "valenna_pose_idle_breath_18.png": {
+    "x": 199,
+    "y": 473,
+    "eye": {
+      "x": 186,
+      "y": 122
+    },
+    "sheath": {
+      "x": 279,
+      "y": 249
+    }
+  },
+  "valenna_pose_idle_breath_19.png": {
+    "x": 199,
+    "y": 473,
+    "eye": {
+      "x": 186,
+      "y": 121
+    },
+    "sheath": {
+      "x": 279,
+      "y": 249
+    }
+  },
+  "valenna_pose_idle_breath_20.png": {
+    "x": 199,
+    "y": 473,
+    "eye": {
+      "x": 186,
+      "y": 121
+    },
+    "sheath": {
+      "x": 279,
+      "y": 249
+    }
+  },
+  "valenna_pose_idle_breath_21.png": {
+    "x": 199,
+    "y": 473,
+    "eye": {
+      "x": 186,
+      "y": 120
+    },
+    "sheath": {
+      "x": 279,
+      "y": 249
+    }
+  },
+  "valenna_pose_idle_breath_22.png": {
+    "x": 199,
+    "y": 473,
+    "eye": {
+      "x": 187,
+      "y": 119
+    },
+    "sheath": {
+      "x": 279,
+      "y": 249
+    }
+  },
+  "valenna_pose_idle_breath_23.png": {
+    "x": 199,
+    "y": 473,
+    "eye": {
+      "x": 187,
+      "y": 119
+    },
+    "sheath": {
+      "x": 279,
+      "y": 249
+    }
+  }
+}

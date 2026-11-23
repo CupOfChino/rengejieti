@@ -1,0 +1,39 @@
+{
+  "Data": {
+    "__type": "BaseSheetData,Assembly-CSharp",
+    "value": {
+      "__type": "MOD.BuffTableData,Assembly-CSharp",
+      "Id": 885133,
+      "Name": {
+        "TarKey": "",
+        "SheetKey": "",
+        "InputText": "烧伤",
+        "Characteristic": null
+      },
+      "Des": {
+        "TarKey": "",
+        "SheetKey": "",
+        "InputText": "按人格解体原版燃烧结算。",
+        "Characteristic": null
+      },
+      "IconPathReference": {
+        "ReferenceType": 1007,
+        "Key": "icon_buff_ranshao"
+      },
+      "BuffType": 4,
+      "BuffEffectType": 1,
+      "OverlayType": 0,
+      "IsShowUI": false,
+      "IsDeathClear": true,
+      "FxPlayType": 0,
+      "PlayFxInBattle": true,
+      "PlayFxInExplore": false,
+      "UseFxPrefab": {
+        "UseFrameEffect": false,
+        "FxPath": null
+      },
+      "Arrts": [],
+      "Events": []
+    }
+  }
+}

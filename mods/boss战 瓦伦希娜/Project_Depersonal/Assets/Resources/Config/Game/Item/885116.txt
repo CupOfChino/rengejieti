@@ -1,0 +1,141 @@
+{
+  "Data": {
+    "__type": "MOD.ItemData,Assembly-CSharp",
+    "value": {
+      "IconPath": "UI/Textures/Icon/Item/valenna_cap_icon",
+      "ItemId": 885116,
+      "UniqueKey": "valenna_captain_hat",
+      "ItemName": {
+        "TarKey": "",
+        "SheetKey": "",
+        "InputText": "指挥官的帽子",
+        "Characteristic": null
+      },
+      "ItemDes": {
+        "TarKey": "",
+        "SheetKey": "",
+        "InputText": "伯纳特利家族二级指挥官的帽子。",
+        "Characteristic": null
+      },
+      "ItemEffectDes": {
+        "TarKey": "",
+        "SheetKey": "",
+        "InputText": "",
+        "Characteristic": null
+      },
+      "IconPathReference": {
+        "ReferenceType": 1004,
+        "Key": "valenna_cap_icon"
+      },
+      "Price": 10,
+      "ChargingCount": 0,
+      "ReplaceChargingConfig": [],
+      "AutoDestruct": false,
+      "Disassemble": {
+        "Items": {
+          "Type": 7,
+          "Ids": []
+        },
+        "PartsCount": 0
+      },
+      "IsCantDisboard": false,
+      "DesignTag": 1,
+      "TagList": [],
+      "ItemAttrValue": [],
+      "MythicalId": 0,
+      "ItemType": 3,
+      "ItemStaticAffixList": [],
+      "ItemDynamicAffixList": [],
+      "IsBindCharacter": false,
+      "BuffsLink": [],
+      "Terms": [],
+      "ConfigData": [],
+      "EquipmentConfigData": {
+        "__type": "MOD.EquipConfigData,Assembly-CSharp",
+        "EquipType": 0,
+        "ShowConfirmEquipPopup": false,
+        "ConfirmEquipDesc": {
+          "TarKey": "e210c02eddaa3fe9c06df7030e55a1cb",
+          "SheetKey": "",
+          "InputText": "此道具装备后在模组结束前会无法卸下。是否确认装备？",
+          "Characteristic": null
+        },
+        "InfoDatas": [],
+        "EnableOverrideDesc": true,
+        "OverrideDesc": {
+          "TarKey": "73388d71b112093988d85bd64a3c0537",
+          "SheetKey": "",
+          "InputText": "装备后不可卸下\n当装备时,使你当前的意志、智力与敏捷减半,体质与力量翻倍,同时增加体质与力量的上限50点",
+          "Characteristic": null
+        },
+        "Arrts": [],
+        "Skills": [],
+        "Def": {
+          "FxPath": null,
+          "PointType": 0,
+          "AudioClip": {
+            "AudioRes": null,
+            "AudioReference": {
+              "ReferenceType": 0,
+              "Key": null
+            },
+            "Volume": 1,
+            "FadeTime": 1
+          },
+          "ArmorValue": 0
+        }
+      },
+      "ThrowConfigData": {
+        "CanThrowOnNoCharge": false,
+        "PlayThrowAnim": false,
+        "ThrowAnimtorName": null,
+        "ThrowSpriteAnimName": null,
+        "DiceCheckType": 1,
+        "ResultCheckType": 1,
+        "ExploreSkill": 201,
+        "UseTag": 1002,
+        "LimitType": 1,
+        "TargetSelect": 0,
+        "CanSelectDeathRole": false,
+        "TargetFilter": {
+          "RoleFilter": [],
+          "EnableMaxMinFilter": false,
+          "Attribute": 0,
+          "Skill": 0,
+          "ExtraAttr": 0,
+          "MaxMinType": 0,
+          "EnableDistanceFilter": false,
+          "DistanceFilterType": 0,
+          "EnableBuffLayerFilter": false,
+          "BuffId": 0,
+          "BuffLayerMaxMinType": 0
+        },
+        "FxPath": null,
+        "PointType": 0,
+        "AudioClip": {
+          "AudioRes": null,
+          "AudioReference": {
+            "ReferenceType": 0,
+            "Key": null
+          },
+          "Volume": 1,
+          "FadeTime": 1
+        },
+        "UsageCheck": [],
+        "ConfigResultFuncs": null,
+        "ResultFuncs": {},
+        "EnableOverrideDesc": false,
+        "OverrideDesc": {
+          "TarKey": "",
+          "SheetKey": "",
+          "InputText": null,
+          "Characteristic": null
+        },
+        "IgnoreInfoDesc": false
+      },
+      "GetItemOpts": [],
+      "EndingOpts": [],
+      "EditorSheetKey": null
+    }
+  }
+}

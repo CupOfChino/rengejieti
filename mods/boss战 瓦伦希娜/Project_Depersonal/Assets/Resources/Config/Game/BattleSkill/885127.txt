@@ -8,7 +8,7 @@
       "Name": {
         "TarKey": "",
         "SheetKey": "",
-        "InputText": "我很荣幸用这颗子弹把你贯穿",
+        "InputText": "我很乐意用这颗子弹把你贯穿",
         "Characteristic": null
       },
       "IsOverrideName": false,
@@ -16,7 +16,7 @@
       "Description": {
         "TarKey": "",
         "SheetKey": "",
-        "InputText": "首刺和两次枪刃直闪结算伤害，最后冲出一圈红金余光。 命中 3 次，每次基础伤害 1。",
+        "InputText": "斗殴＋射击联合检定｜3 段\n<color=#F4C16B>[伤害加成]</color> 自身<color=#EBC556>呼吸法</color>达到 6⁠层时，每⁠段⁠伤⁠害⁠+⁠1。\n<color=#55D8EF>[使用时]</color> 获得 2⁠层<color=#EBC556>呼吸法</color>。\n目标<color=#F35D50>燃烧</color>与<color=#FFA15E>震颤</color>合计至少 6⁠层时，每⁠段⁠伤⁠害⁠+⁠1。\n<b><color=#EBCB91>第 1 段</color></b>｜1d4\n消耗 1⁠发<color=#79CAD7>加速弹</color>。\n<color=#A8E96D>[命中时]</color> 已消耗<color=#79CAD7>加速弹</color>则施加 1⁠层<color=#F35D50>燃烧</color>。\n<b><color=#EBCB91>第 2 段</color></b>｜1d4\n消耗 1⁠发<color=#79CAD7>加速弹</color>。\n<color=#A8E96D>[命中时]</color> 施加 2⁠层<color=#FFA15E>震颤</color>。\n<b><color=#EBCB91>第 3 段</color></b>｜1d6\n<color=#A8E96D>[命中时]</color> 引爆<color=#FFA15E>震颤</color> 1⁠次。",
         "Characteristic": null
       },
       "EffectDesc": {
@@ -37,7 +37,10 @@
       "HideInSkillSelectList": false,
       "CanShowInUnselectSkillList": true,
       "BuffsLink": [
-        885137
+        885137,
+        885131,
+        104,
+        885132
       ],
       "Terms": [],
       "UseCustomIcon": false,
@@ -88,7 +91,7 @@
       ],
       "UseWeaponSelectCount": false,
       "MaxSelectCount": 1,
-      "NeedDice": false,
+      "NeedDice": true,
       "UseWeaponDiceConfig": false,
       "DiceType": 1,
       "DiceCheckType": 1,
@@ -99,7 +102,34 @@
       "AttackEffectType": 0,
       "IgnoreSelfDice": false,
       "IgnoreTargetDice": false,
-      "DiceConfig": null,
+      "DiceConfig": {
+        "SelfDiceData": {
+          "CheckType": 5,
+          "Attr": 0,
+          "ExtraAttr": 0,
+          "Skill": 101,
+          "UniteSkill": 102,
+          "TargetResult": 2,
+          "IsOverrideCheck": false,
+          "OverrideCheckValue": 0,
+          "OverrideCheckString": null,
+          "CheckValueRatio": 1,
+          "TargetType": 0
+        },
+        "TargetDiceData": {
+          "CheckType": 3,
+          "Attr": 0,
+          "ExtraAttr": 118,
+          "Skill": 0,
+          "UniteSkill": 0,
+          "TargetResult": 4,
+          "IsOverrideCheck": false,
+          "OverrideCheckValue": 0,
+          "OverrideCheckString": null,
+          "CheckValueRatio": 1,
+          "TargetType": 1
+        }
+      },
       "SkillValue": 0,
       "NeedDamage": false,
       "DirectDamage": false,

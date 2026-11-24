@@ -154,11 +154,13 @@ namespace ValennaBattle
         public const int VeteranTraitId = 885145;
         public const int DrinkerTraitId = 885146;
         public const int GoldenTicketTraitId = 885147;
+        public const int HeartTraitId = 885155;
         public const int CigarId = 885114;
         public const int VodkaId = 885115;
         public const int HatId = 885116;
         public const int DrunkId = 885150;
         public const int TremorBurstId = 885148;
+        public const int FocusId = 885154;
         public const int StunnedId = 101;
         public const float ForeseenMarkSize = 0.30f;
         public const int MaxEyeCharge = 30;
@@ -296,7 +298,7 @@ namespace ValennaBattle
                         pose: "valenna_point_pass", longThrust: true, passDistance: 0.89f, passMoveTime: 0.49f * (10f / 24f),
                         pauseBeforePose: "valenna_thrust_brace", pauseAfter: true, motionFlashFrames: 2)
                 }),
-            new StrikeShow(885127, "我很荣幸用这颗子弹把你贯穿", "首刺和两次枪刃直闪结算伤害，最后冲出一圈红金余光。",
+            new StrikeShow(885127, "我很乐意用这颗子弹把你贯穿", "首刺和两次枪刃直闪结算伤害，最后冲出一圈红金余光。",
                 new[] {
                     new StrikeCue(StrikeBeat.Thrust, 0.09f, 0.08f, pose: "valenna_bullet_thrust", motionFlashFrames: 3,
                         sweepStyle: new SweepShape(-24f, 1.24f, 0.89f, true, elevation: 0.17f, speed: 1.27f,

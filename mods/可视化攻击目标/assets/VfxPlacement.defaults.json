@@ -1,0 +1,8 @@
+{
+  "flower": { "x": 0, "y": 0, "angle": 0, "spread": 0.62 },
+  "wind": { "x": 0, "y": 0, "angle": 0, "spread": 0.54 },
+  "lockMark": { "x": 0, "y": 0, "angle": 0 },
+  "thrust": { "x": 0, "y": 0, "angle": 0 },
+  "slash": { "x": 0, "y": 0, "angle": 0 },
+  "sweep": { "x": 0, "y": 0, "angle": 0 }
+}

@@ -10,7 +10,7 @@
       "Localization_Name": {
         "TarKey": "",
         "SheetKey": "",
-        "InputText": "战争英雄——瓦伦娜",
+        "InputText": "战争英雄——瓦伦希娜",
         "Characteristic": null
       },
       "Localization_Des": {

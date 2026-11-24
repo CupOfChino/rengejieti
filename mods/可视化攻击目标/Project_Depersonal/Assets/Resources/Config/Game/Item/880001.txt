@@ -8,7 +8,7 @@
       "ItemName": {
         "TarKey": "",
         "SheetKey": "",
-        "InputText": "葬花",
+        "InputText": "<color=#C7ADFF>葬花</color>",
         "Characteristic": null
       },
       "ItemDes": {
@@ -20,7 +20,7 @@
       "ItemEffectDes": {
         "TarKey": "",
         "SheetKey": "",
-        "InputText": "葬花：攻击前进行一次敏捷检定，成功消耗2点充能、困难成功及以上消耗1点充能，本次攻击段数+1；击杀敌人时恢复1点充能。\n每段命中并造成伤害时，为目标叠加1层【剑痕】；目标每有1层【剑痕】，本次攻击伤害+5%。\n装备时：斗殴+10、力量+5、速度-5。\n【持握·葬花】",
+        "InputText": "以<color=#C7ADFF>【充能斩】</color>追加攻击段数。每段造成伤害叠1层<color=#85CCFF>【剑痕】</color>，目标每有1层，此击伤害+2%。\n装备：斗殴+10、力量+5、速度-5。见<color=#C7ADFF>【持握·葬花】</color>。",
         "Characteristic": null
       },
       "IconPathReference": {
@@ -50,10 +50,9 @@
       "ItemStaticAffixList": [],
       "ItemDynamicAffixList": [],
       "IsBindCharacter": true,
-      "BuffsLink": [
-        880040
-      ],
+      "BuffsLink": [],
       "Terms": [
+        880007,
         880001,
         880003
       ],
@@ -79,15 +78,59 @@
           "DamageType": 0,
           "AttackType": 0,
           "AddAttrs": [],
-          "Value": "1D8+2",
+          "Value": "1D8+1",
           "DB_Bonus": 1,
           "WithSuckBlood": false,
           "SuckBloodRatio": 0,
-          "UseCommonEffect": true,
+          "UseCommonEffect": false,
           "CommonEffectId": 4,
           "EffectShow": {
-            "Duration": 0,
-            "EffectShows": []
+            "Duration": 0.6,
+            "EffectShows": [
+              {
+                "__type": "MOD.PlayRoleAnimationData,Assembly-CSharp",
+                "IsSelf": true,
+                "AnimtorName": "Attack",
+                "SpriteAnimName": "attack",
+                "SpriteAnimFirst": false,
+                "DelayTime": 0
+              },
+              {
+                "__type": "MOD.PlayRoleEffectData,Assembly-CSharp",
+                "IsSelf": false,
+                "FxPath": "Effect/Prefabs/FX_BladeHit",
+                "Duration": 0.5,
+                "PlayCenterPoint": false,
+                "UseSameFx": true,
+                "PlayCenterPointFxPath": null,
+                "PointType": 2,
+                "IsGroupCenter": false,
+                "DelayTime": 0.1,
+                "FxPathReference": {
+                  "ReferenceType": 10001,
+                  "Key": "FX_BladeHit"
+                },
+                "UseFrameEffect": false,
+                "EffectName": "ZangHuaSlash"
+              },
+              {
+                "__type": "MOD.PlaySoundData,Assembly-CSharp",
+                "AudioClip": {
+                  "AudioRes": "Sound/Audio/FX/Battle/blade_hit",
+                  "AudioReference": {
+                    "ReferenceType": 2,
+                    "Key": "blade_hit"
+                  },
+                  "Volume": 1,
+                  "FadeTime": 1
+                },
+                "DelayTime": 0.1
+              },
+              {
+                "__type": "MOD.PlayHitData,Assembly-CSharp",
+                "DelayTime": 0.2
+              }
+            ]
           },
           "IsDirectDeath": false,
           "IsNotBlock": false
@@ -419,7 +462,7 @@
         "OverrideDesc": {
           "TarKey": "",
           "SheetKey": "",
-          "InputText": "葬花：攻击前进行一次敏捷检定，成功消耗2点充能、困难成功及以上消耗1点充能，本次攻击段数+1；击杀敌人时恢复1点充能。\n每段命中并造成伤害时，为目标叠加1层【剑痕】；目标每有1层【剑痕】，本次攻击伤害+5%。\n装备时：斗殴+10、力量+5、速度-5。\n【持握·葬花】",
+          "InputText": "以<color=#C7ADFF>【充能斩】</color>追加攻击段数。每段造成伤害叠1层<color=#85CCFF>【剑痕】</color>，目标每有1层，此击伤害+2%。\n装备：斗殴+10、力量+5、速度-5。见<color=#C7ADFF>【持握·葬花】</color>。",
           "Characteristic": null
         },
         "Arrts": [],

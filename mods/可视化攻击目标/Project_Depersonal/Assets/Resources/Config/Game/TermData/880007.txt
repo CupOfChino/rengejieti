@@ -1,0 +1,22 @@
+{
+  "Data": {
+    "__type": "BaseSheetData,Assembly-CSharp",
+    "value": {
+      "__type": "TermData,Assembly-CSharp",
+      "Id": 880007,
+      "Name": {
+        "TarKey": "",
+        "SheetKey": "",
+        "InputText": "<color=#C7ADFF>充能斩</color>",
+        "Characteristic": null
+      },
+      "Des": {
+        "TarKey": "",
+        "SheetKey": "",
+        "InputText": "攻击前掷敏捷，普通成功耗2点充能，困难或大成功耗1点。付得起才加1段。\n击杀敌人回复1点充能。战斗回合开始，充能低于5且精神值大于1时，消耗1点精神值回复1点充能。",
+        "Characteristic": null
+      },
+      "EditorSheetKey": null
+    }
+  }
+}

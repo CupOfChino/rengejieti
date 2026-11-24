@@ -1,0 +1,22 @@
+{
+  "Data": {
+    "__type": "BaseSheetData,Assembly-CSharp",
+    "value": {
+      "__type": "TermData,Assembly-CSharp",
+      "Id": 880010,
+      "Name": {
+        "TarKey": "",
+        "SheetKey": "",
+        "InputText": "<color=#AEE9D0>法术庇护</color>",
+        "Characteristic": null
+      },
+      "Des": {
+        "TarKey": "",
+        "SheetKey": "",
+        "InputText": "战斗中免疫1次法术伤害。触发后至少间隔2回合才可再次免疫。",
+        "Characteristic": null
+      },
+      "EditorSheetKey": null
+    }
+  }
+}

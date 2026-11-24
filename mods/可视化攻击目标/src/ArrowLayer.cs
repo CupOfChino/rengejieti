@@ -902,28 +902,10 @@ namespace AttackTargetVisualizer
             Canvas canvas = hud.GetComponent<Canvas>();
             cam = canvas != null ? canvas.worldCamera : null;
 
-            if (hud.Trans_SkillShow != null && hud.Trans_SkillShow.gameObject.activeInHierarchy)
+            anchor = GetSkillSlotRect(hud);
+            if (anchor != null)
             {
-                // 锚点取"整块行动槽"，**不要**取左上角的数字牌（Image_ActionOrder）——
-                // 否则"顶边中点"会算到数字牌顶上（槽的角落）。
-                // 优先级：技能牌子动画节点（整块牌子的实际矩形）→ 图标按钮 → 容器。
-                if (hud.Anim_SkillShow != null && hud.Anim_SkillShow.gameObject.activeInHierarchy)
-                {
-                    anchor = hud.Anim_SkillShow.transform as RectTransform;
-                }
-                if (anchor == null && hud.Button_SkillIcon != null &&
-                    hud.Button_SkillIcon.gameObject.activeInHierarchy)
-                {
-                    anchor = hud.Button_SkillIcon.transform as RectTransform;
-                }
-                if (anchor == null)
-                {
-                    anchor = hud.Trans_SkillShow as RectTransform;
-                }
-                if (anchor != null)
-                {
-                    return true;
-                }
+                return true;
             }
 
             if (hud.Trans_EditorAction != null && hud.Trans_EditorAction.gameObject.activeInHierarchy)
@@ -932,6 +914,27 @@ namespace AttackTargetVisualizer
                 return anchor != null;
             }
             return false;
+        }
+
+        internal static RectTransform GetSkillSlotRect(HUDElement hud, bool includeHidden = false)
+        {
+            if (hud.Trans_SkillShow == null || (!includeHidden && !hud.Trans_SkillShow.gameObject.activeInHierarchy))
+            {
+                return null;
+            }
+
+            // 取整块行动槽的矩形，顺次用动画节点、图标和容器。
+            if (hud.Anim_SkillShow != null && (includeHidden || hud.Anim_SkillShow.gameObject.activeInHierarchy) &&
+                hud.Anim_SkillShow.transform is RectTransform anim)
+            {
+                return anim;
+            }
+            if (hud.Button_SkillIcon != null && (includeHidden || hud.Button_SkillIcon.gameObject.activeInHierarchy) &&
+                hud.Button_SkillIcon.transform is RectTransform icon)
+            {
+                return icon;
+            }
+            return hud.Trans_SkillShow as RectTransform;
         }
 
         /// <summary>角色模型顶部中点的屏幕坐标（Trans_Head 优先）。</summary>

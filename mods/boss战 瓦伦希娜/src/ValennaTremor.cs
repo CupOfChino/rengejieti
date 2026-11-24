@@ -22,6 +22,7 @@ namespace ValennaBattle
         private const int RetiredBurn = 885133;
 
         private static readonly AsyncLocal<BuffData> InternalGrant = new AsyncLocal<BuffData>();
+        private static readonly AsyncLocal<BurstAudioBatch> ActiveBurstAudio = new AsyncLocal<BurstAudioBatch>();
         private static readonly ConditionalWeakTable<BattleFightContent, StunMeters> Meters =
             new ConditionalWeakTable<BattleFightContent, StunMeters>();
 
@@ -33,6 +34,39 @@ namespace ValennaBattle
             internal bool? UsesLeiHeng;
         }
 
+        private sealed class BurstAudioBatch
+        {
+            internal readonly BattleRole Target;
+            internal int Count;
+
+            internal BurstAudioBatch(BattleRole target) => Target = target;
+        }
+
+        internal static async Task BurstBatch(BattleRole source, BattleRole target, int attempts)
+        {
+            if (attempts <= 0 || !StrikeSequence.CanHit(target)) return;
+            BurstAudioBatch previous = ActiveBurstAudio.Value;
+            var batch = new BurstAudioBatch(target);
+            ActiveBurstAudio.Value = batch;
+            try
+            {
+                for (int i = 0; i < attempts && StrikeSequence.CanHit(target); i++)
+                    await target.AddBuff(source, StrikeProfiles.TremorBurstId);
+            }
+            finally
+            {
+                ActiveBurstAudio.Value = previous;
+                if (batch.Count > 0) ValennaEventAudio.PlayBursts(target, batch.Count);
+            }
+        }
+
+        private static void RecordBurst(BattleRole target)
+        {
+            BurstAudioBatch batch = ActiveBurstAudio.Value;
+            if (batch?.Target == target) batch.Count++;
+            else ValennaEventAudio.PlayBursts(target, 1);
+        }
+
         private static bool UsesLeiHeng(StunMeters fight)
         {
             if (!fight.UsesLeiHeng.HasValue)
@@ -42,6 +76,13 @@ namespace ValennaBattle
                     buffs.GetConfig(LeiScorch) != null && buffs.GetConfig(LeiBurst) != null;
             }
             return fight.UsesLeiHeng.Value;
+        }
+
+        internal static int CountLayers(BattleRole role)
+        {
+            BuffData count = role.GetBuff(LeiCount) ?? role.GetBuff(StrikeProfiles.ScorchTremorId) ??
+                role.GetBuff(StrikeProfiles.TremorId);
+            return count == null || count.DisableBuff ? 0 : Math.Max(0, count.CurLayer);
         }
 
         internal static async Task RoundEnd(BattleRole role)
@@ -85,15 +126,19 @@ namespace ValennaBattle
             int gain = (int)Math.Min(((long)layers + 2) / 3, threshold / 3);
             fight.Values.TryGetValue(target, out int stunValue);
             bool stun = false;
+            int increase = 0;
             if (gain > 0 && target.GetBuff(StrikeProfiles.StunnedId) == null)
             {
+                increase = Math.Max(0, Math.Min(gain, threshold - stunValue));
                 long total = (long)stunValue + gain;
                 stun = total >= threshold;
                 stunValue = stun ? 0 : (int)total;
                 if (stun) fight.Values.Remove(target);
                 else fight.Values[target] = stunValue;
             }
-            TremorBurstDisplay.Show(target, scorch != null);
+            TremorBurstDisplay.Show(target, scorch != null, increase);
+            RecordBurst(target);
+            await ValennaKit.RewardBurst(source);
 
             await tremor.ChangeLayer(target, -1 - (scorch == null ? 0 : layers / 3));
             if (burning >= 3 && ReferenceEquals(target.GetBuff(StrikeProfiles.BurnId), burn))
@@ -120,6 +165,44 @@ namespace ValennaBattle
             await target.SetDamage((uint)Math.Max(0, result), hitData: hit);
         }
 
+        [HarmonyPatch(typeof(Buff_RoleAttrOption), nameof(Buff_RoleAttrOption.OnAction))]
+        private static class LeiBurstApplied
+        {
+            private static void Prefix(Buff_RoleAttrOption __instance, BuffData __0, BattleRole __1,
+                out (RoleData Data, int Willpower) __state)
+            {
+                __state = default;
+                if (!BattleHelper.IsInBattle || __1?.Data == null || __0 == null || __0.CurLayer <= 0) return;
+
+                // 雷横先施加引爆标记，直到伤害结算才执行强度或灼热的引爆属性变化。
+                bool burst = __0.Id switch
+                {
+                    LeiStrength => __instance.SourceKey == "1470691050Buff_RoleAttrOption",
+                    LeiScorch => __instance.SourceKey == "2129000652Buff_RoleAttrOption",
+                    _ => false
+                };
+                if (burst) __state = (__1.Data, __1.Data.GetAttributeValue(EHeroAttribute.POW));
+            }
+
+            private static void Postfix(BuffData __0, BattleRole __1,
+                (RoleData Data, int Willpower) __state, ref Task __result)
+            {
+                if (__state.Data == null) return;
+                __result = RecordAfter(__result, __1, __0.Id == LeiScorch, __state.Data, __state.Willpower);
+            }
+
+            private static async Task RecordAfter(Task original, BattleRole target, bool scorching,
+                RoleData data, int willpowerBefore)
+            {
+                await original;
+                // 领域把混乱结算直接写入原生意志和大失败边界，无独立的累计计量。
+                if (!ReferenceEquals(target.Data, data)) return;
+                int increase = Math.Max(0, willpowerBefore - data.GetAttributeValue(EHeroAttribute.POW));
+                TremorBurstDisplay.Show(target, scorching, increase);
+                RecordBurst(target);
+            }
+        }
+
         private static async Task Apply(BattleRole source, BattleRole target, BuffData incoming,
             bool showChangeTip, object[] arguments)
         {
@@ -137,7 +220,9 @@ namespace ValennaBattle
             {
                 if (id == StrikeProfiles.TremorBurstId)
                 {
+                    bool triggered = CountLayers(target) > 0 && !target.HaveImmunizationBuff(LeiBurst);
                     await target.AddBuff(source, LeiBurst, showChangeTip, arguments);
+                    if (triggered) await ValennaKit.RewardBurst(source);
                     return;
                 }
 
@@ -172,7 +257,7 @@ namespace ValennaBattle
             if (layers > 0) await AddLayers(source, target, id, layers, showChangeTip, arguments);
         }
 
-        private static async Task AddLayers(BattleRole source, BattleRole target, int id, int count,
+        internal static async Task AddLayers(BattleRole source, BattleRole target, int id, int count,
             bool showChangeTip, object[] arguments)
         {
             if (target.HaveImmunizationBuff(id) || target.IsDeath) return;
@@ -228,19 +313,33 @@ namespace ValennaBattle
     internal sealed class TremorBurstDisplay : MonoBehaviour
     {
         private const float IconDuration = 0.50f;
+        private const float GainDuration = 0.68f;
+        private const float GainSpacing = 0.075f;
         private static Font _font;
+        private readonly List<GainPopup> _gains = new List<GainPopup>();
         private BattleRole _target;
         private BattleFightContent _fight;
         private RoleModel _model;
-        private SpriteRenderer _icon;
         private Text _number;
         private Outline _outline;
-        private float _burstTime;
         private int _stunValue;
         private bool _scorching;
 
-        internal static void Show(BattleRole target, bool scorching)
+        private sealed class GainPopup
         {
+            internal int Value;
+            internal int Lane;
+            internal float Starts;
+            internal bool Scorching;
+            internal SpriteRenderer Icon;
+            internal Text Text;
+            internal Outline Outline;
+        }
+
+        internal static void Show(BattleRole target, bool scorching, int increase)
+        {
+            BattleFightContent fight = BattleHelper.FightContent;
+            if (!BattleHelper.IsInBattle || fight == null || fight.IsRestartBattleBreak || fight.IsGiveUpBattleBreak) return;
             RoleModel model = target.Model;
             if (model == null) return;
             TremorBurstDisplay burst = model.GetComponent<TremorBurstDisplay>();
@@ -249,9 +348,17 @@ namespace ValennaBattle
 
             burst._target = target;
             burst._model = model;
-            burst._fight = BattleHelper.FightContent;
+            burst._fight = fight;
             burst._scorching = scorching;
-            burst._burstTime = Time.unscaledTime;
+            float now = Time.unscaledTime;
+            GainPopup previous = burst._gains.Count == 0 ? null : burst._gains[burst._gains.Count - 1];
+            burst._gains.Add(new GainPopup
+            {
+                Value = increase,
+                Scorching = scorching,
+                Lane = previous == null ? 0 : (previous.Lane + 1) % 5,
+                Starts = previous == null ? now : Mathf.Max(now, previous.Starts + GainSpacing)
+            });
             if (burst.isActiveAndEnabled)
             {
                 burst.LateUpdate();
@@ -262,20 +369,14 @@ namespace ValennaBattle
         private void LateUpdate()
         {
             if (!BattleHelper.IsInBattle || !ReferenceEquals(BattleHelper.FightContent, _fight) ||
-                _target.Model != _model || !ValennaTremor.TryGetStunValue(_fight, _target, out int stunValue))
+                _fight.IsRestartBattleBreak || _fight.IsGiveUpBattleBreak || _target.Model != _model)
             {
                 Close();
                 return;
             }
 
-            float elapsed = Time.unscaledTime - _burstTime;
-            if (elapsed < IconDuration) UpdateIcon(elapsed);
-            else if (_icon != null)
-            {
-                _icon.enabled = false;
-                Destroy(_icon.gameObject);
-                _icon = null;
-            }
+            ValennaTremor.TryGetStunValue(_fight, _target, out int stunValue);
+            UpdateGains();
 
             if (_stunValue != stunValue)
             {
@@ -284,38 +385,99 @@ namespace ValennaBattle
             }
             if (stunValue > 0 && !_target.IsDeath) UpdateNumber();
             else RemoveNumber();
-            if (stunValue == 0 && elapsed >= IconDuration) Close();
+            if ((stunValue == 0 || _target.IsDeath) && _gains.Count == 0) Close();
         }
 
-        private void UpdateIcon(float elapsed)
+        private void UpdateGains()
+        {
+            HUDElement hud = _model.Hud;
+            RectTransform bar = hud?.Image_HPBG?.rectTransform;
+            for (int index = _gains.Count - 1; index >= 0; index--)
+            {
+                GainPopup popup = _gains[index];
+                float age = Time.unscaledTime - popup.Starts;
+                if (age < 0f) continue;
+                if (age >= GainDuration)
+                {
+                    if (popup.Icon != null) Destroy(popup.Icon.gameObject);
+                    if (popup.Text != null) Destroy(popup.Text.gameObject);
+                    _gains.RemoveAt(index);
+                    continue;
+                }
+                int lane = (popup.Lane + 1) / 2 * (popup.Lane % 2 == 0 ? 1 : -1);
+                if (age < IconDuration) UpdateIcon(popup, age, lane);
+                else if (popup.Icon != null)
+                {
+                    Destroy(popup.Icon.gameObject);
+                    popup.Icon = null;
+                }
+                if (bar == null || bar.parent == null) continue;
+                if (popup.Text == null)
+                {
+                    var obj = new GameObject("ValennaTremorGain", typeof(RectTransform), typeof(CanvasRenderer),
+                        typeof(Text), typeof(Outline));
+                    var rect = (RectTransform)obj.transform;
+                    rect.SetParent(bar.parent, false);
+                    rect.SetAsLastSibling();
+                    rect.sizeDelta = new Vector2(96f, 56f);
+                    popup.Text = obj.GetComponent<Text>();
+                    if (_font == null && hud.Text_HP?.font == null)
+                        _font = Font.CreateDynamicFontFromOSFont("Arial", 54);
+                    popup.Text.font = hud.Text_HP?.font ?? _font;
+                    popup.Text.fontSize = 44;
+                    popup.Text.fontStyle = FontStyle.Bold;
+                    popup.Text.alignment = TextAnchor.MiddleCenter;
+                    popup.Text.raycastTarget = false;
+                    popup.Text.text = popup.Value.ToString(CultureInfo.InvariantCulture);
+                    popup.Outline = obj.GetComponent<Outline>();
+                    popup.Outline.effectDistance = new Vector2(2f, -2f);
+                }
+                Rect health = bar.rect;
+                float scale = Mathf.Clamp(health.width, 52f, 310f) / 150f;
+                float progress = Mathf.Clamp01(age / GainDuration);
+                popup.Text.rectTransform.position = bar.TransformPoint(new Vector3(
+                    health.center.x + 43f * scale * lane,
+                    health.yMax + scale * (30f + 34f * progress + 9f * (popup.Lane % 2))));
+                float pop = Mathf.Lerp(1.18f, 0.9f, Mathf.Clamp01(age / 0.14f));
+                popup.Text.rectTransform.localScale = Vector3.one * scale * pop;
+                float alpha = 1f - Mathf.SmoothStep(0f, 1f, Mathf.InverseLerp(0.36f, GainDuration, age));
+                popup.Text.color = new Color(0.06f, 0.04f, 0.02f, alpha);
+                popup.Outline.useGraphicAlpha = false;
+                popup.Outline.effectColor = new Color(1f, 0.81f, 0.20f, alpha);
+            }
+        }
+
+        private void UpdateIcon(GainPopup popup, float elapsed, int lane)
         {
             SpriteRenderer body = _model.SpriteRender;
-            Sprite art = _scorching ? StrikeArt.ScorchBurstIcon : StrikeArt.TremorBurstIcon;
+            Sprite art = popup.Scorching ? StrikeArt.ScorchBurstIcon : StrikeArt.TremorBurstIcon;
             if (body == null || body.sprite == null || art == null)
             {
-                if (_icon != null) _icon.enabled = false;
+                if (popup.Icon != null) popup.Icon.enabled = false;
                 return;
             }
 
-            if (_icon == null) _icon = new GameObject("ValennaTremorBurstIcon").AddComponent<SpriteRenderer>();
-            if (_icon.transform.parent != body.transform) _icon.transform.SetParent(body.transform, false);
-            _icon.gameObject.layer = body.gameObject.layer;
-            _icon.sprite = art;
-            _icon.sortingLayerID = body.sortingLayerID;
-            _icon.sortingOrder = body.sortingOrder + 4;
-            _icon.enabled = true;
+            if (popup.Icon == null) popup.Icon = new GameObject("ValennaTremorBurstIcon").AddComponent<SpriteRenderer>();
+            SpriteRenderer icon = popup.Icon;
+            if (icon.transform.parent != body.transform) icon.transform.SetParent(body.transform, false);
+            icon.gameObject.layer = body.gameObject.layer;
+            icon.sprite = art;
+            icon.sortingLayerID = body.sortingLayerID;
+            icon.sortingOrder = body.sortingOrder + 4 + popup.Lane;
+            icon.enabled = true;
 
             Bounds bounds = body.bounds;
-            _icon.transform.position = bounds.center;
+            float height = Mathf.Clamp(bounds.size.y, 0.45f, 2.45f);
+            icon.transform.position = bounds.center + Vector3.right * (0.135f * lane * height);
             float pop = Mathf.Lerp(1.15f, 1f, Mathf.Clamp01(elapsed / 0.14f));
             Vector3 artSize = art.bounds.size;
-            float scale = Mathf.Clamp(bounds.size.y, 0.45f, 2.45f) * 0.29f * pop /
+            float scale = height * 0.29f * pop /
                 Mathf.Max(artSize.x, artSize.y);
             Vector3 parentScale = body.transform.lossyScale;
-            _icon.transform.localScale = new Vector3(scale / Mathf.Max(0.001f, Mathf.Abs(parentScale.x)),
+            icon.transform.localScale = new Vector3(scale / Mathf.Max(0.001f, Mathf.Abs(parentScale.x)),
                 scale / Mathf.Max(0.001f, Mathf.Abs(parentScale.y)), 1f);
             float alpha = 1f - Mathf.SmoothStep(0f, 1f, Mathf.InverseLerp(0.18f, IconDuration, elapsed));
-            _icon.color = new Color(1f, 1f, 1f, alpha);
+            icon.color = new Color(1f, 1f, 1f, alpha);
         }
 
         private void UpdateNumber()
@@ -381,14 +543,22 @@ namespace ValennaBattle
 
         private void OnDisable()
         {
-            if (_icon != null) _icon.enabled = false;
             if (_number != null) _number.enabled = false;
+            foreach (GainPopup popup in _gains)
+            {
+                if (popup.Icon != null) popup.Icon.enabled = false;
+                if (popup.Text != null) popup.Text.enabled = false;
+            }
         }
 
         private void OnDestroy()
         {
             RemoveNumber();
-            if (_icon != null) Destroy(_icon.gameObject);
+            foreach (GainPopup popup in _gains)
+            {
+                if (popup.Icon != null) Destroy(popup.Icon.gameObject);
+                if (popup.Text != null) Destroy(popup.Text.gameObject);
+            }
         }
     }
 }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using BattleSkillEvent;
 using BepInEx;
@@ -11,7 +12,7 @@ using MOD;
 
 namespace ValennaBattle
 {
-    [BepInPlugin("ttrpg.valenna-battle", "boss战 瓦伦希娜", "0.4.16")]
+    [BepInPlugin("ttrpg.valenna-battle", "boss战 瓦伦希娜", "0.5.3")]
     public sealed class ValennaPlugin : BaseUnityPlugin
     {
         internal const int PartnerId = 885101;
@@ -26,14 +27,19 @@ namespace ValennaBattle
             Instance = this;
             StrikeArt.Load();
             new Harmony("ttrpg.valenna-battle").PatchAll(typeof(ValennaPlugin).Assembly);
-            Logger.LogInfo("boss战 瓦伦希娜 0.4.16 已载入");
+            Logger.LogInfo("boss战 瓦伦希娜 0.5.3 已载入");
         }
 
-        private void Update() => ValennaEyeEquipment.ListenForModuleEntry();
+        private void Update()
+        {
+            ValennaEyeEquipment.ListenForModuleEntry();
+            ValennaEventAudio.Update();
+        }
 
         private void OnDestroy()
         {
             ValennaEyeEquipment.StopListening();
+            ValennaEventAudio.Clear();
             StrikeArt.Clear();
         }
 
@@ -113,7 +119,10 @@ namespace ValennaBattle
                     if (IsValennaPartner(__instance) || HasPalermo(__instance) ||
                         ValennaKit.HasStartingAmmo(__instance) ||
                         ValennaEyeEquipment.HasPrescience(__instance) || ValennaEyeEquipment.IsWorn(__instance))
+                    {
+                        ValennaEventAudio.Prepare();
                         __result = InitializeBattleRole(__result, __instance);
+                    }
                 }
                 else if (__0 == EBuffTriggerType.BeforeRoundStart && BattleHelper.IsInBattle &&
                     (ValennaEyeEquipment.IsWorn(__instance) || HasPalermo(__instance)))
@@ -218,28 +227,95 @@ namespace ValennaBattle
         [HarmonyPatch(typeof(BattleFightContent), nameof(BattleFightContent.UninstallOnRestart))]
         private static class RestartPlayback
         {
-            private static void Prefix(BattleFightContent __instance) => StrikeSequence.StopForRestart(__instance);
+            private static void Prefix(BattleFightContent __instance)
+            {
+                StrikeSequence.StopForRestart(__instance);
+                ValennaEventAudio.Clear();
+            }
         }
 
         [HarmonyPatch(typeof(BattleActiveBehaviorData), nameof(BattleActiveBehaviorData.TriggeOptionEffect),
             new[] { typeof(EBattleSkillTrigger), typeof(ParamTransmitionData) })]
         private static class StrikePlayback
         {
+            private sealed class ActionStrike
+            {
+                internal StrikeResolution Resolution;
+                internal bool Played;
+            }
+
+            private static readonly ConditionalWeakTable<BattleActiveBehaviorData, ActionStrike> Prepared =
+                new ConditionalWeakTable<BattleActiveBehaviorData, ActionStrike>();
+
+            [HarmonyPatch(typeof(BattleActiveBehaviorData), nameof(BattleActiveBehaviorData.ActionEffectProcess))]
+            private static class PreserveResult
+            {
+                private static void Prefix(BattleActiveBehaviorData __instance, EDiceResult __0)
+                {
+                    if (Prepared.TryGetValue(__instance, out ActionStrike strike) && strike.Resolution != null)
+                        strike.Resolution.Result = __0;
+                }
+            }
+
+            [HarmonyPatch(typeof(BattleActiveBehaviorData), nameof(BattleActiveBehaviorData.ClearOnActionEnd))]
+            private static class ClearStrike
+            {
+                private static void Postfix(BattleActiveBehaviorData __instance, ref Task __result)
+                {
+                    if (!Prepared.TryGetValue(__instance, out ActionStrike strike)) return;
+                    Prepared.Remove(__instance);
+                    if (strike.Resolution != null)
+                        __result = Finish(__result, strike.Resolution);
+                }
+            }
+
             private static void Postfix(BattleActiveBehaviorData __instance, EBattleSkillTrigger __0,
                 ParamTransmitionData __1, ref Task __result)
             {
-                if (__0 != EBattleSkillTrigger.DiceSuccess && __0 != EBattleSkillTrigger.DiceDiffSuccess &&
-                    __0 != EBattleSkillTrigger.DiceGreatSuccess) return;
-
                 BattleSkillData skill = __instance.BattleSkillData;
                 if (BattleHelper.GameOptionIsBreak || !HasPalermo(__instance.Self) || skill?.Config == null ||
                     !StrikeSequence.Clips.TryGetValue(skill.Id, out StrikeShow show)) return;
 
-                __result = Play(__result, __instance, __1, show);
+                if (__0 == EBattleSkillTrigger.BeforeDiceCheck)
+                {
+                    __result = BeginStrikeAfterOriginal(__result, __instance);
+                    return;
+                }
+                if (__0 != EBattleSkillTrigger.DiceSuccess && __0 != EBattleSkillTrigger.DiceDiffSuccess &&
+                    __0 != EBattleSkillTrigger.DiceGreatSuccess) return;
+
+                EDiceResult result = __0 switch
+                {
+                    EBattleSkillTrigger.DiceDiffSuccess => EDiceResult.DiffSuc,
+                    EBattleSkillTrigger.DiceGreatSuccess => EDiceResult.GreatSuccess,
+                    _ => EDiceResult.Success
+                };
+                __result = Play(__result, __instance, __1, show, result);
+            }
+
+            private static async Task BeginStrikeAfterOriginal(Task original, BattleActiveBehaviorData data)
+            {
+                await original;
+                if (!BattleHelper.IsInBattle || BattleHelper.GameOptionIsBreak || !StrikeSequence.CanHit(data.Self) ||
+                    Prepared.TryGetValue(data, out _)) return;
+                int id = data.BattleSkillData.Id;
+                BattleRole target = data.Targets?.FirstOrDefault(role => role != data.Self &&
+                    StrikeSequence.CanHit(role) && !role.IsRemoved &&
+                    (id != StrikeProfiles.ExecutionId || ValennaHunt.CanExecute(data.Self, role)));
+                if (target == null) return;
+                var resolution = new StrikeResolution(data.Self, target, data.BattleSkillData, EDiceResult.None);
+                Prepared.Add(data, new ActionStrike { Resolution = resolution });
+                await resolution.Begin();
+            }
+
+            private static async Task Finish(Task original, StrikeResolution resolution)
+            {
+                await original;
+                await resolution.Finish();
             }
 
             private static async Task Play(Task original, BattleActiveBehaviorData data,
-                ParamTransmitionData param, StrikeShow show)
+                ParamTransmitionData param, StrikeShow show, EDiceResult result)
             {
                 await original;
                 try
@@ -250,20 +326,60 @@ namespace ValennaBattle
                         : null;
                     if (targets == null)
                         targets = data.CurDiceCheckTargets?.Count > 0 ? data.CurDiceCheckTargets : data.Targets;
-                    BattleRole target = targets?.FirstOrDefault(role => role != data.Self && StrikeSequence.CanHit(role) &&
+                    BattleRole target = targets?.FirstOrDefault(role => role != data.Self &&
+                        StrikeSequence.CanHit(role) && !role.IsRemoved &&
                         (show.Id != StrikeProfiles.ExecutionId || ValennaHunt.CanExecute(data.Self, role)));
                     if (target == null)
                     {
-                        Instance.Warn($"瓦伦娜动作 {show.Id} 无有效目标");
+                        Instance.Warn($"瓦伦希娜动作 {show.Id} 无有效目标");
                         return;
                     }
-                    Instance.Report($"瓦伦娜动作 {show.Id}「{show.Name}」开始播片，共 {show.Cues.Length} 段");
-                    await StrikeSequence.Play(data.Self, target, data.BattleSkillData, show);
+                    ActionStrike strike = Prepared.GetValue(data, _ => new ActionStrike());
+                    if (strike.Played) return;
+                    strike.Played = true;
+                    Instance.Report($"瓦伦希娜动作 {show.Id}「{show.Name}」开始播片，共 {show.Cues.Length} 段");
+                    StrikeResolution resolution = strike.Resolution;
+                    if (resolution != null && resolution.Result != EDiceResult.None) result = resolution.Result;
+                    await StrikeSequence.Play(data.Self, target, data.BattleSkillData, show, result, resolution);
                 }
                 catch (Exception error)
                 {
                     Instance.Report(error);
                 }
+            }
+        }
+
+        [HarmonyPatch(typeof(BattleActiveBehaviorData), "_GetDiceResultList")]
+        private static class AddDexterityToCombatCheck
+        {
+            private static void Postfix(BattleActiveBehaviorData __instance, DiceCheckElementData __0,
+                bool __3, List<DiceResultData> __result)
+            {
+                if (__3 || __0 == null || __0.IsOverrideCheck || __result == null ||
+                    __instance.BattleSkillData?.Id is not (885126 or 885128) ||
+                    !HasPalermo(__instance.Self)) return;
+
+                foreach (DiceResultData dice in __result)
+                {
+                    if (dice.Role?.Data == null || dice.CheckType != EDiceValueType.Skill) continue;
+                    int combat = BattleHelper.GetSkillVaule(__0.Skill, dice.Role.Data);
+                    int dexterity = BattleHelper.GetDiceCheckValue(dice.Role, attrType: EHeroAttribute.DEX);
+                    int combined = UnityEngine.Mathf.Clamp(combat + dexterity, dice.MinCheckValue, dice.MaxCheckValue);
+                    dice.CheckValue = UnityEngine.Mathf.Clamp((int)(combined * __0.CheckValueRatio),
+                        dice.MinCheckValue, dice.MaxCheckValue);
+                }
+            }
+        }
+
+        [HarmonyPatch(typeof(BattleActiveBehaviorData), "_GetCheckResult",
+            new[] { typeof(EDiceResult), typeof(EDiceResult) })]
+        private static class ExecutionResultFloor
+        {
+            private static void Postfix(BattleActiveBehaviorData __instance, EDiceResult __0, ref EDiceResult __result)
+            {
+                if (__instance.BattleSkillData?.Id == StrikeProfiles.ExecutionId && __0 != EDiceResult.None &&
+                    __result.GetLevel() < EDiceResult.Success.GetLevel())
+                    __result = EDiceResult.Success;
             }
         }
     }

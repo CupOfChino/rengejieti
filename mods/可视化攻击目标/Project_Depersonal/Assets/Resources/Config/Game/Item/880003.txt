@@ -8,7 +8,7 @@
       "ItemName": {
         "TarKey": "",
         "SheetKey": "",
-        "InputText": "百合花链",
+        "InputText": "<color=#AEE9D0>百合花链</color>",
         "Characteristic": null
       },
       "ItemDes": {
@@ -20,7 +20,7 @@
       "ItemEffectDes": {
         "TarKey": "",
         "SheetKey": "",
-        "InputText": "装备后无法卸下。\n进入副本时自动获得并装备。\n最大生命值+4。\n每回合开始：为随机一名敌人叠加 2~3 层【百合花芳香】，并吸取其 2 点生命。",
+        "InputText": "进入副本自动获得并装备，装备后无法卸下。\n生命上限+4。\n回合开始：随机吸取1名敌人2点生命，并叠2～3层<color=#AEE9D0>【百合花芳香】</color>。",
         "Characteristic": null
       },
       "IconPathReference": {
@@ -51,7 +51,9 @@
       "ItemDynamicAffixList": [],
       "IsBindCharacter": true,
       "BuffsLink": [],
-      "Terms": [],
+      "Terms": [
+        880011
+      ],
       "ConfigData": [],
       "EquipmentConfigData": {
         "__type": "MOD.EquipConfigData,Assembly-CSharp",
@@ -86,7 +88,7 @@
         "OverrideDesc": {
           "TarKey": "",
           "SheetKey": "",
-          "InputText": "装备后无法卸下。\n进入副本时自动获得并装备。\n最大生命值+4。\n每回合开始：为随机一名敌人叠加 2~3 层【百合花芳香】，并吸取其 2 点生命。",
+          "InputText": "进入副本自动获得并装备，装备后无法卸下。\n生命上限+4。\n回合开始：随机吸取1名敌人2点生命，并叠2～3层<color=#AEE9D0>【百合花芳香】</color>。",
           "Characteristic": null
         },
         "Arrts": [],

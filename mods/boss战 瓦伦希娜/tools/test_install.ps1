@@ -36,7 +36,7 @@ if ($Remove) {
         if ([IO.File]::Exists($target)) { [IO.File]::Delete($target) }
     }
     if ([IO.File]::Exists($manifest)) { [IO.File]::Delete($manifest) }
-    Write-Output "已撤下 $HostModId 的瓦伦娜测试文件"
+    Write-Output "已撤下 $HostModId 的瓦伦希娜测试文件"
     return
 }
 
@@ -44,10 +44,20 @@ $data = Join-Path $mod 'Project_Depersonal/Assets/Resources/Config/Game'
 $assets = Join-Path $mod 'Project_Depersonal/Assets/Resources'
 $plugin = Join-Path $mod 'plugins/ValennaBattle.dll'
 $files = @((Get-Item -LiteralPath $plugin).FullName)
+$files += (Get-Item -LiteralPath (Join-Path $mod 'resource/voice-subtitles.json')).FullName
 $files += @(Get-ChildItem -LiteralPath $data -Recurse -File -Filter '*.txt' | ForEach-Object FullName)
 $files += @((Get-Item -LiteralPath (Join-Path $assets 'Config/InternalConfigure.txt')).FullName)
 $files += @(Get-ChildItem -LiteralPath (Join-Path $assets 'Texture') -Recurse -File |
     Where-Object { $_.Extension -in '.png', '.rtmeta', '.rtview' -or $_.Name -eq 'pose-pivots.json' } | ForEach-Object FullName)
+$soundRoot = Join-Path $mod 'resource/sound'
+if ([IO.Directory]::Exists($soundRoot)) {
+    $files += @(Get-ChildItem -LiteralPath $soundRoot -Recurse -File -Filter '*.ogg' | ForEach-Object FullName)
+}
+$audioPresets = Join-Path $mod 'resource/skill-audio'
+$presets = if ([IO.Directory]::Exists($audioPresets)) {
+    @(Get-ChildItem -LiteralPath $audioPresets -File -Filter '*.json' |
+        Where-Object BaseName -Match '^88512[1456789]$')
+} else { @() }
 $next = [ordered]@{}
 $changes = [Collections.Generic.List[object]]::new()
 $stage = Join-Path $mod ('temp/install-' + [guid]::NewGuid())
@@ -70,6 +80,7 @@ foreach ($relative in $previous.Keys) {
 
 [void][IO.Directory]::CreateDirectory($stage)
 $applied = [Collections.Generic.List[object]]::new()
+$newPresets = [Collections.Generic.List[string]]::new()
 try {
     foreach ($change in $changes) {
         $backup = Join-Path $stage ($applied.Count.ToString() + '.bak')
@@ -82,6 +93,17 @@ try {
             throw "复制校验失败 $($change.Target)"
         }
     }
+    # 技能音轨可由编辑器与玩家修改。安装仅补齐缺少的配置，清单不管理它们。
+    foreach ($preset in $presets) {
+        $target = Get-TargetPath ([IO.Path]::GetRelativePath($mod, $preset.FullName))
+        if ([IO.File]::Exists($target)) { continue }
+        [void][IO.Directory]::CreateDirectory([IO.Path]::GetDirectoryName($target))
+        [IO.File]::Copy($preset.FullName, $target, $false)
+        $newPresets.Add($target)
+        if ((Get-FileHash -LiteralPath $target).Hash -ne (Get-FileHash -LiteralPath $preset.FullName).Hash) {
+            throw "技能音轨复制校验失败 $target"
+        }
+    }
     $stagedManifest = Join-Path $stage 'manifest.json'
     [IO.File]::WriteAllText($stagedManifest, ($next | ConvertTo-Json -Depth 4), [Text.UTF8Encoding]::new($false))
     if ([IO.File]::Exists($manifest)) {
@@ -91,6 +113,7 @@ try {
     }
 }
 catch {
+    foreach ($target in $newPresets) { [IO.File]::Delete($target) }
     foreach ($change in $applied) {
         $exists = [IO.File]::Exists($change.Target)
         if ($change.Previous) {
@@ -105,4 +128,4 @@ catch {
 }
 Get-ChildItem -LiteralPath $stage -File | ForEach-Object { [IO.File]::Delete($_.FullName) }
 [IO.Directory]::Delete($stage)
-Write-Output "宿主 $HostModId 已挂载瓦伦娜，核对 $($next.Count) 个文件"
+Write-Output "宿主 $HostModId 已挂载瓦伦希娜，核对 $($next.Count) 个文件"

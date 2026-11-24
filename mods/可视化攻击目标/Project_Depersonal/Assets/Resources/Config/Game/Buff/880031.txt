@@ -8,20 +8,20 @@
       "Name": {
         "TarKey": "",
         "SheetKey": "",
-        "InputText": "记忆的双剑",
+        "InputText": "<color=#E8C48C>剑刃圆舞曲</color>",
         "Characteristic": null
       },
       "Des": {
         "TarKey": "",
         "SheetKey": "",
-        "InputText": "近战伤害+3。\n近战攻击命中时，给目标施加1层流血。\n受到近战攻击时，伤害-1。\n副手近战武器不受惩罚骰。\n可以单手装备双手近战武器：双手近战武器只占1个装备槽。",
+        "InputText": "近战伤害+3，承受的近战伤害-1。近战命中施加1层<color=#FF818C>【流血】</color>。\n受到敌人闪避后造成的反击伤害-50%。每回合首次闪避获1颗奖励骰。\n<color=#E8C48C>【双持】</color>：副手近战武器免惩罚骰，双手近战武器只占1个武器槽。",
         "Characteristic": null
       },
       "IconPathReference": {
         "ReferenceType": 1004,
         "Key": "icon_item_80"
       },
-      "Comment": "私货特质「记忆的双剑（880030）」的状态。效果都在插件里（SecretTraits.cs），这里只负责显示。图标暂时借原版「刀具附魔」的 icon_buff_daojufumo（自己画的那张游戏里显示空白，机制待查；等用户给图再换）。",
+      "Comment": "私货特质「剑法————Lacrimosa（880030）」的状态。效果都在插件里（SecretTraits.cs），这里只负责显示。图标暂时借原版「刀具附魔」的 icon_buff_daojufumo（自己画的那张游戏里显示空白，机制待查；等用户给图再换）。",
       "BuffType": 4,
       "BuffEffectType": 1,
       "OverlayType": 2,

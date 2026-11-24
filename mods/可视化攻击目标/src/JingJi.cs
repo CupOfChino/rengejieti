@@ -1,30 +1,24 @@
 // 茉莉专属武器「荆棘」（Item 880006）的插件逻辑 —— 和「葬花」配成一对的双剑。
 //
 // 数据侧（由 tools\make_JingJi_item.ps1 生成）：
-//   Item 880006  荆棘：1D4+2、单手、单段、神话+不可出售、绑定角色
+//   Item 880006  荆棘：1D4+1、单手、单段、神话+不可出售、绑定角色
 //                装备时 敏捷 +5 / 斗殴 +5 / 速度 +20（卸下时自动移除）
 //
 // 这里做的事（口径按 2026-09-27 用户最新定稿）：
 //   1. 攻击检定 = **斗殴**（正常显示）；另做一次**隐藏的敏捷检定**（不弹骰子）决定挂不挂【荆棘】。
 //      隐藏检定的分档与游戏一致：骰 ≤ 敏捷/5 大成功、≤ /2 困难成功、≤ 敏捷 普通成功，否则失败
 //      （见 RollHiddenDexCheck；规则是对着游戏日志反推、核对过的）。
-//   2. 主动攻击 = 行动 1 次、伤害结算 3 次：数据 ContinuousAttackCount = 1，
-//      第 1 次伤害由游戏自己算，另外 2 次由插件克隆伤害数据重跑 CalculationDamage ——
-//      3 次各自吃一次护甲 / 减伤、各跳一个伤害数字，但只挥一次、只判定一次。
-//      每 1 次伤害各叠 1 层【荆棘】（一次命中 = 3 层）。
-//   3. 每段倍率：普通成功 ×0.5（三段合计 150%）；困难成功（DiffSuc）/ 大成功 ×1.0（合计 300%）。
-//      低护甲敌人被"多段压制"、高护甲敌人每段都被吃掉 —— 这是这套倍率的设计意图。
-//   4. 挂层（2026-09-27 定稿）：隐藏敏捷检定**失败完全不挂**；成功每段各挂 1 层；大成功整次再额外 +1 层。
-//   5. 装备在主手：此武器伤害 +3；装备在副手：（先发）回合开始时随机打 1 名敌人一次。
-//      先发 = 掷一次武器基础伤害 + 只算防御侧，命中叠 1 层【荆棘】。
-//   6. 速度差加成**常驻**：双手（另一只手空）每高于目标 50 点伤害 +10%，单手每 100 点一档；
-//      双手同时吃主手 + 副手效果。
-//   7. 先发与灰暗孤影的反击 = 只算防御侧：武器基础伤害过一遍目标的护甲 / 减伤 / 易伤，
-//      攻击者一侧的加成（力量、主手 +3、速度台阶、花香……）一律不算。
-//      实现见 TryBaseDamageWithDefense；SetDamage 那一侧只负责挂【荆棘】层数。
+//   2. 主动攻击：一次判定、一次伤害结算，最终跳字均分成三个同屏数字。
+//      隐藏敏捷失败不叠、成功叠 3 层、大成功叠 4 层。
+//   3. 普通、困难、大成功的伤害倍率为 ×0.5、×0.75、×1。
+//   4. 主手武器伤害 +2，副手获得先发。另一只手没有武器时视作双手持握，兼得两者。
+//   5. 速度领先每 100 点增伤 5%，双手持握每 50 点一档。
+//   6. 先发掷一次武器基础伤害并计入目标防御。
 
 using System;
 using System.Collections.Generic;
+using System.Reflection;
+using System.Reflection.Emit;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Game;
@@ -32,6 +26,7 @@ using Game.SkillData;
 using GamePlayEvent;
 using HarmonyLib;
 using MOD;
+using UnityEngine;
 
 namespace AttackTargetVisualizer
 {
@@ -39,35 +34,24 @@ namespace AttackTargetVisualizer
     {
         internal const int WeaponItemId = 880006;
 
-        /// <summary>
-        /// 伤害倍率（2026-09-27 用户定稿）—— 作用在"这一次攻击"上，之后复制 3 份：
-        ///   普通成功 ×0.5（三段合计 150%）
-        ///   困难成功（DiffSuc）×0.75（合计 225%）
-        ///   大成功（GreatSuccess）×1.0（合计 300%）
-        /// （原来大成功还额外"基础伤害 +2"，随这次的倍率表一起去掉。）
-        /// </summary>
-        private const float SegmentRatioNormal = 0.5f;
-        private const float SegmentRatioHard = 0.75f;
+        private const float NormalHitRatio = 0.5f;
+        private const float HardHitRatio = 0.75f;
 
-        /// <summary>主动攻击的伤害结算次数（2026-09-27 用户口径：行动 1 次、伤害结算 3 次）。</summary>
-        private const int StrikeCount = 3;
-
-        /// <summary>补算的两次伤害之间隔多久（毫秒）—— 让 3 个伤害数字依次跳出来，看得清。</summary>
-        private const int ExtraStrikeDelayMs = 260;
+        internal const int StrikeCount = 3;
 
         /// <summary>装备在主手时的武器伤害加成。</summary>
-        private const int MasterDamageBonus = 3;
+        private const int MasterDamageBonus = 2;
 
         /// <summary>
         /// 速度差台阶（2026-09-27 用户口径）：**常驻**，不再要求双手 ——
-        /// 双手（另一只手空）每高于目标 50 点速度 → 伤害 +10%；单手时每 100 点一档。
+        /// 双手（另一只手空）每高于目标 50 点速度 → 伤害 +5%；单手时每 100 点一档。
         /// </summary>
         private const int SpeedStepTwoHanded = 50;
         private const int SpeedStepOneHanded = 100;
-        private const float SpeedStepBonus = 0.1f;
+        private const float SpeedStepBonus = 0.05f;
 
         // 注：【荆棘】挂层 2026-09-27 定稿 —— 由一次**隐藏的敏捷检定**决定（整次攻击判一次）：
-        //     失败完全不挂；成功每段挂 1 层；大成功整次再额外 +1 层（见 RollHiddenDexCheck）。
+        //     主动命中时，失败不叠、普通或困难成功叠 3 层、大成功叠 4 层（见 RollHiddenDexCheck）。
 
         // =====================================================================
         // 槽位判定
@@ -185,17 +169,16 @@ namespace AttackTargetVisualizer
         //    原来这里是「斗殴 + 敏捷」联合检定（把敏捷加进斗殴的检定值）。
         //    用户口径改成：**主检定 = 斗殴**（正常显示，结果影响伤害倍率），
         //    另做一次**隐藏的敏捷检定**（不弹骰子）决定挂不挂【荆棘】 ——
-        //    实现见 RollHiddenDexCheck；挂层在 TripleStrike / 先发 / 反击里。
+        //    实现见 RollHiddenDexCheck；挂层在 PrepareDamage / 先发 / 反击里。
         // =====================================================================
 
         // =====================================================================
         // 2. 伤害的接管点（2026-09-27 定稿）
         //    `CalculationDamage` 的 Prefix（在 SecretTraits 的补丁里）：
-        //      · 先发 / 灰暗孤影的反击 → 只算防御侧（TryBaseDamageWithDefense）
-        //      · 大成功的荆棘攻击   → 无视一半护甲（TryHalfArmor）
+        //      · 先发 → 只算防御侧（TryBaseDamageWithDefense）
         //    `BattleRole.SetDamage` 的 Prefix：
-        //      · 荆棘主动攻击 → 第 1 次照常，随后补 2 次完整结算（TripleStrike）
-        //      · 先发 / 反击 → 只挂 1 层【荆棘】（伤害已在上面算好）
+        //      · 荆棘主动攻击 → 播突刺并决定荆棘层数；伤害由原版结算一次
+        //      · 先发 → 以隐藏敏捷检定决定叠层
         //    旧版的"3 段 + 钉住判定 + 跳过骰子动画"已删：
         //    段数游标在"追加行动"（灰暗孤影）时会残留，把下一次行动的判定也钉住，属于隐患。
         // =====================================================================
@@ -215,7 +198,6 @@ namespace AttackTargetVisualizer
         {
             PendingShufu.Clear();
             ConvertingShufu.Clear();
-            ExtraStrikeData.Clear();
             InGuardedCalc = false;
         }
 
@@ -241,7 +223,7 @@ namespace AttackTargetVisualizer
                 if (addData.SourceType != EDamageSourceType.BattleSkill)
                 {
                     // 只有"正常行动打出来"的伤害才吃荆棘的倍率 / 破甲 / 持握规则。
-                    // 先发与灰暗孤影的反击走另一套：只造成武器基础伤害（见 TryTakeOverDamage）。
+                    // 先发走另一套：只造成武器基础伤害（见 TryBaseDamageWithDefense）。
                     return;
                 }
                 if (Touched.TryGetValue(addData, out object _))
@@ -253,18 +235,15 @@ namespace AttackTargetVisualizer
                 // 局部变量别叫 result —— 它会遮蔽外面那个 ref int result（那是伤害值，2026-09-27 踩）
                 EDiceResult diceResult = addData.DiceResult;
 
-                // 2026-09-27 用户口径：普通成功每段减半（三段合计 150%）；
-                // 困难成功（DiffSuc）/ 大成功不减伤害（三段合计 300%）。
-                // 大成功的"无视一半护甲"不在这里做 —— 见 TryHalfArmor（要跑两次计算取差值）。
-                // 三档倍率（2026-09-27 用户定稿）：普通 ×0.5 / 困难 ×0.75 / 大成功 ×1.0
+                // 普通 ×0.5，困难 ×0.75，大成功 ×1。
                 float ratio;
                 if (diceResult == EDiceResult.Success)
                 {
-                    ratio = SegmentRatioNormal;
+                    ratio = NormalHitRatio;
                 }
                 else if (diceResult == EDiceResult.DiffSuc)
                 {
-                    ratio = SegmentRatioHard;
+                    ratio = HardHitRatio;
                 }
                 else
                 {
@@ -292,13 +271,13 @@ namespace AttackTargetVisualizer
 
                 addData.DamageRatio = ratio;
 
-                // 主手（含"视为双手"）：武器伤害 +3
+                // 主手（含"视为双手"）：武器伤害 +2
                 if (onMaster || asTwoHanded)
                 {
                     addData.ExtraItemAddDamage += MasterDamageBonus;
                 }
 
-                AttackTargetPlugin.LogInfo("荆棘：判定 " + diceResult + " → 每段伤害 ×" + ratio.ToString("0.###") +
+                AttackTargetPlugin.LogInfo("荆棘：判定 " + diceResult + " → 本次伤害倍率 ×" + ratio.ToString("0.###") +
                     ((onMaster || asTwoHanded) ? "，主手 +" + MasterDamageBonus : "") +
                     ((speedDiff > 0) ? "，速度差 " + speedDiff + "（" + (asTwoHanded ? "双手" : "单手") +
                         "每 " + speedStep + " 点一档）" : ""));
@@ -443,7 +422,7 @@ namespace AttackTargetVisualizer
         /// 判定规则和游戏自己的一致（对着日志反推、再按"目标 120 骰 10 = 大成功、骰 61/86/90 = 普通成功"核对过）：
         ///   骰 1~100 → ≤ 检定值/5 = 大成功；≤ 检定值/2 = 困难成功；≤ 检定值 = 普通成功；否则失败。
         /// 用途：决定这次攻击能不能给目标叠【荆棘】——
-        /// 失败完全不挂、成功每段各挂 1 层、大成功整次再额外 +1 层（见 TripleStrike）。
+        /// 主动命中时，失败不叠、普通或困难成功叠 3 层、大成功叠 4 层。
         /// </summary>
         private static EDiceResult RollHiddenDexCheck(BattleRole role)
         {
@@ -487,7 +466,7 @@ namespace AttackTargetVisualizer
         }
 
         /// <summary>
-        /// 先发 / 反击用：隐藏敏捷检定 → 成功挂 1 层、大成功再额外 +1 层、失败不挂。
+        /// 先发用：隐藏敏捷检定 → 成功挂 1 层、大成功再额外 +1 层、失败不挂。
         /// </summary>
         private static void RollThornByDex(BattleRole attacker, BattleRole target)
         {
@@ -514,7 +493,7 @@ namespace AttackTargetVisualizer
         }
 
         /// <summary>
-        /// 挂【荆棘】的"可等待"版本 —— 3 次伤害按顺序 await，层数才不会因为并发的加 buff 少掉。
+        /// 顺序叠加荆棘，避免并发添加状态时丢层。
         /// </summary>
         internal static async Task AddThornAsync(BattleRole target, int layers)
         {
@@ -858,7 +837,7 @@ namespace AttackTargetVisualizer
         /// <summary>
         /// 先发（副手每回合白送的那一下，2026-09-27 用户口径）：
         /// 只造成**武器基础伤害** —— 直接掷武器自己的伤害骰，
-        /// 不吃任何加成（主手 +3、速度台阶、力量、花香……），也不吃目标的护甲 / 减伤。
+        /// 不吃任何加成（主手 +2、速度台阶、力量、花香……），也不吃目标的护甲 / 减伤。
         /// 命中给目标叠 1 层【荆棘】（挂层在 SetDamage 的接管里兜底）。
         /// </summary>
         private static async void FirstStrike(BattleRole source, BattleRole target, MOD_Dynamic_Item weapon)
@@ -893,8 +872,8 @@ namespace AttackTargetVisualizer
                 // 会把"攻击者一侧的加成"全部摘掉，只留下武器基础伤害 + 目标那一侧的
                 // 护甲 / 减伤 / 易伤等结算（2026-09-27 用户口径）。
                 int damage = BattleHelper.CalculationDamage(damageData, source, target, addData);
+                SecretFx.Puncture(target, source);
                 await target.OnHit(source, damage, damageData, addData, record, null);
-                SecretFx.Puncture(source, target);   // 原版「突刺命中」特效 + 刀音效
             }
             catch (Exception e)
             {
@@ -903,30 +882,12 @@ namespace AttackTargetVisualizer
         }
 
         // =====================================================================
-        // 7. 伤害的三套口径（2026-09-27 用户口径定稿）
-        //
-        //   ① 荆棘主动攻击：行动 1 次（一次挥击、一次检定），但**伤害完整结算 3 次**——
-        //      每次都单独跑 CalculationDamage（各自吃一次护甲 / 减伤），跳 3 个伤害数字。
-        //      每段倍率：普通成功 ×0.5、困难 / 大成功 ×1.0（所以总伤 = 150% / 300%）；
-        //      大成功另外无视敌人一半护甲（TryHalfArmor）。低护甲被多段压制、高护甲每段都被吃掉。
-        //   ② 先发 / 灰暗孤影的反击：**只算防御侧** ——
-        //      伤害 = 掷一次武器基础伤害，攻击者一侧的加成（力量、武器 +3、速度台阶、花香……）
-        //      全部不算；目标一侧的护甲、减伤、易伤、身上的 debuff 照常生效（TryBaseDamageWithDefense）。
-        //   ③ 补算的两次伤害：不重新挥砍、不重新判定，只走 OnHit → SetDamage（跳数字 / 受伤事件）。
-        //
-        //   钩子分两处：CalculationDamage 的 Prefix 管 ①②，SetDamage 的 Prefix 管 ③ 的补算与挂层。
+        // 7. 先发只掷武器基础伤害，目标侧的防御仍生效。
         // =====================================================================
 
-        /// <summary>
-        /// 我们自己发起的"内层计算"（只算防御侧、半破甲要算两遍）的重入闸门。
-        /// 为 true 时：CalculationDamage 的补丁直接放行原方法、也不再补攻击侧效果。
-        /// </summary>
+        /// <summary>只算防御侧的内层原版计算时，暂停附加的私货规则。</summary>
         internal static bool InGuardedCalc;
 
-        /// <summary>我们安排补算的伤害数据（原始那次 + 克隆出来的两次），SetDamage 时放行、不重复接管。</summary>
-        private static readonly HashSet<DamageAdditionalData> ExtraStrikeData = new HashSet<DamageAdditionalData>();
-
-        /// <summary>克隆一份 DamageAdditionalData（补算的两次伤害各用一份，免得 Touched 表拦掉倍率）。</summary>
         private static DamageAdditionalData CloneAdditional(DamageAdditionalData src)
         {
             DamageAdditionalData data = new DamageAdditionalData();
@@ -954,35 +915,13 @@ namespace AttackTargetVisualizer
             return data;
         }
 
-        /// <summary>
-        /// 这条伤害是不是"只算防御侧"的那种（先发 / 灰暗孤影的反击）。
-        /// </summary>
-        internal static bool IsBaseDamageOnly(DamageAdditionalData addData, BattleRole source)
+        private static bool IsBaseDamageOnly(DamageAdditionalData data)
         {
-            try
-            {
-                if (addData == null || !addData.IsWeaponDamage || addData.Weapon == null)
-                {
-                    return false;
-                }
-                if (addData.SourceType == EDamageSourceType.Other && IsJingJi(addData.Weapon))
-                {
-                    return true;   // 先发（荆棘副手每回合白送的那一下）
-                }
-                if (addData.SourceType == EDamageSourceType.StrickBack
-                    && SecretTraits.HasTraitWake(source, SecretIds.LoneShadowTrait))
-                {
-                    return true;   // 灰暗孤影的反击
-                }
-                return false;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
+            return data != null && data.IsWeaponDamage && data.SourceType == EDamageSourceType.Other
+                && IsJingJi(data.Weapon);
         }
 
-        /// <summary>掷一次武器自己的伤害骰（荆棘 = 1D4+2 → 3~6），不带任何加成。</summary>
+        /// <summary>掷一次武器自己的基础伤害骰。</summary>
         internal static int RollWeaponBaseDamage(MOD_Dynamic_Item weapon)
         {
             try
@@ -1003,7 +942,7 @@ namespace AttackTargetVisualizer
         }
 
         /// <summary>
-        /// 【只算防御侧】先发 / 灰暗孤影的反击：
+        /// 【只算防御侧】先发：
         /// 伤害 = 掷一次武器基础伤害，然后只让"目标那一侧"的效果参与结算。
         /// 做法：克隆一份干净的伤害数据（基础骰固定成这次掷出的值、攻击侧加值清零），
         /// 再临时把攻击者身上的"造成伤害增减 / 额外伤害项"摘掉，跑一次游戏自己的 CalculationDamage。
@@ -1014,7 +953,7 @@ namespace AttackTargetVisualizer
         {
             try
             {
-                if (InGuardedCalc || target == null || addData == null || !IsBaseDamageOnly(addData, source))
+                if (InGuardedCalc || target == null || addData == null || !IsBaseDamageOnly(addData))
                 {
                     return false;
                 }
@@ -1027,7 +966,7 @@ namespace AttackTargetVisualizer
 
                 DamageAdditionalData cleanAdd = CloneAdditional(addData);
                 cleanAdd.SourceType = addData.SourceType;
-                cleanAdd.ExtraItemAddDamage = 0;   // 装备附加伤害（主手 +3 之类）不算
+                cleanAdd.ExtraItemAddDamage = 0;   // 装备附加伤害（主手 +2 之类）不算
                 cleanAdd.BonusDamage = null;
                 cleanAdd.DamageRatio = 1f;
                 cleanAdd.IsCritical = false;
@@ -1078,176 +1017,207 @@ namespace AttackTargetVisualizer
             }
         }
 
-        /// <summary>
-        /// `BattleRole.SetDamage` 的 Prefix 里调用。
-        /// 返回 true 表示照常走原方法（先发 / 反击只是顺便挂一层【荆棘】）；
-        /// 返回 false 表示这一次由我们接管（主动攻击要再补 2 次结算），并交出一个等它跑完的 Task。
-        /// </summary>
-        internal static bool TryTakeOverDamage(BattleRole target, ref uint damage, bool playAnim, bool showChangeTip,
-            RoleHitData hitData, ref Task result)
+        internal static bool IsActiveStrike(RoleHitData hitData)
         {
-            try
-            {
-                if (target == null || hitData == null || hitData.AddData == null)
-                {
-                    return true;
-                }
-                DamageAdditionalData addData = hitData.AddData;
-                if (!addData.IsWeaponDamage || addData.Weapon == null)
-                {
-                    return true;
-                }
-                if (ExtraStrikeData.Contains(addData))
-                {
-                    return true;   // 我们自己安排的补算 / 第 1 次结算，直接放行
-                }
-
-                // ① 先发（SourceType = Other 的荆棘伤害）：伤害已经由"只算防御侧"算好，这里只挂层
-                if (addData.SourceType == EDamageSourceType.Other && IsJingJi(addData.Weapon))
-                {
-                    RollThornByDex(hitData.Attacker, target);   // 先发：隐藏敏捷检定决定挂不挂层
-                    return true;
-                }
-
-                // ② 灰暗孤影的反击：伤害同样已经由"只算防御侧"算好
-                if (addData.SourceType == EDamageSourceType.StrickBack
-                    && SecretTraits.HasTraitWake(hitData.Attacker, SecretIds.LoneShadowTrait))
-                {
-                    if (IsJingJi(addData.Weapon))
-                    {
-                        RollThornByDex(hitData.Attacker, target);   // 反击也走隐藏敏捷检定
-                    }
-                    return true;
-                }
-
-                // ③ 荆棘主动攻击：这一次是第 1 段，后面再补 2 次完整结算（各自吃护甲）
-                if (addData.SourceType == EDamageSourceType.BattleSkill && IsJingJi(addData.Weapon))
-                {
-                    result = TripleStrike(target, damage, playAnim, showChangeTip, hitData);
-                    return false;
-                }
-
-                return true;
-            }
-            catch (Exception e)
-            {
-                AttackTargetPlugin.LogError("荆棘：伤害接管出错：" + e.Message);
-                return true;
-            }
+            DamageAdditionalData addData = hitData?.AddData;
+            return addData != null && addData.IsWeaponDamage
+                && addData.SourceType == EDamageSourceType.BattleSkill && IsJingJi(addData.Weapon);
         }
 
-        /// <summary>
-        /// 荆棘主动攻击：行动 1 次、伤害结算 3 次（2026-09-27 用户口径）。
-        /// **只判定 1 次、只计算 1 次**：第 1 次的伤害是游戏自己算好的（含护甲 / 减免 / 倍率），
-        /// 第 2、3 次**直接复制这个结果**（不再重跑 CalculationDamage），
-        /// 表现就是"3 个基本相同的伤害数字"（倍率本身已经由第一段承担：普通 ×0.5 → 三段合计 150%）。
-        /// **每一段伤害各挂一次【荆棘】**（2026-09-27 用户澄清：要的是"按武器判断"，
-        /// 不是"把三段压成一次"）——能走到这里就说明这次伤害是荆棘打出来的
-        /// （调用点已用 `IsJingJi(addData.Weapon)` 过滤），所以每段各挂是安全的：
-        /// 双持时葬花打出的那几段不会进这个方法，荆棘的 3 段则各挂 1~2 层（大成功翻倍）。
-        /// </summary>
-        private static async Task TripleStrike(BattleRole target, uint firstDamage, bool playAnim, bool showChangeTip,
-            RoleHitData hitData)
+        internal static int PrepareDamage(BattleRole target, RoleHitData hitData)
         {
-            DamageAdditionalData addData = hitData.AddData;
-            DamageData damageData = hitData.DamageData;
-            BattleRole attacker = hitData.Attacker;
-            List<DamageAdditionalData> registered = new List<DamageAdditionalData>();
-            registered.Add(addData);
-            ExtraStrikeData.Add(addData);
-            try
+            DamageAdditionalData addData = hitData?.AddData;
+            if (addData == null || !addData.IsWeaponDamage || !IsJingJi(addData.Weapon))
             {
-                AttackTargetPlugin.LogInfo("荆棘：命中「" + SecretTraits.NameOf(target) + "」→ 第 1 次伤害 " +
-                    firstDamage + " 点，随后再补 " + (StrikeCount - 1) + " 次结算");
-                // 2026-09-27 定稿：整次攻击只判一次**隐藏敏捷检定**决定挂层 ——
-                // 失败完全不挂；成功每段各挂 1 层；大成功整次再额外 +1 层
-                EDiceResult dexResult = RollHiddenDexCheck(attacker);
-                bool thornOk = dexResult == EDiceResult.Success || dexResult == EDiceResult.DiffSuc
-                            || dexResult == EDiceResult.GreatSuccess;
-                int extraThorn = dexResult == EDiceResult.GreatSuccess ? 1 : 0;
-                if (thornOk)
-                {
-                    await AddThornAsync(target, 1);
-                }
-                await target.SetDamage(firstDamage, playAnim, showChangeTip, hitData);
-                // 主动攻击的突刺特效**改由武器数据自己播**（2026-09-27 二次修改）：
-                // 880006.txt 的 `Damage.EffectShow` 里配了 FXSkillHit_Puncture + weapon_knife，
-                // 游戏在攻击结算时会原生播放一次（3 段伤害共用这一次表现，不会连着响）。
-                // 插件只负责"先发 / 灰暗孤影反击"那种没有武器表现链的白送攻击（见 FirstStrike 与 SecretTraits.cs）。
+                return 0;
+            }
 
-                for (int i = 1; i < StrikeCount; i++)
-                {
-                    if (target == null || target.Data == null || target.IsDeath)
-                    {
-                        break;   // 目标已经倒下就不再补后续伤害
-                    }
-                    if (ExtraStrikeDelayMs > 0)
-                    {
-                        await Task.Delay(ExtraStrikeDelayMs);   // 让伤害数字依次跳出来，看得清
-                    }
-                    DamageAdditionalData extra = CloneAdditional(addData);
-                    ExtraStrikeData.Add(extra);
-                    registered.Add(extra);
-                    // 2026-09-27 用户口径：只判定 1 次、只计算 1 次 —— 后两段直接复制第 1 段的伤害值，
-                    // 不再重跑 CalculationDamage（护甲 / 减免也只吃 1 次），表现就是 3 个基本相同的数字。
-                    int damage = (int)firstDamage;
-                    if (thornOk)
-                    {
-                        await AddThornAsync(target, 1);   // 每段各挂 1 层
-                    }
-                    await target.OnHit(attacker, damage, damageData, extra, MakeRecord(attacker, addData.Weapon), null);
-                }
-                if (extraThorn > 0 && target != null && !target.IsDeath)
-                {
-                    await AddThornAsync(target, extraThorn);   // 敏捷大成功：整次额外 +1 层
-                }
-            }
-            catch (Exception e)
+            if (addData.SourceType == EDamageSourceType.Other)
             {
-                AttackTargetPlugin.LogError("荆棘：三段伤害出错：" + e.Message);
+                RollThornByDex(hitData.Attacker, target);
+                return 0;
             }
-            finally
-            {
-                for (int i = 0; i < registered.Count; i++)
-                {
-                    ExtraStrikeData.Remove(registered[i]);
-                }
-            }
-        }
 
-        /// <summary>补算伤害时用的来源记录（让"造成伤害/击杀"这类装备效果照常触发）。</summary>
-        private static DamageSourceRecord MakeRecord(BattleRole attacker, MOD_Dynamic_Item weapon)
-        {
-            return new DamageSourceRecord
+            if (addData.SourceType == EDamageSourceType.StrickBack)
             {
-                Source = attacker,
-                SourceType = DamageSourceRecord.EDamageSourceType.Weapon,
-                Weapon = weapon
-            };
+                SecretFx.Puncture(target, hitData.Attacker);
+                return 0;
+            }
+
+            if (!IsActiveStrike(hitData))
+            {
+                return 0;
+            }
+
+            EDiceResult dexResult = RollHiddenDexCheck(hitData.Attacker);
+            SecretFx.PunctureBurst(target, hitData.Attacker);
+            switch (dexResult)
+            {
+                case EDiceResult.GreatSuccess:
+                    return StrikeCount + 1;
+                case EDiceResult.DiffSuc:
+                case EDiceResult.Success:
+                    return StrikeCount;
+                default:
+                    return 0;
+            }
         }
     }
 
-    /// <summary>
-    /// 荆棘：在最终扣血入口（BattleRole.SetDamage）接管伤害 ——
-    /// 主动攻击拆 3 次；先发 / 灰暗孤影的反击只给武器基础伤害。
-    /// </summary>
-    [HarmonyPatch(typeof(BattleRole), "SetDamage",
+    [HarmonyPatch(typeof(BattleRole), nameof(BattleRole.SetDamage),
         new Type[] { typeof(uint), typeof(bool), typeof(bool), typeof(RoleHitData) })]
     internal static class Patch_JingJi_SetDamage
     {
-        private static bool Prefix(BattleRole __instance, ref uint damage, bool playAnim, bool showChangeTip,
-            RoleHitData hitData, ref Task __result)
+        private static void Prefix(BattleRole __instance, RoleHitData hitData, out int __state)
         {
+            __state = 0;
             try
             {
-                return JingJi.TryTakeOverDamage(__instance, ref damage, playAnim, showChangeTip, hitData, ref __result);
+                __state = JingJi.PrepareDamage(__instance, hitData);
             }
             catch (Exception e)
             {
-                AttackTargetPlugin.LogError("荆棘补丁出错（伤害接管）：" + e.Message);
-                return true;
+                AttackTargetPlugin.LogError("荆棘：处理命中特效或叠层检定出错：" + e.Message);
+            }
+        }
+
+        private static void Postfix(BattleRole __instance, int __state, ref Task __result)
+        {
+            if (__state > 0)
+            {
+                __result = AddThornsAfterDamage(__result, __instance, __state);
+            }
+        }
+
+        private static async Task AddThornsAfterDamage(Task damageTask, BattleRole target, int layers)
+        {
+            await damageTask;
+            if (target.Data != null && !target.IsDeath)
+            {
+                await JingJi.AddThornAsync(target, layers);
             }
         }
     }
 
+    /// <summary>只在原版 SetDamage 应用生命变化的调用点启用三段跳字。</summary>
+    [HarmonyPatch]
+    internal static class Patch_JingJi_DamageDisplay
+    {
+        [ThreadStatic]
+        internal static HUDElement SplitDamageHud;
+
+        private static MethodBase TargetMethod()
+        {
+            MethodInfo method = AccessTools.Method(typeof(BattleRole), nameof(BattleRole.SetDamage),
+                new[] { typeof(uint), typeof(bool), typeof(bool), typeof(RoleHitData) });
+            Type stateMachine = method.GetCustomAttribute<AsyncStateMachineAttribute>().StateMachineType;
+            return AccessTools.Method(stateMachine, "MoveNext");
+        }
+
+        private static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions,
+            MethodBase original)
+        {
+            MethodInfo changeAttr = AccessTools.Method(typeof(RoleData), nameof(RoleData.ChangeAttr),
+                new[] { typeof(bool), typeof(ChangeAttrData), typeof(string), typeof(bool), typeof(bool), typeof(BattleRole) });
+            FieldInfo hitData = AccessTools.Field(original.DeclaringType, "hitData");
+            MethodInfo display = AccessTools.Method(typeof(Patch_JingJi_DamageDisplay), nameof(ChangeHp));
+
+            var code = new List<CodeInstruction>(instructions);
+            int call = code.FindIndex(instruction => instruction.Calls(changeAttr));
+            if (hitData == null || call < 0 || code.FindLastIndex(instruction => instruction.Calls(changeAttr)) != call)
+            {
+                throw new InvalidOperationException("找不到唯一的 SetDamage 扣血调用点");
+            }
+
+            var loadState = new CodeInstruction(OpCodes.Ldarg_0);
+            loadState.labels.AddRange(code[call].labels);
+            code[call].labels.Clear();
+            code[call].opcode = OpCodes.Call;
+            code[call].operand = display;
+            code.Insert(call, loadState);
+            code.Insert(call + 1, new CodeInstruction(OpCodes.Ldfld, hitData));
+            return code;
+        }
+
+        private static Task ChangeHp(RoleData role, bool isAdd, ChangeAttrData attr, string sourceKey,
+            bool playAnim, bool showChangeTip, BattleRole attacker, RoleHitData hitData)
+        {
+            HUDElement previous = SplitDamageHud;
+            // 原版扣血在第一次等待之前就调用 ShowHudNum，离开这段同步调用就恢复。
+            SplitDamageHud = playAnim && JingJi.IsActiveStrike(hitData) ? role.Role?.Model?.Hud : null;
+            try
+            {
+                return role.ChangeAttr(isAdd, attr, sourceKey, playAnim, showChangeTip, attacker);
+            }
+            finally
+            {
+                SplitDamageHud = previous;
+            }
+        }
+    }
+
+    [HarmonyPatch(typeof(HUDElement), nameof(HUDElement.ShowHudNum))]
+    internal static class Patch_JingJi_SplitHudDamage
+    {
+        private static readonly Action<HUDElement, UIHudNumElement> OnAnimationFinished =
+            AccessTools.MethodDelegate<Action<HUDElement, UIHudNumElement>>(
+                AccessTools.Method(typeof(HUDElement), "_UpdateHUDNumElementsOnAnimFinish"));
+
+        private static bool Prefix(HUDElement __instance, int num, Transform modelPos, bool isHit,
+            List<UIHudNumElement> ____hudNumElements)
+        {
+            if (!isHit || num <= 0 || __instance != Patch_JingJi_DamageDisplay.SplitDamageHud
+                || !__instance.CanShowChangeTip)
+            {
+                return true;
+            }
+
+            Patch_JingJi_DamageDisplay.SplitDamageHud = null;
+            int part = num / JingJi.StrikeCount;
+            int remainder = num % JingJi.StrikeCount;
+            var numbers = new List<UIHudNumElement>(JingJi.StrikeCount);
+            try
+            {
+                float spacing = 0f;
+                for (int i = 0; i < JingJi.StrikeCount; i++)
+                {
+                    UIHudNumElement element = __instance.Pool_HudNum.Alloc<UIHudNumElement>();
+                    numbers.Add(element);
+                    int value = part + (i < remainder ? 1 : 0);
+                    element.SetElement(value, true, finished => OnAnimationFinished(__instance, finished));
+                    if (value == 0)
+                    {
+                        element.Text_Value.text = "0";
+                    }
+                    if (i == 0)
+                    {
+                        spacing = Mathf.Max(24f, element.Text_Value.preferredWidth + 8f);
+                    }
+                    Vector3 offset = new Vector3((i - 1) * spacing, i == 1 ? 18f : 0f, 0f);
+                    element.transform.localPosition += modelPos.right * __instance.HudNumDistance + offset;
+                }
+            }
+            catch (Exception e)
+            {
+                foreach (UIHudNumElement element in numbers)
+                {
+                    if (element != null)
+                    {
+                        __instance.Pool_HudNum.Recycle(element.transform);
+                    }
+                }
+                AttackTargetPlugin.LogError("荆棘：三段跳字准备失败：" + e.Message);
+                return true;
+            }
+
+            ____hudNumElements.AddRange(numbers);
+            foreach (UIHudNumElement element in numbers)
+            {
+                _ = element.PlayShowAnim();
+            }
+            AttackTargetPlugin.LogInfo("荆棘：扣血一次，总伤 " + num + "，同屏跳字 " +
+                string.Join(" / ", numbers.ConvertAll(element => element.Text_Value.text)));
+            return false;
+        }
+    }
 }

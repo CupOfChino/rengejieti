@@ -1,0 +1,22 @@
+{
+  "Data": {
+    "__type": "BaseSheetData,Assembly-CSharp",
+    "value": {
+      "__type": "TermData,Assembly-CSharp",
+      "Id": 880009,
+      "Name": {
+        "TarKey": "",
+        "SheetKey": "",
+        "InputText": "<color=#AEE9D0>百合未谢</color>",
+        "Characteristic": null
+      },
+      "Des": {
+        "TarKey": "",
+        "SheetKey": "",
+        "InputText": "每个副本限1次。战斗中免除一次死亡，生命值变为50%，并获得1回合伤害免疫。",
+        "Characteristic": null
+      },
+      "EditorSheetKey": null
+    }
+  }
+}

@@ -1,0 +1,100 @@
+{
+  "cues": [
+    {
+      "file": "技能音频/7技能 2.ogg",
+      "at": 0,
+      "volume": 100,
+      "speed": 1,
+      "group": 1,
+      "subtitle": "烦死了，烦死了啊！你们和券券，全都烦死了！！！"
+    },
+    {
+      "file": "技能音频/7技能.ogg",
+      "at": 0,
+      "volume": 100,
+      "speed": 1.05,
+      "group": 1,
+      "subtitle": "我爱恨就恨！我恨所有那该死的家族，你们，还有券券！"
+    },
+    {
+      "file": "Wiki音效/技能3/Thumbfather_3_1-1.ogg",
+      "at": 1.03,
+      "volume": 100,
+      "speed": 1,
+      "group": 0,
+      "subtitle": ""
+    },
+    {
+      "file": "Wiki音效/技能1/Thumbfather_1_1-2.ogg",
+      "at": 1.39,
+      "volume": 100,
+      "speed": 1,
+      "group": 0,
+      "subtitle": ""
+    },
+    {
+      "file": "Wiki音效/技能3/Thumbfather_3_1-2.ogg",
+      "at": 1.57,
+      "volume": 100,
+      "speed": 1,
+      "group": 0,
+      "subtitle": ""
+    },
+    {
+      "file": "Wiki音效/特殊3/Thumbfather_sq3_2.ogg",
+      "at": 1.91,
+      "volume": 100,
+      "speed": 1,
+      "group": 0,
+      "subtitle": ""
+    },
+    {
+      "file": "Wiki音效/技能1/Thumbfather_1_2.ogg",
+      "at": 2.3,
+      "volume": 100,
+      "speed": 1,
+      "group": 0,
+      "subtitle": ""
+    },
+    {
+      "file": "Wiki音效/技能3/Thumbfather_3_2-2.ogg",
+      "at": 2.64,
+      "volume": 100,
+      "speed": 1,
+      "group": 0,
+      "subtitle": ""
+    },
+    {
+      "file": "Wiki音效/技能1/Thumbfather_1_1-1.ogg",
+      "at": 3.48,
+      "volume": 100,
+      "speed": 1,
+      "group": 0,
+      "subtitle": ""
+    },
+    {
+      "file": "Wiki音效/技能3/Thumbfather_3_2-3.ogg",
+      "at": 3.48,
+      "volume": 100,
+      "speed": 1,
+      "group": 0,
+      "subtitle": ""
+    },
+    {
+      "file": "Wiki音效/技能1/Thumbfather_1_1-2.ogg",
+      "at": 3.22,
+      "volume": 100,
+      "speed": 1,
+      "group": 0,
+      "subtitle": ""
+    },
+    {
+      "file": "Wiki音效/技能3/Thumbfather_3_4-3.ogg",
+      "at": 4.1,
+      "volume": 100,
+      "speed": 1,
+      "group": 0,
+      "subtitle": ""
+    }
+  ]
+}

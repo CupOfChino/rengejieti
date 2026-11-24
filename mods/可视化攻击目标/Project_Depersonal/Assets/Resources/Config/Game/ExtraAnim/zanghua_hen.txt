@@ -25,8 +25,8 @@
 			],
 			"AnimSpeed" : 0.2,
 			"AnimSize" : {
-				"x" : 1,
-				"y" : 1
+				"x" : 0.6666667,
+				"y" : 0.6666667
 			},
 			"SortName" : "Chara",
 			"SortOrder" : 50,

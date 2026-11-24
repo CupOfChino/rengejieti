@@ -54,7 +54,7 @@ if ($sources.Count -eq 0) { throw "src 目录里没有 .cs 文件：$SrcDir" }
 
 New-Item -ItemType Directory -Force -Path $OutDir | Out-Null
 
-$cscArgs = @($Csc, '-target:library', '-nostdlib+', '-noconfig', '-langversion:latest', "-out:$OutDll")
+$cscArgs = @('-target:library', '-nostdlib+', '-langversion:latest', "-out:$OutDll")
 
 # 游戏程序集 + BepInEx 程序集全量引用；0Harmony20 和 0Harmony 里的类型会撞车，排掉旧的
 foreach ($dir in @($GameManaged, $BepInExCore)) {
@@ -63,10 +63,39 @@ foreach ($dir in @($GameManaged, $BepInExCore)) {
     $cscArgs += "-r:$($f.FullName)"
   }
 }
+# 循环粒子贴图随 DLL 打包，避免游戏或工坊另行导入贴图。
+$particleAssets = @(
+  'moli-pink-petal.png'
+  'moli-pink-petal-rounded.png'
+  'moli-pink-petal-curled.png'
+  'moli-pink-floral-mist.png'
+  'moli-white-airflow.png'
+  'jingji-target-lock.png'
+  'jingji-mint-thrust.png'
+  'zanghua-mint-slash.png'
+  'zanghua-pale-petal.png'
+)
+foreach ($name in $particleAssets) {
+  $asset = Join-Path $ModRoot ('assets\Particles\' + $name)
+  if (-not (Test-Path -LiteralPath $asset -PathType Leaf)) { throw "找不到粒子贴图：$asset" }
+  $cscArgs += "-resource:$asset,AttackTargetVisualizer.Particles.$name"
+}
+$vfxLayoutAsset = Join-Path $ModRoot 'assets\VfxPlacement.defaults.json'
+$cscArgs += "-resource:$vfxLayoutAsset,AttackTargetVisualizer.VfxPlacement.defaults.json"
 foreach ($s in $sources) { $cscArgs += $s.FullName }
 
-& $Dotnet exec @cscArgs 2>&1 | Select-Object -Last 30
-if ($LASTEXITCODE -ne 0) { throw "编译失败" }
+# Windows 的进程命令行有长度上限，完整的游戏依赖列表交给 Roslyn 响应文件。
+$tempDir = Join-Path $ModRoot 'temp'
+[void][IO.Directory]::CreateDirectory($tempDir)
+$responsePath = Join-Path $tempDir ('csc-' + [Guid]::NewGuid().ToString('N') + '.rsp')
+try {
+  $responseLines = @($cscArgs | ForEach-Object { '"' + $_ + '"' })
+  [IO.File]::WriteAllLines($responsePath, [string[]]$responseLines, [Text.UTF8Encoding]::new($true))
+  & $Dotnet exec $Csc '-noconfig' "@$responsePath" 2>&1 | Select-Object -Last 30
+  if ($LASTEXITCODE -ne 0) { throw "编译失败" }
+} finally {
+  if ([IO.File]::Exists($responsePath)) { [IO.File]::Delete($responsePath) }
+}
 
 $dll = Get-Item -LiteralPath $OutDll
 Write-Output ("编译成功：{0}（{1} 字节，{2:HH:mm:ss}）" -f $dll.Name, $dll.Length, $dll.LastWriteTime)

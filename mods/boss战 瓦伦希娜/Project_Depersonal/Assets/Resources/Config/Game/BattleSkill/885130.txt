@@ -31,7 +31,7 @@
       "SkillType": 1,
       "ActionType": 1,
       "TriggerWeaponType": 0,
-      "IsMachiningSkill": true,
+      "IsMachiningSkill": false,
       "IsUseItem": false,
       "CannotBeCancelled": false,
       "HideInSkillSelectList": true,

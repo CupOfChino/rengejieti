@@ -4,7 +4,7 @@
     "value": {
       "__type": "MOD.TraitData,Assembly-CSharp",
       "Id": 885141,
-      "Type": 3,
+      "Type": 4,
       "CanRepeate": false,
       "IsCanCreateGet": false,
       "Localization_Name": {
@@ -16,10 +16,12 @@
       "Localization_Des": {
         "TarKey": "",
         "SheetKey": "",
-        "InputText": "隐匿 -10。攻击栏改为七项巴勒莫剑术专属招式。拥有狩猎时刻时可以指定狩猎目标。",
+        "InputText": "隐匿 -10。攻击栏改为七项巴勒莫剑术专属招式。拥有狩猎时刻时可以指定<color=#E76160>狩猎目标</color>。",
         "Characteristic": null
       },
-      "BuffsLink": [],
+      "BuffsLink": [
+        885139
+      ],
       "Terms": [],
       "CreateEvent": {
         "Localization_Functin": {

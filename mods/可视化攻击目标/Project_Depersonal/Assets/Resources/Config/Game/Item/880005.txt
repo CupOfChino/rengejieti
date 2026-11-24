@@ -8,7 +8,7 @@
       "ItemName": {
         "TarKey": "",
         "SheetKey": "",
-        "InputText": "百合花环",
+        "InputText": "<color=#AEE9D0>百合花环</color>",
         "Characteristic": null
       },
       "ItemDes": {
@@ -20,7 +20,7 @@
       "ItemEffectDes": {
         "TarKey": "",
         "SheetKey": "",
-        "InputText": "装备后无法卸下。\n进入副本时自动获得并装备。\n体质+10、意志+10。\n骨折、流血、中毒、燃烧照样会挂上，但效果不生效。\n每轮开始：随机解除一个【昏迷 / 中毒 / 流血 / 燃烧 / 骨折 / 混乱 / 恐惧 / 弱点暴露】，并按被解除状态的层数为自己叠加【花香】。",
+        "InputText": "进入副本自动获得并装备，装备后无法卸下。\n体质+10、意志+10。\n<color=#AEE9D0>【花环守护】</color>使指定负面效果失效，每轮开始解掉1项并叠<color=#D5A8FF>【花香】</color>。",
         "Characteristic": null
       },
       "IconPathReference": {
@@ -51,7 +51,10 @@
       "ItemDynamicAffixList": [],
       "IsBindCharacter": true,
       "BuffsLink": [],
-      "Terms": [],
+      "Terms": [
+        880013,
+        880014
+      ],
       "ConfigData": [],
       "EquipmentConfigData": {
         "__type": "MOD.EquipConfigData,Assembly-CSharp",
@@ -108,7 +111,7 @@
         "OverrideDesc": {
           "TarKey": "",
           "SheetKey": "",
-          "InputText": "装备后无法卸下。\n进入副本时自动获得并装备。\n体质+10、意志+10。\n骨折、流血、中毒、燃烧照样会挂上，但效果不生效。\n每轮开始：随机解除一个【昏迷 / 中毒 / 流血 / 燃烧 / 骨折 / 混乱 / 恐惧 / 弱点暴露】，并按被解除状态的层数为自己叠加【花香】。",
+          "InputText": "进入副本自动获得并装备，装备后无法卸下。\n体质+10、意志+10。\n<color=#AEE9D0>【花环守护】</color>使指定负面效果失效，每轮开始解掉1项并叠<color=#D5A8FF>【花香】</color>。",
           "Characteristic": null
         },
         "Arrts": [],

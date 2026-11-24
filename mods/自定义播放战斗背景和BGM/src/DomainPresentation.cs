@@ -1,5 +1,5 @@
 // 领域展开时的表现层：
-//   · 可选角色头顶文字 + 边缘暗角（DomainTextBoxOverlay；黑底实验已放弃，尝试记录见协作文档）；
+//   · 可选角色头顶黑底对话气泡和边缘暗角；
 //   · 可选一次性音效（走 AudioManager 的 SFX 通道）；
 //   · 文字框里的领域后缀单独做交错上下浮动（BaseMeshEffect，不依赖 Text 富文本动画标签）。
 //
@@ -53,7 +53,7 @@ namespace CustomBattleBg
                                  "<b><color=#FF0000>" + EscapeRichText(suffix) + "</color></b>";
                 CustomBattleBgPlugin.LogInfo("（" + reason + "）显示领域文字框：「" + prefix + "——" + suffix + "」");
                 DomainTextBoxOverlay.Show(content, prefix, prefix.Length + 2,
-                    VisibleLength(suffix), caster, DomainConstants.OpenDialogDuration);
+                    VisibleLength(suffix), caster, DomainConstants.OpenDialogDuration, speechBubble: true);
             }
             catch (Exception e)
             {

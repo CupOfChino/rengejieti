@@ -12,7 +12,7 @@
 			"Localization_Name" : {
 				"TarKey" : "",
 				"SheetKey" : "",
-				"InputText" : "记忆的双剑",
+				"InputText" : "剑法————Lacrimosa",
 				"Characteristic" : null
 			},
 			"Localization_Des" : {
@@ -32,7 +32,7 @@
 				"Localization_Functin" : {
 					"TarKey" : "",
 					"SheetKey" : "",
-					"InputText" : "近战伤害+3；近战攻击命中时施加1层流血；受到近战攻击时伤害-1；副手近战武器不受惩罚骰；可以单手装备双手近战武器（双手近战武器只占1个装备槽）",
+					"InputText" : "近战伤害+3，受到的近战伤害-1。近战命中附加1层<color=#FF818C>流血</color>。\n受到敌人闪避后造成的反击伤害-50%。每回合首次闪避获1颗奖励骰。\n副手近战免惩罚骰，双手近战武器只占1个武器槽。",
 					"Characteristic" : null
 				},
 				"Inherent" : [
@@ -49,7 +49,7 @@
 				"Localization_Functin" : {
 					"TarKey" : "",
 					"SheetKey" : "",
-					"InputText" : "收回「记忆的双剑」状态",
+					"InputText" : "收回「剑刃圆舞曲」状态",
 					"Characteristic" : null
 				},
 				"Inherent" : [

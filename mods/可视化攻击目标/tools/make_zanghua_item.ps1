@@ -63,14 +63,14 @@ function New-AttrInfoData {
 
 # ---- 基础信息 ----
 $v.ItemId = 880001
-$v.ItemName.InputText = "葬花"
+$v.ItemName.InputText = '<color=#C7ADFF>葬花</color>'
 $v.ItemDes.InputText = "花瓣落尽之处，旧日的记忆随之入土。"
 # 从蔷薇黑剑抄来的本地化 key 必须清掉 —— TarKey 非空且本地化表里查得到时，
 # 游戏会拿表里的文案把 InputText 顶掉（这里会显示成「蔷薇黑剑」）。见 docs\AI协作文档.md 19.1
 $v.ItemName.TarKey = ""
 $v.ItemDes.TarKey = ""
 $v.ItemEffectDes.TarKey = ""
-$v.ItemEffectDes.InputText = "葬花：攻击前进行一次敏捷检定，成功消耗2点充能、困难成功及以上消耗1点充能，本次攻击段数+1；击杀敌人时恢复1点充能。`n每段命中并造成伤害时，为目标叠加1层【剑痕】；目标每有1层【剑痕】，本次攻击伤害+5%。`n装备时：斗殴+10、力量+5、速度-5。`n【持握·葬花】"
+$v.ItemEffectDes.InputText = "以<color=#C7ADFF>【充能斩】</color>追加攻击段数。每段造成伤害叠1层<color=#85CCFF>【剑痕】</color>，目标每有1层，此击伤害+2%。`n装备：斗殴+10、力量+5、速度-5。见<color=#C7ADFF>【持握·葬花】</color>。"
 # （Item 数据没有 Comment 字段，说明写在 ItemEffectDes 里了；这份数据由 tools\make_zanghua_item.ps1 生成）
 
 # ---- 图标（我们做的那张茉莉剑）----
@@ -97,17 +97,61 @@ $v.EquipmentConfigData.AttackCount = 1
 $v.EquipmentConfigData.AttackType = 1
 $v.EquipmentConfigData.TargetSelect = 2
 $v.EquipmentConfigData.Damage.DamageType = 0
-$v.EquipmentConfigData.Damage.Value = "1D8+2"
+$v.EquipmentConfigData.Damage.Value = "1D8+1"
 $v.EquipmentConfigData.Damage.IsNotBlock = $false
 
-# ---- 命中表现：用原版「利刃受击」（Id=4）----
-# 这是游戏自己的武器表现链（DamageData.UseCommonEffect），原版利刃武器就是这么配的：
-# 攻击动画 + 目标身上的 FX_BladeHit 斩击闪光 + blade_hit 音效 + 受击动作。
-# 为什么放数据里而不是插件里：插件那套是手工构造 EffectShowData，字段多、容易漏；
-# 走数据 = 和原版武器同一条路，表现一定一致（2026-09-27 用户反馈"看不到攻击特效"后改的）。
-# 注意：UseCommonEffect = true 时游戏会忽略下面的 EffectShow，别两边都配。
-$v.EquipmentConfigData.Damage.UseCommonEffect = $true
+# ---- 命中表现：保留原版利刃受击的动作、声音和时序 ----
+# 预制体条目的 EffectName 标记用于插件识别，设置缩小的单体斩击或宽扁的横扫。
+$v.EquipmentConfigData.Damage.UseCommonEffect = $false
 $v.EquipmentConfigData.Damage.CommonEffectId = 4
+$v.EquipmentConfigData.Damage.EffectShow = [ordered]@{
+  Duration = 0.6
+  EffectShows = @(
+    [ordered]@{
+      '__type' = 'MOD.PlayRoleAnimationData,Assembly-CSharp'
+      IsSelf = $true
+      AnimtorName = 'Attack'
+      SpriteAnimName = 'attack'
+      SpriteAnimFirst = $false
+      DelayTime = 0
+    },
+    [ordered]@{
+      '__type' = 'MOD.PlayRoleEffectData,Assembly-CSharp'
+      IsSelf = $false
+      FxPath = 'Effect/Prefabs/FX_BladeHit'
+      Duration = 0.5
+      PlayCenterPoint = $false
+      UseSameFx = $true
+      PlayCenterPointFxPath = $null
+      PointType = 2
+      IsGroupCenter = $false
+      DelayTime = 0.1
+      FxPathReference = [ordered]@{
+        ReferenceType = 10001
+        Key = 'FX_BladeHit'
+      }
+      UseFrameEffect = $false
+      EffectName = 'ZangHuaSlash'
+    },
+    [ordered]@{
+      '__type' = 'MOD.PlaySoundData,Assembly-CSharp'
+      AudioClip = [ordered]@{
+        AudioRes = 'Sound/Audio/FX/Battle/blade_hit'
+        AudioReference = [ordered]@{
+          ReferenceType = 2
+          Key = 'blade_hit'
+        }
+        Volume = 1
+        FadeTime = 1
+      }
+      DelayTime = 0.1
+    },
+    [ordered]@{
+      '__type' = 'MOD.PlayHitData,Assembly-CSharp'
+      DelayTime = 0.2
+    }
+  )
+}
 
 # ---- 装备时 / 卸下时的属性加成：斗殴 +10、力量 +5、速度 -5（2026-09-23 用户要求）----
 # 充能相关的数据层效果全部清掉（蔷薇黑剑那套"满充能消耗3点额外攻击"不是我们要的，改由插件做）
@@ -128,17 +172,15 @@ $v.EquipmentConfigData.InfoDatas = @(
 $v.EquipmentConfigData.EnableOverrideDesc = $true
 $v.EquipmentConfigData.OverrideDesc.TarKey = ""
 $v.EquipmentConfigData.OverrideDesc.SheetKey = ""
-$v.EquipmentConfigData.OverrideDesc.InputText = "葬花：攻击前进行一次敏捷检定，成功消耗2点充能、困难成功及以上消耗1点充能，本次攻击段数+1；击杀敌人时恢复1点充能。`n每段命中并造成伤害时，为目标叠加1层【剑痕】；目标每有1层【剑痕】，本次攻击伤害+5%。`n装备时：斗殴+10、力量+5、速度-5。`n【持握·葬花】"
+$v.EquipmentConfigData.OverrideDesc.InputText = $v.ItemEffectDes.InputText
 
 # ---- 关键词术语（装备面板右侧那栏）：880001 = 剑痕 ----
 # 剑痕那条长解释从这里挪到 Game\TermData\880001.txt，描述里只留【剑痕】三个字，
 # 面板就不会被一大段说明撑满。术语由 tools\make_secret_terms.ps1 生成。
-$v.Terms = @(880001, 880003)
+$v.Terms = @(880007, 880001, 880003)
 
-# 再挂一遍剑痕本体（880040）的链接 —— 装备面板读 BuffsLink 时会显示那个 buff 的名字+描述，
-# 和上面的术语重名，GetAffixPair 用字典去重，只会显示一条（先到先得，BuffsLink 在前）。
-# 这么挂的好处：万一术语表那边没读到，buff 这条还能兜底；而且 buff 的描述才是真正的效果口径。
-$v.BuffsLink = @(880040)
+# 剑痕通过 Terms 中的 880001 显示。状态本体独立显示，免得在装备右栏重复。
+$v.BuffsLink = @()
 
 $out = $json | ConvertTo-Json -Depth 100
 New-Item -ItemType Directory -Force -Path (Split-Path -Parent $dstFile) | Out-Null

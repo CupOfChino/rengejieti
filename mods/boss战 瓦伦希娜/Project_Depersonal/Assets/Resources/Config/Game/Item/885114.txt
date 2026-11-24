@@ -2,7 +2,7 @@
   "Data": {
     "__type": "MOD.ItemData,Assembly-CSharp",
     "value": {
-      "IconPath": null,
+      "IconPath": "UI/Textures/Icon/Item/valenna_cigar_icon",
       "ItemId": 885114,
       "UniqueKey": "valenna_cigars",
       "ItemName": {
@@ -14,18 +14,18 @@
       "ItemDes": {
         "TarKey": "",
         "SheetKey": "",
-        "InputText": "品味一小时后恢复 1D2 精神值，共 3 支。",
+        "InputText": "烟鬼的最爱。「这个烟鬼哪里的钱用定制的子弹和名贵雪茄？」",
         "Characteristic": null
       },
       "ItemEffectDes": {
         "TarKey": "",
         "SheetKey": "",
-        "InputText": "品味一小时后恢复 1D2 精神值，共 3 支。",
+        "InputText": "携带 3 支。品味一小时后恢复 1D2 精神值。也可叼在嘴里，不扣次数也不恢复精神值。",
         "Characteristic": null
       },
       "IconPathReference": {
         "ReferenceType": 1004,
-        "Key": "icon_item_kafei"
+        "Key": "valenna_cigar_icon"
       },
       "Price": 10,
       "ChargingCount": 3,
@@ -159,7 +159,7 @@
           "OverrideDesc": {
             "TarKey": "",
             "SheetKey": "",
-            "InputText": "品味一小时后恢复 1D2 精神值，共 3 支。",
+            "InputText": "携带 3 支。品味一小时后恢复 1D2 精神值。也可叼在嘴里，不扣次数也不恢复精神值。",
             "Characteristic": null
           },
           "IgnoreInfoDesc": false

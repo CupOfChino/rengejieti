@@ -13,7 +13,7 @@
       "Des": {
         "TarKey": "",
         "SheetKey": "",
-        "InputText": "上限 30 层。战斗或探索回合开始回 5 层。触发预知或受到攻击命中时扣 5 层，归零后进入过热。",
+        "InputText": "上限 30⁠层。战斗或探索回合开始回 5⁠层。触发预知或受到攻击命中时扣 5⁠层，归零后进入过热。",
         "Characteristic": null
       },
       "IconPathReference": {

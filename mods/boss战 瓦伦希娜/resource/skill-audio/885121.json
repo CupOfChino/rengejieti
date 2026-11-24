@@ -1,0 +1,36 @@
+{
+  "cues": [
+    {
+      "file": "Wiki音效/技能1/Thumbfather_1_1-1.ogg",
+      "at": 0.27,
+      "volume": 100,
+      "speed": 1,
+      "group": 0,
+      "subtitle": ""
+    },
+    {
+      "file": "Wiki音效/技能1/Thumbfather_1_1-2.ogg",
+      "at": 0.8,
+      "volume": 100,
+      "speed": 1,
+      "group": 0,
+      "subtitle": ""
+    },
+    {
+      "file": "Wiki音效/技能1/Thumbfather_1_2.ogg",
+      "at": 0.94,
+      "volume": 100,
+      "speed": 1,
+      "group": 0,
+      "subtitle": ""
+    },
+    {
+      "file": "其他语气词/1-1（1）.ogg",
+      "at": 1,
+      "volume": 100,
+      "speed": 1,
+      "group": 0,
+      "subtitle": ""
+    }
+  ]
+}

@@ -8,7 +8,7 @@
       "ItemName": {
         "TarKey": "",
         "SheetKey": "",
-        "InputText": "百合花戒指",
+        "InputText": "<color=#AEE9D0>百合花戒指</color>",
         "Characteristic": null
       },
       "ItemDes": {
@@ -20,7 +20,7 @@
       "ItemEffectDes": {
         "TarKey": "",
         "SheetKey": "",
-        "InputText": "装备后无法卸下。\n进入副本时自动获得并装备。\n魔法值上限+8。\n装备时习得法术「枯萎术」「赤印术」「真理之拳」「祝福术」。\n每回合开始恢复 2 点魔法值。\n施放法术后，对全体敌人造成等同于本次消耗魔法值的法术伤害。",
+        "InputText": "进入副本自动获得并装备，装备后无法卸下。\n魔法值上限+8，回合开始回复2点。\n施法后，对全体敌人追加等同于本次耗魔的法术伤害。见<color=#AEE9D0>【戒中法术】</color>。",
         "Characteristic": null
       },
       "IconPathReference": {
@@ -51,7 +51,9 @@
       "ItemDynamicAffixList": [],
       "IsBindCharacter": true,
       "BuffsLink": [],
-      "Terms": [],
+      "Terms": [
+        880012
+      ],
       "ConfigData": [],
       "EquipmentConfigData": {
         "__type": "MOD.EquipConfigData,Assembly-CSharp",
@@ -118,7 +120,7 @@
         "OverrideDesc": {
           "TarKey": "",
           "SheetKey": "",
-          "InputText": "装备后无法卸下。\n进入副本时自动获得并装备。\n魔法值上限+8。\n装备时习得法术「枯萎术」「赤印术」「真理之拳」「祝福术」。\n每回合开始恢复 2 点魔法值。\n施放法术后，对全体敌人造成等同于本次消耗魔法值的法术伤害。",
+          "InputText": "进入副本自动获得并装备，装备后无法卸下。\n魔法值上限+8，回合开始回复2点。\n施法后，对全体敌人追加等同于本次耗魔的法术伤害。见<color=#AEE9D0>【戒中法术】</color>。",
           "Characteristic": null
         },
         "Arrts": [],

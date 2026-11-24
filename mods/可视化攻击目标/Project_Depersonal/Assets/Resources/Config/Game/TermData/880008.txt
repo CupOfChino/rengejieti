@@ -1,0 +1,22 @@
+{
+  "Data": {
+    "__type": "BaseSheetData,Assembly-CSharp",
+    "value": {
+      "__type": "TermData,Assembly-CSharp",
+      "Id": 880008,
+      "Name": {
+        "TarKey": "",
+        "SheetKey": "",
+        "InputText": "<color=#F4A07F>三段刺击</color>",
+        "Characteristic": null
+      },
+      "Des": {
+        "TarKey": "",
+        "SheetKey": "",
+        "InputText": "斗殴命中后算一次总伤害并扣血。总伤尽量均分为3个整数，同时跳出。\n普通、困难、大成功的伤害倍率依次为×0.5、×0.75、×1。",
+        "Characteristic": null
+      },
+      "EditorSheetKey": null
+    }
+  }
+}

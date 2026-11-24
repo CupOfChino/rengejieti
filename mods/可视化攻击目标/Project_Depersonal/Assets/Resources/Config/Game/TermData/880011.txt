@@ -1,0 +1,22 @@
+{
+  "Data": {
+    "__type": "BaseSheetData,Assembly-CSharp",
+    "value": {
+      "__type": "TermData,Assembly-CSharp",
+      "Id": 880011,
+      "Name": {
+        "TarKey": "",
+        "SheetKey": "",
+        "InputText": "<color=#AEE9D0>百合花芳香</color>",
+        "Characteristic": null
+      },
+      "Des": {
+        "TarKey": "",
+        "SheetKey": "",
+        "InputText": "行动轮开始：不足5层时，每满2层失去1点生命。达到5层则移除芳香，失去「层数×1%最大生命值＋层数」点生命。\n受到火焰伤害会触发<color=#AEE9D0>【粉尘爆炸】</color>并移除芳香，同阵营每人各受到2×层数点爆炸伤害。",
+        "Characteristic": null
+      },
+      "EditorSheetKey": null
+    }
+  }
+}

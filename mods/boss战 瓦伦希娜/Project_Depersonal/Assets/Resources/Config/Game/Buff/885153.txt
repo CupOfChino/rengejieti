@@ -1,0 +1,57 @@
+{
+  "Data": {
+    "__type": "BaseSheetData,Assembly-CSharp",
+    "value": {
+      "__type": "MOD.BuffTableData,Assembly-CSharp",
+      "Id": 885153,
+      "Name": {
+        "TarKey": "",
+        "SheetKey": "",
+        "InputText": "伤害强化",
+        "Characteristic": null
+      },
+      "Des": {
+        "TarKey": "",
+        "SheetKey": "",
+        "InputText": "每层使造成的普通伤害 +10%。战斗结束时清除。",
+        "Characteristic": null
+      },
+      "IconPathReference": {
+        "ReferenceType": 1007,
+        "Key": "valenna_damage_up_icon"
+      },
+      "BuffType": 4,
+      "BuffEffectType": 1,
+      "OverlayType": 1,
+      "InitLayer": 1,
+      "OverrideInitLayer": true,
+      "LayerCount": {
+        "Value": "1"
+      },
+      "MaxLayer": 0,
+      "Duration": 0,
+      "IsShowUI": true,
+      "IsDeathClear": true,
+      "PlayFxInBattle": false,
+      "PlayFxInExplore": false,
+      "Arrts": [],
+      "Events": [
+        {
+          "EBuffTrigger": 1,
+          "Checks": [],
+          "Funcs": [
+            {
+              "__type": "MOD.Buff_ChangeAddOrReducePercentOption,Assembly-CSharp",
+              "TargetType": 0,
+              "ChangeType": 0,
+              "Percent": 0.1,
+              "DamageTypes": [
+                0
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

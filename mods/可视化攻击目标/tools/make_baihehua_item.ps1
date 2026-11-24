@@ -32,7 +32,7 @@ $v.ItemId = 880002
 $v.UniqueKey = $null
 $v.ItemName.TarKey = ""
 $v.ItemName.SheetKey = ""
-$v.ItemName.InputText = "百合花"
+$v.ItemName.InputText = '<color=#AEE9D0>百合花</color>'
 $v.ItemName.Characteristic = $null
 
 $v.ItemDes.TarKey = ""
@@ -42,7 +42,7 @@ $v.ItemDes.Characteristic = $null
 
 $v.ItemEffectDes.TarKey = ""
 $v.ItemEffectDes.SheetKey = ""
-$v.ItemEffectDes.InputText = "装备后无法卸下。`n进入副本时自动获得并装备。`n最大生命值+10。`n探索中每回合恢复1点精神值。`n每个副本限1次：战斗死亡时免疫此次死亡，生命值变为50%，并获得1回合伤害免疫。`n每2回合：免疫1次法术伤害。"
+$v.ItemEffectDes.InputText = "进入副本自动获得并装备，装备后无法卸下。`n生命上限+10，探索每回合回复1点精神值。`n战斗中获得<color=#AEE9D0>【百合未谢】</color>与<color=#AEE9D0>【法术庇护】</color>。"
 $v.ItemEffectDes.Characteristic = $null
 
 # ---- 图标（先生成 PNG 用游戏编辑器导入，生成三件套后再把 Key 填成 icon_item_baihehua）----
@@ -65,7 +65,7 @@ $v.IsBindCharacter = $true             # 绑定角色：不能被偷窃/赠与
 $v.ItemStaticAffixList = @()
 $v.ItemDynamicAffixList = @()
 $v.BuffsLink = @()
-$v.Terms = @()
+$v.Terms = @(880009, 880010)
 $v.ConfigData = @()
 $v.GetItemOpts = @()
 $v.EndingOpts = @()
@@ -88,7 +88,7 @@ $v.EquipmentConfigData.InfoDatas = @()
 $v.EquipmentConfigData.EnableOverrideDesc = $true
 $v.EquipmentConfigData.OverrideDesc.TarKey = ""
 $v.EquipmentConfigData.OverrideDesc.SheetKey = ""
-$v.EquipmentConfigData.OverrideDesc.InputText = "装备后无法卸下。`n进入副本时自动获得并装备。`n最大生命值+10。`n探索中每回合恢复1点精神值。`n每个副本限1次：战斗死亡时免疫此次死亡，生命值变为50%，并获得1回合伤害免疫。`n每2回合：免疫1次法术伤害。"
+$v.EquipmentConfigData.OverrideDesc.InputText = $v.ItemEffectDes.InputText
 $v.EquipmentConfigData.OverrideDesc.Characteristic = $null
 
 # ⚠ 大坑（2026-09-22 踩）：PowerShell 5.1 的 ConvertTo-Json 会把对象里的 `__type` 字段弄丢，

@@ -1,0 +1,22 @@
+{
+  "Data": {
+    "__type": "BaseSheetData,Assembly-CSharp",
+    "value": {
+      "__type": "TermData,Assembly-CSharp",
+      "Id": 880013,
+      "Name": {
+        "TarKey": "",
+        "SheetKey": "",
+        "InputText": "<color=#AEE9D0>花环守护</color>",
+        "Characteristic": null
+      },
+      "Des": {
+        "TarKey": "",
+        "SheetKey": "",
+        "InputText": "<color=#DCB5A1>骨折</color>、<color=#FF818C>流血</color>、<color=#9CDA71>中毒</color>、<color=#FF9F62>燃烧</color>可附加，效果被压制。\n每轮开始，从<color=#A3B8ED>昏迷</color>、<color=#9CDA71>中毒</color>、<color=#FF818C>流血</color>、<color=#FF9F62>燃烧</color>、<color=#DCB5A1>骨折</color>、<color=#CE93EC>混乱</color>、<color=#F1AECD>恐惧</color>、<color=#FFCB81>弱点暴露</color>中随机解除1项，按其层数叠<color=#D5A8FF>【花香】</color>。",
+        "Characteristic": null
+      },
+      "EditorSheetKey": null
+    }
+  }
+}

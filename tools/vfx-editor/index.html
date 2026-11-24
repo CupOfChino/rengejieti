@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>人格解体 · 人物特效编辑器</title>
+<link rel="stylesheet" href="/style.css">
+<script type="module" src="/app.mjs"></script>
+</head>
+<body>
+<main>
+  <header>
+    <h1>人物特效编辑器</h1>
+    <div class="actions">
+      <a class="button" href="/live">游戏预制体</a>
+      <button id="new-project" type="button">新建</button>
+      <button id="open-project" type="button">打开工程</button>
+      <button id="save-project" type="button">保存工程</button>
+      <button id="export" class="primary" type="button">导出透明帧</button>
+      <input id="project-file" type="file" accept=".json" hidden>
+      <input id="image-files" type="file" accept="image/png,image/webp,image/jpeg" multiple hidden>
+    </div>
+  </header>
+
+  <div class="workspace">
+    <div class="preview">
+      <div class="skill-picker">
+        <label for="preview-skill">瓦伦希娜技能</label>
+        <select id="preview-skill"><option value="">选择技能</option></select>
+        <button type="button" id="show-skill" disabled>查看整招</button>
+      </div>
+      <div class="actors">
+        <fieldset>
+          <legend>左侧角色</legend>
+          <select id="model" aria-label="左侧角色"><option value="">隐藏人物</option></select>
+          <div class="actor-motion actor-track">
+            <select id="left-cues" aria-label="左侧动作轨"></select>
+            <button id="left-add-cue" type="button">添加动作</button>
+            <button id="left-remove-cue" type="button" aria-label="删除左侧选中动作">删除</button>
+          </div>
+          <div class="actor-motion">
+            <select id="left-action" aria-label="左侧动作"></select>
+            <label>延迟 <input id="left-at" type="number" min="0" max="8" step="0.05" value="0" aria-label="左侧动作延迟，秒"></label>
+            <label title="数值越大，人物越靠后">站位 <input id="left-rise" type="number" min="-70" max="70" step="1" value="0" aria-label="左侧站位高度"></label>
+            <label class="check"><input id="left-flip" type="checkbox"> 镜像</label>
+          </div>
+        </fieldset>
+        <fieldset>
+          <legend>右侧角色</legend>
+          <select id="right-model" aria-label="右侧角色"><option value="">隐藏人物</option></select>
+          <div class="actor-motion actor-track">
+            <select id="right-cues" aria-label="右侧动作轨"></select>
+            <button id="right-add-cue" type="button">添加动作</button>
+            <button id="right-remove-cue" type="button" aria-label="删除右侧选中动作">删除</button>
+          </div>
+          <div class="actor-motion">
+            <select id="right-action" aria-label="右侧动作"></select>
+            <label>延迟 <input id="right-at" type="number" min="0" max="8" step="0.05" value="0" aria-label="右侧动作延迟，秒"></label>
+            <label title="数值越大，人物越靠后">站位 <input id="right-rise" type="number" min="-70" max="70" step="1" value="16" aria-label="右侧站位高度"></label>
+            <label class="check"><input id="right-flip" type="checkbox" checked> 镜像</label>
+          </div>
+        </fieldset>
+      </div>
+      <canvas id="scene" width="800" height="480" aria-label="特效预览。暂停后可拖动当前图层。"></canvas>
+      <div class="transport">
+        <button id="play" class="primary" type="button">播放</button>
+        <input type="range" id="seek" min="0" max="1" step="0.01" value="0" aria-label="预览时间">
+        <output id="clock">0.00 / 1.00 秒</output>
+        <label class="check"><input type="checkbox" id="loop" checked> 循环</label>
+        <label class="check"><input type="checkbox" id="guides" checked> 挂点</label>
+        <label class="check"><input type="checkbox" id="stage-grid" checked> 网格</label>
+        <label class="check">背景 <input type="color" id="stage-background" value="#17201e" aria-label="舞台背景色"></label>
+        <button id="review" type="button">保存检查图</button>
+      </div>
+      <section aria-labelledby="audio-heading">
+        <div id="skill-timing" hidden>
+          <div class="timing-title"><h2>动作与音效时间</h2><span id="skill-duration"></span></div>
+          <div class="timing-track"><span>动作</span><div id="action-times"></div></div>
+          <div class="timing-track"><span>音效</span><div id="sound-times"></div></div>
+        </div>
+        <h2 id="audio-heading">演示音效</h2>
+        <div class="audio-picker">
+          <input id="sound-search" type="search" placeholder="搜索本地音效" aria-label="搜索本地音效">
+          <select id="sound-asset" aria-label="本地音效"><option>正在读取音效…</option></select>
+          <button id="sound-preview" type="button" disabled>试听</button>
+          <button id="sound-add" type="button" disabled>在当前时间添加</button>
+        </div>
+        <div class="audio-pair-tools">
+          <button id="sound-pair" type="button" disabled>将勾选语音设为同一随机组</button>
+          <span>勾选至少两条，每次施招随机播放其中一条。组号 0 独立播放。</span>
+        </div>
+        <div id="sound-cues" class="audio-cues"></div>
+        <details>
+          <summary>瓦伦希娜技能音效配置</summary>
+          <div class="audio-controls">
+            <select id="sound-skill" aria-label="目标技能">
+              <option value="">选择目标技能</option>
+              <option value="885121">切割攻击</option>
+              <option value="885124">尖端打击</option>
+              <option value="885125">解兔</option>
+              <option value="885126">解鹿</option>
+              <option value="885127">我很乐意用这颗子弹把你贯穿</option>
+              <option value="885128">解象</option>
+              <option value="885129">处置</option>
+            </select>
+            <button id="sound-load-skill" type="button" disabled>载入技能配置</button>
+            <button id="sound-apply-skill" type="button" disabled>应用到技能</button>
+          </div>
+        </details>
+      </section>
+    </div>
+
+    <aside>
+      <label class="project-name">工程名称 <input id="project-name" type="text" maxlength="72" value="新特效"></label>
+      <section>
+        <h2>添加特效</h2>
+        <div class="asset-controls">
+          <input id="search" type="search" placeholder="搜特效名或来源" aria-label="搜索素材">
+          <select id="source" aria-label="素材来源"><option value="">所有来源</option></select>
+          <select id="asset" aria-label="特效素材"><option value="">正在读取素材…</option></select>
+          <button id="add" type="button">添加</button>
+        </div>
+        <div class="actions compact">
+          <button id="make" type="button">加一层光点</button>
+          <button id="import-images" type="button">导入图片或帧</button>
+        </div>
+      </section>
+      <section>
+        <div class="between">
+          <h2>特效图层</h2>
+          <div class="layer-actions">
+            <button id="earlier" type="button" aria-label="图层上移" title="图层上移">↑</button>
+            <button id="later" type="button" aria-label="图层下移" title="图层下移">↓</button>
+            <button id="duplicate" type="button">复制</button>
+            <button id="remove" type="button">删除</button>
+          </div>
+        </div>
+        <div id="layers" class="layers" aria-label="特效图层"></div>
+        <p id="empty">从素材库加一层，或导入自己的图片。选好播放方式就能预览。</p>
+      </section>
+      <section id="inspector" hidden>
+        <label class="editor-row">图层名称 <input id="layer-name" type="text" maxlength="72"></label>
+        <label class="editor-row">定位角色 <select id="layer-side">
+          <option value="center">画面中央</option><option value="left">左侧角色</option><option value="right">右侧角色</option>
+        </select></label>
+        <label class="editor-row">挂到哪里 <select id="anchor">
+          <option value="body">身体</option><option value="head">头顶</option><option value="feet">脚边</option>
+          <option value="eye">左眼（逐帧）</option><option value="sheath">剑鞘口（逐帧）</option>
+        </select></label>
+        <label class="editor-row">播放方式 <select id="motion"></select></label>
+        <label class="check"><input id="layer-flip-x" type="checkbox"> 横向镜像</label>
+        <label class="check"><input id="layer-flip-y" type="checkbox"> 纵向镜像</label>
+        <label id="color-row" class="editor-row" hidden>光点颜色 <input type="color" id="color" value="#ffb8e3"></label>
+        <div class="fields" id="fields"></div>
+        <details>
+          <summary>时间与透明度</summary>
+          <div class="fields" id="advanced"></div>
+          <label class="check"><input id="behind" type="checkbox"> 放到人物背后</label>
+        </details>
+      </section>
+    </aside>
+  </div>
+  <footer>
+    <span id="status" role="status">正在读取本机素材…</span>
+    <details id="info"><summary>素材说明</summary><ul id="notes"></ul></details>
+  </footer>
+</main>
+</body>
+</html>

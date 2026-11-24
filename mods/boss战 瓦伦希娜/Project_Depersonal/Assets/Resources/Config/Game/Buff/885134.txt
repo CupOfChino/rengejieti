@@ -7,13 +7,13 @@
       "Name": {
         "TarKey": "",
         "SheetKey": "",
-        "InputText": "灼热·震颤",
+        "InputText": "震颤·灼热",
         "Characteristic": null
       },
       "Des": {
         "TarKey": "",
         "SheetKey": "",
-        "InputText": "由震颤转化，新增震颤层数会并入。除了普通引爆效果，还会造成燃烧与震颤层数之和的一半的爆炸伤害，并分别扣除二者原层数的三分之一（向下取整）。大行动轮结束后扣 1 层。",
+        "InputText": "由<color=#FFA15E>震颤</color>转化，新增<color=#FFA15E>震颤</color>层数会并入。除了普通引爆效果，还会造成<color=#F35D50>燃烧</color>与<color=#FFA15E>震颤</color>层数之和的一半的爆炸伤害，并分别扣除二者原层数的三分之一（向下取整）。大行动轮结束后扣 1⁠层。",
         "Characteristic": null
       },
       "IconPathReference": {

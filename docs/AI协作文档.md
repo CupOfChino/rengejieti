@@ -896,6 +896,14 @@ while (curFinishCount < totalCount) { await new WaitForEndOfFrame(); }
 > 武器数据里的 `Terms` 字段才是"这件装备要显示哪几条关键词"的挂钩；
 > 新加术语后**别忘了把它加进武器的 `Terms`**，否则右栏不会出现。
 
+### 19.3 武器和百合花系列的右栏词条（2026-11-19）
+
+- 主面板正文保存在 `ItemEffectDes.InputText` 与 `EquipmentConfigData.OverrideDesc.InputText`。右栏由 `Terms` 关联通用术语，`GetAffixPair` 同时收集 `BuffsLink`，按显示名称去重。葬花的右栏剑痕只通过术语 880001 显示，Buff 880040 仍用于战斗状态。
+- 私货当前使用术语 880001～880014。名称和正文都可用 Unity 的 `<color=#RRGGBB>…</color>`，流血用红色、剑痕用蓝色、花香用紫色。Buff 数据没有 `Terms` 字段，三项状态直接在 `Des` 里用彩色小标题整理。英文状态文案在 `src/SecretText.cs`，改装备数据时同步检查对应的 `tools/make_*.ps1`。
+
+- 2026-11-19 实测旧插件只补载 6 条硬编码术语，导致原来的剑痕标题和状态标题颜色不同而重复，四件百合花饰品也没有右栏。现在 `SecretRuntime.EnsureTerms` 在 `WorkshopHelper.EndLoadConfigData` 之后，从 DLL 所属模组的 `Game/TermData` 读取 880001～880014 中缺失的条目。新增后只清一次术语工厂缓存，文案从数据文件维护。
+- 剑痕是持续状态帧动画，`Game/ExtraAnim/zanghua_hen.txt` 的 `AnimSize` 为原尺寸的 2/3。目标锁定（880052）沿用状态栏图标。橙金四角由 `MoliAmbientFx.UpdateLockMark` 绘制，中心对齐人物，外框高约为头脚高度的 1.32 倍，宽度按当前精灵投影加留白。初次出现时用 0.20 秒收紧，中心保持透明，状态解除后清理。生成器 `tools/make_target_lock.ps1` 关闭 Buff 的原版 prefab 特效。
+
 ## 20. 「额外攻击 / 连击段数」的原版写法（2026-09-22 对照检查）
 
 游戏里"多打一次"有**两条完全不同的路**，别混：
@@ -995,9 +1003,13 @@ num += OffHandWeapon.ExtraContinuousAttackCount.Value + OffHandWeapon.ExtraConti
   4. 用一个 `InGuardedCalc` 标志让"内层调用"跳过我们自己的所有附加处理（否则花香、剑痕会被加两遍）。
   这样护甲、`CalculateReducDamage`、`CalculateReducRoleDamage`、`BeDamageChangePercentData`、
   免疫区间都还是游戏原逻辑，只有攻击者的加成被摘掉。
-- **想"行动 1 次、伤害结算 N 次（各算护甲）"**：克隆 `DamageAdditionalData` 重跑 `CalculationDamage`，
-  再走 `OnHit` —— 别去拆最终数值，拆数值等于只算一次护甲（2026-09-27 先做错了一版）。
-  参考实现：`mods\可视化攻击目标\src\JingJi.cs` 的 `TryBaseDamageWithDefense` / `TryGreatSuccessBonus` / `TripleStrike`。
+- **荆棘的三段是跳字**：原版 `OnHit` → `SetDamage` 只算和扣一次总伤。
+  `Patch_JingJi_DamageDisplay` 仅在 `SetDamage` 异步状态机直接调用改血的位置标记荆棘。原版 `ShowHudNum` 拿到实际用于跳字的整数后，同一帧创建三个原版数字元素并错开摆放。总伤 46 显示 16、15、15。旧版有三次实际伤害，首段击杀会跳过后两段。
+- **茉莉的输出和反击减伤**：`SecretTraits.ApplyMoliDamageModifiers` 统一处理孤影的近战 +1、百合花状态的近战 −2、白毛少女的普通/物理伤害 −25%。剑刃圆舞曲仅对原版闪避对抗发起的敌方回击减伤；`Patch_Moli_DodgeCounter` 标记原版骰子流程的两个调用点，避免混进技能或受击状态触发的其他反击。
+- **剑痕的追加法伤**：`MoliCombat` 在 `SetDamage` 记录当前主动近战命中的受击者，原版 `ActionEnd` 后每个受击者按当时剑痕层数结算一次。固定伤害按（层数+1）÷3向下取整，走原版魔法免疫、减伤和扣血。
+- **白毛少女专属行动**：`Game/BattleSkill/880071.txt` 用敌方全体、普通意志检定和条件技艺（`IsMachiningSkill`），原版战斗菜单会把未通过 `ShowCheck` 的条件技艺隐藏。`WhiteHairAction` 在工坊配置加载完成时挂选定/成功效果。技能数据的自身特质筛选明确要求苏醒的白毛少女，使用战斗 HUD 字体显示粉色表情，有理智且 `RoleData.IsHuman` 的敌人施加原版魅惑；无理智的敌人叠两层弱点暴露。
+- 「喵喵叫卖萌」的装备表情持续跟随当前技能槽。定位复用箭头的整块槽矩形，以顶边中点对齐。在原版 `Run` 设置 `IsRunning` 并开始收槽时隐藏装备表情。意志检定成功时，`DiceSuccess` 在收槽前记录的 HUD 局部位置显示喵叫表情 2 秒。换掉行动、无法继续显示的战斗状态和退出战斗由 `WhiteHairAction` 清理。
+- **孤影与花香**：孤影的旧意志追击从触发点注释停用，闪避获得隐匿读原版防御骰的困难或大成功。`Patch_Moli_ReduceSanLoss` 在原版额外属性数值入口消减实际 SAN 变化量。花香根据 `RoleData._ChangeAttr` 的实际扣血记录消耗一层，沿用一次层数减少回复 1 血、1 精神。
 - **给目标挂"受到伤害 +X%"（易伤）**：用
   `role.Data.BeDamageChangePercentData.Add(sourceKey, false, percent, 0, 0, damageTypes)`，
   摘掉用 `.Remove(sourceKey)`（成对，和属性那套一样）。两个坑：
@@ -1046,9 +1058,68 @@ num += OffHandWeapon.ExtraContinuousAttackCount.Value + OffHandWeapon.ExtraConti
   原版样例：`Item\10306.txt` / `10604.txt` 用 `FXSkillHit_Puncture` 做突刺。
 - 两者互斥：`UseCommonEffect = true` 时游戏**完全忽略** `EffectShow`（别以为会叠加）。
 
-私货现状：葬花 `880001` = `true + 4`（利刃受击：FX_BladeHit + blade_hit）；
-荆棘 `880006` = 自定义 `EffectShow`（FXSkillHit_Puncture + weapon_knife）。
-两边都改了 `tools\make_zanghua_item.ps1` / `make_jingji_item.ps1`，**改数据必须连着脚本一起改**（见 18.3.2）。
+**当前武器表现（2026-11-20）**
+
+- 葬花 880001 保留原版动作、声音和命中节点。武器的 `EffectShow` 以 `EffectName=ZangHuaSlash` 标记调用，`BattleBladeFx` 播淡绿斩击，随后拉出浅绿残影，白、淡蓝花瓣错时翻落。单体主刃宽以目标身高的 1.64 倍为基准，每攻击段各播一次。横扫按目标组跨度加留白、压扁，扫过整组目标。贴图载入失败时回退原版利刃受击效果。
+- 荆棘 880006 的原版命中时机触发淡绿突刺，主刃宽以目标身高的 1.72 倍为基准。刃尖先展开，残影随后跟进，两对透明气浪在不同时间上下扩散。普通攻击三段动画相隔 0.1 秒、上下错开，先发和反击各播一段。刀刺音效仍用游戏音效。伤害在原版命中时点一次结算，三个数字同屏。
+- `SecretFx` 负责现有命中节点和原版兜底，`BattleBladeFx` 的瞬态粒子随战斗场景回收。剑气以同一张贴图的 16 个精灵裁片沿出手方向展开，再收淡。原版突刺 `FXSkillHit_Puncture` 的 64 像素帧按 100 PPU、子节点 2 倍缩放换算，完整帧宽约 1.28 Unity 单位。本模组以此为比例参照并放大瞬态剑气。原版 `FX_BladeHit` 的光晕、火花、轮廓分层可作动效参考，通用命中特效窗口为 0.5 秒。剑气贴图与花香、孤影的 PNG 一起嵌入 DLL。比例预览用原版成年调查员 `AdultYaNan_Idle_1_200` 的待机帧，原版角色贴图仅作本地预览。独立的 `LimbusSlashFx` 实验件仍停用。
+
+**茉莉的循环状态粒子（2026-11-19）**
+
+- 常驻状态控制密度和遮挡，锁定框以人物为中心。短时攻击可覆盖更大的范围，主刃从无到有，残影、气浪和花瓣错时出现。
+
+- `src/MoliAmbientFx.cs` 按当前场景角色的状态驱动花香（880049）和灰暗孤影（880026）。探索与战斗分别使用原版地图、战斗摄像机。转换场景、状态消失或模型销毁时清理粒子，角色预览界面不运行。
+- 花香三种粉色花瓣轮换，最多八片，单片为模型高度的 6%～9%，从肩侧交替生成，向外轻摆、翻转并在脚边淡出。低位粉雾最多两缕，绘制在角色背层。灰暗孤影只有两道半透明白线，沿身侧、脚边绕行，按前后位置随角色排序。尺寸、位置取当前模型头脚挂点和精灵宽度。密度与轨迹在 `UpdatePetals`、`UpdateMist` 和 `UpdateWind` 调整。茉莉存档的 `Custom_ModelReference.Key` 是 `Model_Custom_all`，对应工坊 3253405563「生命树奥萝菈人物模型」的 `ResourcesFramework/Input/all/1-*.png` 待机帧，原画布 64×80，轴心 (0.45, 0)。
+- 源贴图位于 `mods/可视化攻击目标/assets/Particles`。`tools/build.ps1` 使用 Roslyn 响应文件处理 Windows 长命令行，并把循环粒子 PNG 作为嵌入资源编入 DLL。本机工坊只需要同步 DLL。运行时从 alpha 边界生成精灵，保留透明通道。
+
+**离线特效预览与调位（2026-11-20）**
+
+- `Buff/880049.txt` 的 `FxPlayType` 为 0，清空旧的肾上腺素 `FX_Buff_130`。花香特效由插件绘制。花瓣、粉雾以精灵中心为基准，默认横向范围为旧版的 62%，白风的轨道半径为旧版的 54%。葬花贴图上下翻转，沿出手方向从斜上到斜下展开。
+- 执行 `mods/可视化攻击目标/tools/make_vfx_preview.ps1` 生成模组 `temp/特效预览器.html`。在浏览器打开即可用茉莉的待机帧预览六种特效。工坊模型贴图只写入本机临时页面。模板在 `tools/vfx_preview.html`。花瓣随机轨迹、原版模型挂点和横扫目标跨度在浏览器用固定样例模拟，可在游戏里复核。
+- 浏览器和插件共用 `assets/VfxPlacement.defaults.json` 的默认调位参数。X 正值右移，Y 正值上移，1.00 为一个头脚挂点高度，角度正值逆时针。花香和白风的角度调各粒子的姿态，攻击角度转动整组特效。网页导出的 `VfxPlacement.json` 可放入本机测试版 DLL 同级目录，插件启动时读取。发布工坊时发布默认参数，个人调位文件留在本机。
+- 攻击动作与攻击段触发继续由游戏处理。调整运行时轨迹或贴图时，对照 `MoliAmbientFx`、`BattleBladeFx` 与浏览器里的对应函数，再重新生成页面。
+
+**人物特效编辑器（2026-11-20）**
+
+- 仓库根目录 `tools/打开特效编辑器.cmd` 是入口。双击会启动本地页面，窗口随用随关。实现位于 `tools/vfx-editor/`，需要本机 Node.js。游戏安装目录和工坊库从 Steam 常用位置、`libraryfolders.vdf` 查找。非标准路径可通过 `DEPERSONAL_GAME`、`DEPERSONAL_WORKSHOP`、`DEPERSONAL_LOCAL` 指定。
+- 左右角色可分别选择动作、延迟、镜像和前后站位。图层的「定位角色」决定头顶、身体与脚边挂点。动作时序和场景绘制统一由 `scene.mjs` 处理。原有单角色工程保持保存的模型 ID 与画面中央挂点。动作列表只显示能够从实有精灵帧还原的动作。
+- 「保存检查图」写入 `mods/可视化攻击目标/temp/特效编辑器缓存/检查记录/`。从 `latest.json` 找最新编号，取该目录里的 `current.png`、`timeline.png`、`manifest.json` 和可原样打开的 `project.vfx.json`。检查图使用编辑器本身的渲染代码。
+- [Agent 自查指南](../tools/vfx-editor/Agent自查指南.md)记录素材搜索、定时截图、与目标工程或参考图并排对照的命令。用脚本返回的图片路径检查实际画面。替换原贴图前先保存参考截图，避免新旧工程同时读取当前素材。
+- `catalog.mjs` 先读本地和订阅模组的 `ExtraAnim`、`Texture/ExtraAnim`、`ResourcesFramework/Input` 和自定义粒子图，再按帧名用 AssetStudioCLI 提取原版 `resources.assets`。原版帧缓存在可视化攻击目标的 `temp/特效编辑器缓存`，由打包资源时间戳和筛选条件区分版本。游戏和工坊源文件只读。遇到同名且无法判定来自哪个图集的精灵，跳过相关动画，避免加载错帧。带 `.rtprefab` 的 Unity 粒子由游戏引擎播放，离线工具处理可提取的二维逐帧素材。
+- `animation.mjs` 负责挂点、时间与播放预设，`app.mjs` 负责图层和导出。画布 X 正值向右，Y 正值向上。工程的 `.vfx.json` 保存图层和动作，并内嵌手动导入的图片。引用游戏和工坊的工程在打开时需要对应旧素材仍可扫描。
+- 「导出透明帧」输出 24 FPS 的 PNG ZIP，里面有连续帧及记录画布尺寸、挂点和帧率的 `manifest.json`。画面里的人物和参考线是预览辅助。导出的帧可拿进游戏编辑器再建 `ExtraAnim` 并挂到 Buff 或攻击动作。游戏内原有的 `VfxPlacement.json` 仍由上一节的调位页管理。
+
+**游戏预制体联动（2026-11-21）**
+
+- 启动同一个编辑器，点「游戏预制体」进入联动页。可以启动游戏或连接已打开的游戏，等到首页后读取预制体。选中一个粒子层，改倍率和颜色，点「应用并重播」。左侧回放游戏相机捕获的帧，右侧「游戏回读」对照 Unity 组件读出的原值和应用值。
+- 网页逻辑在 `tools/vfx-editor/live.mjs`，本机服务器的预览接口在 `bridge.mjs`。游戏端是「可视化攻击目标」的 `PrefabPreviewBridge.cs`。两端经工坊测试模组自身的 `temp/VfxEditorBridge` 匹配会话编号和请求序号；令牌过期或主动断开时释放预览副本及相机。调试时从 Steam 启动游戏。
+- 原版资源经 `Resources.Load` 按白名单加载。在独立位置复制预制体，固定随机种子，按 12 FPS 推进粒子并读取专用相机画面。粒子发射量倍率同时作用在发射率和爆发粒子数上。游戏端用内置 Newtonsoft.Json 传层列表，Unity `JsonUtility` 曾在实测中漏掉插件自定义的层数组。
+- 「保存副本」输出 `.prefab-vfx.json`，记录原版预制体引用和调参值，可在联动页打开。游戏编辑器可独立导入的 `.rtprefab` 还需要验证序列化与材质资源引用。
+- 本机实测读取了利刃命中、魅惑和肾上腺素。对利刃的 `HCFX_Hit_08` 层调参时，Unity 回读初始大小 8 → 16，爆发粒子数 2 → 4。浏览器成功回放游戏相机帧，保存副本后可以重新读取同一组改动。
+
+**瓦伦希娜战斗规则、卡面与音轨（0.5.3）**
+
+- 发布从仓库根的 `工坊待上传/瓦伦希娜` 选择目录；包内需带 `resource/skill-audio`、`resource/sound` 与 `resource/voice-subtitles.json`。开发目录的 `temp/特效浏览器` 保存实际分镜，逐帧图与对照图还用于后续调参。更新其他既有条目若要求保留多语言介绍，只向 Steam 提交内容路径，并核对新 manifest 和原描述。
+
+- 排查「选完判定后没有攻击」，先查本机游戏日志里的 Harmony 补丁加载异常。0.5.2 的 `StrikePlayback.Prepare(Task, …)` 被识别为补丁初始化方法，攻击挂钩整体跳过。已把业务方法改名。攻击栏列出 7/7 招只说明菜单生成成功，仍须核对成功事件回退和分段伤害入口。
+- 伙伴资料用 `PartnerData/885101`，基础体质 80，酒鬼特质扣 10。旧档在 `ValennaKit.RefreshPartnerProfile` 迁移，原生体质变更入口重算 HP 上限。游戏内显示「瓦伦希娜」，旧的立绘名、磁盘路径与桌面角色卡原名仍可用于查找。简介有七项标签，其中「二老板」「七大家族」绘制红色删除线。
+- `build_data.ps1` 分开维护神话卡底部短说明及装备完整规则。大图和横幅是独立素材。七招的公共条件、各段伤害和触发时点写进 `BattleSkill.Description`。旧 UGUI 的行内状态图使用真实 Buff 图标，优先确认在原生滚动框里能读到处置最后的攻击后与击杀两项。特质卡原版外层已靠上，内层描述组的默认对齐是 MiddleCenter，需要在切换到其他卡片时还原。
+- 预知眼扣费前为本次闪避记录充能与过热状态。战斗成功区间、探索检定、满层未来奖励骰，以及主动技能面板的概率明细各有自己的原生入口，见 `ValennaPrescience.cs` 和 `AcceleratedFuture.cs`。验证补丁注册可以在 Windows .NET Framework 下使用游戏随附的 Harmony 执行整个 `PatchAll`，这与运行 Unity 战斗、观察界面排版是两项验证。
+
+- 入本前的伙伴神话栏走 `PartnerData/885101 → MythicalItem/885112 → Item/885112`，玩家角色的候选列表是另一条入口。专属限制和旧档迁移在 `ValennaEyeEquipment.cs`。神话卡采用原生 1005 资源类型，128×194 大图和 166×54 横幅各自有单独资源键；工坊原版示例和本体「不死者吊坠」可供核对。角色卡的八项特质由 `build_data.ps1` 生成，其中「心——瓦伦希娜」885155 使用原生战斗速度 119；技能层数加成在 `ValennaHeart.cs`。
+- `ValennaEventAudio.cs` 独立处理闪避和引爆声音。以每次闪避开骰前的过热状态选取语音资格，未过热时的成功池 2 条、失败池 5 条；按原字幕表取词。对照引爆时，检查 `ValennaTremor.cs` 的真实增长、图标和数字，与 `BurstBatch` 传出的有效次数。五声的音频起点相隔 20 毫秒。
+- 排查攻击菜单常亮的感叹号时，用原版 `UIBattlePanel.UpdateNewSkillTips` 核对。它查询 `IsMachiningSkill`、角色绑定与 `ShowCheck`，不看 `HideInSkillSelectList`。退役表须同时隐藏并关闭新技提示资格。保留原版已读记录，玩家仍能正常发现其他新技能。
+- 招式配色与处置的点阵警示在 `ValennaSkillFrame.cs`，面板元素复用时要清除装饰。规则文字由 `tools/format_rules.ps1` 在导出时统一处理；优先使用游戏支持的颜色标签和 `BuffsLink`。UGUI 词条图标与预知眼下划线在 `ValennaRuleVisuals.cs`；神话卡面由原生界面绘制标题与背景，投影只画右侧物品。
+
+- `mods/boss战 瓦伦希娜/resource/sound/Wiki音效` 保存敌方单位 1314「音效」表中的 28 个原始 OGG。子目录对应表中「特殊1–4」「技能1–3」「拼点」「范围攻击」九行，文件保留 Wiki 原名。编辑器搜索「Wiki音效」可试听，具体技能和起播时间由玩家配置。[灰机 Wiki 原表](https://limbuscompany.huijiwiki.com/wiki/敌方单位/1314#音效)
+
+- 编辑器画布上方的「瓦伦希娜技能 → 查看整招」从模组 `temp/特效浏览器` 载入动作并读取已应用的音轨。整招列表与处置前后段的衔接在 `tools/vfx-editor/skill-projects.mjs`。若改处置穿身、回身举铳或回位的时长，同步核对 `StrikeProfiles.cs`、`PlayExecutionFinish` 和编辑器中的整招开火点。[查看动作与音效时间](../tools/vfx-editor/Agent自查指南.md#配置演示音效)
+
+- 伙伴资料与装备风味用桌面 `111]/卡14-瓦伦娜.md`。战斗数值以玩家确认的游戏版为准。解象和处置使用时各给 3 层呼吸法。预知眼与技艺的闪避回理智分别计数，技艺每战最多两次。七招效果在 `StrikeResolution.cs`，装备与补弹在 `ValennaEquipmentRules.cs`，分段时序仍由 `StrikeProfiles.cs` 控制。原生联合技能配置只能填两个探索技能，解鹿和解象在构造主动骰时取斗殴技能值与 DEX 属性值，依原生联合公式相加并按主技能上下限截取。
+- 构建入口为模组 `tools/build_presentation.ps1`、`build_data.ps1`、`build.ps1` 和 `test_install.ps1`。铳剑、切斩刀由原武器图等比缩小，独立头像和四件装备图标的源文件在 `resource/装备与头像`。「狩猎目标」状态图和战场双剑分别由图标资源与 `ValennaHunt.cs` 管理。
+- 本地音效编辑器可在同一秒叠放多条音效并分别调音量。「应用到技能」同步 `resource/skill-audio/<技能ID>.json`，`StrikeAudio.cs` 在下次使用技能时读取。同一套分镜时间用于编辑器和游戏。维护技能 ID 或音频路径时同时核对编辑器、运行时与安装脚本。[编辑器音效操作](../tools/vfx-editor/Agent自查指南.md#配置演示音效)
+
+- 技能音轨的 `speed` 是保音高语速（0.5～2），`group` 为 0 时独立播放，正整数为随机组号。编辑器可勾选两条或更多语音编入同一组，每次施招每组只抽一条。旧的双句组沿用相同格式。`subtitle` 缺省时依 `resource/voice-subtitles.json` 回填，显式空串关闭该句字幕。默认表的 22 条由敌方单位 1314 的语音文件与本地 OGG 核对哈希，再按对白 ID 对应本机汉化 `LLC_zh-CN/BattleSpeechBubbleDlg-a1c9p3.json`。武器音效默认无台词。游戏变速与头顶字幕分别在 `VoiceTempo.cs` 和 `StrikeVoiceCaption.cs`，预览对应 `audio.mjs` 和 `scene.mjs`。测试保存与同步时请使用临时工程和宿主，玩家正在编辑的技能音轨只读。
 
 **瓦伦娜演出测试（2026-11-21）**
 
@@ -1096,10 +1167,7 @@ num += OffHandWeapon.ExtraContinuousAttackCount.Value + OffHandWeapon.ExtraConti
 
 ### 23.2 插件层（次选）：手工构造 `EffectShowData` 的两个静默坑
 
-只有**先发攻击（插件自己造的白送一击）和吸血回血**这类"不走武器表现链"的伤害才需要插件自己播
-（`mods\可视化攻击目标\src\SecretFx.cs`）。注意**普通攻击和反击都不用插件管**：
-`DamageData.Play` 在攻击技能流程里被调，`BattleHelper.StrickBackProcess`（反编译 19922 起）内部
-也会 `damageData.Play(...)` 打一次反击的武器表现 —— 插件再补就是双响。
+`DamageData.Play` 会驱动普通攻击和原版反击的表现。荆棘由插件按段播放后，武器数据里相同的特效与音效需要移除，避免双播。先发与吸血由 `SecretFx.cs` 单独播放。
 手工构造数据时有两个字段是**旧版遗留、运行时不读**，
 漏填就是**静默不播、日志里连报错都没有**：
 
@@ -1312,8 +1380,8 @@ CurAddEle = null;
   `ShowOpenDialog / PlayOpenSound / SfxFile / RuntimeDialogSuffix`，外部
   `DomainDefinition` 对应 `ShowDialogOnOpen / PlaySoundOnOpen / SoundPath / DialogSuffix`；
   音效放资源库 `Sfx`（ogg/mp3/wav），播放走 `AudioManager.PlaySound(clip,...)` 的 SFX 通道。
-  最终稳定方案是自定义 `DomainTextBoxOverlay`：角色头顶文字（当前不画黑色底框）、
-  按 `Text` preferred size 自动排版，底边锚在 `RoleModel.Trans_Head` 上方；
+  表现使用自定义 `DomainTextBoxOverlay`，按 `Text` preferred size 自动排版，
+  位置优先取行动牌上边框中点，再取 `RoleModel.Trans_Head` 上方；
   整个屏幕再叠一张纯网格径向暗角（中心透明、边缘黑），随文字约 2.5 秒淡入淡出。
   独立 ScreenSpaceOverlay Canvas 使用 `overrideSorting = true`、`sortingLayerName = "UI"`、
   `sortingOrder = 30000`，所以战斗开始、行动槽 HUD 还在时也会盖在行动槽上面；不拦截鼠标。
@@ -1331,7 +1399,7 @@ CurAddEle = null;
    「黑暗拥抱」实际用 `ShowHUDTextOption` 显示“桀桀桀桀桀”（HUD 文本），
    `MonsterBattleSkill\32.txt`「层层恐惧」是黑暗恐惧 buff。夜魔并没有一个可直接复用的
    “黑色文字框”效果，因此最终采用自定义 overlay。
-4. 最终方案：`DomainTextBoxOverlay` 只保留角色头顶文字 + 边缘暗角，不再绘制黑色底框；
+4. 当时的稳定方案：`DomainTextBoxOverlay` 只保留角色头顶文字 + 边缘暗角；
    `SoftEllipseGraphic` 已从代码中删除。定位优先取技能牌 / 编辑行动牌的上边框中点，
    没有行动框时再取 `RoleModel.Trans_Head`（模型顶边）。
 
@@ -1347,6 +1415,14 @@ CurAddEle = null;
 后续不要再把椭圆网格重新加回来。
 Canvas 使用能显示文字/暗角的 **Screen Space - Overlay**；不要擅自切到 Screen Space - Camera，
 实测会让整个 Canvas 的文字和网格一起消失。
+
+**领域黑底气泡（2026-11-20，本机测试版）**：领域展开走 `DomainPresentation.ShowTextBox`，
+传 `speechBubble: true`。黑色圆角底板、细边和指向施法者的小尖角追加到
+`EdgeVignetteGraphic` 的现有顶点色网格，原有 CanvasGroup 一起控制淡入淡出。
+用文字容器世界角点转暗角网格的局部坐标，静止时复用网格。文字按实际内宽测量换行。
+靠屏幕上沿且下方有空间时，气泡挪到锚点下方并把尖角移到上沿。
+普通外部 `DomainApi.ShowHeadText` 沿用原表现。编译与网格验证可离线进行，画面显示仍以实机为准。
+早期调研记录见 [领域文字底板调研](自定义背景-领域文字底板调研.md)。
 
 **行动框定位（2026-10-18 修正）**：HUD 的 `GetWorldCorners` 结果属于 HUD 自己的 Canvas，
 不能直接交给战斗相机做 `WorldToScreenPoint`。正确做法照抄

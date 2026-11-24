@@ -7,13 +7,13 @@
       "Name": {
         "TarKey": "",
         "SheetKey": "",
-        "InputText": "持握·荆棘",
+        "InputText": "<color=#F4A07F>持握·荆棘</color>",
         "Characteristic": null
       },
       "Des": {
         "TarKey": "",
         "SheetKey": "",
-        "InputText": "装备在主手：此武器伤害+3。\n装备在副手：【先发】进入战斗时判定资格；之后每轮先给随机敌人挂【目标锁定】，再对它打一次。\n主/副手未装备其他武器时视为双手：同时触发主手与副手效果。\n速度差：每高于目标100点，此武器伤害+10%；双手持握时每50点一档。",
+        "InputText": "主手：此武器伤害+2。副手：获得<color=#F4A07F>【先发】</color>资格的条件见右栏。\n另一手空着时视为双手，两侧效果同时生效。\n速度每高于目标100点，武器伤害+5%。双手每50点一档。",
         "Characteristic": null
       },
       "EditorSheetKey": null

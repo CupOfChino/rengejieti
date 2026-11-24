@@ -4,7 +4,7 @@
     "value": {
       "__type": "MOD.TraitData,Assembly-CSharp",
       "Id": 885142,
-      "Type": 3,
+      "Type": 4,
       "CanRepeate": false,
       "IsCanCreateGet": false,
       "Localization_Name": {
@@ -16,10 +16,12 @@
       "Localization_Des": {
         "TarKey": "",
         "SheetKey": "",
-        "InputText": "完整闪避一个敌人的攻击行动后，以解兔反击该敌人。进入剧本或战斗时获得并穿戴预知眼。",
+        "InputText": "完整闪避一个敌人的攻击行动后，以解兔反击该敌人。进入剧本或战斗时获得并穿戴<color=#8CD6EB>预知眼</color>。",
         "Characteristic": null
       },
-      "BuffsLink": [],
+      "BuffsLink": [
+        885135
+      ],
       "Terms": [],
       "CreateEvent": null,
       "WakeEvent": null

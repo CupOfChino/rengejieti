@@ -13,7 +13,7 @@
       "Des": {
         "TarKey": "",
         "SheetKey": "",
-        "InputText": "12 小时内进行检定获得 1 颗惩罚骰。",
+        "InputText": "12 小时内进行检定获得 1⁠颗惩罚骰。",
         "Characteristic": null
       },
       "IconPathReference": {

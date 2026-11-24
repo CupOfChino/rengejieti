@@ -14,13 +14,13 @@
       "ItemDes": {
         "TarKey": "",
         "SheetKey": "",
-        "InputText": "伯纳特利家族的单手近战武器，以斗殴检定攻击单体。",
+        "InputText": "巴勒莫的另一把刀，刀鞘系在瓦伦希娜腰侧。她以这把单手刀使出切割攻击。",
         "Characteristic": null
       },
       "ItemEffectDes": {
         "TarKey": "",
         "SheetKey": "",
-        "InputText": "",
+        "InputText": "攻击时，按目标<color=#F35D50>燃烧</color>和<color=#FFA15E>震颤</color>层数之和，每层增加 5% 伤害，上限 100%。对有<color=#AAC4D2>护甲</color>的目标改为每层 10%，上限 200%。",
         "Characteristic": null
       },
       "IconPathReference": {
@@ -47,7 +47,10 @@
       "ItemStaticAffixList": [],
       "ItemDynamicAffixList": [],
       "IsBindCharacter": false,
-      "BuffsLink": [],
+      "BuffsLink": [
+        104,
+        885132
+      ],
       "Terms": [],
       "ConfigData": [],
       "EquipmentConfigData": {
@@ -97,7 +100,7 @@
         "OverrideDesc": {
           "TarKey": "",
           "SheetKey": "",
-          "InputText": "基础伤害 2D4。",
+          "InputText": "基础伤害 2D4。攻击时，按目标<color=#F35D50>燃烧</color>和<color=#FFA15E>震颤</color>层数之和，每层增加 5% 伤害，上限 100%。对有<color=#AAC4D2>护甲</color>的目标改为每层 10%，上限 200%。",
           "Characteristic": null
         },
         "Arrts": [],

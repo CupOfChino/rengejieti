@@ -10,14 +10,14 @@ using MOD;
 
 namespace ValennaBattle
 {
-    internal static class ValennaKit
+    internal static partial class ValennaKit
     {
         private const string LegacyStats = "valenna_legacy_bases";
         private static readonly int[] InitialTraits =
         {
             StrikeProfiles.TraitId, StrikeProfiles.PrescienceTraitId, StrikeProfiles.DisgraceTraitId,
             StrikeProfiles.VeteranTraitId, StrikeProfiles.DrinkerTraitId, StrikeProfiles.GoldenTicketTraitId,
-            StrikeProfiles.HuntTraitId
+            StrikeProfiles.HuntTraitId, StrikeProfiles.HeartTraitId
         };
         private static readonly int[] InitialWeapons = { StrikeProfiles.GunbladeId, StrikeProfiles.CutlassId };
         private static readonly HashSet<RoleData> Upgrading = new HashSet<RoleData>();
@@ -91,12 +91,13 @@ namespace ValennaBattle
 
                 foreach (int trait in InitialTraits)
                 {
-                    if (trait != StrikeProfiles.HuntTraitId && !Has(role, trait))
+                    if (trait != StrikeProfiles.HuntTraitId && trait != StrikeProfiles.HeartTraitId && !Has(role, trait))
                     {
                         await role.AddTrait(trait, showChangeInfo: false, isInitTrait: true);
                         changed = true;
                     }
                 }
+                await RefreshPartnerProfile(data);
                 bool equip = equipStartingGear || missingGear;
                 foreach (int weapon in InitialWeapons) await GiveStartingWeapon(role, weapon, equip);
                 await GiveStartingHat(role, equip);
@@ -106,15 +107,42 @@ namespace ValennaBattle
                     await role.AddTrait(StrikeProfiles.HuntTraitId, showChangeInfo: false, isInitTrait: true);
                     changed = true;
                 }
+                // 旧存档随特质更新补齐「心」，沿用常规库存。
+                if (!Has(role, StrikeProfiles.HeartTraitId))
+                {
+                    await role.AddTrait(StrikeProfiles.HeartTraitId, showChangeInfo: false, isInitTrait: true);
+                    changed = true;
+                }
                 if (changed || missingGear || equipStartingGear)
                 {
                     int traits = data.Traits.Count(trait => trait != null && IsInitialTrait(trait.Id));
                     int armed = InitialWeapons.Count(id => data.Weapons.Exists(weapon => IsItem(weapon, id)));
                     bool wearingHat = data.Equips.Exists(item => IsItem(item, StrikeProfiles.HatId));
-                    ValennaPlugin.Instance.Report($"瓦伦娜伙伴资料：特质 {traits}/{InitialTraits.Length}，已装备初始武器 {armed}/{InitialWeapons.Length}，帽子已装备 {wearingHat}");
+                    ValennaPlugin.Instance.Report($"瓦伦希娜伙伴资料：特质 {traits}/{InitialTraits.Length}，已装备初始武器 {armed}/{InitialWeapons.Length}，帽子已装备 {wearingHat}");
                 }
             }
             finally { Upgrading.Remove(role.Data); }
+        }
+
+        private static async Task RefreshPartnerProfile(RoleData data)
+        {
+            const string oldName = "瓦伦娜";
+            if (data.Custom_Name == oldName) data.Custom_Name = data.ConfigData.CharacterName.InputText;
+            if (data.Custom_Name_KeyData?.InputText == oldName &&
+                string.IsNullOrEmpty(data.Custom_Name_KeyData.TargetKey))
+                data.Custom_Name_KeyData = data.ConfigData.CharacterName;
+
+            if (data.Attribute?.AttrDict == null || data.Hp == null ||
+                !data.Attribute.AttrDict.TryGetValue(EHeroAttribute.CON, out DiceVariableData con)) return;
+            int previousOffset = con._sources?.Where(source => source.Key == LegacyStats)
+                .Sum(source => source.Value) ?? 0;
+            int template = data.ConfigData.Constitution;
+            // 最老的伙伴从最终面板建档，后来通过同源修正还原基础。保留其余来源和成长。
+            if (con._baseValue != 60 && !(previousOffset == 10 && con._baseValue == 50)) return;
+            int nextBase = template - previousOffset;
+            if (con._baseValue >= nextBase) return;
+            con.Assign(nextBase);
+            await data.UpdateValueOnAttrChanged(EHeroAttribute.CON, showChangeTip: false);
         }
 
         private static async Task<bool> RepairExistingTraits(RoleData data)
@@ -143,7 +171,7 @@ namespace ValennaBattle
                         }
                     }
                     data.Traits.RemoveAt(index);
-                    changed = true;
+                    if (id != StrikeProfiles.HeartTraitId) changed = true;
                 }
             }
             return changed;
@@ -213,12 +241,14 @@ namespace ValennaBattle
                 await role.Data.ChangeAttr(true, new ChangeAttrData(ERoleExtraAttribute.Gold, "1000"),
                     playAnim: false, showChangeTip: false);
             await Restock(role);
+            await ValennaBattleStatus.StartAmmo(role);
         }
 
         internal static async Task FinishModule(BattleRole role)
         {
-            if (Has(role, StrikeProfiles.DisgraceTraitId) && !role.IsDeath)
-                await Restock(role);
+            if (!Has(role, StrikeProfiles.DisgraceTraitId) || role.IsDeath) return;
+            await Restock(role);
+            await ValennaBattleStatus.StartAmmo(role);
         }
 
         private static async Task Restock(BattleRole role)

@@ -14,13 +14,13 @@
       "ItemDes": {
         "TarKey": "",
         "SheetKey": "",
-        "InputText": "伯纳特利家族的单手近战武器，以斗殴检定攻击单体。",
+        "InputText": "瓦伦希娜斜挎在背后的铳剑。伯纳特利家族的定制加速弹用在贴身出剑的一瞬。",
         "Characteristic": null
       },
       "ItemEffectDes": {
         "TarKey": "",
         "SheetKey": "",
-        "InputText": "装备者进入战斗时获得 10 发加速弹。",
+        "InputText": "伯纳特利家族特制<color=#79CAD7>加速弹</color>，每战补满 10⁠发。该段攻击成功消耗<color=#79CAD7>加速弹</color>并命中时施加 1⁠层<color=#F35D50>燃烧</color>与 1⁠层<color=#FFA15E>震颤</color>。引爆<color=#FFA15E>震颤</color>时获得 1⁠层<color=#EABA6D>伤害强化</color>，每行动轮最多获得 3⁠层。",
         "Characteristic": null
       },
       "IconPathReference": {
@@ -48,7 +48,10 @@
       "ItemDynamicAffixList": [],
       "IsBindCharacter": false,
       "BuffsLink": [
-        885137
+        885137,
+        104,
+        885132,
+        885153
       ],
       "Terms": [],
       "ConfigData": [],
@@ -99,7 +102,7 @@
         "OverrideDesc": {
           "TarKey": "",
           "SheetKey": "",
-          "InputText": "基础伤害 1D6。装备者进入战斗时获得 10 发加速弹。",
+          "InputText": "基础伤害 1D6。伯纳特利家族特制<color=#79CAD7>加速弹</color>，每战补满 10⁠发。该段攻击成功消耗<color=#79CAD7>加速弹</color>并命中时施加 1⁠层<color=#F35D50>燃烧</color>与 1⁠层<color=#FFA15E>震颤</color>。引爆<color=#FFA15E>震颤</color>时获得 1⁠层<color=#EABA6D>伤害强化</color>，每行动轮最多获得 3⁠层。",
           "Characteristic": null
         },
         "Arrts": [],

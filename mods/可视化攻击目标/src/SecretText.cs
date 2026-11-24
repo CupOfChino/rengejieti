@@ -70,7 +70,8 @@ namespace AttackTargetVisualizer
         internal const string LilyTraitDes =
             "A beautiful lily - lacking in resistance, yet overwhelmingly alluring.";
         internal const string LilyEffect =
-            "Willpower -25.\n" +
+            "Willpower -30, Constitution -20, Strength -10, Dodge -15.\n" +
+            "Melee damage dealt -2.\n" +
             "Enemy charm actions against you gain 1 bonus die.\n" +
             "Your opposing roll against charm actions gains 1 penalty die.\n" +
             "Enemy actions that charm will target the holder first.\n" +
@@ -81,28 +82,27 @@ namespace AttackTargetVisualizer
         internal const string WhiteHairTraitName = "White-Haired Girl";
         internal const string WhiteHairTraitDes = "A frail white-haired girl.";
         internal const string WhiteHairEffect =
-            "Enemies without sanity gain 2 stacks of Exposed Weakness.\n" +
+            "At battle start, charm all sane human enemies and give enemies without Sanity 2 stacks of Exposed Weakness.\n" +
+            "Meow for Mercy: Pass a Willpower check to apply the same effects to all enemies.\n" +
+            "Strength -40, Constitution -40, Athletics -20, physical damage dealt -25%.\n" +
             "Persuade and Psychology checks gain 1 bonus die.";
 
         internal const string LoneShadowTraitName = "Lone Shadow";
         internal const string LoneShadowDes =
             "A legendary investigator who always walks alone; because of her white hair, the world calls her: the Lone Shadow.";
         internal const string LoneShadowEffect =
-            "After an attack action (throw and magic excluded), roll Willpower: " +
-            "a hard success spends 2 Sanity to strike once more, an extreme success does so for free; " +
-            "a regular success or a failure grants nothing.\n" +
-            "Never triggers with less than 2 Sanity, or while Weakened or Collapsed.\n" +
-            "While alone: Dodge +20, Speed +20, Physical damage +50%.\n" +
-            "Always: Dexterity +20.";
+            "Dexterity +20, melee damage +1, and each loss of Sanity is reduced by 1.\n" +
+            "Gain Stealth after a hard or better successful dodge.\n" +
+            "With no other living ally: Dodge +20, Speed +20, physical damage +50%. Half with one ally.";
 
-        internal const string MemoryTraitName = "Twin Swords of Memory";
+        internal const string MemoryTraitName = "Sword Art — Lacrimosa";
         internal const string MemoryTraitDes = "Memories carved into the bone are never forgotten.";
         internal const string MemoryEffect =
             "Melee damage +3.\n" +
             "Melee hits apply 1 stack of Bleed.\n" +
             "Melee damage you take is reduced by 1.\n" +
-            "When an attack misses you while you have a melee weapon equipped, strike back immediately " +
-            "(one hit only, never counts as a pursuit attack).\n" +
+            "Take 50% less damage from enemy dodge counterattacks.\n" +
+            "Your first dodge each round gains 1 bonus die.\n" +
             "Your off-hand melee weapon suffers no penalty die.\n" +
             "Two-handed melee weapons take up only one weapon slot for you.";
 
@@ -118,6 +118,28 @@ namespace AttackTargetVisualizer
 
         internal const string DamageImmuneName = "Damage Immunity";
         internal const string DamageImmuneDes = "Immune to damage from enemies for 1 round.";
+
+        private const string LilyBuffName = "<color=#AEE9D0>Lily Flower</color>";
+        private const string LilyBuffDes =
+            "Willpower -30, Constitution -20, Strength -10, Dodge -15.\n" +
+            "Melee damage dealt -2.\n" +
+            "Enemy charm actions target you first and gain 1 bonus die. Your opposed rolls against charm gain 1 penalty die.\n" +
+            "<color=#AEE9D0>[Dazed]</color> While charmed: another -25 Willpower, damage dealt -50%, " +
+            "and 1 penalty die on Willpower checks and opposed rolls.\n" +
+            "Automatically equip the <color=#AEE9D0>Lily Flower set</color> on entering a module.";
+
+        private const string LoneShadowBuffName = "<color=#B7B5EF>Lone Shadow</color>";
+        private const string LoneShadowBuffDes =
+            "Dexterity +20, melee damage +1, and each loss of Sanity is reduced by 1.\n" +
+            "Gain <color=#AAB3DE>Stealth</color> after a hard or better successful dodge.\n" +
+            "<color=#B7B5EF>[Solitude]</color> In battle with no other living ally: Dodge +20, Speed +20, physical damage +50%. " +
+            "Half with one living ally, zero with two or more.";
+
+        private const string MemoryBuffName = "<color=#E8C48C>Blade Waltz</color>";
+        private const string MemoryBuffDes =
+            "Melee damage dealt +3, melee damage taken -1. Melee hits apply 1 stack of <color=#FF818C>[Bleed]</color>.\n" +
+            "Take 50% less damage from enemy dodge counterattacks. Your first dodge each round gains 1 bonus die.\n" +
+            "<color=#E8C48C>[Dual Wield]</color> Off-hand melee attacks take no penalty die. Two-handed melee weapons use one weapon slot.";
 
         // ---------------- 覆盖我们自己的数据文案 ----------------
 
@@ -137,16 +159,16 @@ namespace AttackTargetVisualizer
                 ResManager res = Singleton<ResManager>.Instance;
 
                 ApplyTraitText(res, SecretIds.LilyTrait, LilyTraitName, LilyTraitDes, LilyEffect, "Charm no longer lasts longer");
-                ApplyTraitText(res, SecretIds.WhiteHairTrait, WhiteHairTraitName, WhiteHairTraitDes, WhiteHairEffect, "No longer charms enemies");
+                ApplyTraitText(res, SecretIds.WhiteHairTrait, WhiteHairTraitName, WhiteHairTraitDes, WhiteHairEffect, "Lose the opening and group charm effects");
                 ApplyTraitText(res, SecretIds.LoneShadowTrait, LoneShadowTraitName, LoneShadowDes, LoneShadowEffect, "Lose the Lone Shadow status");
-                ApplyTraitText(res, SecretIds.MemoryTrait, MemoryTraitName, MemoryTraitDes, MemoryEffect, "Lose Twin Swords of Memory");
+                ApplyTraitText(res, SecretIds.MemoryTrait, MemoryTraitName, MemoryTraitDes, MemoryEffect, "Lose Blade Waltz");
 
-                ApplyBuffText(res, SecretIds.LilyBuff, LilyTraitName, LilyEffect);
-                ApplyBuffText(res, SecretIds.LoneShadowBuff, LoneShadowTraitName, LoneShadowDes);
+                ApplyBuffText(res, SecretIds.LilyBuff, LilyBuffName, LilyBuffDes);
+                ApplyBuffText(res, SecretIds.LoneShadowBuff, LoneShadowBuffName, LoneShadowBuffDes);
                 ApplyBuffText(res, SecretIds.UndyingBuff, UndyingName, UndyingDes);
                 ApplyBuffText(res, SecretIds.LoneBonusBuff, LoneBonusName, LoneBonusDes);
                 ApplyBuffText(res, SecretIds.DamageImmuneBuff, DamageImmuneName, DamageImmuneDes);
-                ApplyBuffText(res, SecretIds.MemoryBuff, MemoryTraitName, MemoryEffect);
+                ApplyBuffText(res, SecretIds.MemoryBuff, MemoryBuffName, MemoryBuffDes);
                 ApplyBuffText(res, SecretIds.WhiteHairWeakBuff, WhiteHairWeakName, WhiteHairWeakDes);
             }
             catch (Exception e)

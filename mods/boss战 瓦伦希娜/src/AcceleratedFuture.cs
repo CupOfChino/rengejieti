@@ -8,10 +8,9 @@ namespace ValennaBattle
 {
     internal static class AcceleratedFuture
     {
-        internal static async Task Grant(BattleRole role)
+        internal static async Task Grant(BattleRole role, bool startedWithEyeReady)
         {
-            if (!StrikeSequence.CanHit(role) || !ValennaEyeEquipment.IsWorn(role) ||
-                role.GetBuff(StrikeProfiles.EyeOverheatId) != null) return;
+            if (!startedWithEyeReady || !StrikeSequence.CanHit(role) || !ValennaEyeEquipment.IsWorn(role)) return;
 
             BuffData future = role.GetBuff(StrikeProfiles.AcceleratedFutureId);
             if (future == null)
@@ -23,10 +22,32 @@ namespace ValennaBattle
         internal static AttackUse BeginAttack(BattleActiveBehaviorData action)
         {
             if (!action.IsAttackAction || action.BattleSkillData?.Id == StrikeProfiles.RabbitId ||
-                !ValennaEyeEquipment.IsWorn(action.Self) || action.Self.Data.BuffList == null) return null;
+                action.Self?.Data?.BuffList == null) return null;
 
             BuffData future = action.Self.GetBuff(StrikeProfiles.AcceleratedFutureId);
-            return future == null || future.DisableBuff || future.CurLayer <= 0 ? null : new AttackUse(future);
+            return StackCount(future) > 0 ? new AttackUse(future) : null;
+        }
+
+        private static int StackCount(BuffData future) => future == null || future.DisableBuff ? 0 :
+            Math.Max(0, Math.Min(future.CurLayer, StrikeProfiles.AcceleratedFutureMax));
+
+        internal static int RewardDice(BattleRole role, bool magic)
+        {
+            if (!BattleHelper.IsInBattle || magic || role?.Data?.BuffList == null) return 0;
+            return StackCount(role.GetBuff(StrikeProfiles.AcceleratedFutureId)) == StrikeProfiles.AcceleratedFutureMax ? 1 : 0;
+        }
+
+        private static int StatBonus(RoleData role, EExploreSkill skill)
+        {
+            if (skill is not (EExploreSkill.Combat or EExploreSkill.Motion) || role?.BuffList == null) return 0;
+            BuffData future = role.BuffList.Find(buff => buff != null && buff.Id == StrikeProfiles.AcceleratedFutureId);
+            return 2 * StackCount(future);
+        }
+
+        private static int WithStatBonus(RoleData role, EExploreSkill skill, int value, int bonus)
+        {
+            int max = role.GetSkillMaxValue(skill);
+            return max > 0 ? Math.Min(max, value + bonus) : value + bonus;
         }
 
         internal sealed class AttackUse
@@ -38,8 +59,7 @@ namespace ValennaBattle
             internal AttackUse(BuffData future)
             {
                 _future = future;
-                _percent = StrikeProfiles.AcceleratedFuturePercent *
-                    Math.Min(future.CurLayer, StrikeProfiles.AcceleratedFutureMax);
+                _percent = StrikeProfiles.AcceleratedFuturePercent * StackCount(future);
             }
 
             internal int Boost(int damage)
@@ -64,14 +84,25 @@ namespace ValennaBattle
         {
             private static void Postfix(RoleData __instance, EExploreSkill __0, ref int __result)
             {
-                if ((__0 != EExploreSkill.Combat && __0 != EExploreSkill.Motion) ||
-                    __instance.BuffList == null) return;
+                int bonus = StatBonus(__instance, __0);
+                if (bonus > 0) __result = WithStatBonus(__instance, __0, __result, bonus);
+            }
+        }
 
-                BuffData future = __instance.BuffList.Find(buff => buff != null && buff.Id == StrikeProfiles.AcceleratedFutureId);
-                if (future == null || future.DisableBuff) return;
-                int bonus = 2 * Math.Max(0, Math.Min(future.CurLayer, StrikeProfiles.AcceleratedFutureMax));
-                int max = __instance.GetSkillMaxValue(__0);
-                __result = max > 0 ? Math.Min(max, __result + bonus) : __result + bonus;
+        [HarmonyPatch(typeof(BattleHelper), nameof(BattleHelper.GetFinalCheckDetailBaseValue))]
+        private static class SkillDetailBonus
+        {
+            private static void Postfix(BattleRole __0, EDiceValueType __1, int __2, VariableData<int> __3,
+                int __4, float __5, ref int __result)
+            {
+                if (__1 is not (EDiceValueType.Skill or EDiceValueType.Unite) || __4 > 0 || __3 == null) return;
+                var skill = (EExploreSkill)__2;
+                int bonus = StatBonus(__0?.Data, skill);
+                if (bonus == 0) return;
+                // 幸运攻击重算底值和检定说明直接从变量数据读取，未经过 GetSkillValue。
+                int baseValue = BattleHelper.CalculateCheckDetailBaseValue(
+                    BattleHelper.GetSourceDetailValueDatas(__0, __3), __3);
+                __result = (int)(WithStatBonus(__0.Data, skill, baseValue, bonus) * __5);
             }
         }
     }

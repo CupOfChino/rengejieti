@@ -1,0 +1,100 @@
+{
+  "cues": [
+    {
+      "file": "Wiki音效/技能1/Thumbfather_1_1-1.ogg",
+      "at": 0.13,
+      "volume": 100,
+      "speed": 1,
+      "group": 0,
+      "subtitle": ""
+    },
+    {
+      "file": "Wiki音效/技能1/Thumbfather_1_2.ogg",
+      "at": 0.43,
+      "volume": 100,
+      "speed": 1,
+      "group": 0,
+      "subtitle": ""
+    },
+    {
+      "file": "Wiki音效/技能3/Thumbfather_3_1-1.ogg",
+      "at": 0.69,
+      "volume": 100,
+      "speed": 1,
+      "group": 0,
+      "subtitle": ""
+    },
+    {
+      "file": "Wiki音效/技能3/Thumbfather_3_1-2.ogg",
+      "at": 0.88,
+      "volume": 100,
+      "speed": 1,
+      "group": 0,
+      "subtitle": ""
+    },
+    {
+      "file": "Wiki音效/技能3/Thumbfather_3_2-2.ogg",
+      "at": 0.8,
+      "volume": 100,
+      "speed": 1,
+      "group": 0,
+      "subtitle": ""
+    },
+    {
+      "file": "Wiki音效/技能3/Thumbfather_3_2-3.ogg",
+      "at": 1.36,
+      "volume": 100,
+      "speed": 1,
+      "group": 0,
+      "subtitle": ""
+    },
+    {
+      "file": "Wiki音效/技能3/Thumbfather_3_2-4.ogg",
+      "at": 1.74,
+      "volume": 100,
+      "speed": 1,
+      "group": 0,
+      "subtitle": ""
+    },
+    {
+      "file": "Wiki音效/技能2/Thumbfather_2_3.ogg",
+      "at": 1.14,
+      "volume": 100,
+      "speed": 1,
+      "group": 0,
+      "subtitle": ""
+    },
+    {
+      "file": "Wiki音效/技能1/Thumbfather_1_2.ogg",
+      "at": 2.17,
+      "volume": 100,
+      "speed": 1,
+      "group": 0,
+      "subtitle": ""
+    },
+    {
+      "file": "技能音频/6技能.ogg",
+      "at": 0,
+      "volume": 100,
+      "speed": 1.1,
+      "group": 0,
+      "subtitle": "哈哈哈哈哈！"
+    },
+    {
+      "file": "技能音频/6技能 3.ogg",
+      "at": 1.75,
+      "volume": 100,
+      "speed": 1.1,
+      "group": 0,
+      "subtitle": "狩猎结束！"
+    },
+    {
+      "file": "技能音频/6技能 4（2）.ogg",
+      "at": 2.6,
+      "volume": 100,
+      "speed": 1.1,
+      "group": 0,
+      "subtitle": "把你们统统解体！"
+    }
+  ]
+}

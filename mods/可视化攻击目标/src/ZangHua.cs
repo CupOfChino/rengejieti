@@ -1,7 +1,7 @@
 // 茉莉专属武器「葬花」（Item 880001）的插件逻辑。
 //
 // 数据侧（由 tools\make_zanghua_item.ps1 / make_zanghua_buffs.ps1 生成）：
-//   Item 880001        葬花：1D8+2、单手、连击 2、充能上限 12、神话+不可出售、绑定角色
+//   Item 880001        葬花：1D8+1、单手、连击 2、充能上限 12、神话+不可出售、绑定角色
 //   Buff 880040        剑痕本体（层数容器 + 图标 + 描述，最高 5 层）
 //   Buff 880041~880045 剑痕的隐藏数值档位（护甲 -x / 闪避 -10x / 运动 -10x）
 //
@@ -14,7 +14,7 @@
 //   5. 回合结束：剑痕层数减半（向下取整）→ 对中状态者补等量【流血】；同步隐藏档位
 //   6. 剑痕不可被驱散（拦 RemoveBuff）
 //   7. 战斗开始时检查：没有葬花就发一把，并把初始充能设成 7（游戏那个字段同时管上限和初始）
-//   8. 【2026-09-27】剑痕的"受到伤害 +15%/层"（易伤）：按层数同步到目标的
+//   8. 【2026-09-27】剑痕的"受到伤害 +2%/层"（易伤）：按层数同步到目标的
 //      `BeDamageChangePercentData`（对所有伤害类型生效），位置在 SyncMarkBeDamage；
 //      速度削减已去掉（减速归荆棘的【束缚】），闪避 -10、运动 -10 走数据档位。
 
@@ -56,12 +56,12 @@ namespace AttackTargetVisualizer
         private const string OffhandArmorKey = "zanghua_offhand_armor";
 
         /// <summary>
-        /// 剑痕的"受到伤害 +5%/层"（2026-09-27 改版：上限抬到 10 层、每层效果减半）。
+        /// 剑痕的"受到伤害 +2%/层"（2026-09-27 改版：上限抬到 10 层、每层效果减半）。
         /// 挂在目标的 `BeDamageChangePercentData` 上（不是属性），所以不受"属性不随层数缩放"的限制，
         /// 直接按当前层数写一个百分比即可。
         /// </summary>
         private const string MarkBeDamageKey = "zanghua_mark_be_damage";
-        private const float MarkBeDamagePerLayer = 0.05f;
+        private const float MarkBeDamagePerLayer = 0.02f;
 
         /// <summary>
         /// 剑痕的"闪避 / 运动 -5/层"（2026-09-27 用户口径）。
@@ -563,12 +563,12 @@ namespace AttackTargetVisualizer
                     result += MasterDamageBonus;
                 }
 
-                // 4. 每层剑痕 +5%（只对葬花；2026-09-27 改版：上限抬到 10 层、每层 +10% → +5%；
+                // 4. 每层剑痕 +2%（只对葬花；上限 10 层；
                 //    先算加成再叠层，避免本次命中吃到自己这层）
                 int layer = MarkLayer(target);
                 if (layer > 0)
                 {
-                    int bonus = (int)(result * 0.05f * layer);
+                    int bonus = (int)(result * 0.02f * layer);
                     if (bonus > 0)
                     {
                         result += bonus;
@@ -583,7 +583,7 @@ namespace AttackTargetVisualizer
                 // 游戏在攻击结算时会自己播"斩击闪光 FX_BladeHit + blade_hit 音效 + 攻击/受击动作"。
                 // 走数据的原因：插件手工构造 EffectShowData 要填一长串字段，漏一个就静默不播（音效那次就是
                 // `AudioClipData.AudioReference` 没填），数据层是原版武器同一条路，最稳。
-                // 反击（StrickBack）例外：那条流程没有武器表现链，仍由孤影的反击代码补播（见 SecretTraits.cs）。
+                // 反击（StrickBack）例外：那条流程没有武器表现链，由原版反击流程处理。
                 // 保留 MarkAppliedThisDamage 的调用标记，方便以后需要"整次攻击只做一次"的判断。
                 SecretTraits.MarkAppliedThisDamage(addData);
             }
@@ -599,29 +599,30 @@ namespace AttackTargetVisualizer
         /// 天然对应"每段各挂"（多段共享同一个伤害实例也不影响，因为这里是按"段"调用的）。
         /// 「视为双手」时每段 2 层（数据描述里那条"施加的负面状态 +1 层"）。
         /// </summary>
-        internal static void OnDamageLanded(BattleRole source, BattleRole target, DamageAdditionalData addData)
+        internal static Task OnDamageLanded(BattleRole source, BattleRole target, DamageAdditionalData addData)
         {
             try
             {
                 if (addData == null || !addData.IsWeaponDamage || !IsZangHua(addData.Weapon))
                 {
-                    return;
+                    return null;
                 }
                 if (source == null || target == null || target.IsDeath || target.Data == null)
                 {
-                    return;
+                    return null;
                 }
                 bool onMaster, onOffhand, asTwoHanded;
                 GetSlot(source, out onMaster, out onOffhand, out asTwoHanded);
-                AddMark(source, target, asTwoHanded ? 2 : 1);
+                return AddMark(source, target, asTwoHanded ? 2 : 1);
             }
             catch (Exception e)
             {
                 AttackTargetPlugin.LogError("葬花：命中挂剑痕出错：" + e.Message);
+                return null;
             }
         }
 
-        private static async void AddMark(BattleRole source, BattleRole target, int count)
+        private static async Task AddMark(BattleRole source, BattleRole target, int count)
         {
             try
             {
@@ -639,7 +640,7 @@ namespace AttackTargetVisualizer
 
         /// <summary>
         /// 按当前层数同步剑痕的全部数值效果（2026-09-27 改版：上限 10、每层效果削弱）：
-        ///   · 受到伤害 **+5%/层**（BeDamageChangePercentData，按层数）
+        ///   · 受到伤害 **+2%/层**（BeDamageChangePercentData，按层数）
         ///   · 闪避 **-5/层**、运动 **-5/层**（插件按层数直接改属性，SourceKey 幂等）
         ///   · 护甲：**每 2 层 -1**（走 880041~880045 五个隐藏档位，第 n 档 = 2n 层；1 层时还没有护甲削减）
         /// </summary>
@@ -715,7 +716,7 @@ namespace AttackTargetVisualizer
         }
 
         /// <summary>
-        /// 按层数同步"受到伤害 +5%"（目标的 `BeDamageChangePercentData`，对所有伤害类型生效）。
+        /// 按层数同步"受到伤害 +2%"（目标的 `BeDamageChangePercentData`，对所有伤害类型生效）。
         /// 层数为 0 就是把这条摘掉；加/摘都用同一个 SourceKey，保证不会叠加出错。
         /// </summary>
         internal static void SyncMarkBeDamage(BattleRole target, int layer)
@@ -1022,16 +1023,26 @@ namespace AttackTargetVisualizer
         new Type[] { typeof(uint), typeof(bool), typeof(bool), typeof(RoleHitData) })]
     internal static class Patch_ZangHua_MarkOnHit
     {
-        private static void Prefix(BattleRole __instance, RoleHitData hitData)
+        private static void Prefix(BattleRole __instance, RoleHitData hitData, out Task __state)
         {
+            __state = null;
             try
             {
-                ZangHua.OnDamageLanded(hitData != null ? hitData.Attacker : null, __instance,
+                __state = ZangHua.OnDamageLanded(hitData != null ? hitData.Attacker : null, __instance,
                     hitData != null ? hitData.AddData : null);
             }
             catch (Exception e)
             {
                 AttackTargetPlugin.LogError("葬花补丁出错（命中挂剑痕）：" + e.Message);
+            }
+        }
+
+        private static void Postfix(Task __state, ref Task __result)
+        {
+            // 让动作结束时读到本段已经叠完的剑痕。
+            if (__state != null)
+            {
+                __result = Task.WhenAll(__result, __state);
             }
         }
     }

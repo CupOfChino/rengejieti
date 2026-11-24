@@ -1,6 +1,4 @@
-// 领域展开用的角色头顶文字 + 画面边缘黑色暗角。
-//
-// 黑色椭圆底框在原版 UI 下无法稳定渲染，已移除；现在只绘制文字和全屏暗角。
+// 领域展开用的头顶对话气泡。气泡与暗角共用现有的顶点色网格。
 // 文字长度变化时按 Text 的 preferred size 重新计算排版区域。
 // 定位优先级：
 //   1) 技能牌 / 编辑行动牌存在时，放在行动框上边框中点上方；
@@ -26,16 +24,18 @@ namespace CustomBattleBg
         private static DomainTextBoxOverlay _instance;
 
         private CanvasGroup _group;
-        private Canvas _canvas;
         private RectTransform _canvasRt;
         private RectTransform _boxRt;
+        private EdgeVignetteGraphic _vignette;
         private Text _text;
         private Transform _anchor;
         private BattleRole _caster;
         private Coroutine _showCo;
+        private bool _speechBubble;
+        private Vector2 _layoutSize;
 
         internal static void Show(string content, string prefix, int startChar, int charCount,
-            BattleRole caster, float duration)
+            BattleRole caster, float duration, bool speechBubble = false)
         {
             try
             {
@@ -49,7 +49,7 @@ namespace CustomBattleBg
                     return;
                 }
                 overlay.ShowInternal(content, prefix, startChar, charCount, caster,
-                    Mathf.Clamp(duration, 0.5f, 30f));
+                    Mathf.Clamp(duration, 0.5f, 30f), speechBubble);
             }
             catch (Exception e)
             {
@@ -93,7 +93,6 @@ namespace CustomBattleBg
         private void Build()
         {
             Canvas canvas = gameObject.AddComponent<Canvas>();
-            _canvas = canvas;
             // 先恢复能稳定显示文字/暗角的 Overlay；Camera 模式在这套 UI 下会让整个 Canvas 消失。
             canvas.renderMode = RenderMode.ScreenSpaceOverlay;
             canvas.overrideSorting = true;
@@ -121,11 +120,11 @@ namespace CustomBattleBg
             GameObject vignetteGo = new GameObject("Vignette", typeof(RectTransform),
                 typeof(CanvasRenderer), typeof(EdgeVignetteGraphic));
             vignetteGo.transform.SetParent(transform, false);
-            EdgeVignetteGraphic vignette = vignetteGo.GetComponent<EdgeVignetteGraphic>();
-            vignette.raycastTarget = false;
+            _vignette = vignetteGo.GetComponent<EdgeVignetteGraphic>();
+            _vignette.raycastTarget = false;
             UIFactory.Stretch(vignetteGo.GetComponent<RectTransform>(), 0f, 0f, 0f, 0f);
 
-            // 文字容器；不绘制黑色底框，只保留文字和边缘暗角。
+            // 容器只负责定位和排版，底板在文字之前绘制。
             GameObject bubbleGo = new GameObject("Bubble", typeof(RectTransform),
                 typeof(CanvasRenderer));
             bubbleGo.transform.SetParent(transform, false);
@@ -141,12 +140,12 @@ namespace CustomBattleBg
             _text.verticalOverflow = VerticalWrapMode.Truncate;
             UIFactory.Stretch(_text.rectTransform, 28f, 28f, 16f, 16f);
 
-            CustomBattleBgPlugin.LogInfo("头顶文字显示已创建：文字 + 边缘暗角（不绘制黑底框）");
+            CustomBattleBgPlugin.LogInfo("已创建头顶文字与气泡画布");
             gameObject.SetActive(false);
         }
 
         private void ShowInternal(string content, string prefix, int startChar, int charCount,
-            BattleRole caster, float duration)
+            BattleRole caster, float duration, bool speechBubble)
         {
             gameObject.SetActive(true);
             transform.SetAsLastSibling();
@@ -154,6 +153,8 @@ namespace CustomBattleBg
 
             _anchor = null;
             _caster = caster;
+            _speechBubble = speechBubble;
+            _vignette.ClearSpeechBubble();
             try
             {
                 if (caster != null && caster.Model != null)
@@ -170,17 +171,6 @@ namespace CustomBattleBg
             _text.text = content;
             ResizeToText(content);
             UpdatePosition();
-            try
-            {
-                EdgeVignetteGraphic vignette = GetComponentInChildren<EdgeVignetteGraphic>(true);
-                if (vignette != null)
-                {
-                    vignette.SetAllDirty();
-                }
-            }
-            catch (Exception)
-            {
-            }
             try
             {
                 CustomBattleBgPlugin.LogInfo("头顶文字框状态：rect=" + (_boxRt != null ? _boxRt.rect.ToString() : "null") +
@@ -217,17 +207,26 @@ namespace CustomBattleBg
 
         private void ResizeToText(string content)
         {
+            _layoutSize = _canvasRt.rect.size;
             try
             {
-                float maxWidth = 720f;
-                TextGenerationSettings settings = _text.GetGenerationSettings(new Vector2(maxWidth, 0f));
+                float maxWidth = _speechBubble ? Mathf.Clamp(_layoutSize.x - 24f, 100f, 790f) : 790f;
+                float maxHeight = _speechBubble ? Mathf.Clamp(_layoutSize.y - 24f, 80f, 320f) : 320f;
+                const float horizontalPadding = 56f;
+                float measureWidth = _speechBubble ? maxWidth - horizontalPadding : 720f;
+                TextGenerationSettings settings = _text.GetGenerationSettings(new Vector2(measureWidth, 0f));
                 settings.horizontalOverflow = HorizontalWrapMode.Wrap;
                 settings.verticalOverflow = VerticalWrapMode.Overflow;
                 TextGenerator generator = new TextGenerator();
-                float width = generator.GetPreferredWidth(content, settings) / Mathf.Max(_text.pixelsPerUnit, 1f);
-                float height = generator.GetPreferredHeight(content, settings) / Mathf.Max(_text.pixelsPerUnit, 1f);
-                width = Mathf.Clamp(width + 70f, 260f, maxWidth + 70f);
-                height = Mathf.Clamp(height + 42f, 80f, 320f);
+                float pixelsPerUnit = Mathf.Max(_text.pixelsPerUnit, 1f);
+                float width = generator.GetPreferredWidth(content, settings) / pixelsPerUnit;
+                width = Mathf.Clamp(width + 70f, Mathf.Min(260f, maxWidth), maxWidth);
+                if (_speechBubble)
+                {
+                    settings.generationExtents = new Vector2(width - horizontalPadding, 0f);
+                }
+                float height = generator.GetPreferredHeight(content, settings) / pixelsPerUnit;
+                height = Mathf.Clamp(height + 42f, 80f, maxHeight);
                 _boxRt.sizeDelta = new Vector2(width, height);
                 CustomBattleBgPlugin.LogInfo("头顶文字框尺寸：" + width + "×" + height +
                     "（文字 " + content.Length + " 字符）");
@@ -247,28 +246,37 @@ namespace CustomBattleBg
             }
             try
             {
-                Vector2 screen;
-                bool aboveHud;
-                if (!TryGetAnchorScreen(out screen, out aboveHud))
+                Rect viewport = _canvasRt.rect;
+                Vector2 anchor = Vector2.zero;
+                bool hasAnchor = TryGetAnchorScreen(out Vector2 screen, out bool aboveHud) &&
+                    RectTransformUtility.ScreenPointToLocalPointInRectangle(_canvasRt, screen, null, out anchor);
+                if (!hasAnchor)
                 {
-                    return;
-                }
-                Vector2 local;
-                if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(_canvasRt, screen,
-                    null, out local))
-                {
-                    return;
+                    if (!_speechBubble) return;
+                    anchor = new Vector2(viewport.center.x, viewport.center.y + viewport.height * 0.18f);
                 }
 
                 Vector2 size = _boxRt.sizeDelta;
-                Rect rect = _canvasRt.rect;
-                // 有行动框时贴在行动框上方，没有行动框时贴在角色模型顶边上方。
-                local.y += aboveHud ? 16f : 28f;
-                local.x = Mathf.Clamp(local.x,
-                    rect.xMin + size.x * 0.5f + 12f,
-                    rect.xMax - size.x * 0.5f - 12f);
-                // 优先保证底边高于角色头顶；角色靠屏幕顶端时允许框顶部略微超出。
-                _boxRt.anchoredPosition = local;
+                float gap = aboveHud ? 16f : 28f;
+                Vector2 position = anchor + Vector2.up * gap;
+                float xMargin = Mathf.Max(0f, (viewport.width - size.x) * 0.5f - 12f);
+                position.x = Mathf.Clamp(position.x, viewport.center.x - xMargin, viewport.center.x + xMargin);
+                bool tailAbove = false;
+                if (_speechBubble)
+                {
+                    float minY = viewport.yMin + 12f;
+                    float maxY = Mathf.Max(minY, viewport.yMax - 12f - size.y);
+                    float below = anchor.y - size.y - gap;
+                    tailAbove = position.y > maxY && below >= minY;
+                    position.y = tailAbove ? Mathf.Min(below, maxY) : Mathf.Clamp(position.y, minY, maxY);
+                }
+                _boxRt.anchoredPosition = position;
+                if (_speechBubble)
+                {
+                    Vector3 anchorWorld = _canvasRt.TransformPoint(new Vector3(anchor.x, anchor.y, 0f));
+                    bool tailVisible = hasAnchor && (tailAbove || position.y - anchor.y >= 12f);
+                    _vignette.SetSpeechBubble(_boxRt, anchorWorld, tailVisible, tailAbove);
+                }
             }
             catch (Exception e)
             {
@@ -412,6 +420,10 @@ namespace CustomBattleBg
         {
             if (gameObject.activeInHierarchy)
             {
+                if (_speechBubble && (_canvasRt.rect.size - _layoutSize).sqrMagnitude > 0.25f)
+                {
+                    ResizeToText(_text.text);
+                }
                 UpdatePosition();
             }
         }
@@ -446,9 +458,54 @@ namespace CustomBattleBg
 
     }
 
-    /// <summary>纯网格全屏暗角：中心透明，边缘和四角渐黑，不依赖贴图。</summary>
+    /// <summary>用同一顶点色网格绘制暗角和文字后面的对话气泡。</summary>
     internal class EdgeVignetteGraphic : MaskableGraphic
     {
+        private static readonly Color32 BubbleFill = new Color32(6, 7, 9, 248);
+        private static readonly Color32 BubbleBorder = new Color32(74, 76, 81, 228);
+        private readonly Vector3[] _bubbleCorners = new Vector3[4];
+        private Rect _bubble;
+        private float _tailX;
+        private bool _showTail;
+        private bool _tailAbove;
+
+        internal void SetSpeechBubble(RectTransform box, Vector3 anchorWorld, bool showTail, bool tailAbove)
+        {
+            box.GetWorldCorners(_bubbleCorners);
+            Vector3 min = rectTransform.InverseTransformPoint(_bubbleCorners[0]);
+            Vector3 max = rectTransform.InverseTransformPoint(_bubbleCorners[2]);
+            float tailX = rectTransform.InverseTransformPoint(anchorWorld).x;
+            if (!IsFinite(min.x) || !IsFinite(min.y) || !IsFinite(max.x) || !IsFinite(max.y) ||
+                !IsFinite(tailX) || max.x - min.x < 46f || max.y - min.y < 22f)
+            {
+                ClearSpeechBubble();
+                return;
+            }
+
+            Rect next = Rect.MinMaxRect(min.x, min.y, max.x, max.y);
+            if ((next.position - _bubble.position).sqrMagnitude <= 0.01f &&
+                (next.size - _bubble.size).sqrMagnitude <= 0.01f &&
+                (!showTail || Mathf.Abs(tailX - _tailX) < 0.1f) &&
+                _showTail == showTail && _tailAbove == tailAbove)
+            {
+                return;
+            }
+            _bubble = next;
+            _tailX = tailX;
+            _showTail = showTail;
+            _tailAbove = tailAbove;
+            SetVerticesDirty();
+        }
+
+        internal void ClearSpeechBubble()
+        {
+            if (_bubble.width <= 0f) return;
+            _bubble = default;
+            SetVerticesDirty();
+        }
+
+        private static bool IsFinite(float value) => !float.IsNaN(value) && !float.IsInfinity(value);
+
         protected override void OnPopulateMesh(VertexHelper vh)
         {
             vh.Clear();
@@ -490,6 +547,67 @@ namespace CustomBattleBg
                     vh.AddTriangle(a, c, b);
                     vh.AddTriangle(b, c, dIndex);
                 }
+            }
+            if (_bubble.width > 0f)
+            {
+                AppendSpeechBubble(vh);
+            }
+        }
+
+        private void AppendSpeechBubble(VertexHelper vh)
+        {
+            const float radius = 9f;
+            const float lineWidth = 1.5f;
+            float baseX = Mathf.Clamp(_tailX, _bubble.xMin + radius + 12f, _bubble.xMax - radius - 12f);
+            float endX = Mathf.Clamp(_tailX, baseX - 7f, baseX + 7f);
+            float edge = _tailAbove ? _bubble.yMax : _bubble.yMin;
+            float direction = _tailAbove ? 1f : -1f;
+            if (_showTail)
+            {
+                AddTail(vh, baseX, endX, edge, direction, 10f, 11f, BubbleBorder);
+            }
+            AddRoundedRect(vh, _bubble, radius, BubbleBorder);
+            if (_showTail)
+            {
+                AddTail(vh, baseX, endX, edge, direction, 8f, 8f, BubbleFill);
+            }
+            Rect inner = Rect.MinMaxRect(_bubble.xMin + lineWidth, _bubble.yMin + lineWidth,
+                _bubble.xMax - lineWidth, _bubble.yMax - lineWidth);
+            AddRoundedRect(vh, inner, radius - lineWidth, BubbleFill);
+        }
+
+        private static void AddTail(VertexHelper vh, float x, float tipX, float y, float direction,
+            float halfWidth, float height, Color32 color)
+        {
+            int start = vh.currentVertCount;
+            float baseY = y - direction * 3f;
+            vh.AddVert(new Vector3(x - halfWidth, baseY, 0f), color, Vector2.zero);
+            vh.AddVert(new Vector3(x + halfWidth, baseY, 0f), color, Vector2.zero);
+            vh.AddVert(new Vector3(tipX, y + direction * height, 0f), color, Vector2.zero);
+            vh.AddTriangle(start, start + (direction < 0f ? 1 : 2), start + (direction < 0f ? 2 : 1));
+        }
+
+        private static void AddRoundedRect(VertexHelper vh, Rect rect, float radius, Color32 color)
+        {
+            const int segments = 4;
+            int center = vh.currentVertCount;
+            Vector2 middle = rect.center;
+            vh.AddVert(new Vector3(middle.x, middle.y, 0f), color, Vector2.zero);
+            for (int corner = 0; corner < 4; corner++)
+            {
+                float x = corner < 2 ? rect.xMax - radius : rect.xMin + radius;
+                float y = corner == 1 || corner == 2 ? rect.yMax - radius : rect.yMin + radius;
+                for (int step = 0; step <= segments; step++)
+                {
+                    float angle = ((corner - 1f) * 90f + step * (90f / segments)) * Mathf.Deg2Rad;
+                    vh.AddVert(new Vector3(x + Mathf.Cos(angle) * radius, y + Mathf.Sin(angle) * radius, 0f),
+                        color, Vector2.zero);
+                }
+            }
+            int count = 4 * (segments + 1);
+            for (int i = 0; i < count; i++)
+            {
+                vh.AddTriangle(center, center + 1 + (i + 1) % count, center + 1 + i);
             }
         }
 

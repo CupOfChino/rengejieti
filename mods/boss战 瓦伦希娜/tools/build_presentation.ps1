@@ -128,16 +128,16 @@ function Stage-Image([string]$RelativePath, [string]$SourcePath) {
 }
 
 function Stage-Portrait([string]$SourcePath) {
-    if (-not $SourcePath) { $SourcePath = Join-Path $mod 'resource/瓦伦娜立绘.png' }
+    if (-not $SourcePath) {
+        Stage-Image "Resources/Texture/HeadIcon/$portraitName.png" (Join-Path $mod 'resource/装备与头像/瓦伦娜头像.png')
+        return
+    }
     $image = [Drawing.Bitmap]::new((Get-Item -LiteralPath $SourcePath).FullName)
     $frame = [Drawing.Bitmap]::new(64, 64, [Drawing.Imaging.PixelFormat]::Format32bppArgb)
     $graphics = [Drawing.Graphics]::FromImage($frame)
     try {
         # 海琳娜、艾咪、莎夜的原版头像约 64 像素，眉眼和帽檐落在头肩画幅内。
         $crop = [Drawing.Rectangle]::new(0, 0, $image.Width, $image.Height)
-        if ($image.Width -eq 800 -and $image.Height -eq 1391) {
-            $crop = [Drawing.Rectangle]::new(334, 0, 300, 300)
-        }
         $scale = 64.0 / [Math]::Max($crop.Width, $crop.Height)
         $width = [Math]::Max(1, [int][Math]::Round($crop.Width * $scale))
         $height = [Math]::Max(1, [int][Math]::Round($crop.Height * $scale))
@@ -220,7 +220,7 @@ function Model-Clip([string]$Key, [bool]$Loop, [double]$Interval, [string[]]$Fra
 $base = Join-Path $GameTables 'RoleModel/Model_NPC_093.txt'
 $model = (Get-Content -LiteralPath $base -Raw -Encoding UTF8 | ConvertFrom-Json -AsHashtable).Data.value
 $model.ModelName = $actorName
-$model.Speaker = '瓦伦娜'
+$model.Speaker = '瓦伦希娜'
 $model.HeadIcons = @([ordered]@{
     MatchParames = @(); Type = 0; Offset = @{ x = 0; y = 0 }; Icon = $null
     IconResference = Asset-Ref 1001 $portraitName
@@ -421,11 +421,6 @@ if (!(Test-Path -LiteralPath $futurePath -PathType Leaf)) {
     $futurePath = 'C:/Users/huawei/AppData/Local/Temp/codex-clipboard-9c5bfa7e-f47b-44b4-ab2a-e9d56ac465c6.webp'
 }
 Stage-Icon 'Resources/Texture/BuffIcon/valenna_accelerated_future_icon.png' $futurePath
-$equipPath = 'D:/HuaweiMoveData/Users/huawei/Desktop/钢丝/饰品-9256.webp'
-if (!(Test-Path -LiteralPath $equipPath -PathType Leaf)) {
-    $equipPath = 'E:/lim/_save/素材库/_图标与UI/Sprite/EgoGiftIcon/9256/9256.png'
-}
-Stage-Icon 'Resources/Texture/ItemIcon/valenna_eye_equip_icon.png' $equipPath
 Stage-Icon 'Resources/Texture/BuffIcon/valenna_accel_bullet_icon.png' 'D:/HuaweiMoveData/Users/huawei/Desktop/钢丝/加速弹.webp'
 foreach ($icon in @(
     @{ Name = 'breath'; Key = 'Breath' },
@@ -437,8 +432,11 @@ foreach ($icon in @(
         "E:/lim/_save/素材库/_状态图标/$($icon.Key)/$($icon.Key).png"
 }
 foreach ($icon in @(
-    @{ Name = 'gunblade'; File = '铳剑.png' },
-    @{ Name = 'cutlass'; File = '切斩刀.png' },
+    @{ Name = 'gunblade'; File = '装备与头像/铳剑.png' },
+    @{ Name = 'eye_equip'; File = '装备与头像/预知眼.png' },
+    @{ Name = 'cutlass'; File = '装备与头像/切斩刀.png' },
+    @{ Name = 'cigar'; File = '装备与头像/上等雪茄.png' },
+    @{ Name = 'vodka'; File = '装备与头像/高浓度伏特加.png' },
     @{ Name = 'cap'; File = '帽子.png' }
 )) {
     Stage-Image "Resources/Texture/ItemIcon/valenna_$($icon.Name)_icon.png" (Join-Path $sourceDirectory $icon.File)
@@ -456,9 +454,10 @@ $swordPath = Join-Path $assets "$huntTexture/valenna_hunt_swords_00.png"
 Write-Picture $swordPath $huntSize $huntSize $swords
 Write-Picture (Join-Path $assets "$huntTexture/valenna_hunt_glow_00.png") $huntSize $huntSize `
     ([ValennaBattle.HuntingMarkArt]::Glow($swords))
-Stage-Image 'Resources/Texture/BuffIcon/valenna_hunting_prey_icon.png' $swordPath
-Save-EffectSequence 'valenna_hunt_swords' 'valenna_hunt_swords_' 1 0.55 0.55
-Save-EffectSequence 'valenna_hunt_glow' 'valenna_hunt_glow_' 1 0.55 0.55
+Stage-Image 'Resources/Texture/BuffIcon/valenna_damage_up_icon.png' (Join-Path $sourceDirectory '装备与头像/伤害强化.png')
+Stage-Image 'Resources/Texture/BuffIcon/valenna_hunting_prey_icon.png' (Join-Path $sourceDirectory '装备与头像/狩猎目标.png')
+Save-EffectSequence 'valenna_hunt_swords' 'valenna_hunt_swords_' 1 0.825 0.825
+Save-EffectSequence 'valenna_hunt_glow' 'valenna_hunt_glow_' 1 0.825 0.825
 Write-Picture (Join-Path $assets "$huntTexture/valenna_execution_frame.png") `
     ([ValennaBattle.HuntingMarkArt]::FrameWidth) ([ValennaBattle.HuntingMarkArt]::FrameHeight) `
     ([ValennaBattle.HuntingMarkArt]::Frame())
@@ -605,8 +604,14 @@ for ($index = 0; $index -lt $parryCount; $index++) {
 }
 Save-EffectSequence $parryName 'valenna_parry_frame_' $parryCount 1.48 1.48
 
+foreach ($mythical in 'valenna_eye_mythical_card', 'valenna_eye_mythical_projection') {
+    $path = "Resources/Texture/MythologicalObj/$mythical.png"
+    Stage-Image $path
+    Stage-Image "$path.rtview"
+}
+
 $resourceMap = [ordered]@{}
-foreach ($group in ([ordered]@{ '1001' = 'HeadIcon'; '1004' = 'ItemIcon'; '1007' = 'BuffIcon'; '1018' = 'Charator'; '1023' = 'Effect' }).GetEnumerator()) {
+foreach ($group in ([ordered]@{ '1001' = 'HeadIcon'; '1004' = 'ItemIcon'; '1005' = 'MythologicalObj'; '1007' = 'BuffIcon'; '1018' = 'Charator'; '1023' = 'Effect' }).GetEnumerator()) {
     $resourceMap[$group.Key] = @(Get-ChildItem -LiteralPath (Join-Path $texture $group.Value) -Recurse -File -Filter '*.png' |
         Sort-Object FullName | ForEach-Object {
             $path = [IO.Path]::GetRelativePath($assets, $_.FullName).Replace('\', '/')
@@ -619,7 +624,7 @@ $mapEnvelope = [ordered]@{
         value = [ordered]@{ ResourceMap = $resourceMap }
     }
 }
-$mapJson = ($mapEnvelope | ConvertTo-Json -Depth 8) -replace '(?m)^(\s*)"(1001|1004|1007|1018|1023)"(?=\s*:)', '$1$2'
+$mapJson = ($mapEnvelope | ConvertTo-Json -Depth 8) -replace '(?m)^(\s*)"(1001|1004|1005|1007|1018|1023)"(?=\s*:)', '$1$2'
 Save-Text 'Resources/Config/InternalConfigure.txt' $mapJson
 
 Copy-Item -LiteralPath (Join-Path $project 'Project.rtmeta') -Destination (Join-Path $stagedProject 'Project.rtmeta')

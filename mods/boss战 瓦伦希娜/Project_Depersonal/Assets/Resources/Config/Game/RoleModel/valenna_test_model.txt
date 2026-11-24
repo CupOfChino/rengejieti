@@ -37,7 +37,7 @@
           }
         }
       ],
-      "Speaker": "瓦伦娜",
+      "Speaker": "瓦伦希娜",
       "HeadIcons": [
         {
           "MatchParames": [],

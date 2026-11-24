@@ -35,7 +35,6 @@ namespace ValennaBattle
         internal static Sprite ForeseenMark { get; private set; }
         internal static Sprite HuntSwords { get; private set; }
         internal static Sprite HuntGlow { get; private set; }
-        internal static Sprite ExecutionFrame { get; private set; }
         internal static Sprite TremorBurstIcon { get; private set; }
         internal static Sprite ScorchBurstIcon { get; private set; }
         internal static Sprite Flare { get; private set; }
@@ -75,7 +74,6 @@ namespace ValennaBattle
                 ForeseenMark = LoadSprite("foreseen_mark_00");
                 HuntSwords = LoadSprite("hunt_swords_00");
                 HuntGlow = LoadSprite("hunt_glow_00");
-                ExecutionFrame = LoadSprite("execution_frame");
                 TremorBurstIcon = LoadSprite("tremor_burst_icon");
                 ScorchBurstIcon = LoadSprite("scorch_burst_icon");
                 Flare = LoadSprite("flare");
@@ -86,7 +84,7 @@ namespace ValennaBattle
             catch (Exception error)
             {
                 Clear();
-                ValennaPlugin.Instance.Warn($"瓦伦娜演出贴图载入失败：{error.Message}");
+                ValennaPlugin.Instance.Warn($"瓦伦希娜演出贴图载入失败：{error.Message}");
             }
         }
 
@@ -157,7 +155,7 @@ namespace ValennaBattle
             Loaded.Clear();
             Silhouettes.Clear();
             Sweep = ExecutionWave = CuttingWind = ElephantWind = Companion = TwinThrust = Eye = Sheath = Aim = Wake = Pierce = Impact = Parry = null;
-            ForeseenMark = HuntSwords = HuntGlow = ExecutionFrame = TremorBurstIcon = ScorchBurstIcon = Flare = Streak = HitLine = Smoke = null;
+            ForeseenMark = HuntSwords = HuntGlow = TremorBurstIcon = ScorchBurstIcon = Flare = Streak = HitLine = Smoke = null;
             LongThrust = Shot = ExecutionSweep = ExecutionCompanion = AttackSweep = AttackCompanion = TwinThrustSweep = PeakSweep = null;
         }
     }

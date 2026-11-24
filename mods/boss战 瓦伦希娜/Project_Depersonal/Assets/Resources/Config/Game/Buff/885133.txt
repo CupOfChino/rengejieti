@@ -13,7 +13,7 @@
       "Des": {
         "TarKey": "",
         "SheetKey": "",
-        "InputText": "按人格解体原版燃烧结算。",
+        "InputText": "按人格解体原版<color=#F35D50>燃烧</color>结算。",
         "Characteristic": null
       },
       "IconPathReference": {

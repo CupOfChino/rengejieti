@@ -7,13 +7,13 @@
       "Name": {
         "TarKey": "",
         "SheetKey": "",
-        "InputText": "持握·葬花",
+        "InputText": "<color=#C7ADFF>持握·葬花</color>",
         "Characteristic": null
       },
       "Des": {
         "TarKey": "",
         "SheetKey": "",
-        "InputText": "装备在主手：此武器伤害+1，可施展二连斩与横扫。\n装备在副手：护甲+2，受到的魔法伤害-1。\n主/副手未装备其他武器时视为双手：同时触发主手与副手效果，且此武器施加的负面状态+1层。",
+        "InputText": "主手：此武器伤害+1，可用<color=#C7ADFF>【二连斩】</color>与<color=#C7ADFF>【横扫】</color>。\n副手：护甲+2，受到的魔法伤害-1。\n另一手空着时视为双手：两侧效果同时生效，此武器施加的负面状态+1层。",
         "Characteristic": null
       },
       "EditorSheetKey": null

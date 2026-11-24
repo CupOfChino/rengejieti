@@ -1,0 +1,84 @@
+{
+  "cues": [
+    {
+      "file": "Wiki音效/技能1/Thumbfather_1_1-1.ogg",
+      "at": 0.32,
+      "volume": 100,
+      "speed": 1,
+      "group": 0,
+      "subtitle": ""
+    },
+    {
+      "file": "Wiki音效/技能2/Thumbfather_2_1.ogg",
+      "at": 0.85,
+      "volume": 100,
+      "speed": 1,
+      "group": 0,
+      "subtitle": ""
+    },
+    {
+      "file": "Wiki音效/技能1/Thumbfather_1_1-2.ogg",
+      "at": 1.7,
+      "volume": 100,
+      "speed": 1,
+      "group": 0,
+      "subtitle": ""
+    },
+    {
+      "file": "Wiki音效/技能1/Thumbfather_1_1-1.ogg",
+      "at": 2.14,
+      "volume": 100,
+      "speed": 1,
+      "group": 0,
+      "subtitle": ""
+    },
+    {
+      "file": "Wiki音效/特殊1/Thumbfather_sq1_1.ogg",
+      "at": 2.71,
+      "volume": 100,
+      "speed": 1,
+      "group": 0,
+      "subtitle": ""
+    },
+    {
+      "file": "Wiki音效/特殊1/Thumbfather_sq1_2.ogg",
+      "at": 1.54,
+      "volume": 80,
+      "speed": 1,
+      "group": 0,
+      "subtitle": ""
+    },
+    {
+      "file": "其他语气词/3-2（10）.ogg",
+      "at": 0.92,
+      "volume": 100,
+      "speed": 1,
+      "group": 0,
+      "subtitle": ""
+    },
+    {
+      "file": "其他语气词/3-2（11）.ogg",
+      "at": 1.73,
+      "volume": 100,
+      "speed": 1,
+      "group": 0,
+      "subtitle": ""
+    },
+    {
+      "file": "Wiki音效/技能1/Thumbfather_1_1-1.ogg",
+      "at": 2.6,
+      "volume": 100,
+      "speed": 1,
+      "group": 0,
+      "subtitle": ""
+    },
+    {
+      "file": "其他语气词/5（2）.ogg",
+      "at": 2.6,
+      "volume": 100,
+      "speed": 1,
+      "group": 0,
+      "subtitle": "还敢东张西望，滚去死吧！"
+    }
+  ]
+}

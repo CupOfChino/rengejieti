@@ -17,6 +17,11 @@
             "Ext": ".png"
           },
           {
+            "Key": "valenna_cigar_icon",
+            "Path": "Resources/Texture/ItemIcon/valenna_cigar_icon",
+            "Ext": ".png"
+          },
+          {
             "Key": "valenna_cutlass_icon",
             "Path": "Resources/Texture/ItemIcon/valenna_cutlass_icon",
             "Ext": ".png"
@@ -29,6 +34,23 @@
           {
             "Key": "valenna_gunblade_icon",
             "Path": "Resources/Texture/ItemIcon/valenna_gunblade_icon",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_vodka_icon",
+            "Path": "Resources/Texture/ItemIcon/valenna_vodka_icon",
+            "Ext": ".png"
+          }
+        ],
+        1005: [
+          {
+            "Key": "valenna_eye_mythical_card",
+            "Path": "Resources/Texture/MythologicalObj/valenna_eye_mythical_card",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_eye_mythical_projection",
+            "Path": "Resources/Texture/MythologicalObj/valenna_eye_mythical_projection",
             "Ext": ".png"
           }
         ],
@@ -51,6 +73,11 @@
           {
             "Key": "valenna_burn_icon",
             "Path": "Resources/Texture/BuffIcon/valenna_burn_icon",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_damage_up_icon",
+            "Path": "Resources/Texture/BuffIcon/valenna_damage_up_icon",
             "Ext": ".png"
           },
           {

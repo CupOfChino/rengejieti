@@ -1,0 +1,51 @@
+{
+  "Data": {
+    "__type": "MOD.MythicalItemData,Assembly-CSharp",
+    "value": {
+      "Icon": "UI/Textures/Icon/MythologicalObj/valenna_eye_mythical_card",
+      "IconReference": {
+        "ReferenceType": 1005,
+        "Key": "valenna_eye_mythical_card"
+      },
+      "ProjectionIcon": "UI/Textures/Icon/MythologicalObj/valenna_eye_mythical_projection",
+      "ProjectionIconReference": {
+        "ReferenceType": 1005,
+        "Key": "valenna_eye_mythical_projection"
+      },
+      "Index": 885112,
+      "ItemId": 885112,
+      "Localization_Name": {
+        "TarKey": "",
+        "SheetKey": "",
+        "InputText": "预知眼",
+        "Characteristic": null
+      },
+      "Localization_Des": {
+        "TarKey": "",
+        "SheetKey": "",
+        "InputText": "并非像魔法那样预测未来。这只眼睛更接近于通过分析进入视野的一切，预测即将到来的瞬间的计算机。被称为奥丁之眼的这件遗物，实际上是被分为三份的某件遗物的碎片。",
+        "Characteristic": null
+      },
+      "Localization_Effct": {
+        "TarKey": "",
+        "SheetKey": "",
+        "InputText": "辅助闪避，成功恢复1⁠点⁠精⁠神⁠值。\n未过热时获得<color=#77D1DC>加速的未来</color>。",
+        "Characteristic": null
+      },
+      "TriggerEven": {
+        "TriggerTiming": 0,
+        "UIChange": 506,
+        "Opts": [
+          {
+            "__type": "MOD.MythicalItemEven.AddExtraOption,Assembly-CSharp",
+            "ItemList": [
+              885112
+            ],
+            "_baseKey": "885112"
+          }
+        ]
+      },
+      "DefaultUnLock": false
+    }
+  }
+}

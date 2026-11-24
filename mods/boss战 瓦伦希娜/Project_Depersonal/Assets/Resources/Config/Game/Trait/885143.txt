@@ -4,7 +4,7 @@
     "value": {
       "__type": "MOD.TraitData,Assembly-CSharp",
       "Id": 885143,
-      "Type": 3,
+      "Type": 2,
       "CanRepeate": false,
       "IsCanCreateGet": false,
       "Localization_Name": {
@@ -16,7 +16,7 @@
       "Localization_Des": {
         "TarKey": "",
         "SheetKey": "",
-        "InputText": "开战时标记一名敌人。标记者受到自己的伤害 +20%，速度 -50，最多减至 10。处置只可选择标记目标，击杀后立即换标。每 3 个行动轮结束时若无标记，在下轮开始重新指定。击杀自己的标记时，人类敌人意志检定失败会陷入恐惧。",
+        "InputText": "开战时标记一名敌人。标记者受到自己的伤害 +20%，速⁠度⁠-⁠50，最多减至 10。<color=#EE827B>处置</color>只可选择标记目标，攻击后移除印记，击杀时下回合标记另一名敌人。每 3 个行动轮结束时若无标记，在下轮开始重新指定。击杀自己的标记时，人类敌人意志检定失败会陷入<color=#D196C7>恐惧</color>。",
         "Characteristic": null
       },
       "BuffsLink": [

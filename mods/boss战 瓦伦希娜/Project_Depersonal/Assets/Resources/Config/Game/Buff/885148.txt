@@ -13,7 +13,7 @@
       "Des": {
         "TarKey": "",
         "SheetKey": "",
-        "InputText": "引爆目标身上的震颤或灼热·震颤。",
+        "InputText": "引爆目标身上的<color=#FFA15E>震颤</color>或<color=#F35D50>震颤·灼热</color>。",
         "Characteristic": null
       },
       "IconPathReference": {

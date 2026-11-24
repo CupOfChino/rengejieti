@@ -1,0 +1,5 @@
+I originally wanted to make a Reception for Valencina, but I ended up spending days just getting her effects to feel right. They’re finally close to what I had in mind, and I’m pretty worn out, so I’m putting the companion version out for you to play in the meantime.
+
+She’s playable! I’m sure there are still a few bugs hiding in there, though. Some skill descriptions could read better, some effects land a beat too early or too late, and a few animations could flow better into the next move. I’ll work through those a bit at a time.
+
+I’ve tried to keep her power level in check for this release. I’m planning a toggle so you can choose for yourself whether you want her overpowered. That’ll come with the next round of fixes in the next update.

@@ -8,13 +8,13 @@
       "Name": {
         "TarKey": "",
         "SheetKey": "",
-        "InputText": "剑痕",
+        "InputText": "<color=#85CCFF>剑痕</color>",
         "Characteristic": null
       },
       "Des": {
         "TarKey": "",
         "SheetKey": "",
-        "InputText": "空间被斩击后留下的痕迹，无需触碰便能感受到它的锋利。\n每层：受到伤害+5%、闪避-5、运动-5；每2层：护甲-1。\n回合结束时层数减半（向下取整），并按减少的层数获得等量【流血】。\n最高10层，不可驱散。",
+        "InputText": "每层：受到伤害+2%，闪避与运动各-5。每2层护甲-1。\n受到一套完整的近战攻击后，按（层数+1）÷3向下取整，受到固定法术伤害，可被法术减免。\n回合结束层数向下减半，失去的层数转为等量<color=#FF818C>【流血】</color>。上限10层，不可驱散。",
         "Characteristic": null
       },
       "IconPathReference": {

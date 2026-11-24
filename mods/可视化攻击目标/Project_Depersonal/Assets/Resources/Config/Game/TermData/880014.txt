@@ -1,0 +1,22 @@
+{
+  "Data": {
+    "__type": "BaseSheetData,Assembly-CSharp",
+    "value": {
+      "__type": "TermData,Assembly-CSharp",
+      "Id": 880014,
+      "Name": {
+        "TarKey": "",
+        "SheetKey": "",
+        "InputText": "<color=#D5A8FF>花香</color>",
+        "Characteristic": null
+      },
+      "Des": {
+        "TarKey": "",
+        "SheetKey": "",
+        "InputText": "解除状态时获得，取其层数（最低1、最高5，无上限按5层算）。\n每层使意志检定成功区间+5。生命减少时消耗1层，战斗或探索回合结束时层数向下减半。每次因这两种效果减少层数，回复生命与精神各1点。\n进出副本时清空。",
+        "Characteristic": null
+      },
+      "EditorSheetKey": null
+    }
+  }
+}

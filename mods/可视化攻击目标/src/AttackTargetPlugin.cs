@@ -18,7 +18,7 @@ namespace AttackTargetVisualizer
     /// 箭头那部分不改游戏原有界面、不改数据、不碰存档，拔掉插件就等于没装；
     /// 私货那部分只对自己那几个编号（88xxxx）动手。
     /// </summary>
-    [BepInPlugin(Guid, "可视化攻击目标", "0.2.3")]
+    [BepInPlugin(Guid, "可视化攻击目标", "0.2.4")]
     public class AttackTargetPlugin : BaseUnityPlugin
     {
         public const string Guid = "codex.depersonal.attacktargetvisualizer";
@@ -33,6 +33,7 @@ namespace AttackTargetVisualizer
         internal static ManualLogSource Log;
 
         private ArrowLayer _layer;
+        private PrefabPreviewBridge _prefabPreview;
         private bool _createFailed;
 
         private void Awake()
@@ -42,8 +43,10 @@ namespace AttackTargetVisualizer
 
             try
             {
+                _prefabPreview = new PrefabPreviewBridge(Info.Location);
+                VfxPlacement.Load(Info.Location);
                 Harmony harmony = new Harmony(Guid);
-                SecretRuntime.Install(harmony);
+                SecretRuntime.Install(harmony, Info.Location);
                 LogInfo("私货特质钩子挂载结束");
             }
             catch (Exception e)
@@ -54,6 +57,7 @@ namespace AttackTargetVisualizer
 
         private void Update()
         {
+            _prefabPreview?.Tick();
             SecretRuntime.Tick();   // 私货：每帧推进排队的回击 / 段间缓冲，定时补监听与英文文案
 
             if (_layer != null)
@@ -65,6 +69,19 @@ namespace AttackTargetVisualizer
                 return;
             }
             TryCreateLayer();
+        }
+
+        private void LateUpdate()
+        {
+            WhiteHairAction.UpdateSlotCues();
+        }
+
+        private void OnDestroy()
+        {
+            _prefabPreview?.Clear();
+            WhiteHairAction.ClearSlotCues();
+            BattleBladeFx.Shutdown();
+            MoliAmbientFx.Shutdown();
         }
 
         private void TryCreateLayer()

@@ -16,7 +16,7 @@
       "Description": {
         "TarKey": "",
         "SheetKey": "",
-        "InputText": "原地预闪后切到目标身前，旋斩时穿到身后，转身举铳连闪。 命中 5 次，每次基础伤害 1。 只可选择狩猎目标。以处置击杀后立刻标记另一名敌人。",
+        "InputText": "斗殴检定，至少成功｜5 段\n<color=#F4C16B>[伤害加成]</color> 自身<color=#EBC556>呼吸法</color>达到 6⁠层时，每⁠段⁠伤⁠害⁠+⁠1。\n仅限<color=#E76160>狩猎目标</color>，选择技能时自动选中。目标无法闪避。\n<color=#55D8EF>[使用时]</color> 获得 3⁠层<color=#EBC556>呼吸法</color>。若未处于精神衰弱或精神枯竭，消耗 2⁠点⁠理⁠智并获得 1⁠层<color=#F9CA75>「望」</color>。\n各段基础伤害为 1。每 10⁠层<color=#8CD6EB>预知眼</color>使额外伤害骰增加 2 面，达到 10⁠层时掷 1d2，20⁠层时掷 1d4，依此类推。\n目标<color=#F35D50>燃烧</color>与<color=#FFA15E>震颤</color>每合计 6⁠层，每⁠段⁠伤⁠害⁠+⁠1，至多+2。目标生命值不高于一半时，该段伤害翻倍。\n<b><color=#EBCB91>第 1 段</color></b>\n<color=#A8E96D>[命中时]</color> 施加 1⁠层<color=#FFA15E>震颤</color>。\n<b><color=#EBCB91>第 2、3 段</color></b>\n<color=#A8E96D>[命中时]</color> 每段施加 1⁠层<color=#F35D50>燃烧</color>。\n<b><color=#EBCB91>第 4 段</color></b>\n<color=#A8E96D>[命中时]</color> 将<color=#FFA15E>震颤</color>转为<color=#F35D50>震颤·灼热</color>。\n<b><color=#EBCB91>第 5 段</color></b>\n消耗至多 5⁠发<color=#79CAD7>加速弹</color>。<color=#F9CA75>「望」</color>使本段基⁠础⁠伤⁠害⁠+⁠2。\n<color=#A8E96D>[命中时]</color> 引爆<color=#FFA15E>震颤</color> 3⁠次。\n<color=#B3F26E>[暴击命中时]</color> 额外引爆 2⁠次。\n<color=#A8E96D>[攻击后]</color> <color=#79CAD7>加速弹</color>补至 10⁠发。移除目标的印记。\n<color=#A8E96D>[击杀时]</color> 下回合标记另一名敌人。",
         "Characteristic": null
       },
       "EffectDesc": {
@@ -37,7 +37,14 @@
       "HideInSkillSelectList": false,
       "CanShowInUnselectSkillList": true,
       "BuffsLink": [
-        885139
+        885139,
+        885154,
+        885131,
+        885135,
+        104,
+        885132,
+        885134,
+        885137
       ],
       "Terms": [],
       "UseCustomIcon": false,
@@ -104,7 +111,7 @@
       ],
       "UseWeaponSelectCount": false,
       "MaxSelectCount": 1,
-      "NeedDice": false,
+      "NeedDice": true,
       "UseWeaponDiceConfig": false,
       "DiceType": 1,
       "DiceCheckType": 1,
@@ -115,7 +122,22 @@
       "AttackEffectType": 0,
       "IgnoreSelfDice": false,
       "IgnoreTargetDice": false,
-      "DiceConfig": null,
+      "DiceConfig": {
+        "SelfDiceData": {
+          "CheckType": 1,
+          "Attr": 0,
+          "ExtraAttr": 0,
+          "Skill": 101,
+          "UniteSkill": 0,
+          "TargetResult": 2,
+          "IsOverrideCheck": false,
+          "OverrideCheckValue": 0,
+          "OverrideCheckString": null,
+          "CheckValueRatio": 1,
+          "TargetType": 0
+        },
+        "TargetDiceData": null
+      },
       "SkillValue": 0,
       "NeedDamage": false,
       "DirectDamage": false,

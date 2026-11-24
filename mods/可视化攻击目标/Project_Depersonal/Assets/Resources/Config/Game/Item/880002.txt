@@ -8,7 +8,7 @@
       "ItemName": {
         "TarKey": "",
         "SheetKey": "",
-        "InputText": "百合花",
+        "InputText": "<color=#AEE9D0>百合花</color>",
         "Characteristic": null
       },
       "ItemDes": {
@@ -20,7 +20,7 @@
       "ItemEffectDes": {
         "TarKey": "",
         "SheetKey": "",
-        "InputText": "装备后无法卸下。\n进入副本时自动获得并装备。\n最大生命值+10。\n探索中每回合恢复1点精神值。\n每个副本限1次：战斗死亡时免疫此次死亡，生命值变为50%，并获得1回合伤害免疫。\n每2回合：免疫1次法术伤害。",
+        "InputText": "进入副本自动获得并装备，装备后无法卸下。\n生命上限+10，探索每回合回复1点精神值。\n战斗中获得<color=#AEE9D0>【百合未谢】</color>与<color=#AEE9D0>【法术庇护】</color>。",
         "Characteristic": null
       },
       "IconPathReference": {
@@ -51,7 +51,10 @@
       "ItemDynamicAffixList": [],
       "IsBindCharacter": true,
       "BuffsLink": [],
-      "Terms": [],
+      "Terms": [
+        880009,
+        880010
+      ],
       "ConfigData": [],
       "EquipmentConfigData": {
         "__type": "MOD.EquipConfigData,Assembly-CSharp",
@@ -113,7 +116,7 @@
         "OverrideDesc": {
           "TarKey": "",
           "SheetKey": "",
-          "InputText": "装备后无法卸下。\n进入副本时自动获得并装备。\n最大生命值+10。\n探索中每回合恢复1点精神值。\n每个副本限1次：战斗死亡时免疫此次死亡，生命值变为50%，并获得1回合伤害免疫。\n每2回合：免疫1次法术伤害。",
+          "InputText": "进入副本自动获得并装备，装备后无法卸下。\n生命上限+10，探索每回合回复1点精神值。\n战斗中获得<color=#AEE9D0>【百合未谢】</color>与<color=#AEE9D0>【法术庇护】</color>。",
           "Characteristic": null
         },
         "Arrts": [],

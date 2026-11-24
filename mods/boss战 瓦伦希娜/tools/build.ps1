@@ -38,7 +38,7 @@ try {
     }
     [IO.File]::WriteAllLines($response, @($arguments | ForEach-Object { '"' + $_ + '"' }), [Text.UTF8Encoding]::new($false))
     & (Join-Path $sdk 'dotnet.exe') $compiler "@$response"
-    if ($LASTEXITCODE -ne 0) { throw "瓦伦娜插件编译失败，退出码 $LASTEXITCODE" }
+    if ($LASTEXITCODE -ne 0) { throw "瓦伦希娜插件编译失败，退出码 $LASTEXITCODE" }
 
     $identity = [Reflection.AssemblyName]::GetAssemblyName($dll)
     if ($identity.Name -ne 'ValennaBattle') { throw '程序集名称错误' }

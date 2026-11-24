@@ -1,0 +1,60 @@
+{
+  "cues": [
+    {
+      "file": "Wiki音效/技能1/Thumbfather_1_1-1.ogg",
+      "at": 0.21,
+      "volume": 100,
+      "speed": 1,
+      "group": 0,
+      "subtitle": ""
+    },
+    {
+      "file": "Wiki音效/技能2/Thumbfather_2_1.ogg",
+      "at": 0.91,
+      "volume": 100,
+      "speed": 1,
+      "group": 0,
+      "subtitle": ""
+    },
+    {
+      "file": "Wiki音效/技能2/Thumbfather_2_2-1.ogg",
+      "at": 1.8,
+      "volume": 100,
+      "speed": 1,
+      "group": 0,
+      "subtitle": ""
+    },
+    {
+      "file": "Wiki音效/技能2/Thumbfather_2_3.ogg",
+      "at": 2.08,
+      "volume": 100,
+      "speed": 1,
+      "group": 0,
+      "subtitle": ""
+    },
+    {
+      "file": "Wiki音效/特殊1/Thumbfather_sq1_2.ogg",
+      "at": 2.31,
+      "volume": 100,
+      "speed": 1,
+      "group": 0,
+      "subtitle": ""
+    },
+    {
+      "file": "其他语气词/1-1（3）.ogg",
+      "at": 0.88,
+      "volume": 100,
+      "speed": 1,
+      "group": 0,
+      "subtitle": ""
+    },
+    {
+      "file": "其他语气词/1-1（2）.ogg",
+      "at": 2.13,
+      "volume": 100,
+      "speed": 1,
+      "group": 0,
+      "subtitle": ""
+    }
+  ]
+}

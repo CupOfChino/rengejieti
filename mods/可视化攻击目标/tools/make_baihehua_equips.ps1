@@ -31,21 +31,24 @@ $raw = $raw -replace '\\“', '“' -replace '\\”', '”'
 # ---- 三件装备的配置 ----
 $equips = @(
   @{
-    Id = 880003; Name = '百合花链'; Icon = 'icon_item_baihehualian'; EquipType = 0
+    Id = 880003; Name = '<color=#AEE9D0>百合花链</color>'; Icon = 'icon_item_baihehualian'; EquipType = 0
     Des = "一朵小小的百合花，安静地悬在腕间。"
-    Effect = "装备后无法卸下。`n进入副本时自动获得并装备。`n最大生命值+4。`n每回合开始：为随机一名敌人叠加 2~3 层【百合花芳香】，并吸取其 2 点生命。"
+    Effect = "进入副本自动获得并装备，装备后无法卸下。`n生命上限+4。`n回合开始：随机吸取1名敌人2点生命，并叠2～3层<color=#AEE9D0>【百合花芳香】</color>。"
+    Terms = @(880011)
     InfoDatas = 'chain'
   },
   @{
-    Id = 880004; Name = '百合花戒指'; Icon = 'icon_item_baihehuajiezhi'; EquipType = 0
+    Id = 880004; Name = '<color=#AEE9D0>百合花戒指</color>'; Icon = 'icon_item_baihehuajiezhi'; EquipType = 0
     Des = "戒面上凝着一朵不会再谢的百合。"
-    Effect = "装备后无法卸下。`n进入副本时自动获得并装备。`n魔法值上限+8。`n装备时习得法术「枯萎术」「赤印术」「真理之拳」「祝福术」。`n每回合开始恢复 2 点魔法值。`n施放法术后，对全体敌人造成等同于本次消耗魔法值的法术伤害。"
+    Effect = "进入副本自动获得并装备，装备后无法卸下。`n魔法值上限+8，回合开始回复2点。`n施法后，对全体敌人追加等同于本次耗魔的法术伤害。见<color=#AEE9D0>【戒中法术】</color>。"
+    Terms = @(880012)
     InfoDatas = 'ring'
   },
   @{
-    Id = 880005; Name = '百合花环'; Icon = 'icon_item_baihehuahuan'; EquipType = 2
+    Id = 880005; Name = '<color=#AEE9D0>百合花环</color>'; Icon = 'icon_item_baihehuahuan'; EquipType = 2
     Des = "编作环状的百合与青枝，戴上它，像是被什么温柔地护着。"
-    Effect = "装备后无法卸下。`n进入副本时自动获得并装备。`n体质+10、意志+10。`n骨折、流血、中毒、燃烧照样会挂上，但效果不生效。`n每轮开始：随机解除一个【昏迷 / 中毒 / 流血 / 燃烧 / 骨折 / 混乱 / 恐惧 / 弱点暴露】，并按被解除状态的层数为自己叠加【花香】。"
+    Effect = "进入副本自动获得并装备，装备后无法卸下。`n体质+10、意志+10。`n<color=#AEE9D0>【花环守护】</color>使指定负面效果失效，每轮开始解掉1项并叠<color=#D5A8FF>【花香】</color>。"
+    Terms = @(880013, 880014)
     InfoDatas = 'wreath'
   }
 )
@@ -202,7 +205,7 @@ foreach ($e in $equips) {
   $v.IsBindCharacter = $true
 
   $v.ItemStaticAffixList = @(); $v.ItemDynamicAffixList = @()
-  $v.BuffsLink = @(); $v.Terms = @(); $v.ConfigData = @()
+  $v.BuffsLink = @(); $v.Terms = $e.Terms; $v.ConfigData = @()
   $v.GetItemOpts = @(); $v.EndingOpts = @()
   $v.Disassemble.Items.Type = 7; $v.Disassemble.Items.Ids = @(); $v.Disassemble.PartsCount = 0
 

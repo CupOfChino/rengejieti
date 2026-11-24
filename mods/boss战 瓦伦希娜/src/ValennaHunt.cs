@@ -95,8 +95,21 @@ namespace ValennaBattle
 
             hunt.Prey = null;
             await victim.RemoveBuff(StrikeProfiles.HuntingPreyId, showChangeTip: false);
-            if (execution) await Assign(hunt, victim);
+            if (execution) hunt.RenewInRound = BattleHelper.FightContent.Round + 1;
             await TerrifyEnemies(owner);
+        }
+
+        internal static async Task FinishExecution(BattleRole owner, BattleRole target)
+        {
+            Hunt hunt = Current;
+            if (hunt?.Owner != owner || hunt.Prey != target) return;
+            if (target.IsDeath)
+            {
+                await PreyDefeated(owner, target, execution: true);
+                return;
+            }
+            hunt.Prey = null;
+            await target.RemoveBuff(StrikeProfiles.HuntingPreyId, showChangeTip: false);
         }
 
         private static async Task TerrifyEnemies(BattleRole owner)
@@ -204,35 +217,6 @@ namespace ValennaBattle
                     __0 |= TargetFor(BattleHelper.BattleHeroInfo) == null;
             }
 
-            private static void Postfix(BattleSkillSelectElement __instance)
-            {
-                const string frameName = "ValennaExecutionFrame";
-                Transform existing = __instance.transform.Find(frameName);
-                if (__instance.SkillData?.Id != StrikeProfiles.ExecutionId || StrikeArt.ExecutionFrame == null)
-                {
-                    if (existing != null) existing.gameObject.SetActive(false);
-                    return;
-                }
-
-                Image frame;
-                if (existing == null)
-                {
-                    var frameObject = new GameObject(frameName, typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
-                    var rect = (RectTransform)frameObject.transform;
-                    rect.SetParent(__instance.transform, false);
-                    rect.anchorMin = Vector2.zero;
-                    rect.anchorMax = Vector2.one;
-                    rect.offsetMin = new Vector2(-2f, -1f);
-                    rect.offsetMax = new Vector2(2f, 1f);
-                    frame = frameObject.GetComponent<Image>();
-                    frame.raycastTarget = false;
-                    frame.sprite = StrikeArt.ExecutionFrame;
-                }
-                else frame = existing.GetComponent<Image>();
-
-                frame.color = __instance.Masked ? new Color(0.51f, 0.48f, 0.48f, 0.72f) : Color.white;
-                frame.gameObject.SetActive(true);
-            }
         }
 
         [HarmonyPatch(typeof(UIBattlePanel), "_OnClickBattleSkillSelectElement")]
@@ -298,7 +282,7 @@ namespace ValennaBattle
                 float height = Mathf.Clamp(_body.bounds.size.y, 0.45f, 2.45f);
                 Vector3 center = _body.bounds.center;
                 transform.position = center + Vector3.up * height * 0.04f;
-                float displaySize = height * Mathf.Lerp(0.88f, 0.53f, settle);
+                float displaySize = height * 1.5f * Mathf.Lerp(0.88f, 0.53f, settle);
                 float modelScale = Mathf.Max(Mathf.Abs(_body.transform.lossyScale.x), 0.001f);
                 transform.localScale = Vector3.one * (displaySize / modelScale);
                 _swords.color = new Color(1f, 1f, 1f, Mathf.Lerp(1f, 0.85f, settle));

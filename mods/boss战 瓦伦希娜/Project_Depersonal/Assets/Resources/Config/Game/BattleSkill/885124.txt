@@ -16,7 +16,7 @@
       "Description": {
         "TarKey": "",
         "SheetKey": "",
-        "InputText": "首段突刺后后仰蓄势，再接两段直刺。 命中 2 次，每次基础伤害 1。",
+        "InputText": "斗殴＋射击联合检定｜2 段\n<color=#F4C16B>[伤害加成]</color> 自身<color=#EBC556>呼吸法</color>达到 6⁠层时，每⁠段⁠伤⁠害⁠+⁠1。\n<b><color=#EBCB91>第 1 段</color></b>｜1d3\n消耗 1⁠发<color=#79CAD7>加速弹</color>。\n<color=#A8E96D>[命中时]</color> 已消耗<color=#79CAD7>加速弹</color>则施加 1⁠层<color=#F35D50>燃烧</color>。\n<b><color=#EBCB91>第 2 段</color></b>｜1d4\n消耗 1⁠发<color=#79CAD7>加速弹</color>。\n<color=#A8E96D>[命中时]</color> 施加 2⁠层<color=#FFA15E>震颤</color>。",
         "Characteristic": null
       },
       "EffectDesc": {
@@ -36,7 +36,12 @@
       "CannotBeCancelled": false,
       "HideInSkillSelectList": false,
       "CanShowInUnselectSkillList": true,
-      "BuffsLink": [],
+      "BuffsLink": [
+        885131,
+        885137,
+        104,
+        885132
+      ],
       "Terms": [],
       "UseCustomIcon": false,
       "BattleSkillIcon": "",
@@ -86,7 +91,7 @@
       ],
       "UseWeaponSelectCount": false,
       "MaxSelectCount": 1,
-      "NeedDice": false,
+      "NeedDice": true,
       "UseWeaponDiceConfig": false,
       "DiceType": 1,
       "DiceCheckType": 1,
@@ -97,7 +102,34 @@
       "AttackEffectType": 0,
       "IgnoreSelfDice": false,
       "IgnoreTargetDice": false,
-      "DiceConfig": null,
+      "DiceConfig": {
+        "SelfDiceData": {
+          "CheckType": 5,
+          "Attr": 0,
+          "ExtraAttr": 0,
+          "Skill": 101,
+          "UniteSkill": 102,
+          "TargetResult": 2,
+          "IsOverrideCheck": false,
+          "OverrideCheckValue": 0,
+          "OverrideCheckString": null,
+          "CheckValueRatio": 1,
+          "TargetType": 0
+        },
+        "TargetDiceData": {
+          "CheckType": 3,
+          "Attr": 0,
+          "ExtraAttr": 118,
+          "Skill": 0,
+          "UniteSkill": 0,
+          "TargetResult": 4,
+          "IsOverrideCheck": false,
+          "OverrideCheckValue": 0,
+          "OverrideCheckString": null,
+          "CheckValueRatio": 1,
+          "TargetType": 1
+        }
+      },
       "SkillValue": 0,
       "NeedDamage": false,
       "DirectDamage": false,

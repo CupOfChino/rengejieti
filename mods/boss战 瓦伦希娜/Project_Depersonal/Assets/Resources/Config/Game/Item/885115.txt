@@ -2,7 +2,7 @@
   "Data": {
     "__type": "MOD.ItemData,Assembly-CSharp",
     "value": {
-      "IconPath": "UI/Textures/Icon/Item/icon_item_huangjinfengmijiu",
+      "IconPath": "UI/Textures/Icon/Item/valenna_vodka_icon",
       "ItemId": 885115,
       "UniqueKey": "valenna_vodka",
       "ItemName": {
@@ -14,18 +14,18 @@
       "ItemDes": {
         "TarKey": "",
         "SheetKey": "",
-        "InputText": "饮用后恢复 1D4 精神值，12 小时内检定获得 1 颗惩罚骰。",
+        "InputText": "酒鬼的最爱。瓦伦希娜总会为自己留上一瓶。",
         "Characteristic": null
       },
       "ItemEffectDes": {
         "TarKey": "",
         "SheetKey": "",
-        "InputText": "饮用后恢复 1D4 精神值，12 小时内检定获得 1 颗惩罚骰。",
+        "InputText": "饮用后恢复 1D4 精神值，12 小时内检定获得 1⁠颗惩罚骰。",
         "Characteristic": null
       },
       "IconPathReference": {
         "ReferenceType": 1004,
-        "Key": "icon_item_huangjinfengmijiu"
+        "Key": "valenna_vodka_icon"
       },
       "Price": 0,
       "ChargingCount": 1,
@@ -174,7 +174,7 @@
           "OverrideDesc": {
             "TarKey": "",
             "SheetKey": "",
-            "InputText": "饮用后恢复 1D4 精神值，12 小时内检定获得 1 颗惩罚骰。",
+            "InputText": "饮用后恢复 1D4 精神值，12 小时内检定获得 1⁠颗惩罚骰。",
             "Characteristic": null
           },
           "IgnoreInfoDesc": false

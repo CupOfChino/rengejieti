@@ -14,7 +14,7 @@
       "ItemDes": {
         "TarKey": "",
         "SheetKey": "",
-        "InputText": "伯纳特利家族二级指挥官的帽子。",
+        "InputText": "深红宽檐，帽身和帽檐镶着金色饰带。家族二级指挥官的标配。",
         "Characteristic": null
       },
       "ItemEffectDes": {

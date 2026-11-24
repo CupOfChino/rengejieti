@@ -8,13 +8,13 @@
 			"Name" : {
 				"TarKey" : "",
 				"SheetKey" : "",
-				"InputText" : "灰暗孤影",
+				"InputText" : "<color=#B7B5EF>灰暗孤影</color>",
 				"Characteristic" : null
 			},
 			"Des" : {
 				"TarKey" : "",
 				"SheetKey" : "",
-				"InputText" : "作为传奇调查员，总是独来独往的她因一袭白发，被世人称为：灰暗孤影\n（独行加成：除自己外每有1名友方存活，效果减半）",
+				"InputText" : "敏捷+20、造成的近战伤害+1、每次精神值减少量-1。\n闪避达到困难成功时获得<color=#AAB3DE>隐匿</color>。\n<color=#B7B5EF>【独行】</color>：无其他存活友方时，闪避与速度各+20、物理伤害+50%。1名友方半效，2名起无效。",
 				"Characteristic" : null
 			},
 			"IconPathReference" : {

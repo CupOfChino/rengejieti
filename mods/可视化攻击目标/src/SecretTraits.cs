@@ -110,9 +110,8 @@ namespace AttackTargetVisualizer
         /// </summary>
         internal static void Tick()
         {
-            TickPendingCounters();
             TickSegmentHold();
-            TickExtraAction();   // 灰暗孤影：排队的"追加一次行动"（等行动结束的事件链跑完再执行）
+            // TickExtraAction();  // 灰暗孤影的旧追击规则暂留，当前停用。
         }
 
         /// <summary>
@@ -564,10 +563,6 @@ namespace AttackTargetVisualizer
                         ZangHua.EnsureWeapon(role);          // 葬花：战斗开始时确保茉莉手上有这把武器
                         JingJi.EnsureWeapon(role);        // 荆棘：同上
                         ZangHua.SyncOffhandBonus(role);      // 葬花：副手（护甲 +2 / 魔减 1）对齐一次
-                        if (role.IsAlly && HasTraitWake(role, SecretIds.WhiteHairTrait))
-                        {
-                            WhiteHairBattleStart(role);
-                        }
                         RefreshLoneBonusForAllies();
                         break;
                     case EBuffTriggerType.Attack:
@@ -580,10 +575,11 @@ namespace AttackTargetVisualizer
                         FlowerScentRoundEnd(role);           // 花香：层数减半（并回 1 点生命 + 1 点精神值）
                         break;
                     case EBuffTriggerType.ActionEnd:
-                        QueueExtraAction(role);              // 灰暗孤影：近战武器攻击结束后，整套再来一遍
+                        // QueueExtraAction(role);  // 灰暗孤影的意志追击暂时停用。
                         LilyRingAfterAction(role);           // 百合花戒指：施法后按消耗的魔法值对全体敌人造成伤害
                         break;
                     case EBuffTriggerType.ActionStart:
+                        MoliCombat.BeginAction(role);
                         LilyRingRememberMp(role);            // 百合花戒指：记住行动开始时的魔法值
                         ZangHua.SyncOffhandBonus(role);   // 葬花：每次行动开始时再对一次持握加成（用户要求：进战斗 + 每回合 + 每次行动）
                         break;
@@ -630,10 +626,6 @@ namespace AttackTargetVisualizer
                         JingJi.ClearState();              // 荆棘：状态缓存清掉
                         JingJi.ClearAllTargetLocks();         // 荆棘：战斗结束清掉所有【目标锁定】
                         JingJi.ClearFirstStrikeReady();       // 荆棘：先发资格也清掉
-                        break;
-                    case EBuffTriggerType.AttackDodgeSuccess:
-                        // 灰暗孤影：闪避成功 → 立刻回击一次（2026-09-22 用户要求，从「记忆的双剑」转过来）
-                        LoneShadowCounterAttack(role);
                         break;
                 }
             }
@@ -1030,8 +1022,12 @@ namespace AttackTargetVisualizer
                 }
                 else
                 {
-                    AttackTargetPlugin.LogInfo("百合花芳香：「" + NameOf(target) + "」轮开始，失去 " + layer + " 点生命");
-                    await target.Data.ChangeAttr(true, new ChangeAttrData(ERoleExtraAttribute.CurrentHp, (-layer).ToString()), "", true, true);
+                    int damage = layer / 2;
+                    if (damage > 0)
+                    {
+                        await target.Data.ChangeAttr(true, new ChangeAttrData(ERoleExtraAttribute.CurrentHp,
+                            (-damage).ToString()), "", true, true);
+                    }
                 }
                 SyncLilyAromaTier(target);
             }
@@ -1194,16 +1190,44 @@ namespace AttackTargetVisualizer
                 {
                     await buff.ChangeLayer(self, half - cur);
                 }
-                if (!self.IsDeath)
-                {
-                    await self.Data.ChangeAttr(true, new ChangeAttrData(ERoleExtraAttribute.CurrentHp, "1"), "", true, true);
-                    await self.Data.ChangeAttr(true, new ChangeAttrData(ERoleExtraAttribute.CurrentSan, "1"), "", true, true);
-                }
+                await RecoverFromSpentFlowerScent(self);
                 ClearFlowerScentAttr(self);
                 AttackTargetPlugin.LogInfo("花香：「" + NameOf(self) + "」" + reason + "层数 " + cur + " → " + half +
                     "，回复 1 点生命与 1 点精神值");
             }
             catch (Exception e) { AttackTargetPlugin.LogError("花香：层数减半出错：" + e.Message); }
+        }
+
+        internal static async Task ConsumeFlowerScentOnDamage(BattleRole role)
+        {
+            if (role?.Data == null || role.IsDeath)
+            {
+                return;
+            }
+            BuffData scent = role.GetBuff(SecretIds.FlowerScentBuff);
+            if (scent == null || scent.CurLayer <= 0)
+            {
+                return;
+            }
+            if (scent.CurLayer == 1)
+            {
+                await role.RemoveBuff(SecretIds.FlowerScentBuff);
+            }
+            else
+            {
+                await scent.ChangeLayer(role, -1);
+            }
+            await RecoverFromSpentFlowerScent(role);
+        }
+
+        private static async Task RecoverFromSpentFlowerScent(BattleRole role)
+        {
+            if (role.IsDeath)
+            {
+                return;
+            }
+            await role.Data.ChangeAttr(true, new ChangeAttrData(ERoleExtraAttribute.CurrentHp, "1"));
+            await role.Data.ChangeAttr(true, new ChangeAttrData(ERoleExtraAttribute.CurrentSan, "1"));
         }
 
         /// <summary>
@@ -1631,145 +1655,6 @@ namespace AttackTargetVisualizer
         // 三、白毛少女（880022）
         // =====================================================================
 
-        private static void WhiteHairBattleStart(BattleRole self)
-        {
-            if (BattleHelper.FightContent == null)
-            {
-                return;
-            }
-            List<BattleNpcRole> wave = BattleHelper.FightContent.CurWaveEnemies;
-            if (wave == null || wave.Count == 0)
-            {
-                return;
-            }
-            List<BattleRole> targets = new List<BattleRole>();
-            for (int i = 0; i < wave.Count; i++)
-            {
-                BattleRole enemy = wave[i];
-                if (enemy == null || enemy.IsDeath || enemy.IsUnableAct)
-                {
-                    continue;
-                }
-                targets.Add(enemy);
-            }
-            if (targets.Count == 0)
-            {
-                return;
-            }
-            AttackTargetPlugin.LogInfo("白毛少女：战斗开始，对 " + targets.Count + " 个敌人结算（" + NameOf(self) + "）");
-            ProcessWhiteHair(self, targets);   // async void：故意不挡战斗开始流程
-        }
-
-        private static async void ProcessWhiteHair(BattleRole self, List<BattleRole> enemies)
-        {
-            try
-            {
-                for (int i = 0; i < enemies.Count; i++)
-                {
-                    BattleRole enemy = enemies[i];
-                    if (enemy == null || enemy.IsDeath)
-                    {
-                        continue;
-                    }
-                    if (HasSan(enemy))
-                    {
-                        // 2026-09-29 用户要求：**注释停用**"战斗开始时魅惑有理智的敌人"（白毛少女）。
-                        // 恢复时把 #if false 改成 #if true 即可（下面的弱点暴露分支不受影响）。
-#if false
-                        EDiceResult result = await RollAttrCheck(enemy, EHeroAttribute.POW);
-                        if (result.GetLevel() < EDiceResult.Success.GetLevel())
-                        {
-                            await PlayCharmShow(enemy);
-                            await enemy.AddBuff(self, SecretIds.VanillaCharmBuff);
-                            AttackTargetPlugin.LogInfo("白毛少女：「" + NameOf(enemy) + "」意志检定失败（" + result + "），被魅惑 3 回合");
-                        }
-                        else
-                        {
-                            AttackTargetPlugin.LogInfo("白毛少女：「" + NameOf(enemy) + "」意志检定 " + result + "，抵抗住了魅惑");
-                        }
-#endif
-                    }
-                    else
-                    {
-                        await enemy.AddBuff(self, SecretIds.VanillaWeakPointBuff);
-                        await enemy.AddBuff(self, SecretIds.VanillaWeakPointBuff);
-                        AttackTargetPlugin.LogInfo("白毛少女：「" + NameOf(enemy) + "」没有理智值，获得 2 层弱点暴露");
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                AttackTargetPlugin.LogError("白毛少女：结算出错：" + e);
-            }
-        }
-
-        /// <summary>
-        /// 白毛少女：给目标补一次本体「魅惑」技能（BattleSkill 14）的命中演出。
-        /// 用户反馈"只有骰子没有魅惑行动的演出"——原版魅惑技能在 Trigger 5 里会播
-        /// `Effect/Prefabs/FX_Skill_Charm`（时长 1.5 秒）+ 音效 `skill_charm`，
-        /// 我们这里是插件直接挂 buff 的，所以得自己把这段演出补上（先演出、再上状态）。
-        /// </summary>
-        private static async Task PlayCharmShow(BattleRole target)
-        {
-            try
-            {
-                if (target == null || target.Model == null)
-                {
-                    return;
-                }
-                await target.Model.PlayFx(CharmFxPath, false, ERolePointType.Center);
-                PrefabSingleton<AudioManager>.Instance.PlaySound(CharmFxSoundKey);
-            }
-            catch (Exception e)
-            {
-                AttackTargetPlugin.LogError("白毛少女：魅惑演出出错（不影响结算）：" + e.Message);
-            }
-        }
-
-        /// <summary>本体魅惑技能用的命中特效（见 BattleSkill\14.txt）。</summary>
-        private const string CharmFxPath = "Effect/Prefabs/FX_Skill_Charm";
-
-        /// <summary>本体魅惑技能用的命中音效 key（见 BattleSkill\14.txt 的 AudioReference.Key）。</summary>
-        private const string CharmFxSoundKey = "skill_charm";
-
-        /// <summary>「有理智」的口径（用户明确）：只看有没有理智值这一项，不看是不是人形。</summary>
-        private static bool HasSan(BattleRole role)
-        {
-            if (role == null || role.Data == null)
-            {
-                return false;
-            }
-            int max = role.Data.GetRoleExtraAttrMaxValue(ERoleExtraAttribute.CurrentSan);
-            int cur = role.Data.GetRoleExtraAttrValue(ERoleExtraAttribute.CurrentSan);
-            return max > 0 || cur > 0;
-        }
-
-        /// <summary>掷一次属性检定并把骰子演出来，返回结果。</summary>
-        private static async Task<EDiceResult> RollAttrCheck(BattleRole role, EHeroAttribute attr)
-        {
-            DiceResultData dice = new DiceResultData();
-            dice.Role = role;
-            dice.CheckType = EDiceValueType.Attr;
-            dice.CheckId = (int)attr;
-            dice.OriginAttr = attr;
-            dice.CheckNameKey = attr.GetLocalizationKeyData();
-            dice.CheckValue = BattleHelper.GetDiceCheckValue(
-                role, EExploreSkill.None, attr, ERoleExtraAttribute.None, EExploreSkill.None, false);
-
-            List<DiceResultData> list = new List<DiceResultData>();
-            list.Add(dice);
-            await BattleHelper.UpdateDiceResultData(list, false, false);
-            try
-            {
-                await PrefabSingleton<UIBattlePanel>.Instance.PlayDiceAnim(dice, false);
-            }
-            catch (Exception e)
-            {
-                AttackTargetPlugin.LogError("白毛少女：骰子动画出错（不影响结算）：" + e.Message);
-            }
-            return dice.Result;
-        }
-
         // =====================================================================
         // 四、灰暗孤影（880023）
         // =====================================================================
@@ -1810,7 +1695,7 @@ namespace AttackTargetVisualizer
                 MigrateWeaknessNumbers(role);
             }
             SyncStatus(role, SecretIds.LoneShadowTrait, SecretIds.LoneShadowBuff, EHeroAttribute.DEX, 20, "灰暗孤影", false);
-            SyncStatus(role, SecretIds.MemoryTrait, SecretIds.MemoryBuff, EHeroAttribute.None, 0, "记忆的双剑", false);
+            SyncStatus(role, SecretIds.MemoryTrait, SecretIds.MemoryBuff, EHeroAttribute.None, 0, "剑刃圆舞曲", false);
             SyncWhiteHairDice(role);
             // 花香（880049）：2026-09-27 起不再提供伤害加成（改成"意志检定 +5/层"），
             // 这里只负责把老存档里残留的旧属性加成按 SourceKey 摘干净（幂等）。
@@ -2458,7 +2343,7 @@ namespace AttackTargetVisualizer
         // =====================================================================
 
         /// <summary>这把武器算不算近战（"均可"的武器也能近战用，算在内）。</summary>
-        private static bool IsMeleeWeapon(MOD_Dynamic_Item weapon)
+        internal static bool IsMeleeWeapon(MOD_Dynamic_Item weapon)
         {
             try
             {
@@ -2475,31 +2360,8 @@ namespace AttackTargetVisualizer
             }
         }
 
-        private static bool HasMeleeWeapon(BattleRole role)
-        {
-            try
-            {
-                if (role == null || role.Data == null || role.Data.Weapons == null)
-                {
-                    return false;
-                }
-                for (int i = 0; i < role.Data.Weapons.Count; i++)
-                {
-                    if (IsMeleeWeapon(role.Data.Weapons[i]))
-                    {
-                        return true;
-                    }
-                }
-                return false;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-        }
-
         /// <summary>
-        /// 效果 1（输出方）：近战伤害 +2 —— 算在每一次伤害实例上，包括回击那一下。
+        /// 记忆的双剑：近战伤害 +3。
         /// 效果 5（承受方）：受到近战攻击时伤害 -1。
         /// </summary>
         internal static void OnDamageCalculated(DamageData damageData, BattleRole source, BattleRole target,
@@ -2520,10 +2382,6 @@ namespace AttackTargetVisualizer
                         return;
                     }
                 }
-                // 灰暗孤影的反击、荆棘的先发：2026-09-27 起统一改成"只造成武器基础伤害"，
-                // 由 JingJi 在最终扣血入口（BattleRole.SetDamage）接管 —— 这里不再改数值。
-                // 荆棘的挂层（普通攻击拆 3 次 = 3 层、先发 1 次 = 1 层）也一并挪到那边。
-
                 // 花香（880049）：2026-09-27 用户口径 —— **不再提供伤害加成**，
                 // 改成"每层让意志检定的成功区间 +5"，实现在 OnQueryWillDiceValue（GetDiceCheckValue 的 Postfix）。
                 // 粉尘爆炸（2026-09-25 用户追加）：带着【百合花芳香】的目标被火焰伤害打中时，
@@ -2556,12 +2414,41 @@ namespace AttackTargetVisualizer
                 {
                     result = Math.Max(0, result - 1);
                 }
-                // 葬花：目标每层剑痕 +10%，并在每次造成伤害时叠 1 层剑痕
+                // 葬花：目标每层剑痕 +2% 武器伤害
                 ZangHua.OnDamage(source, target, addData, ref result);
             }
             catch (Exception e)
             {
                 AttackTargetPlugin.LogError("记忆的双剑：近战增减伤出错：" + e.Message);
+            }
+        }
+
+        internal static void ApplyMoliDamageModifiers(DamageData damageData, BattleRole source, BattleRole target,
+            DamageAdditionalData addData, ref int result)
+        {
+            if (result <= 0 || source == null)
+            {
+                return;
+            }
+            bool melee = addData != null && addData.IsWeaponDamage && IsMeleeWeapon(addData.Weapon);
+            if (melee && HasTraitWake(source, SecretIds.LoneShadowTrait))
+            {
+                result++;
+            }
+            if (melee && source.HaveBuff(SecretIds.LilyBuff))
+            {
+                result = Math.Max(0, result - 2);
+            }
+            // 普通伤害是原版的物理伤害类别，百分比沿用原版向上取整。
+            if (damageData?.DamageType == EDamageType.Ordinary && HasTraitWake(source, SecretIds.WhiteHairTrait))
+            {
+                result -= result / 4;
+            }
+            if (addData?.SourceType == EDamageSourceType.StrickBack && target != null
+                && source.IsAlly != target.IsAlly && target.HaveBuff(SecretIds.MemoryBuff)
+                && Patch_Moli_DodgeCounter.IsDodgeCounter(source, target))
+            {
+                result -= result / 2;
             }
         }
 
@@ -2637,189 +2524,6 @@ namespace AttackTargetVisualizer
             catch (Exception e)
             {
                 AttackTargetPlugin.LogError("记忆的双剑：上流血出错：" + e);
-            }
-        }
-
-        /// <summary>
-        /// 受到攻击且闪避成功时，用武器回击一次（**2026-09-22 用户要求：从「记忆的双剑」转给「灰暗孤影」**）。
-        /// `EBuffTriggerType.AttackDodgeSuccess`（62）就是游戏"闪避成功"那一刻触发的节点
-        /// （BattleDefenceData.Run 里，只在这次攻击没打中时才会走）。
-        /// 回击直接调游戏自己的 `BattleHelper.StrickBackProcess`：它内部固定 attackCount = 1，
-        /// 而且不走攻击行动那套循环，所以**不会触发灰暗孤影的追击**。
-        /// </summary>
-        private static void LoneShadowCounterAttack(BattleRole dodger)
-        {
-            try
-            {
-                if (dodger == null || dodger.Data == null)
-                {
-                    return;
-                }
-                if (!BattleHelper.IsInBattle || BattleHelper.FightContent == null)
-                {
-                    return;
-                }
-                if (!HasTraitWake(dodger, SecretIds.LoneShadowTrait))
-                {
-                    return;
-                }
-                if (!HasMeleeWeapon(dodger))
-                {
-                    return;   // 没带近战武器就不回击
-                }
-                BattleRole attacker = BattleHelper.FightContent.CurActionRole;   // 正在出手的那个人
-                if (attacker == null || attacker == dodger || attacker.IsDeath)
-                {
-                    return;
-                }
-                AttackTargetPlugin.LogInfo("灰暗孤影：「" + NameOf(dodger) + "」闪避成功，回击「" + NameOf(attacker) + "」");
-                QueueCounter(dodger, attacker);
-            }
-            catch (Exception e)
-            {
-                AttackTargetPlugin.LogError("灰暗孤影：回击判定出错：" + e);
-            }
-        }
-
-        /// <summary>
-        /// 回击前的起手缓冲（秒）。0 = 闪避一结束就砍出去（第一版的表现，会觉得"啪一下"很急）；
-        /// 太小会跟敌人的行动演出叠在一起，太大拖节奏，0.2~0.4 比较自然。
-        /// </summary>
-        private const float CounterWindUpSeconds = 0.25f;
-
-        /// <summary>排队中的回击。</summary>
-        private class PendingCounter
-        {
-            internal BattleRole Dodger;
-            internal BattleRole Attacker;
-            internal float FireAt;
-        }
-
-        private static readonly List<PendingCounter> PendingCounters = new List<PendingCounter>();
-
-        /// <summary>战斗演出那个"暂停开关"是不是我们按下的（按下的才由我们放开）。</summary>
-        private static bool CounterPaused;
-        private static BattleFightContent CounterPausedContent;
-
-        /// <summary>
-        /// 排一次回击（不立刻执行）。
-        /// 为什么要这样：
-        ///   1. 我们是在"闪避成功"那一刻触发的，但那时**敌人的行动还在演**（可能还有后续段数/收尾），
-        ///      立刻砍出去会和敌人的演出叠在一起 —— 看起来就是"莫名其妙很快地反了一下"；
-        ///   2. 游戏自己有个演出暂停开关 `BattleFightContent.BattlePerformPause`，
-        ///      演出流程里一堆 `while (BattlePerformPause) await WaitForEndOfFrame();` 检查点。
-        ///      我们把它按住（原本就是 true 的话不碰），等回击演完再放开 —— 回击就会插在"敌人打完"之后，
-        ///      而不是从旁边飘出来。
-        /// 用每帧调度（`Tick`）而不是 await 等待：一来插件里引那套协程等待 API 麻烦，
-        /// 二来暂停期间游戏就是靠每帧检查点等的，我们在 Update 里照样能跑。
-        /// </summary>
-        private static void QueueCounter(BattleRole dodger, BattleRole attacker)
-        {
-            try
-            {
-                BattleFightContent content = BattleHelper.FightContent;
-                if (content != null && !content.BattlePerformPause)
-                {
-                    content.BattlePerformPause = true;
-                    CounterPaused = true;
-                    CounterPausedContent = content;
-                }
-                PendingCounter pending = new PendingCounter();
-                pending.Dodger = dodger;
-                pending.Attacker = attacker;
-                pending.FireAt = UnityEngine.Time.unscaledTime + CounterWindUpSeconds;
-                PendingCounters.Add(pending);
-                    AttackTargetPlugin.LogInfo("灰暗孤影：回击排队（" + CounterWindUpSeconds.ToString("0.##") + " 秒后出手）");
-            }
-            catch (Exception e)
-            {
-                AttackTargetPlugin.LogError("灰暗孤影：回击排队出错：" + e);
-            }
-        }
-
-        /// <summary>每帧调用：到点就把排队的回击执行掉（顺手做超时兜底，免得把战斗卡在暂停状态）。</summary>
-        private static void TickPendingCounters()
-        {
-            if (PendingCounters.Count == 0)
-            {
-                return;
-            }
-            try
-            {
-                float now = UnityEngine.Time.unscaledTime;
-                for (int i = PendingCounters.Count - 1; i >= 0; i--)
-                {
-                    PendingCounter pending = PendingCounters[i];
-                    bool timeout = now - pending.FireAt > 5f;
-                    if (!timeout && now < pending.FireAt)
-                    {
-                        continue;
-                    }
-                    PendingCounters.RemoveAt(i);
-                    if (timeout || pending.Dodger == null || pending.Attacker == null || pending.Dodger.IsDeath)
-                    {
-                        ReleaseCounterPause();
-                        continue;
-                    }
-                    CounterRun(pending);
-                }
-            }
-            catch (Exception e)
-            {
-                AttackTargetPlugin.LogError("灰暗孤影：回击调度出错：" + e.Message);
-                PendingCounters.Clear();
-                ReleaseCounterPause();
-            }
-        }
-
-        private static async void CounterRun(PendingCounter pending)
-        {
-            try
-            {
-                // 反击的命中特效**由游戏自己播**（2026-09-27 二次修改）：
-                // `BattleHelper.StrickBackProcess` 内部会 `damageData.Play(...)`（反编译 19922 起），
-                // 走的就是被反击者当前近战武器的表现链 —— 葬花 → 利刃受击、荆棘 → 突刺，
-                // 所以这里再补一次会双响，插件不再插手。
-                await BattleHelper.StrickBackProcess(pending.Dodger, pending.Attacker, true);
-                // 2026-09-25 用户要求：反击除了打伤害，还给敌人挂 1 层【流血】。
-                // 这里显式挂（不走武器的附加效果表），免得受"反击只跑一次伤害"的影响。
-                if (pending.Attacker != null && !pending.Attacker.IsDeath && !pending.Dodger.IsDeath)
-                {
-                    await pending.Attacker.AddBuff(pending.Dodger, ZangHua.BleedBuffId);
-                    AttackTargetPlugin.LogInfo("灰暗孤影：反击额外给「" + NameOf(pending.Attacker) + "」挂 1 层流血");
-                }
-            }
-            catch (Exception e)
-            {
-                AttackTargetPlugin.LogError("灰暗孤影：回击出错：" + e);
-            }
-            finally
-            {
-                ReleaseCounterPause();
-            }
-        }
-
-        /// <summary>放开我们按下的那个演出暂停开关（还有别的回击排队时先不放）。</summary>
-        private static void ReleaseCounterPause()
-        {
-            try
-            {
-                if (!CounterPaused || CounterPausedContent == null)
-                {
-                    return;
-                }
-                if (PendingCounters.Count > 0)
-                {
-                    return;
-                }
-                CounterPausedContent.BattlePerformPause = false;
-                CounterPaused = false;
-                CounterPausedContent = null;
-            }
-            catch (Exception)
-            {
-                CounterPaused = false;
-                CounterPausedContent = null;
             }
         }
 
@@ -3118,7 +2822,7 @@ namespace AttackTargetVisualizer
         //   没办法只改一半；所以框保持疯狂（好看），逻辑上把它们从"疯狂特质"里摘出来：
         //     · 不参与【陷入疯狂】(buff 148) 的层数计算（原文：每 3 个疯狂特质 1 层，每层所有检定 +1 惩罚骰）
         //     · 不参与"10 个疯狂特质"成就
-        //   其余（幕间不出现转换项、不进随机疯狂切换池）本来就因为疯狂特质被排除，正好合意。
+        //   默认分配和随机唤醒也需要单独排除，入口见 SecretTraitAvailability.cs。
         // =====================================================================
 
         internal static bool IsOurSecretTrait(int traitId)
@@ -3378,6 +3082,7 @@ namespace AttackTargetVisualizer
             try
             {
                 SecretTraits.OnBeforeDiceRoll(__instance, targetDices, overrideTargets);
+                MoliCombat.AddFirstDodgeBonus(targetDices);
             }
             catch (Exception e)
             {
@@ -3403,7 +3108,7 @@ namespace AttackTargetVisualizer
         }
     }
 
-    /// <summary>灰暗孤影：每 2 回合 1 次的法术伤害免疫（伤害直接归零）。</summary>
+    /// <summary>百合花法术庇护与私货伤害增减。</summary>
     [HarmonyPatch(typeof(BattleHelper), "CalculationDamage")]
     internal static class Patch_CalculationDamage
     {
@@ -3433,7 +3138,7 @@ namespace AttackTargetVisualizer
                     return false;
                 }
                 _blockedByMagicImmunity = false;
-                JingJi.OnDamageCalculate(source, target, addData);   // 荆棘：每段倍率 / 主手加成 / 双手速度加成
+                JingJi.OnDamageCalculate(source, target, addData);   // 荆棘：伤害倍率 / 主手加成 / 速度加成
                 if (JingJi.TryBaseDamageWithDefense(damageData, source, target, addData, ref __result))
                 {
                     _takenOverByJingJi = true;
@@ -3454,13 +3159,17 @@ namespace AttackTargetVisualizer
             _blockedByMagicImmunity = false;
             bool takenOver = _takenOverByJingJi;
             _takenOverByJingJi = false;
-            if (blocked || takenOver || JingJi.InGuardedCalc)
+            if (blocked || JingJi.InGuardedCalc)
             {
-                return;   // 归零 / 已被荆棘接管 / 内层计算：都不再补攻击侧效果
+                return;
             }
             try
             {
-                SecretTraits.OnDamageCalculated(damageData, source, target, addData, ref __result);
+                if (!takenOver)
+                {
+                    SecretTraits.OnDamageCalculated(damageData, source, target, addData, ref __result);
+                }
+                SecretTraits.ApplyMoliDamageModifiers(damageData, source, target, addData, ref __result);
             }
             catch (Exception e)
             {

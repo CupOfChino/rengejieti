@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>人格解体 · 游戏预制体</title>
+<link rel="stylesheet" href="/style.css">
+<script type="module" src="/live.mjs"></script>
+</head>
+<body>
+<main>
+  <header>
+    <h1>游戏预制体</h1>
+    <nav class="actions" aria-label="编辑器">
+      <a class="button" href="/">二维编辑器</a>
+      <button type="button" id="open">打开副本</button>
+      <button type="button" id="save">保存副本</button>
+      <input type="file" id="file" accept=".json" hidden>
+    </nav>
+  </header>
+  <div class="workspace">
+    <div class="preview live-preview">
+      <div class="scene-options">
+        <label for="preset">预制体</label><select id="preset"></select>
+        <a class="button" id="launch" href="steam://rungameid/1477070">启动游戏</a>
+        <button type="button" id="connect">读取预制体</button>
+      </div>
+      <div class="live-stage">
+        <img id="image" alt="由游戏渲染的预制体播放画面" hidden>
+        <p id="placeholder">启动游戏后读取预制体，再点「应用并重播」。</p>
+      </div>
+      <div class="transport">
+        <button type="button" class="primary" id="play" disabled>应用并重播</button>
+        <button type="button" id="disconnect" disabled>断开预览</button>
+        <output id="state" role="status">正在读取本机插件状态…</output>
+      </div>
+    </div>
+    <aside>
+      <section class="live-section">
+        <h2>整体位置</h2>
+        <div class="fields" id="placement"></div>
+      </section>
+      <section>
+        <label class="editor-row">粒子层 <select id="layer" disabled><option>等待读取</option></select></label>
+        <div id="settings" hidden>
+          <div class="fields" id="controls"></div>
+          <p>粒子数值为原参数的倍率，1 保持原值。</p>
+          <div class="actions live-color">
+            <label for="color">粒子颜色</label><input type="color" id="color" value="#ffffff">
+            <button type="button" id="reset-color">用原色</button>
+            <button type="button" id="reset-layer">重置这一层</button>
+          </div>
+          <table class="live-table">
+            <caption>游戏回读</caption>
+            <thead><tr><th scope="col">参数</th><th scope="col">原值</th><th scope="col">应用后</th></tr></thead>
+            <tbody id="values"></tbody>
+          </table>
+        </div>
+      </section>
+    </aside>
+  </div>
+  <footer>副本保存原版特效的引用与调整值，可以重新打开继续调。</footer>
+</main>
+</body>
+</html>

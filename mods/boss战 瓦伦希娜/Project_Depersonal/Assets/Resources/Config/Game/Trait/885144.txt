@@ -16,7 +16,7 @@
       "Localization_Des": {
         "TarKey": "",
         "SheetKey": "",
-        "InputText": "进剧本时获得 1000 资金，进剧本及通关时补满雪茄和伏特加。进入战斗时获得 10 发加速弹。",
+        "InputText": "进剧本时获得 1000 资金，进剧本及通关时补满上等雪茄、高浓度伏特加和<color=#79CAD7>加速弹</color>。每战以 10⁠发<color=#79CAD7>加速弹</color>开场。",
         "Characteristic": null
       },
       "BuffsLink": [

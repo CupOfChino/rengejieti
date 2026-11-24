@@ -13,7 +13,7 @@
       "Des": {
         "TarKey": "",
         "SheetKey": "",
-        "InputText": "入战获得 10 发。上限 10，下限 0，打空后仍显示，战斗结束后清除。",
+        "InputText": "上限 10⁠发。每段消耗时进行一次暗中射击检定，失败仍消耗子弹。成功使该段伤害 +10%，每发额外获得 3⁠层<color=#EBC556>呼吸法</color>。",
         "Characteristic": null
       },
       "IconPathReference": {

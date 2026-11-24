@@ -8,7 +8,8 @@
 // 现在私货的数据、插件都归「可视化攻击目标」，两个 mod 才算真正各走各的。
 
 using System;
-using System.Collections.Generic;
+using System.IO;
+using System.Threading.Tasks;
 using Game;
 using GamePlayEvent;
 using HarmonyLib;
@@ -19,20 +20,32 @@ namespace AttackTargetVisualizer
     {
         private static float _timer;
         private static bool _slowStarted;
+        private static string _configRoot;
+        private static string _termDirectory;
 
         /// <summary>插件启动时调一次：挂上私货的全部 Harmony 补丁。</summary>
-        internal static void Install(Harmony harmony)
+        internal static void Install(Harmony harmony, string pluginLocation)
         {
+            string pluginDirectory = Path.GetDirectoryName(pluginLocation);
+            if (!string.IsNullOrEmpty(pluginDirectory))
+            {
+                _configRoot = Path.GetFullPath(Path.Combine(pluginDirectory, "..", "Project_Depersonal",
+                    "Assets", "Resources", "Config", "Game"));
+                _termDirectory = Path.Combine(_configRoot, "TermData");
+            }
+            PatchOne(harmony, typeof(Patch_SecretTerms_ConfigLoaded));
             PatchOne(harmony, typeof(Patch_BuffData_AddBuff));             // 百合花环：免疫骨折/流血/中毒/燃烧
             PatchOne(harmony, typeof(Patch_BattleBaseAI_AutoSelectTarget)); // 百合花：敌人魅惑行动优先指向她
             PatchOne(harmony, typeof(Patch_UpdateRollDiceTmpDiceCount));   // 百合花：魅惑行动的奖惩骰
             PatchOne(harmony, typeof(Patch_GetSkillEffectCount));          // 灰暗孤影 / 葬花：近战攻击整套再来一遍
-            PatchOne(harmony, typeof(Patch_CalculationDamage));            // 灰暗孤影：法术免伤；记忆的双剑：近战增减伤
+            PatchOne(harmony, typeof(Patch_CalculationDamage));            // 百合花与记忆的双剑：伤害增减和法术免伤
             PatchOne(harmony, typeof(Patch_BattleRole_SetLiftState));      // 灰暗孤影：每局 1 次免死；葬花：击杀回充能
             PatchOne(harmony, typeof(Patch_GetAttackAdditionalEffect));    // 记忆的双剑：近战命中上流血
             PatchOne(harmony, typeof(Patch_DiceShowAndTriggerEffectProcess)); // 记忆的双剑：副手免惩罚骰
             PatchOne(harmony, typeof(Patch_UpdateCrazyBuffLayer));         // 私货特质不算疯狂特质
             PatchOne(harmony, typeof(Patch_CheckCrazyTraitWakeAchievements));
+            PatchOne(harmony, typeof(SecretTraitAvailability));
+            PatchOne(harmony, typeof(HideDefaultSecretTraits));
             PatchOne(harmony, typeof(Patch_BuffDiceCheck_GetDiceResultList)); // 百合花：被魅惑时意志检定 +1 惩罚骰
             PatchOne(harmony, typeof(Patch_GetDiceData));                     // 同上（面板投骰那条路）
             PatchOne(harmony, typeof(Patch_Item_IsNeedBoth));                 // 记忆的双剑：双手近战武器只占 1 个槽
@@ -41,10 +54,17 @@ namespace AttackTargetVisualizer
             PatchOne(harmony, typeof(Patch_ZangHua_DeathClearMark));          // 葬花：标记"死亡清理中"（好让剑痕能被清掉）
             PatchOne(harmony, typeof(Patch_ZangHua_MarkCantBeRemoved));       // 葬花：剑痕不可被驱散
             PatchOne(harmony, typeof(Patch_ZangHua_MarkOnHit));               // 葬花：每一段命中各叠 1 层剑痕
+            PatchOne(harmony, typeof(Patch_ZangHua_SlashEffect));             // 葬花：按攻击动作选择单体斩击或横扫
             PatchOne(harmony, typeof(Patch_LilyWreath_BlockDamage));          // 百合花环：流血/燃烧的效果不生效
             PatchOne(harmony, typeof(Patch_LilyWreath_BlockPercent));         // 百合花环：中毒的削属性不生效
             PatchOne(harmony, typeof(Patch_LilyWreath_BlockFracture));        // 百合花环：骨折不生效
-            PatchOne(harmony, typeof(Patch_JingJi_SetDamage));             // 荆棘：伤害接管（先发/反击 = 武器基础伤害；主动攻击拆 3 次）
+            PatchOne(harmony, typeof(Patch_JingJi_SetDamage));              // 荆棘：命中特效与叠层
+            PatchOne(harmony, typeof(Patch_JingJi_SplitHudDamage));         // 荆棘：同一帧显示三个伤害数字
+            PatchOne(harmony, typeof(Patch_Moli_RecordMeleeHit));
+            PatchOne(harmony, typeof(Patch_Moli_FlowerScent));
+            PatchOne(harmony, typeof(Patch_Moli_ReduceSanLoss));
+            PatchOne(harmony, typeof(Patch_Moli_DodgeCounter));
+            PatchOne(harmony, typeof(Patch_JingJi_DamageDisplay));         // 仅标记荆棘主动命中的扣血跳字
             PatchOne(harmony, typeof(Patch_SecretTraits_BattleRole_TriggerBuffs)); // 战斗开始/结束/回合结束等节点
             PatchOne(harmony, typeof(Patch_FlowerScent_DiceCheckValue));           // 花香：意志检定 +5/层
             PatchOne(harmony, typeof(Patch_WhiteHair_StrengthDice));               // 白毛少女：力量检定/对抗 +敏捷的一半
@@ -70,6 +90,8 @@ namespace AttackTargetVisualizer
         {
             // 每帧：处理排队的回击（记忆的双剑）、放行段间缓冲
             SecretTraits.Tick();
+            MoliAmbientFx.Tick();
+            BattleBladeFx.Tick();
 
             _timer += UnityEngine.Time.unscaledDeltaTime;
             if (!_slowStarted)
@@ -83,7 +105,6 @@ namespace AttackTargetVisualizer
                 _timer = 0f;
                 SecretText.ApplyDataOverlay();
                 SecretTraits.TickSlow();
-                EnsureTerms();
                 return;
             }
             if (_timer >= 10f)
@@ -93,94 +114,71 @@ namespace AttackTargetVisualizer
                 _timer = 0f;
                 SecretText.ApplyDataOverlay();
                 SecretTraits.TickSlow();
-                EnsureTerms();
             }
         }
 
-        // =====================================================================
-        // 关键词术语（装备面板右边那一栏）
-        //
-        // 数据侧也有一份（Project_Depersonal\...\Config\Game\TermData\88000x.txt），
-        // 理论上会被 LoadAllFactoryData 扫进去，但 2026-09-24 实测装备面板读不到
-        // （同一套机制里的 BuffsLink 倒是好的）。所以这里直接把 TermData 对象塞进
-        // 工厂的 UGC 列表再清缓存 —— 这条路完全可控（见 AI协作文档 第 10 节"运行时新增数据"）。
-        // 已经有的（数据文件加载成功 / 之前注入过）就跳过，不会重复。
-        // =====================================================================
+        // 工坊术语有时未进原版工厂。配置加载完成后，从模组自己的术语文件补上缺项。
+        internal static void ConfigureWhiteHairAction()
+        {
+            WhiteHairAction.EnsureSkill(_configRoot);
+        }
 
         internal static void EnsureTerms()
         {
+            if (_termDirectory == null || !Singleton<ResManager>.HasInstance)
+            {
+                return;
+            }
+            TermFactory factory = Singleton<ResManager>.Instance.TermResFactory;
+            if (factory == null)
+            {
+                return;
+            }
+
+            const int firstId = 880001;
+            const int lastId = 880014;
+            const int total = lastId - firstId + 1;
+            int added = 0;
+            int missing = 0;
+            for (int id = firstId; id <= lastId; id++)
+            {
+                if (factory.GetCache(id.ToString()) != null)
+                {
+                    continue;
+                }
+                string path = Path.Combine(_termDirectory, id + ".txt");
+                TermData term = File.Exists(path) ? GameHelper.ESLoad<TermData>("Data", path) : null;
+                if (term == null || term.Id != id)
+                {
+                    missing++;
+                    AttackTargetPlugin.LogError("私货术语文件无法读取：" + path);
+                    continue;
+                }
+                factory.UGC.Add(term);
+                added++;
+            }
+            if (added > 0)
+            {
+                factory.ClearCachData();
+            }
+            AttackTargetPlugin.LogInfo("私货术语：已就绪 " + (total - missing) + " / " + total + " 条，本次补载 " + added + " 条");
+        }
+    }
+
+    [HarmonyPatch(typeof(WorkshopHelper), nameof(WorkshopHelper.EndLoadConfigData))]
+    internal static class Patch_SecretTerms_ConfigLoaded
+    {
+        private static void Postfix()
+        {
             try
             {
-                if (!Singleton<ResManager>.HasInstance)
-                {
-                    return;
-                }
-                TermFactory factory = Singleton<ResManager>.Instance.TermResFactory;
-                if (factory == null)
-                {
-                    return;
-                }
-                int added = 0;
-                added += InjectTerm(factory, 880001, "剑痕",
-                    "葬花命中时叠加的负面状态。每层：受到伤害+5%、闪避-5、运动-5（每2层：护甲-1）。回合结束时层数减半（向下取整），并按减少的层数获得等量【流血】；最高10层，不可驱散。");
-                added += InjectTerm(factory, 880002, "先发",
-                    "进入战斗时判定一次：副手装备荆棘（或视为双手）才获得先发资格。战斗中会持续跟踪，一旦不再满足条件就失去资格（本场不再恢复）；中途才换上荆棘也不会补发资格。\n每个行动轮：轮开始前给随机一名敌人挂【目标锁定】，回合开始时用武器对它打一次。\n该次攻击无需检定（按普通成功结算），敌人无法闪避；伤害固定为武器基础伤害，只受目标护甲/减伤等影响（自己身上的加成一律不算）。命中后同样进行隐藏敏捷检定，决定这次叠不叠【荆棘】。");
-                added += InjectTerm(factory, 880003, "持握·葬花",
-                    "装备在主手：此武器伤害+1，可施展二连斩与横扫。\n装备在副手：护甲+2，受到的魔法伤害-1。\n主/副手未装备其他武器时视为双手：同时触发主手与副手效果，且此武器施加的负面状态+1层。");
-                added += InjectTerm(factory, 880004, "持握·荆棘",
-                    "装备在主手：此武器伤害+3。\n装备在副手：【先发】进入战斗时判定资格；之后每轮先给随机敌人挂【目标锁定】，再对它打一次。\n主/副手未装备其他武器时视为双手：同时触发主手与副手效果。\n速度差：每高于目标100点，此武器伤害+10%；双手持握时每50点一档。");
-                added += InjectTerm(factory, 880005, "荆棘",
-                    "命中时给目标叠加的预告状态，本身没有任何效果。由隐藏的敏捷检定决定：失败不叠、成功每次伤害叠1层、大成功再额外叠1层。行动轮开始时，它整颗转为等量的【束缚】；【束缚】每层使速度-10（最低降到10点），回合结束时移除。");
-                added += InjectTerm(factory, 880006, "目标锁定",
-                    "荆棘先发用的标记：轮开始前挂给随机一名敌人，回合开始时用武器对它打一次；回合结束、目标死亡或战斗结束时解除。");
-                if (added > 0)
-                {
-                    factory.ClearCachData();
-                    AttackTargetPlugin.LogInfo("私货术语：注入 " + added + " 条关键词说明（装备面板右栏用）");
-                }
+                SecretRuntime.EnsureTerms();
+                SecretRuntime.ConfigureWhiteHairAction();
             }
             catch (Exception e)
             {
-                AttackTargetPlugin.LogError("私货术语：注入出错：" + e.Message);
+                AttackTargetPlugin.LogError("私货术语：载入失败：" + e.Message);
             }
-        }
-
-        private static int InjectTerm(TermFactory factory, int id, string name, string des)
-        {
-            if (HasTerm(factory, id))
-            {
-                return 0;
-            }
-            TermData term = new TermData();
-            term.Id = id;
-            term.Name = new LocalizationTermKeyData();
-            term.Name.InputText = name;
-            term.Des = new LocalizationTermKeyData();
-            term.Des.InputText = des;
-            factory.UGC.Add(term);
-            return 1;
-        }
-
-        private static bool HasTerm(TermFactory factory, int id)
-        {
-            try
-            {
-                List<TermData> all = factory.All;
-                if (all != null)
-                {
-                    for (int i = 0; i < all.Count; i++)
-                    {
-                        if (all[i] != null && all[i].Id == id)
-                        {
-                            return true;
-                        }
-                    }
-                }
-            }
-            catch (Exception)
-            {
-            }
-            return false;
         }
     }
 
@@ -192,6 +190,46 @@ namespace AttackTargetVisualizer
         private static void Prefix(BattleRole __instance, EBuffTriggerType trigger)
         {
             SecretTraits.OnBattleTrigger(__instance, trigger);
+        }
+
+        private static void Postfix(BattleRole __instance, EBuffTriggerType trigger, ref Task __result)
+        {
+            if (__instance?.Data == null)
+            {
+                return;
+            }
+            switch (trigger)
+            {
+                case EBuffTriggerType.BattleStart:
+                case EBuffTriggerType.ActionEnd:
+                case EBuffTriggerType.AttackDodgeSuccess:
+                    __result = FinishTrigger(__result, __instance, trigger);
+                    break;
+            }
+        }
+
+        private static async Task FinishTrigger(Task original, BattleRole role, EBuffTriggerType trigger)
+        {
+            await original;
+            try
+            {
+                switch (trigger)
+                {
+                    case EBuffTriggerType.BattleStart:
+                        await WhiteHairAction.OnBattleStart(role);
+                        break;
+                    case EBuffTriggerType.ActionEnd:
+                        await MoliCombat.FinishMeleeAction(role);
+                        break;
+                    case EBuffTriggerType.AttackDodgeSuccess:
+                        await MoliCombat.GiveStealthForDodge(role);
+                        break;
+                }
+            }
+            catch (Exception error)
+            {
+                AttackTargetPlugin.LogError("茉莉战斗效果（" + trigger + "）：" + error);
+            }
         }
     }
 }

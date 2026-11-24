@@ -16,7 +16,7 @@
       "Description": {
         "TarKey": "",
         "SheetKey": "",
-        "InputText": "近身挑斩后顺势回斩。 命中 2 次，每次基础伤害 1。",
+        "InputText": "近身挑斩后顺势回斩。 命中 2⁠次，每次基础伤害 1。",
         "Characteristic": null
       },
       "EffectDesc": {
@@ -31,7 +31,7 @@
       "SkillType": 1,
       "ActionType": 1,
       "TriggerWeaponType": 0,
-      "IsMachiningSkill": true,
+      "IsMachiningSkill": false,
       "IsUseItem": false,
       "CannotBeCancelled": false,
       "HideInSkillSelectList": true,

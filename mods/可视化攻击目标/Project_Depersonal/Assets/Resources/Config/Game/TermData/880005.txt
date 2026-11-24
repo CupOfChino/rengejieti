@@ -7,13 +7,13 @@
       "Name": {
         "TarKey": "",
         "SheetKey": "",
-        "InputText": "荆棘",
+        "InputText": "<color=#F4A07F>荆棘</color>",
         "Characteristic": null
       },
       "Des": {
         "TarKey": "",
         "SheetKey": "",
-        "InputText": "命中时给目标叠加的预告状态，本身没有任何效果。由隐藏的敏捷检定决定：失败不叠、成功每次伤害叠1层、大成功再额外叠1层。行动轮开始时，它整颗转为等量的【束缚】；【束缚】每层使速度-10（最低降到10点），回合结束时移除。",
+        "InputText": "命中掷1次隐藏敏捷：失败不叠。主动攻击成功叠3层，先发成功叠1层；大成功额外+1层。\n下个行动轮开始，所有层数转为等量<color=#F4A07F>【束缚】</color>。每层降10点速度（最低10），回合结束移除。",
         "Characteristic": null
       },
       "EditorSheetKey": null

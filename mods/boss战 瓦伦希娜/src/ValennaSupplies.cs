@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Game;
 using GamePlayEvent;
@@ -24,6 +26,52 @@ namespace ValennaBattle
             return end != null && BattleHelper.Record != null && BattleHelper.Record.GameTime >= end.Value;
         }
 
+        private static readonly ConditionalWeakTable<RoleData, MOD_Dynamic_Item> HeldCigars =
+            new ConditionalWeakTable<RoleData, MOD_Dynamic_Item>();
+        private static (RoleData Role, MOD_Dynamic_Item Cigar) _cigarMenu;
+
+        [HarmonyPatch(typeof(UIItemManagementPanel), nameof(UIItemManagementPanel.OnLeftClickElement))]
+        private static class SelectCigar
+        {
+            private static void Prefix(UIItemManagementPanel __instance, UIItemElement __0,
+                out (RoleData Role, MOD_Dynamic_Item Cigar) __state)
+            {
+                __state = _cigarMenu;
+                RoleData role = __instance.CurSelectRole?.Data;
+                MOD_Dynamic_Item cigar = __0?.ItemData;
+                if (__instance.IsCommonPanelMode && !BattleHelper.IsInBattle && role != null &&
+                    ValennaKit.IsItem(cigar, StrikeProfiles.CigarId) && cigar.GetCharge(role) > 0)
+                    _cigarMenu = (role, cigar);
+            }
+
+            private static void Finalizer((RoleData Role, MOD_Dynamic_Item Cigar) __state) => _cigarMenu = __state;
+        }
+
+        [HarmonyPatch(typeof(UISubMenuPanel), nameof(UISubMenuPanel.Open))]
+        private static class AddCigarMode
+        {
+            private static void Prefix(List<SubMenuSelectionViewData> __0)
+            {
+                (RoleData role, MOD_Dynamic_Item cigar) = _cigarMenu;
+                if (role == null || __0 == null) return;
+                int useIndex = __0.FindIndex(option => option.ButtonLocKey == "使用");
+                if (useIndex < 0) return;
+
+                bool holding = HeldCigars.TryGetValue(role, out MOD_Dynamic_Item held) &&
+                    ReferenceEquals(held, cigar);
+                __0[useIndex].ButtonLocKey = "品味雪茄";
+                __0.Insert(useIndex + 1, new SubMenuSelectionViewData
+                {
+                    ButtonLocKey = holding ? "取下雪茄" : "叼在嘴里",
+                    Callback = () =>
+                    {
+                        HeldCigars.Remove(role);
+                        if (!holding) HeldCigars.Add(role, cigar);
+                    }
+                });
+            }
+        }
+
         [HarmonyPatch(typeof(Item_ChargingOption), "_SetCharge")]
         private static class CigarTime
         {
@@ -42,6 +90,7 @@ namespace ValennaBattle
             {
                 await original;
                 if (BattleHelper.IsInBattle || cigar.GetCharge(role.Data) >= before) return;
+                HeldCigars.Remove(role.Data);
 
                 if (Singleton<GameWorld>.HasInstance)
                     await Singleton<GameWorld>.Instance.GameInstance.AddGameTime(Hour);

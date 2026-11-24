@@ -8,7 +8,7 @@
       "ItemName": {
         "TarKey": "",
         "SheetKey": "",
-        "InputText": "荆棘",
+        "InputText": "<color=#F4A07F>荆棘</color>",
         "Characteristic": null
       },
       "ItemDes": {
@@ -20,7 +20,7 @@
       "ItemEffectDes": {
         "TarKey": "",
         "SheetKey": "",
-        "InputText": "荆棘：攻击时进行斗殴检定；命中后本次伤害结算 3 次（3 个伤害数字，护甲只结算 1 次）。\n另外进行一次隐藏的敏捷检定：失败则本次不叠【荆棘】；成功则每次伤害各叠 1 层；大成功再额外叠 1 层。\n普通成功 / 困难成功 / 大成功：本次伤害 ×0.5 / ×0.75 / ×1.0。\n装备时：敏捷+5、斗殴+5、速度+20。\n速度差：每高于目标100点，此武器伤害+10%（双手持握时每50点一档）。\n【持握·荆棘】",
+        "InputText": "斗殴命中后触发<color=#F4A07F>【三段刺击】</color>，以隐藏敏捷检定决定叠加<color=#F4A07F>【荆棘】</color>。\n装备：敏捷+5、斗殴+5、速度+20。见<color=#F4A07F>【持握·荆棘】</color>。",
         "Characteristic": null
       },
       "IconPathReference": {
@@ -52,10 +52,10 @@
       "IsBindCharacter": true,
       "BuffsLink": [],
       "Terms": [
-        880002,
-        880004,
+        880008,
         880005,
-        880006
+        880004,
+        880002
       ],
       "ConfigData": [],
       "EquipmentConfigData": {
@@ -79,7 +79,7 @@
           "DamageType": 0,
           "AttackType": 0,
           "AddAttrs": [],
-          "Value": "1D4+2",
+          "Value": "1D4+1",
           "DB_Bonus": 1,
           "WithSuckBlood": false,
           "SuckBloodRatio": 0,
@@ -97,47 +97,6 @@
                 "SpriteAnimFirst": false,
                 "StartTime": 0,
                 "DelayTime": 0
-              },
-              {
-                "__type": "MOD.PlayRoleEffectData,Assembly-CSharp",
-                "IsSelf": false,
-                "UseFrameEffect": false,
-                "FxPath": "Effect/Prefabs/FXSkillHit_Puncture",
-                "FxPathReference": {
-                  "ReferenceType": 0,
-                  "Key": null
-                },
-                "EffectName": null,
-                "EffectAnimName": null,
-                "Duration": 0.5,
-                "PlayCenterPoint": false,
-                "UseSameFx": true,
-                "PointUseFrameEffect": false,
-                "PlayCenterPointFxPath": null,
-                "PointFxPathReference": {
-                  "ReferenceType": 0,
-                  "Key": null
-                },
-                "PointEffectName": null,
-                "PointEffectAnimName": null,
-                "PointType": 2,
-                "IsGroupCenter": false,
-                "DelayTime": 0.1
-              },
-              {
-                "__type": "MOD.PlaySoundData,Assembly-CSharp",
-                "AudioClip": {
-                  "AudioRes": "Sound/Audio/FX/weapon_knife",
-                  "AudioReference": {
-                    "ReferenceType": 2,
-                    "Key": "weapon_knife"
-                  },
-                  "Volume": 1,
-                  "FadeTime": 1
-                },
-                "IsLoop": false,
-                "StopOnBattleFinish": false,
-                "DelayTime": 0.1
               },
               {
                 "__type": "MOD.PlayHitData,Assembly-CSharp",
@@ -475,7 +434,7 @@
         "OverrideDesc": {
           "TarKey": "",
           "SheetKey": "",
-          "InputText": "荆棘：攻击时进行斗殴检定；命中后本次伤害结算 3 次（3 个伤害数字，护甲只结算 1 次）。\n另外进行一次隐藏的敏捷检定：失败则本次不叠【荆棘】；成功则每次伤害各叠 1 层；大成功再额外叠 1 层。\n普通成功 / 困难成功 / 大成功：本次伤害 ×0.5 / ×0.75 / ×1.0。\n装备时：敏捷+5、斗殴+5、速度+20。\n速度差：每高于目标100点，此武器伤害+10%（双手持握时每50点一档）。\n【持握·荆棘】",
+          "InputText": "斗殴命中后触发<color=#F4A07F>【三段刺击】</color>，以隐藏敏捷检定决定叠加<color=#F4A07F>【荆棘】</color>。\n装备：敏捷+5、斗殴+5、速度+20。见<color=#F4A07F>【持握·荆棘】</color>。",
           "Characteristic": null
         },
         "Arrts": [],

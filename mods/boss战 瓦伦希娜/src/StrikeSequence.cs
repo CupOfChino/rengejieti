@@ -15,9 +15,9 @@ namespace ValennaBattle
             StrikeProfiles.Shows.ToDictionary(show => show.Id);
 
         private static readonly HashSet<StrikeSequence> Playing = new HashSet<StrikeSequence>();
+        private static readonly HashSet<StrikeSequence> AudioTails = new HashSet<StrikeSequence>();
 
         private readonly BattleFightContent _fight;
-        private readonly BattleSkillData _skill;
         private readonly StrikeShow _show;
         private readonly Actor _source;
         private readonly Actor _target;
@@ -28,18 +28,22 @@ namespace ValennaBattle
         private readonly bool _originalFacing;
 
         private StrikeEffects _effects;
+        private readonly StrikeAudio _audio = new StrikeAudio();
+        private float _audioTime;
         private StrikeFootwork _footwork;
         private Sprite _displayedPose;
         private string _stepAction;
         private Task _pendingImpact = Task.CompletedTask;
+        private bool _finalImpactStarted;
         private bool _stopped;
+        private readonly StrikeResolution _resolution;
 
-        private StrikeSequence(BattleRole actor, BattleRole target, BattleSkillData skill, Camera camera,
-            StrikeShow show)
+        private StrikeSequence(BattleRole actor, BattleRole target, Camera camera,
+            StrikeShow show, StrikeResolution resolution)
         {
             _fight = BattleHelper.FightContent;
-            _skill = skill;
             _show = show;
+            _resolution = resolution;
             _source = new Actor(actor);
             _target = new Actor(target);
             _view = camera.transform;
@@ -54,11 +58,36 @@ namespace ValennaBattle
             role?.Data != null && !role.IsDeath && !role.IsEscape;
 
         internal static async Task Play(BattleRole actor, BattleRole target, BattleSkillData skill,
-            StrikeShow show)
+            StrikeShow show, EDiceResult result = EDiceResult.Success, StrikeResolution resolution = null)
         {
             BattleFightContent fight = BattleHelper.FightContent;
             if (!CanContinueBattle(fight) || !CanHit(actor) || !CanHit(target)) return;
 
+            if (resolution == null)
+            {
+                resolution = new StrikeResolution(actor, target, skill, result);
+                await resolution.Begin();
+            }
+            resolution.SetTarget(target);
+            resolution.Result = result;
+            try
+            {
+                await PlayAnimation(actor, target, show, fight, resolution);
+            }
+            finally
+            {
+                await resolution.Finish();
+                if (skill.Id == StrikeProfiles.ExecutionId && resolution.HitResolved && CanContinueBattle(fight))
+                {
+                    if (CanHit(actor)) await ValennaBattleStatus.StartAmmo(actor);
+                    await ValennaHunt.FinishExecution(actor, target);
+                }
+            }
+        }
+
+        private static async Task PlayAnimation(BattleRole actor, BattleRole target,
+            StrikeShow show, BattleFightContent fight, StrikeResolution resolution)
+        {
             RoleModel sourceModel = actor.Model;
             RoleModel targetModel = target.Model;
             Camera camera = BattleHelper.BattleCam;
@@ -73,12 +102,12 @@ namespace ValennaBattle
                 {
                     if (!CanContinueBattle(fight) || !CanHit(actor) || !CanHit(target) ||
                         !ReferenceEquals(sourceData, actor.Data) || !ReferenceEquals(targetData, target.Data)) break;
-                    if (cue.Damage) await Hit(actor, target, skill);
+                    if (cue.Damage) await resolution.Hit();
                 }
                 return;
             }
 
-            var sequence = new StrikeSequence(actor, target, skill, camera, show);
+            var sequence = new StrikeSequence(actor, target, camera, show, resolution);
             Playing.Add(sequence);
             await sequence.PlayClip();
         }
@@ -87,6 +116,8 @@ namespace ValennaBattle
         {
             foreach (StrikeSequence sequence in Playing.Where(clip => ReferenceEquals(clip._fight, fight)).ToArray())
                 sequence.StopPresentation();
+            foreach (StrikeSequence sequence in AudioTails.Where(clip => ReferenceEquals(clip._fight, fight)).ToArray())
+                sequence._audio.Dispose();
         }
 
         // 原版换模型会停用 RoleModel 组件，SpriteAnim 仍从独立的组件播放。
@@ -109,8 +140,11 @@ namespace ValennaBattle
 
         private async Task PlayClip()
         {
+            bool completed = false;
             try
             {
+                if (!CanAnimate()) return;
+                await _audio.Load(_show.Id, CanAnimate, _source.Role);
                 if (!CanAnimate()) return;
 
                 var body = _source.Model.SpriteRender;
@@ -129,7 +163,7 @@ namespace ValennaBattle
                 string style = _effects.HasTextured ? "贴图扫斩"
                     : _effects.HasRibbon ? "分节网格"
                     : (_effects.HasStrokeMaterial ? "线条着色器" : "序列帧");
-                ValennaPlugin.Instance.Report($"瓦伦娜刀光 {style}，模型高度 {_size:F2}");
+                ValennaPlugin.Instance.Report($"瓦伦希娜刀光 {style}，模型高度 {_size:F2}");
                 _displayedPose = body.sprite;
                 _effects.SampleAttackPose(body, TrailColor);
                 _footwork = body.gameObject.AddComponent<StrikeFootwork>();
@@ -199,26 +233,32 @@ namespace ValennaBattle
                 Vector3 fromTarget = _target.World;
                 _stepAction = null;
                 TryPose(_source.Model, StrikeProfiles.ReturnPose(_show), "valenna_recover", "move", "walk");
-                if (await Animate(StrikeProfiles.ReturnTime, t =>
+                completed = await Animate(StrikeProfiles.ReturnTime, t =>
                 {
                     _source.Move(Vector3.Lerp(fromSource, _source.OriginalWorld, Ease(t)));
                     _target.Move(Vector3.Lerp(fromTarget, _target.OriginalWorld, Ease(t)));
                     DrawBlade(18f - 35f * t, 1f, 1f - Mathf.Clamp01(t * 2.5f));
-                }) && _effects.HasTextured)
-                    await Animate(StrikeProfiles.ReturnAfterglow);
+                });
+                if (completed && _effects.HasTextured)
+                    completed = await Animate(StrikeProfiles.ReturnAfterglow);
             }
             finally
             {
-                try { StopPresentation(); }
+                // 最后一击击倒目标时，受击动作可以提前结束，已经起播的音效仍有尾音。
+                bool finishedWithDefeat = _finalImpactStarted && !_pendingImpact.IsFaulted &&
+                    !_pendingImpact.IsCanceled && _target.Role.IsDeath && CanHit(_source.Role);
+                try { StopPresentation((completed || finishedWithDefeat) && CanContinueBattle(_fight)); }
                 finally { await _pendingImpact; }
             }
         }
 
-        private void StopPresentation()
+        private void StopPresentation(bool finishAudio = false)
         {
             if (_stopped) return;
             _stopped = true;
             Playing.Remove(this);
+            if (finishAudio) _ = FinishAudioTail();
+            else _audio.Dispose();
             if (_footwork != null)
             {
                 _footwork.BeforeRender = null;
@@ -235,6 +275,19 @@ namespace ValennaBattle
             var body = _source.Model.SpriteRender;
             if (body != null) body.flipX = _originalFacing;
             if (CanHit(_source.Role)) _source.Model.PlayIdle(isFight: true);
+        }
+
+        private async Task FinishAudioTail()
+        {
+            AudioTails.Add(this);
+            try
+            {
+                await _audio.FinishTail(() => CanContinueBattle(_fight));
+            }
+            finally
+            {
+                AudioTails.Remove(this);
+            }
         }
 
         private async Task<bool> WaitForImpact()
@@ -352,7 +405,8 @@ namespace ValennaBattle
             Task fallback = !_effects.HasTextured && !_effects.HasStrokeMaterial && !shot
                 ? _target.Model.PlayFx("valenna_arc_preview", "idle", false, ERolePointType.Center)
                 : Task.CompletedTask;
-            _pendingImpact = cue.Damage ? Task.WhenAll(Hit(_source.Role, _target.Role, _skill), fallback) : fallback;
+            _pendingImpact = cue.Damage ? Task.WhenAll(_resolution.Hit(), fallback) : fallback;
+            _finalImpactStarted = next == null && cue.Damage;
             if (!CanAnimate()) return false;
 
             float passTravel = passing
@@ -439,7 +493,8 @@ namespace ValennaBattle
             TryPose(_source.Model, StrikeProfiles.ActionPose(cue), "valenna_muzzle", "attack");
             _effects.ReleaseMuzzleRing(body, cue.Scale);
             _effects.Impact(cue, origin, contact, 0f, 0f, null, direction, leaveScar: true);
-            _pendingImpact = Hit(_source.Role, _target.Role, _skill);
+            _pendingImpact = _resolution.Hit();
+            _finalImpactStarted = true;
             if (!await Animate(cue.Hold, t =>
             {
                 float airborne = Mathf.Clamp01(t * cue.Hold / StrikeProfiles.ExecutionKnockbackTime);
@@ -510,6 +565,7 @@ namespace ValennaBattle
             if (!CanAnimate()) return false;
             float elapsed = 0f;
             _effects.Advance(0f, frame);
+            _audio.Advance(_audioTime);
             while (elapsed < duration)
             {
                 await new WaitForEndOfFrame();
@@ -517,7 +573,9 @@ namespace ValennaBattle
                 float step = FrameStep;
                 elapsed += step;
                 _effects.Advance(step, frame, Mathf.Clamp01(elapsed / duration));
+                _audio.Advance(_audioTime + Mathf.Min(elapsed, duration));
             }
+            _audioTime += duration;
             return true;
         }
 
@@ -539,32 +597,6 @@ namespace ValennaBattle
                 return true;
             }
             return false;
-        }
-
-        private static async Task Hit(BattleRole actor, BattleRole target, BattleSkillData skill)
-        {
-            DamageData damage = skill.Config.CustomDamage?.Clone();
-            if (damage == null) return;
-
-            var additional = new DamageAdditionalData
-            {
-                SourceType = EDamageSourceType.BattleSkill,
-                DiceResult = EDiceResult.Success,
-                EnableChangeDamageValue = true
-            };
-            var source = new DamageSourceRecord
-            {
-                Source = actor,
-                SourceType = DamageSourceRecord.EDamageSourceType.BattleSkill,
-                BattleSkill = skill
-            };
-            var log = new BattleSkillEffectLogData
-            {
-                LogType = EBattleLogType.BattleSkill,
-                EffectType = EBattleLogEffectType.Damage
-            };
-            int points = BattleHelper.CalculationDamage(damage, actor, target, additional);
-            await target.OnHit(actor, Mathf.Max(points, 0), damage, additional, source, log);
         }
 
         private sealed class Actor

@@ -7,7 +7,12 @@
         "Key": "valenna_portrait"
       },
       "PartnerId": 885101,
-      "MythicalItemList": [],
+      "MythicalItemList": [
+        {
+          "Grade": 1,
+          "Index": 885112
+        }
+      ],
       "MagicUnlockList": [],
       "EndingKeys": [],
       "ExItems": [],
@@ -17,14 +22,14 @@
       "CharacterName": {
         "TarKey": "",
         "SheetKey": "",
-        "InputText": "瓦伦娜",
+        "InputText": "瓦伦希娜",
         "Characteristic": null
       },
       "CharacterNamePool": [],
       "CharacterDes": {
         "TarKey": "",
         "SheetKey": "",
-        "InputText": "持铳刃的近战伙伴，习得巴勒莫之剑。",
+        "InputText": "<color=#FF4040>二老板</color> · 手指 · 拇指 · 蜘蛛巢 · 战争英雄 · <color=#FF4040>七大家族</color> · 烟霾战争",
         "Characteristic": null
       },
       "CharacterIconReference": {
@@ -41,7 +46,7 @@
       "Dexterity": 60,
       "Intelligence": 50,
       "WillPower": 50,
-      "Constitution": 60,
+      "Constitution": 80,
       "HP_Extra": 0,
       "MP_Extra": 0,
       "DB_Extra": null,
@@ -162,7 +167,8 @@
           885144,
           885145,
           885146,
-          885147
+          885147,
+          885155
         ]
       },
       "CharacterSkillList": {
@@ -188,7 +194,13 @@
       "AlarmDistance": 0,
       "CharacterType": 5,
       "CharacterTags": [],
-      "CustomTags": [],
+      "CustomTags": [
+        "手指",
+        "拇指",
+        "蜘蛛巢",
+        "战争英雄",
+        "烟霾战争"
+      ],
       "BattleClueOption": null,
       "CanControlInBattle": true,
       "AI": {

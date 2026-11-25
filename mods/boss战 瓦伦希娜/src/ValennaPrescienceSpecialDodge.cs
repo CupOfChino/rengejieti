@@ -84,7 +84,7 @@ namespace ValennaBattle
             await SpendEye(defender, eye);
             ValennaPlugin.Instance.Report($"预知眼 {before}→{Math.Max(eye.CurLayer, 0)} 层，特殊闪避 +{state.RollReward} 奖励骰");
 
-            PrescienceDisplay display = PrescienceDisplay.Show(defender, attacker);
+            PrescienceDisplay display = PrescienceDisplay.Show(defender, attacker, minimumPoseTime: 0.5f);
             state.Mark = display == null ? default : new MarkLifetime(display);
             DodgeRolls.Add(dice, state);
             BattleFightContent fight = BattleHelper.FightContent;

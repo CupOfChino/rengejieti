@@ -115,7 +115,8 @@ $itemText = @{
     885111 = @('Palermo - Gunblade', 'Valencina carries this gunblade slung across her back. Famiglia Bognatelli custom Acceleration Rounds fire the instant she strikes at close range.', (
         '[Battle Start] Refill Acceleration Rounds to 10.',
         '[On Hit] If this hit spent an Acceleration Round and passed the Shoot check, inflict 1 Burn and 1 Tremor.',
-        '[On Burst] Gain 1 Damage Up, up to 3 stacks per action round.' -join "`n"), '1D6')
+        '[On Burst] Gain 1 Damage Up, up to 3 stacks per action round.',
+        '[Turn End] Clear all Damage Up stacks.' -join "`n"), '1D6')
     885112 = @($eyeName, $eyeLore, ((@('Valencina''s exclusive armor. Cannot be removed once equipped.') + $eyeRules + @(
         '[Turn Start] Recover 5 charge in combat and exploration, up to 30.',
         '[When Hit] Lose 5 charge. An assisted dodge also costs 5 charge.',
@@ -196,7 +197,7 @@ $buffText = @{
     885140 = @('Shin (心) - Valencina', ($traitText[885155][1].Replace('[While Awakened] ', '')))
     885148 = @('Tremor Burst', 'Trigger the target''s Tremor Burst and resolve each burst separately. If the status has become Tremor - Scorch, also resolve its explosion.')
     885150 = @('Drunk', "Lasts 12 hours.`n[On Check] Receive 1 penalty die in combat and exploration.")
-    885153 = @('Damage Up', "Deal +10% normal damage per stack.`n[Battle End] Clear all stacks.")
+    885153 = @('Damage Up', "Deal +10% normal damage per stack.`n[Turn End] Clear all stacks.")
     885154 = @('Mang', 'The fifth hit of this Disposal gains +2 base damage.')
 }
 foreach ($entry in $buffText.GetEnumerator()) {

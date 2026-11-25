@@ -216,8 +216,8 @@
     "en": "Drunk"
   },
   "valenna.Buff.885153.Des": {
-    "zh": "每层使造成的⁣普通伤害+10%⁤。\n<color=#55D8EF>[战斗结束时]</color> 清除全部层数。",
-    "en": "Deal +10% normal damage per stack.\n<color=#55D8EF>[Battle End]</color> Clear all stacks."
+    "zh": "每层使造成的⁣普通伤害+10%⁤。\n<color=#55D8EF>[回合结束时]</color> 清除全部层数。",
+    "en": "Deal +10% normal damage per stack.\n<color=#55D8EF>[Turn End]</color> Clear all stacks."
   },
   "valenna.Buff.885153.Name": {
     "zh": "伤害强化",
@@ -232,16 +232,16 @@
     "en": "Mang"
   },
   "valenna.Item.885111.EquipmentConfigData.OverrideDesc": {
-    "zh": "武器面板伤害⁣1D6⁤。\n<color=#55D8EF>[战斗开始时]</color> <color=#79CAD7>加速弹</color>补至⁣10发⁤。\n<color=#A8E96D>[命中时]</color> 若本段消耗了<color=#79CAD7>加速弹</color>且射击检定成功，施加⁣1层<color=#F35D50>燃烧</color>⁤和⁣1层<color=#FFA15E>震颤</color>⁤。\n<color=#FFA15E>[引爆时]</color> 获得⁣1层<color=#EABA6D>伤害强化</color>⁤，每行动轮最多获得⁣3层⁤。",
-    "en": "Weapon damage: 1D6.\n<color=#55D8EF>[Battle Start]</color> Refill <color=#79CAD7>Acceleration Rounds</color> to 10.\n<color=#A8E96D>[On Hit]</color> If this hit spent an <color=#79CAD7>Acceleration Round</color> and passed the Shoot check, inflict 1 <color=#F35D50>Burn</color> and 1 <color=#FFA15E>Tremor</color>.\n<color=#FFA15E>[On Burst]</color> Gain 1 <color=#EABA6D>Damage Up</color>, up to 3 stacks per action round."
+    "zh": "武器面板伤害⁣1D6⁤。\n<color=#55D8EF>[战斗开始时]</color> <color=#79CAD7>加速弹</color>补至⁣10发⁤。\n<color=#A8E96D>[命中时]</color> 若本段消耗了<color=#79CAD7>加速弹</color>且射击检定成功，施加⁣1层<color=#F35D50>燃烧</color>⁤和⁣1层<color=#FFA15E>震颤</color>⁤。\n<color=#FFA15E>[引爆时]</color> 获得⁣1层<color=#EABA6D>伤害强化</color>⁤，每行动轮最多获得⁣3层⁤。\n<color=#55D8EF>[回合结束时]</color> 清除<color=#EABA6D>伤害强化</color>。",
+    "en": "Weapon damage: 1D6.\n<color=#55D8EF>[Battle Start]</color> Refill <color=#79CAD7>Acceleration Rounds</color> to 10.\n<color=#A8E96D>[On Hit]</color> If this hit spent an <color=#79CAD7>Acceleration Round</color> and passed the Shoot check, inflict 1 <color=#F35D50>Burn</color> and 1 <color=#FFA15E>Tremor</color>.\n<color=#FFA15E>[On Burst]</color> Gain 1 <color=#EABA6D>Damage Up</color>, up to 3 stacks per action round.\n<color=#55D8EF>[Turn End]</color> Clear all <color=#EABA6D>Damage Up</color> stacks."
   },
   "valenna.Item.885111.ItemDes": {
     "zh": "瓦伦希娜斜挎在背后的铳剑。伯纳特利家族的定制加速弹用在贴身出剑的一瞬。",
     "en": "Valencina carries this gunblade slung across her back. Famiglia Bognatelli custom Acceleration Rounds fire the instant she strikes at close range."
   },
   "valenna.Item.885111.ItemEffectDes": {
-    "zh": "<color=#55D8EF>[战斗开始时]</color> <color=#79CAD7>加速弹</color>补至⁣10发⁤。\n<color=#A8E96D>[命中时]</color> 若本段消耗了<color=#79CAD7>加速弹</color>且射击检定成功，施加⁣1层<color=#F35D50>燃烧</color>⁤和⁣1层<color=#FFA15E>震颤</color>⁤。\n<color=#FFA15E>[引爆时]</color> 获得⁣1层<color=#EABA6D>伤害强化</color>⁤，每行动轮最多获得⁣3层⁤。",
-    "en": "<color=#55D8EF>[Battle Start]</color> Refill <color=#79CAD7>Acceleration Rounds</color> to 10.\n<color=#A8E96D>[On Hit]</color> If this hit spent an <color=#79CAD7>Acceleration Round</color> and passed the Shoot check, inflict 1 <color=#F35D50>Burn</color> and 1 <color=#FFA15E>Tremor</color>.\n<color=#FFA15E>[On Burst]</color> Gain 1 <color=#EABA6D>Damage Up</color>, up to 3 stacks per action round."
+    "zh": "<color=#55D8EF>[战斗开始时]</color> <color=#79CAD7>加速弹</color>补至⁣10发⁤。\n<color=#A8E96D>[命中时]</color> 若本段消耗了<color=#79CAD7>加速弹</color>且射击检定成功，施加⁣1层<color=#F35D50>燃烧</color>⁤和⁣1层<color=#FFA15E>震颤</color>⁤。\n<color=#FFA15E>[引爆时]</color> 获得⁣1层<color=#EABA6D>伤害强化</color>⁤，每行动轮最多获得⁣3层⁤。\n<color=#55D8EF>[回合结束时]</color> 清除<color=#EABA6D>伤害强化</color>。",
+    "en": "<color=#55D8EF>[Battle Start]</color> Refill <color=#79CAD7>Acceleration Rounds</color> to 10.\n<color=#A8E96D>[On Hit]</color> If this hit spent an <color=#79CAD7>Acceleration Round</color> and passed the Shoot check, inflict 1 <color=#F35D50>Burn</color> and 1 <color=#FFA15E>Tremor</color>.\n<color=#FFA15E>[On Burst]</color> Gain 1 <color=#EABA6D>Damage Up</color>, up to 3 stacks per action round.\n<color=#55D8EF>[Turn End]</color> Clear all <color=#EABA6D>Damage Up</color> stacks."
   },
   "valenna.Item.885111.ItemName": {
     "zh": "巴勒莫——铳剑",

@@ -22,7 +22,6 @@ namespace ValennaBattle
         private const int RetiredBurn = 885133;
 
         private static readonly AsyncLocal<BuffData> InternalGrant = new AsyncLocal<BuffData>();
-        private static readonly AsyncLocal<BurstAudioBatch> ActiveBurstAudio = new AsyncLocal<BurstAudioBatch>();
         private static readonly ConditionalWeakTable<BattleFightContent, StunMeters> Meters =
             new ConditionalWeakTable<BattleFightContent, StunMeters>();
 
@@ -43,37 +42,10 @@ namespace ValennaBattle
             internal bool StunPending;
         }
 
-        private sealed class BurstAudioBatch
-        {
-            internal readonly BattleRole Target;
-            internal int Count;
-
-            internal BurstAudioBatch(BattleRole target) => Target = target;
-        }
-
         internal static async Task BurstBatch(BattleRole source, BattleRole target, int attempts)
         {
-            if (attempts <= 0 || !StrikeSequence.CanHit(target)) return;
-            BurstAudioBatch previous = ActiveBurstAudio.Value;
-            var batch = new BurstAudioBatch(target);
-            ActiveBurstAudio.Value = batch;
-            try
-            {
-                for (int i = 0; i < attempts && StrikeSequence.CanHit(target); i++)
-                    await target.AddBuff(source, StrikeProfiles.TremorBurstId);
-            }
-            finally
-            {
-                ActiveBurstAudio.Value = previous;
-                if (batch.Count > 0) ValennaEventAudio.PlayBursts(target, batch.Count);
-            }
-        }
-
-        private static void RecordBurst(BattleRole target)
-        {
-            BurstAudioBatch batch = ActiveBurstAudio.Value;
-            if (batch?.Target == target) batch.Count++;
-            else ValennaEventAudio.PlayBursts(target, 1);
+            for (int i = 0; i < attempts && StrikeSequence.CanHit(target); i++)
+                await target.AddBuff(source, StrikeProfiles.TremorBurstId);
         }
 
         private static bool UsesLeiHeng(StunMeters fight)
@@ -170,6 +142,7 @@ namespace ValennaBattle
             BuffData tremor = scorch ?? target.GetBuff(StrikeProfiles.TremorId);
             if (tremor == null || tremor.CurLayer <= 0 || tremor.DisableBuff || target.IsDeath) return;
 
+            ValennaEventAudio.PlayBurst(target);
             int layers = tremor.CurLayer;
             BuffData burn = scorch == null ? null : target.GetBuff(StrikeProfiles.BurnId);
             int burning = Math.Max(0, burn?.CurLayer ?? 0);
@@ -178,7 +151,6 @@ namespace ValennaBattle
             int gain = threshold == 0 ? 0 : (int)Math.Min(((long)layers + 2) / 3, Math.Max(1, threshold / 3));
             int increase = Accumulate(fight, target, gain, threshold, holdThreshold: false, out bool full);
             TremorBurstDisplay.Show(target, scorch != null, increase);
-            RecordBurst(target);
             if (full) await ApplyStun(fight, source, target, battle);
             await ValennaKit.RewardBurst(source);
 
@@ -221,6 +193,7 @@ namespace ValennaBattle
                 BuffData mark = __1.GetBuff(LeiBurst);
                 if (mark == null || !fight.LeiBursts.TryGetValue(mark, out BattleRole source)) return;
 
+                ValennaEventAudio.PlayBurst(__1);
                 __state = (battle, source, __1.Data, __1.Data.GetAttributeValue(EHeroAttribute.POW));
             }
 
@@ -243,7 +216,6 @@ namespace ValennaBattle
                 StunMeters fight = Meters.GetValue(battle, _ => new StunMeters());
                 int increase = Accumulate(fight, target, gain, willpowerBefore, holdThreshold: true, out bool full);
                 TremorBurstDisplay.Show(target, scorching, increase);
-                RecordBurst(target);
                 if (full) await ApplyStun(fight, source, target, battle);
             }
         }

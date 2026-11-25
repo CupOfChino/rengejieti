@@ -843,19 +843,21 @@ namespace ValennaBattle
     // 图标跟着模型实时挂点，持续到本次攻击的骰子和伤害都处理结束。
     internal sealed class PrescienceDisplay : MonoBehaviour
     {
+        private const string DodgeAnimation = "valenna_prescience_dodge";
         private BattleRole _role;
         private BattleFightContent _fight;
         private RoleModel _model;
         private SpriteRenderer _body;
         private StrikeEffects _effects;
         private bool _dodge;
+        private float _earliestIdle;
         private float _remaining = 1f;
         internal bool IsHeld { get; private set; }
         internal int Revision { get; private set; }
 
         private static readonly Color Echo = new Color(0.97f, 0.52f, 0.49f);
 
-        internal static PrescienceDisplay Show(BattleRole role, BattleRole attacker)
+        internal static PrescienceDisplay Show(BattleRole role, BattleRole attacker, float minimumPoseTime = 0f)
         {
             RoleModel model = role.Model;
             SpriteRenderer body = model?.SpriteRender;
@@ -866,7 +868,7 @@ namespace ValennaBattle
             if (display != null && display._effects != null &&
                 ReferenceEquals(display._fight, BattleHelper.FightContent))
             {
-                display.Refresh();
+                display.Refresh(minimumPoseTime);
                 return display;
             }
 
@@ -885,7 +887,7 @@ namespace ValennaBattle
             display._effects = new StrikeEffects(display._fight.Room?.RoomEntity?.SceneTipRoot,
                 body, right, camera.transform, height, useRibbon: false);
             display._effects.Foretell(body);
-            display.Refresh();
+            display.Refresh(minimumPoseTime);
             return display;
         }
 
@@ -901,6 +903,7 @@ namespace ValennaBattle
             float step = Mathf.Min(Time.deltaTime, 0.05f);
             if (!IsHeld)
             {
+                if (_dodge && Time.unscaledTime >= _earliestIdle) ReturnToIdle();
                 _remaining -= Time.unscaledDeltaTime;
                 if (_remaining <= 0f)
                 {
@@ -916,28 +919,30 @@ namespace ValennaBattle
 
         internal void Confirm() => _effects?.ConfirmDodge(_body);
 
-        internal void Refresh()
+        private void Refresh(float minimumPoseTime)
         {
             Revision++;
             IsHeld = true;
             _remaining = 1f;
             _effects.SetForetellOpacity(1f);
             _effects.SamplePose(_body, Echo, leaveEcho: false);
-            _dodge = _model.CheckSpriteAnimExist("valenna_prescience_dodge");
-            if (_dodge) _model.PlaySpriteAnim("valenna_prescience_dodge", 1f);
+            _earliestIdle = Time.unscaledTime + minimumPoseTime;
+            _dodge = _model.CheckSpriteAnimExist(DodgeAnimation);
+            if (_dodge) _model.PlaySpriteAnim(DodgeAnimation, 1f);
         }
 
         internal void StartFade(int revision)
         {
             if (revision != Revision || !IsHeld || _effects == null) return;
             IsHeld = false;
-            ReturnToIdle();
+            if (Time.unscaledTime >= _earliestIdle) ReturnToIdle();
         }
 
         private void ReturnToIdle()
         {
-            if (_dodge && _body != null && _body.sprite != null &&
-                _body.sprite.name == "valenna_pose_dodge" && _role.Model == _model && StrikeSequence.CanHit(_role))
+            if (_dodge && ReferenceEquals(BattleHelper.FightContent, _fight) &&
+                _model != null && _model.SpriteAnim?.CurrentPlayAnimKey == DodgeAnimation &&
+                _role.Model == _model && StrikeSequence.CanHit(_role))
                 _model.PlayIdle(isFight: true);
             _dodge = false;
         }
@@ -952,6 +957,10 @@ namespace ValennaBattle
             Destroy(this);
         }
 
-        private void OnDestroy() => _effects?.Dispose();
+        private void OnDestroy()
+        {
+            ReturnToIdle();
+            _effects?.Dispose();
+        }
     }
 }

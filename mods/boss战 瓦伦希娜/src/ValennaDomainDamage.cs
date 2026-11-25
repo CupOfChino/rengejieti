@@ -40,8 +40,6 @@ namespace ValennaBattle
                 config.Des = new LocalizationBuffKeyData { TarKey = rules.TargetKey, InputText = rules.InputText };
                 Totals.Add(config.Des, new DamageTotal { Percent = layers * 10 });
             }
-            // 领域每轮重新发放；铳剑的层数则留到战斗结束。每个角色持有独立的配置实例。
-            config.Events.RemoveAll(effect => effect.EBuffTrigger == EBuffTriggerType.RoundEnd);
             return config;
         }
 

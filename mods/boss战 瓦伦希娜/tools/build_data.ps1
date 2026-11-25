@@ -191,6 +191,7 @@ foreach ($weapon in @(
         '[战斗开始时] 加速弹补至10发。'
         '[命中时] 若本段消耗了加速弹且射击检定成功，施加1层燃烧和1层震颤。'
         '[引爆时] 获得1层伤害强化，每行动轮最多获得3层。'
+        '[回合结束时] 清除伤害强化。'
     ) -join "`n"); Buffs = @(885137) },
     @{ Id = 885113; Key = 'valenna_cutlass'; Icon = 'valenna_cutlass_icon'; Name = '巴勒莫——切斩刀'; Damage = '2D4'; Lore = '巴勒莫的另一把刀，刀鞘系在瓦伦希娜腰侧。她以这把单手刀使出切割攻击。'; Extra = (@(
         '[攻击时] 合计目标的燃烧与震颤层数。'
@@ -701,7 +702,7 @@ foreach ($definition in @(
 
 Add-Table 'Buff/885153' 'BaseSheetData' ([ordered]@{
     __type = 'MOD.BuffTableData,Assembly-CSharp'
-    Id = 885153; Name = Text-Data '伤害强化'; Des = Text-Data ('每层使造成的普通伤害+10%。', '[战斗结束时] 清除全部层数。' -join "`n")
+    Id = 885153; Name = Text-Data '伤害强化'; Des = Text-Data ('每层使造成的普通伤害+10%。', '[回合结束时] 清除全部层数。' -join "`n")
     IconPathReference = [ordered]@{ ReferenceType = 1007; Key = 'icon_domain_phys_up' }
     BuffType = 4; BuffEffectType = 1; OverlayType = 1
     InitLayer = 1; OverrideInitLayer = $true; LayerCount = [ordered]@{ Value = '1' }; MaxLayer = 0; Duration = 0; IsShowUI = $true; IsDeathClear = $true

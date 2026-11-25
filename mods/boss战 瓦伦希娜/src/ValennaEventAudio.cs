@@ -26,7 +26,9 @@ namespace ValennaBattle
         private readonly BattleFightContent _fight;
         private readonly Dictionary<string, StrikeAudio.SubtitleLine> _subtitles;
         private readonly Dictionary<string, Task<AudioClip>> _files = new Dictionary<string, Task<AudioClip>>();
-        private readonly Dictionary<int, AudioClip> _bursts = new Dictionary<int, AudioClip>();
+        private readonly Dictionary<BattleRole, double> _lastBurstStart = new Dictionary<BattleRole, double>();
+        private readonly List<(AudioSource Source, double FreeAt)> _burstSources = new List<(AudioSource, double)>();
+        private GameObject _burstNode;
         private readonly List<AudioClip> _owned = new List<AudioClip>();
         private readonly List<(AudioManager Manager, uint Handle, double Ends)> _playing =
             new List<(AudioManager, uint, double)>();
@@ -37,17 +39,19 @@ namespace ValennaBattle
             _subtitles = StrikeAudio.ReadSubtitleDefaults(resource);
         }
 
-        internal static void Prepare()
+        internal static Task Prepare()
         {
             BattleFightContent fight = BattleHelper.FightContent;
-            if (fight == null || !BattleHelper.IsInBattle || fight.IsRestartBattleBreak || fight.IsGiveUpBattleBreak) return;
-            if (ReferenceEquals(_current?._fight, fight)) return;
+            if (fight == null || !BattleHelper.IsInBattle || fight.IsRestartBattleBreak || fight.IsGiveUpBattleBreak)
+                return Task.CompletedTask;
+            if (ReferenceEquals(_current?._fight, fight)) return _current._files[BurstFile];
             Clear();
             string root = Path.Combine(Path.GetDirectoryName(Path.GetDirectoryName(ValennaPlugin.Instance.Info.Location)), "resource");
             var bank = new ValennaEventAudio(fight, root);
             _current = bank;
-            foreach (string file in Success.Concat(Failure).Append(BurstFile))
+            foreach (string file in new[] { BurstFile }.Concat(Success).Concat(Failure))
                 bank._files[file] = bank.Load(Path.Combine(root, "sound", file));
+            return bank._files[BurstFile];
         }
 
         private bool IsActive() => ReferenceEquals(_current, this) && BattleHelper.IsInBattle &&
@@ -64,7 +68,7 @@ namespace ValennaBattle
 
         internal static void PlayDodge(BattleRole role, bool evaded)
         {
-            Prepare();
+            _ = Prepare();
             if (_current != null) _ = _current.PlayVoice(role, evaded ? Success : Failure);
         }
 
@@ -83,51 +87,44 @@ namespace ValennaBattle
             catch (Exception error) { ValennaPlugin.Instance.Warn($"预知眼语音播放失败。{error.Message}"); }
         }
 
-        internal static void PlayBursts(BattleRole target, int count)
+        internal static void PlayBurst(BattleRole target)
         {
-            if (target == null || count <= 0) return;
-            Prepare();
-            if (_current != null) _ = _current.PlayBurstBatch(count);
+            if (target == null) return;
+            _ = Prepare();
+            if (_current != null) _ = _current.PlayBurstSound(target);
         }
 
-        private async Task PlayBurstBatch(int count)
+        private async Task PlayBurstSound(BattleRole target)
         {
             try
             {
-                AudioClip original = await _files[BurstFile];
-                if (!IsActive() || original == null) return;
-                if (count == 1) { Play(original); return; }
-                if (!_bursts.TryGetValue(count, out AudioClip batch))
+                AudioClip clip = await _files[BurstFile];
+                if (!IsActive() || clip == null || !PrefabSingleton<AudioManager>.HasInstance) return;
+                AudioManager manager = PrefabSingleton<AudioManager>.Instance;
+                if (manager.AudioNode == null) return;
+                if (_burstNode == null)
                 {
-                    var source = new float[checked(original.samples * original.channels)];
-                    if (!original.GetData(source, 0)) throw new IOException("无法读取引爆音效采样");
-                    float[] mix = MixBursts(source, original.channels, original.frequency, count);
-                    batch = AudioClip.Create("震颤引爆 ×" + count, mix.Length / original.channels, original.channels, original.frequency, false);
-                    if (batch == null) throw new IOException("无法创建引爆音效");
-                    _owned.Add(batch);
-                    if (!batch.SetData(mix, 0)) throw new IOException("无法写入引爆音效采样");
-                    _bursts.Add(count, batch);
+                    _burstNode = new GameObject("ValennaTremorAudio");
+                    _burstNode.transform.SetParent(manager.AudioNode, false);
+                    _burstSources.Clear();
                 }
-                Play(batch);
+                double now = AudioSettings.dspTime;
+                double start = _lastBurstStart.TryGetValue(target, out double last)
+                    ? Math.Clamp(last + 0.020, now, now + 0.080) : now;
+                _lastBurstStart[target] = start;
+                int index = _burstSources.FindIndex(voice => voice.FreeAt <= now && !voice.Source.isPlaying);
+                AudioSource source = index < 0 ? _burstNode.AddComponent<AudioSource>() : _burstSources[index].Source;
+                source.playOnAwake = false;
+                source.outputAudioMixerGroup = manager.MixerGroups[1];
+                source.volume = manager.SoundVolume;
+                source.clip = clip;
+                if (start <= now) source.Play();
+                else source.PlayScheduled(start);
+                var voice = (source, start + clip.length);
+                if (index < 0) _burstSources.Add(voice);
+                else _burstSources[index] = voice;
             }
             catch (Exception error) { ValennaPlugin.Instance.Warn($"震颤引爆音效播放失败。{error.Message}"); }
-        }
-
-        // 在同一条 PCM 缓冲里安排每次起音，低帧率下仍保留各声部和完整尾音。
-        internal static float[] MixBursts(float[] source, int channels, int rate, int count)
-        {
-            int span = (int)Math.Round(rate * Math.Min(0.080, 0.020 * (count - 1)));
-            var mix = new float[checked(source.Length + span * channels)];
-            for (int i = 0; i < count; i++)
-            {
-                int start = count == 1 ? 0 : (int)Math.Round((double)i * span / (count - 1)) * channels;
-                for (int sample = 0; sample < source.Length; sample++) mix[start + sample] += source[sample];
-            }
-            float peak = 0;
-            foreach (float sample in mix) peak = Math.Max(peak, Math.Abs(sample));
-            if (peak > 0.98f)
-                for (int i = 0; i < mix.Length; i++) mix[i] *= 0.98f / peak;
-            return mix;
         }
 
         private bool Play(AudioClip clip)
@@ -155,6 +152,11 @@ namespace ValennaBattle
             var bank = _current;
             if (bank == null) return;
             _current = null;
+            if (bank._burstNode != null)
+            {
+                bank._burstNode.SetActive(false);
+                UnityEngine.Object.Destroy(bank._burstNode);
+            }
             foreach (var sound in bank._playing)
                 if (sound.Manager != null) sound.Manager.StopSound(sound.Handle);
             foreach (var clip in bank._owned)

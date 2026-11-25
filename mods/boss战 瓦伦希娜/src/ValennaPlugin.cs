@@ -14,7 +14,7 @@ namespace ValennaBattle
 {
     [BepInDependency("codex.depersonal.xineditor", BepInDependency.DependencyFlags.HardDependency)]
     [BepInDependency("codex.depersonal.custombattlebg", BepInDependency.DependencyFlags.HardDependency)]
-    [BepInPlugin("ttrpg.valenna-battle", "boss战 瓦伦希娜", "0.5.9")]
+    [BepInPlugin("ttrpg.valenna-battle", "boss战 瓦伦希娜", "0.5.10")]
     [BepInDependency("codex.depersonal.duoactionslot", BepInDependency.DependencyFlags.SoftDependency)]
     public sealed class ValennaPlugin : BaseUnityPlugin
     {
@@ -124,8 +124,7 @@ namespace ValennaBattle
                         ValennaKit.HasStartingAmmo(__instance) ||
                         ValennaEyeEquipment.HasPrescience(__instance) || ValennaEyeEquipment.IsWorn(__instance))
                     {
-                        ValennaEventAudio.Prepare();
-                        __result = InitializeBattleRole(__result, __instance);
+                        __result = Task.WhenAll(ValennaEventAudio.Prepare(), InitializeBattleRole(__result, __instance));
                     }
                 }
                 else if (__0 == EBuffTriggerType.BeforeRoundStart && BattleHelper.IsInBattle &&

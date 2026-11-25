@@ -16,7 +16,7 @@
       "Description": {
         "TarKey": "",
         "SheetKey": "",
-        "InputText": "近身挑斩后顺势回斩。 命中 2⁠次，每次基础伤害 1。",
+        "InputText": "近身挑斩后顺势回斩。 命中⁣2次⁤，每次基础伤害1。",
         "Characteristic": null
       },
       "EffectDesc": {

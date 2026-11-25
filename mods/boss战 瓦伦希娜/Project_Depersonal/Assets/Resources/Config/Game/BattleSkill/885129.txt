@@ -16,7 +16,7 @@
       "Description": {
         "TarKey": "",
         "SheetKey": "",
-        "InputText": "斗殴检定，至少成功｜5 段\n<color=#F4C16B>[伤害加成]</color> 自身<color=#EBC556>呼吸法</color>达到 6⁠层时，每⁠段⁠伤⁠害⁠+⁠1。\n仅限<color=#E76160>狩猎目标</color>，选择技能时自动选中。目标无法闪避。\n<color=#55D8EF>[使用时]</color> 获得 3⁠层<color=#EBC556>呼吸法</color>。若未处于精神衰弱或精神枯竭，消耗 2⁠点⁠理⁠智并获得 1⁠层<color=#F9CA75>「望」</color>。\n各段基础伤害为 1。每 10⁠层<color=#8CD6EB>预知眼</color>使额外伤害骰增加 2 面，达到 10⁠层时掷 1d2，20⁠层时掷 1d4，依此类推。\n目标<color=#F35D50>燃烧</color>与<color=#FFA15E>震颤</color>每合计 6⁠层，每⁠段⁠伤⁠害⁠+⁠1，至多+2。目标生命值不高于一半时，该段伤害翻倍。\n<b><color=#EBCB91>第 1 段</color></b>\n<color=#A8E96D>[命中时]</color> 施加 1⁠层<color=#FFA15E>震颤</color>。\n<b><color=#EBCB91>第 2、3 段</color></b>\n<color=#A8E96D>[命中时]</color> 每段施加 1⁠层<color=#F35D50>燃烧</color>。\n<b><color=#EBCB91>第 4 段</color></b>\n<color=#A8E96D>[命中时]</color> 将<color=#FFA15E>震颤</color>转为<color=#F35D50>震颤·灼热</color>。\n<b><color=#EBCB91>第 5 段</color></b>\n消耗至多 5⁠发<color=#79CAD7>加速弹</color>。<color=#F9CA75>「望」</color>使本段基⁠础⁠伤⁠害⁠+⁠2。\n<color=#A8E96D>[命中时]</color> 引爆<color=#FFA15E>震颤</color> 3⁠次。\n<color=#B3F26E>[暴击命中时]</color> 额外引爆 2⁠次。\n<color=#A8E96D>[攻击后]</color> <color=#79CAD7>加速弹</color>补至 10⁠发。移除目标的印记。\n<color=#A8E96D>[击杀时]</color> 下回合标记另一名敌人。",
+        "InputText": "斗殴检定，至少成功｜⁣5段⁤\n<color=#F4C16B>[伤害加成]</color> 自身<color=#EBC556>呼吸法</color>达到⁣6层⁤时，⁣每段伤害+1⁤。\n仅限<color=#E76160>狩猎目标</color>，选择技能时自动选中。目标无法闪避。\n每段基础伤害为1。<color=#8CD6EB>预知眼</color>不足⁣10层⁤时没有额外伤害骰。\n<color=#8CD6EB>预知眼</color>达到⁣10层⁤掷⁣1d2⁤，⁣20层⁤掷⁣1d4⁤，⁣30层⁤掷⁣1d6⁤。\n<color=#F4C16B>[伤害加成]</color> 目标<color=#F35D50>燃烧</color>与<color=#FFA15E>震颤</color>每合计⁣6层⁤，⁣每段伤害+1⁤，至多⁣+2⁤。\n<color=#F4C16B>[伤害加成]</color> 目标生命值不高于一半时，该段伤害翻倍。\n<color=#55D8EF>[使用时]</color> 获得⁣3层<color=#EBC556>呼吸法</color>⁤。\n<color=#55D8EF>[使用时]</color> 至少有⁣2点理智⁤且未陷入精神衰弱或精神枯竭时，消耗⁣2点理智⁤并获得⁣1层<color=#F9CA75>「望」</color>⁤。\n<color=#A8E96D>[攻击后]</color> <color=#79CAD7>加速弹</color>补至⁣10发⁤。\n<color=#A8E96D>[攻击后]</color> 移除目标的<color=#E76160>狩猎目标</color>印记。\n<color=#A8E96D>[击杀时]</color> 下回合标记另一名敌人。\n【I】 1＋<color=#8CD6EB>预知眼</color>伤害骰\n<color=#A8E96D>[命中时]</color> 施加⁣1层<color=#FFA15E>震颤</color>⁤。\n【II】 1＋<color=#8CD6EB>预知眼</color>伤害骰\n<color=#A8E96D>[命中时]</color> 施加⁣1层<color=#F35D50>燃烧</color>⁤。\n【III】 1＋<color=#8CD6EB>预知眼</color>伤害骰\n<color=#A8E96D>[命中时]</color> 施加⁣1层<color=#F35D50>燃烧</color>⁤。\n【IV】 1＋<color=#8CD6EB>预知眼</color>伤害骰\n<color=#A8E96D>[命中时]</color> 将<color=#FFA15E>震颤</color>转为<color=#F35D50>震颤·灼热</color>。\n【V】 1＋<color=#8CD6EB>预知眼</color>伤害骰\n消耗至多⁣5发<color=#79CAD7>加速弹</color>⁤。\n消耗<color=#F9CA75>「望」</color>时，本段⁣基础伤害+2⁤。\n<color=#A8E96D>[命中时]</color> 引爆<color=#FFA15E>震颤</color>⁣3次⁤。\n<color=#B3F26E>[暴击命中时]</color> 额外引爆⁣2次⁤。",
         "Characteristic": null
       },
       "EffectDesc": {
@@ -43,26 +43,26 @@
         885135,
         104,
         885132,
-        885134,
-        885137
+        885137,
+        885134
       ],
       "Terms": [],
-      "UseCustomIcon": false,
-      "BattleSkillIcon": "",
+      "UseCustomIcon": true,
+      "BattleSkillIcon": "UI/Textures/Icon/Skill/valenna_skill_131407",
       "BattleSkillIconReference": {
-        "ReferenceType": 0,
-        "Key": null
+        "ReferenceType": 1006,
+        "Key": "valenna_skill_131407"
       },
       "MonsterSkillIcon": null,
       "MonsterSkillIconReference": {
         "ReferenceType": 0,
         "Key": null
       },
-      "UseCustomSkillElementIcon": false,
-      "CustomSkillElementIconPath": "UI/Textures/Atlas/BattlePanel/NewBattlePanel/BattlePanel_actionLimit/battlePanel_actionUnlimit_knife",
+      "UseCustomSkillElementIcon": true,
+      "CustomSkillElementIconPath": "UI/Textures/Icon/Skill/valenna_skill_131407",
       "CustomSkillElementIconReference": {
         "ReferenceType": 1006,
-        "Key": "battlePanel_actionUnlimit_knife"
+        "Key": "valenna_skill_131407"
       },
       "ShowCheck": [
         {

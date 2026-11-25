@@ -16,7 +16,7 @@
       "Localization_Des": {
         "TarKey": "",
         "SheetKey": "",
-        "InputText": "完整闪避一个敌人的攻击行动后，以解兔反击该敌人。进入剧本或战斗时获得并穿戴<color=#8CD6EB>预知眼</color>。",
+        "InputText": "进入剧本或战斗时，自动装备专属神话物品<color=#8CD6EB>预知眼</color>。\n借助<color=#8CD6EB>预知眼</color>闪避敌方一次攻击的全部段数后，以「<color=#FFA15E>解兔</color>」反击该敌人。",
         "Characteristic": null
       },
       "BuffsLink": [

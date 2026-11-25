@@ -113,6 +113,7 @@ namespace ValennaBattle
                     await role.AddTrait(StrikeProfiles.HeartTraitId, showChangeInfo: false, isInitTrait: true);
                     changed = true;
                 }
+                ValennaHeart.RefreshSpeed(data, role.GetTraitData(StrikeProfiles.HeartTraitId));
                 if (changed || missingGear || equipStartingGear)
                 {
                     int traits = data.Traits.Count(trait => trait != null && IsInitialTrait(trait.Id));
@@ -124,14 +125,49 @@ namespace ValennaBattle
             finally { Upgrading.Remove(role.Data); }
         }
 
+        private const string OldPartnerName = "瓦伦娜";
+        private const string PartnerName = "瓦伦希娜";
+        private static readonly string OldPartnerNameKey = new LocalizationKeyData
+        {
+            InputText = OldPartnerName
+        }.TargetKey;
+
+        private static bool IsPartnerNameOwner(RoleData data) =>
+            data is PartnerRoleData partner && partner.PartnerId == ValennaPlugin.PartnerId;
+
+        private static bool IsOldPartnerName(string value) =>
+            value == OldPartnerName || value == OldPartnerNameKey;
+
+        private static LocalizationKeyData GetPartnerName(RoleData data)
+        {
+            var name = data.ConfigData?.CharacterName;
+            return name?.InputText == PartnerName ? name : new LocalizationKeyData { InputText = PartnerName };
+        }
+
+        // 伙伴库与入队后的角色卡都会读取这两个结果。旧 RoleData 会保留建档时的本地化键。
+        [HarmonyPatch(typeof(RoleData), nameof(RoleData.Name), MethodType.Getter)]
+        private static class PartnerNameDisplay
+        {
+            private static void Postfix(RoleData __instance, ref string __result)
+            {
+                if (IsPartnerNameOwner(__instance) && IsOldPartnerName(__result))
+                    __result = PartnerName;
+            }
+        }
+
+        [HarmonyPatch(typeof(RoleData), nameof(RoleData.NameKeyData), MethodType.Getter)]
+        private static class PartnerNameKeyDisplay
+        {
+            private static void Postfix(RoleData __instance, ref LocalizationKeyData __result)
+            {
+                if (IsPartnerNameOwner(__instance) && __result != null &&
+                    (IsOldPartnerName(__result.InputText) || IsOldPartnerName(__result.TargetKey)))
+                    __result = GetPartnerName(__instance);
+            }
+        }
+
         private static async Task RefreshPartnerProfile(RoleData data)
         {
-            const string oldName = "瓦伦娜";
-            if (data.Custom_Name == oldName) data.Custom_Name = data.ConfigData.CharacterName.InputText;
-            if (data.Custom_Name_KeyData?.InputText == oldName &&
-                string.IsNullOrEmpty(data.Custom_Name_KeyData.TargetKey))
-                data.Custom_Name_KeyData = data.ConfigData.CharacterName;
-
             if (data.Attribute?.AttrDict == null || data.Hp == null ||
                 !data.Attribute.AttrDict.TryGetValue(EHeroAttribute.CON, out DiceVariableData con)) return;
             int previousOffset = con._sources?.Where(source => source.Key == LegacyStats)
@@ -207,7 +243,16 @@ namespace ValennaBattle
             }
             if (item == null) return;
             item.IsLockedOnNpc = true;
-            if (equip && !data.Equips.Contains(item) &&
+            if (data.Equips.Contains(item))
+            {
+                // 老档的帽子已在装备栏，读档不会再触发原生穿戴事件。
+                var persuade = data.RoleSkills.Find(skill => skill.SkillType == EExploreSkill.Persuade);
+                var bonus = item.Config?.Equip?.Arrts?.Find(attr => attr.RoleSkill.Type == EExploreSkill.Persuade);
+                if (bonus != null && persuade != null && !string.IsNullOrEmpty(item.SourceKey) &&
+                    !persuade.SkillValue._sources.Exists(entry => entry.Key == item.SourceKey))
+                    await data.ChangeAttr(true, bonus, item.SourceKey, playAnim: false, showChangeTip: false);
+            }
+            else if (equip &&
                 data.Equips.Count(gear => gear?.Config?.Equip != null && gear.EquipType == EEquipType.None) < 4)
                 await item.EquipItem(role, false);
         }

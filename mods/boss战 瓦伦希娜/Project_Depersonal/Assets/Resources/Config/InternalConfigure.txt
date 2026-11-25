@@ -2299,6 +2299,48 @@
             "Path": "Resources/Texture/Effect/valenna_vfx/valenna_streak",
             "Ext": ".png"
           }
+        ],
+        1006: [
+          {
+            "Key": "valenna_skill_131401",
+            "Path": "Resources/Texture/SkillIcon/valenna_skill_131401",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_skill_131402",
+            "Path": "Resources/Texture/SkillIcon/valenna_skill_131402",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_skill_131403",
+            "Path": "Resources/Texture/SkillIcon/valenna_skill_131403",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_skill_131404",
+            "Path": "Resources/Texture/SkillIcon/valenna_skill_131404",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_skill_131405",
+            "Path": "Resources/Texture/SkillIcon/valenna_skill_131405",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_skill_131406",
+            "Path": "Resources/Texture/SkillIcon/valenna_skill_131406",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_skill_131407",
+            "Path": "Resources/Texture/SkillIcon/valenna_skill_131407",
+            "Ext": ".png"
+          },
+          {
+            "Key": "valenna_skill_131408",
+            "Path": "Resources/Texture/SkillIcon/valenna_skill_131408",
+            "Ext": ".png"
+          }
         ]
       }
     }

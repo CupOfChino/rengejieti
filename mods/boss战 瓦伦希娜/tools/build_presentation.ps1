@@ -610,9 +610,18 @@ foreach ($mythical in 'valenna_eye_mythical_card', 'valenna_eye_mythical_project
     Stage-Image "$path.rtview"
 }
 
+$skillIconFolder = Join-Path $project 'Assets/Resources/Texture/SkillIcon'
+if (Test-Path -LiteralPath $skillIconFolder) {
+    foreach ($png in Get-ChildItem -LiteralPath $skillIconFolder -File -Filter '*.png') {
+        Stage-Image "Resources/Texture/SkillIcon/$($png.Name)" $png.FullName
+    }
+}
+
 $resourceMap = [ordered]@{}
-foreach ($group in ([ordered]@{ '1001' = 'HeadIcon'; '1004' = 'ItemIcon'; '1005' = 'MythologicalObj'; '1007' = 'BuffIcon'; '1018' = 'Charator'; '1023' = 'Effect' }).GetEnumerator()) {
-    $resourceMap[$group.Key] = @(Get-ChildItem -LiteralPath (Join-Path $texture $group.Value) -Recurse -File -Filter '*.png' |
+foreach ($group in ([ordered]@{ '1001' = 'HeadIcon'; '1004' = 'ItemIcon'; '1005' = 'MythologicalObj'; '1006' = 'SkillIcon'; '1007' = 'BuffIcon'; '1018' = 'Charator'; '1023' = 'Effect' }).GetEnumerator()) {
+    $folder = Join-Path $texture $group.Value
+    if (!(Test-Path -LiteralPath $folder)) { continue }
+    $resourceMap[$group.Key] = @(Get-ChildItem -LiteralPath $folder -Recurse -File -Filter '*.png' |
         Sort-Object FullName | ForEach-Object {
             $path = [IO.Path]::GetRelativePath($assets, $_.FullName).Replace('\', '/')
             [ordered]@{ Key = $_.BaseName; Path = $path.Substring(0, $path.Length - 4); Ext = '.png' }
@@ -624,7 +633,7 @@ $mapEnvelope = [ordered]@{
         value = [ordered]@{ ResourceMap = $resourceMap }
     }
 }
-$mapJson = ($mapEnvelope | ConvertTo-Json -Depth 8) -replace '(?m)^(\s*)"(1001|1004|1005|1007|1018|1023)"(?=\s*:)', '$1$2'
+$mapJson = ($mapEnvelope | ConvertTo-Json -Depth 8) -replace '(?m)^(\s*)"(1001|1004|1005|1006|1007|1018|1023)"(?=\s*:)', '$1$2'
 Save-Text 'Resources/Config/InternalConfigure.txt' $mapJson
 
 Copy-Item -LiteralPath (Join-Path $project 'Project.rtmeta') -Destination (Join-Path $stagedProject 'Project.rtmeta')
@@ -634,7 +643,7 @@ foreach ($png in Get-ChildItem -LiteralPath $texture -Recurse -File -Filter '*.p
     if (Test-Path -LiteralPath $old) { Copy-Item -LiteralPath $old -Destination (Join-Path $stagedProject $key) }
 }
 $sync = Join-Path (Split-Path -Parent $mod) '跑团伙伴/tools/sync_editor_textures.ps1'
-& $sync -ProjectPath $stagedProject
+& $sync -ProjectPath $stagedProject -TextureFolders 'Charator','Effect','MagicCard','Item','Buff','HeadIcon','SkillIcon'
 
 $written = [Collections.Generic.List[object]]::new()
 try {

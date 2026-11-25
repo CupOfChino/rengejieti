@@ -114,7 +114,7 @@ namespace ValennaBattle
             return sequence;
         }
 
-        private static Sprite LoadSprite(string key, Sprite pose = null)
+        internal static Sprite LoadSprite(string key, Sprite pose = null)
         {
             string name = "valenna_" + key;
             using (Stream source = typeof(StrikeArt).Assembly.GetManifestResourceStream("ValennaBattle.Art." + name + ".png"))

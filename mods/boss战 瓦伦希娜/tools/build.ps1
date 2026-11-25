@@ -22,8 +22,14 @@ try {
         $arguments += @(Get-ChildItem -LiteralPath $folder -File -Filter '*.dll' |
             Where-Object Name -ne '0Harmony20.dll' | ForEach-Object { "-r:$($_.FullName)" })
     }
+    $domain = (Get-Item -LiteralPath (Join-Path $repo 'mods/自定义播放战斗背景和BGM/plugins/CustomBattleBg.dll')).FullName
+    $arguments += "-r:$domain"
     $arguments += @(Get-ChildItem -LiteralPath (Join-Path $mod 'src') -File -Filter '*.cs' | ForEach-Object FullName)
     $effectDir = Join-Path $mod 'Project_Depersonal/Assets/Resources/Texture/Effect'
+    foreach ($key in 'danger_2','warning_2','danger_3','warning_3','stage_I','stage_II','stage_III','stage_IV','stage_V') {
+        $iconFile = (Get-Item -LiteralPath (Join-Path $mod "resource/skill-ui/valenna_$key.png")).FullName
+        $arguments += "-resource:$iconFile,ValennaBattle.Art.valenna_$key.png"
+    }
     foreach ($folder in 'valenna_arc_preview/idle', 'valenna_execution_wave/idle', 'valenna_cutting_wind/idle', 'valenna_elephant_wind/idle',
         'valenna_companion_sweep/idle', 'valenna_execution_sweep/idle', 'valenna_execution_companion/idle', 'valenna_twin_thrust/idle',
         'valenna_attack_sweep/idle', 'valenna_attack_companion/idle', 'valenna_peak_sweep/idle',

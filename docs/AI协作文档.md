@@ -1097,7 +1097,9 @@ num += OffHandWeapon.ExtraContinuousAttackCount.Value + OffHandWeapon.ExtraConti
 - 「保存副本」输出 `.prefab-vfx.json`，记录原版预制体引用和调参值，可在联动页打开。游戏编辑器可独立导入的 `.rtprefab` 还需要验证序列化与材质资源引用。
 - 本机实测读取了利刃命中、魅惑和肾上腺素。对利刃的 `HCFX_Hit_08` 层调参时，Unity 回读初始大小 8 → 16，爆发粒子数 2 → 4。浏览器成功回放游戏相机帧，保存副本后可以重新读取同一组改动。
 
-**瓦伦希娜战斗规则、卡面与音轨（0.5.3）**
+**瓦伦希娜战斗规则、卡面与音轨（0.5.4）**
+
+- 0.5.4 在 BepInEx 声明自定义心、领域两个硬前置。心的展示状态 885140 只引用 880901 的外观。领域按配置动态生成伤害强化；铳剑保留 885153 以兼容旧档，`ValennaDomainDamage.cs` 调用现有领域程序集的构建器获取稳定效果，再按装备自己的叠层与战斗期管理生命周期。构建瓦伦希娜只引用前置 DLL，工坊包只分发自己的插件。
 
 - 发布从仓库根的 `工坊待上传/瓦伦希娜` 选择目录；包内需带 `resource/skill-audio`、`resource/sound` 与 `resource/voice-subtitles.json`。开发目录的 `temp/特效浏览器` 保存实际分镜，逐帧图与对照图还用于后续调参。更新其他既有条目若要求保留多语言介绍，只向 Steam 提交内容路径，并核对新 manifest 和原描述。
 
@@ -1109,7 +1111,11 @@ num += OffHandWeapon.ExtraContinuousAttackCount.Value + OffHandWeapon.ExtraConti
 - 入本前的伙伴神话栏走 `PartnerData/885101 → MythicalItem/885112 → Item/885112`，玩家角色的候选列表是另一条入口。专属限制和旧档迁移在 `ValennaEyeEquipment.cs`。神话卡采用原生 1005 资源类型，128×194 大图和 166×54 横幅各自有单独资源键；工坊原版示例和本体「不死者吊坠」可供核对。角色卡的八项特质由 `build_data.ps1` 生成，其中「心——瓦伦希娜」885155 使用原生战斗速度 119；技能层数加成在 `ValennaHeart.cs`。
 - `ValennaEventAudio.cs` 独立处理闪避和引爆声音。以每次闪避开骰前的过热状态选取语音资格，未过热时的成功池 2 条、失败池 5 条；按原字幕表取词。对照引爆时，检查 `ValennaTremor.cs` 的真实增长、图标和数字，与 `BurstBatch` 传出的有效次数。五声的音频起点相隔 20 毫秒。
 - 排查攻击菜单常亮的感叹号时，用原版 `UIBattlePanel.UpdateNewSkillTips` 核对。它查询 `IsMachiningSkill`、角色绑定与 `ShowCheck`，不看 `HideInSkillSelectList`。退役表须同时隐藏并关闭新技提示资格。保留原版已读记录，玩家仍能正常发现其他新技能。
-- 招式配色与处置的点阵警示在 `ValennaSkillFrame.cs`，面板元素复用时要清除装饰。规则文字由 `tools/format_rules.ps1` 在导出时统一处理；优先使用游戏支持的颜色标签和 `BuffsLink`。UGUI 词条图标与预知眼下划线在 `ValennaRuleVisuals.cs`；神话卡面由原生界面绘制标题与背景，投影只画右侧物品。
+- 技能说明先列整招规则，再用【I】至【V】逐段列骰和命中效果。`tools/build_data.ps1` 写规则，`tools/format_rules.ps1` 写颜色与状态链接，`ValennaRuleVisuals.cs` 显示段号徽章、词条图标与预知眼下划线。神话卡面由原生界面绘制标题与背景，投影只画右侧物品。
+- 处置与预知的技能框见 `ValennaSkillFrame.cs`。双侧警标和顶边滚动贴图取自 `resource/skill-ui`，由 `ValennaWarningArt.cs` 绘制。行动槽徽标在 `ValennaActionWarning.cs`，多行动槽按各格绑定的技能刷新。两个界面都复用对象，换技时须清除旧装饰。
+- 原版技能图取自桌面保存的灰机 Wiki「主线战斗9-42」页面，131401 至 131407 为七项攻击，131408 为预知。`tools/import_skill_icons.ps1` 注册 `Texture/SkillIcon` 下的八张 PNG。选技能列表与行动槽分别使用 `CustomSkillElementIconReference` 和 `BattleSkillIconReference`，均为 1006；发布时一起带上图片、边车、项目资源表和 `Project.rtmeta`。
+- 伙伴库会读取旧存档中 `PartnerRoleData` 的姓名。表里已写「瓦伦希娜」时仍要核对 `RoleData.Name` 和 `NameKeyData`。针对伙伴 885101 的旧名兼容见 `ValennaKit.cs`。
+- 数值和单位按原版连写，例如「10点伤害」「1颗奖励骰」。导出脚本用 U+2063 和 U+2064 标出需要同行的短语，配置文件要按序数比较才能检查这两个不可见字符。`ValennaRuleWrapping.cs` 在显示时移除标记，按 UGUI 的实际宽度决定换行。复核时同时看技能正文和战斗状态悬浮框，后者直接写入 `Text_NameContent.text`。改动这套规则后，插件和对应配置表要一同打包。
 
 - `mods/boss战 瓦伦希娜/resource/sound/Wiki音效` 保存敌方单位 1314「音效」表中的 28 个原始 OGG。子目录对应表中「特殊1–4」「技能1–3」「拼点」「范围攻击」九行，文件保留 Wiki 原名。编辑器搜索「Wiki音效」可试听，具体技能和起播时间由玩家配置。[灰机 Wiki 原表](https://limbuscompany.huijiwiki.com/wiki/敌方单位/1314#音效)
 
@@ -1149,7 +1155,8 @@ num += OffHandWeapon.ExtraContinuousAttackCount.Value + OffHandWeapon.ExtraConti
 - 0.3.7 把反击与发放挂在「预知」特质 `885142`，充能、闪避奖惩和「加速的未来」挂在预知眼装备 `885112`。`ValennaEyeEquipment.cs` 走 `EnterModule` 和入战入口，查装备与背包后使用原版 `EquipItem` 穿戴护具栏（`EEquipType.Cloth`）。神话、绑定和不可卸写进物品数据。`ValennaPrescience.cs` 在受击和直接伤害入口共用命中记录，同一次命中只扣一次。`AcceleratedFuture.cs` 叠层后由招式入口保留整招倍率，解兔跳过倍率与清层。装备图标取 `饰品-9256.webp`，状态图标取 `加速的未来.webp`，原图路径及登记键见模组内 `状态图标索引.md`。
 
 - 0.4.0 将“大行动轮开始”对齐到选择行动前的原版 `BeforeRoundStart`，该事件在首轮 `LookStage` 和以后各轮 `PreprepareStage` 触发。原版 `RoundStart` 已在行动选择后。`ValennaHunt.cs` 在每第 3 轮的 `ResultStage` 完成后决定是否安排补标，下一大行动轮实际开始时施加。处置条件同时走按钮遮罩、目标过滤和提交后的再校验。七项招式配置与预知数值仍在 `StrikeProfiles.cs`。
-- 普通与灼热震颤的配置及代理入口见 `ValennaTremor.cs`。原生燃烧为 104，原生昏迷为 101。雷横默工坊号 `3587695213`，运行时查四张状态表 686122775、68612299、68614495、68612256 来决定是否调用它的状态。本模组的兜底引爆在目标模型中心短暂显示图标，血条下只在累计眩晕值大于 0 时显示数字。本地预览工程及数值详见瓦伦娜模组 `README.md`。
+- 普通与灼热震颤的配置及代理入口见 `ValennaTremor.cs`。原生燃烧为 104，原生昏迷为 101。雷横默工坊号 `3587695213`，运行时查四张状态表 686122775、68612299、68614495、68612256 来决定是否调用它的状态。瓦伦希娜出战时对手模型右侧从开战起显示空的混乱条；引爆增长，满槽触发原生昏迷。联动模式跟踪本模组发起的引爆及其实际意志降幅。
+- 本机挂载以瓦伦希娜的工坊目录 `3845388588` 为准。编译并运行 `tools/test_install.ps1` 后，可核对正式目录、工程与待上传包的插件哈希。启动日志的「0.5.5 已载入」包含实际 DLL 路径。旧宿主 `3813306323` 的 `-Remove` 只处理旧哈希清单记录的文件。编辑器应用音轨时也会同步本机瓦伦希娜目录。
 - `ValennaPrescience.cs` 等全部分段的后处理完成才统计本次闪避和攻击。原版部分 `ActionEffectProcess` 调用按回调推进。攻击、呼吸法和狩猎伤害改在实际 `SetDamage` 取值，狩猎与未来累计小数，避免 1 点测试分段被逐段向上取整。暴击数字按命中范围定位 HUD，池化数字重置字号。其余装备、初始特质和旧伙伴升级见 `ValennaKit.cs` 与 `tools/build_data.ps1`。
 - 0.4.2 把扫刃、气流、碎屑与收势余风错开。最外侧暗红尖弧随原刀光向外卷，在亮刃消失后继续渐隐。`SweepFrames` 从 24 改为 26 时同步更新了浏览器素材 ID 和各层时长。浏览器大小输入上限为 650，长直刺用现有横纵比例保持实际尺寸。调参和修改前后关键帧见[招式演出分段](../mods/boss战%20瓦伦希娜/招式演出分段.md#042-逐帧复查)。
 - 0.4.3 由 `tools/IdleBreathPainter.cs` 生成原生待机图帧，`src/ValennaPoses.cs` 共用呼吸变形和眼、鞘、脚点坐标。`pose-pivots.json` 中的 `referenceIdle` 保留浏览器旧工程的模型引用。切割攻击保留 1.47 秒的举刀与外圈，之后才接下放和回握。`StrikeEffects.Advance` 先推进人物位移再重算已有挂件，保持新刀光的起扫年龄。 [待机与出招衔接](../mods/boss战%20瓦伦希娜/招式演出分段.md#043-待机与出招衔接)

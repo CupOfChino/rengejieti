@@ -12,7 +12,10 @@ using MOD;
 
 namespace ValennaBattle
 {
-    [BepInPlugin("ttrpg.valenna-battle", "boss战 瓦伦希娜", "0.5.3")]
+    [BepInDependency("codex.depersonal.xineditor", BepInDependency.DependencyFlags.HardDependency)]
+    [BepInDependency("codex.depersonal.custombattlebg", BepInDependency.DependencyFlags.HardDependency)]
+    [BepInPlugin("ttrpg.valenna-battle", "boss战 瓦伦希娜", "0.5.8")]
+    [BepInDependency("codex.depersonal.duoactionslot", BepInDependency.DependencyFlags.SoftDependency)]
     public sealed class ValennaPlugin : BaseUnityPlugin
     {
         internal const int PartnerId = 885101;
@@ -27,7 +30,7 @@ namespace ValennaBattle
             Instance = this;
             StrikeArt.Load();
             new Harmony("ttrpg.valenna-battle").PatchAll(typeof(ValennaPlugin).Assembly);
-            Logger.LogInfo("boss战 瓦伦希娜 0.5.3 已载入");
+            Logger.LogInfo($"boss战 瓦伦希娜 {Info.Metadata.Version} 已载入：" + Info.Location);
         }
 
         private void Update()
@@ -47,8 +50,7 @@ namespace ValennaBattle
         internal void Report(string message) => Logger.LogInfo(message);
         internal void Warn(string message) => Logger.LogWarning(message);
 
-        internal static bool IsValennaPartner(BattleRole role) =>
-            role?.Data?.ConfigId == PartnerId && role.Data.ConfigData is PartnerData;
+        internal static bool IsValennaPartner(BattleRole role) => ValennaHeart.IsPreset(role?.Data);
 
         internal static bool HasPalermo(BattleRole role) =>
             role?.Data != null && role.GetTraitData(StrikeProfiles.TraitId)?.Config != null;
@@ -205,16 +207,16 @@ namespace ValennaBattle
                         return;
 
                     var factory = Singleton<ResManager>.Instance.BuffFactory;
+                    var heart = factory.GetConfig(CustomHeartId);
+                    if (heart?.UseFxPrefab?.UseFrameEffect != true ||
+                        string.IsNullOrEmpty(heart.UseFxPrefab.EffectName)) return;
                     var preview = factory.GetData(HeartPreviewId);
                     if (preview?.Config == null) return;
-                    var heart = factory.GetData(CustomHeartId)?.Config;
-                    if (heart?.UseFxPrefab?.UseFrameEffect == true &&
-                        !string.IsNullOrEmpty(heart.UseFxPrefab.EffectName) && role.GetBuff(CustomHeartId) == null)
-                    {
-                        preview.Config.FxPlayType = heart.FxPlayType;
-                        preview.Config.UseFxPrefab = heart.UseFxPrefab;
-                        preview.Config.IconPathReference = heart.IconPathReference;
-                    }
+                    if (role.GetBuff(CustomHeartId) != null)
+                        await role.RemoveBuff(CustomHeartId, showChangeTip: false);
+                    preview.Config.FxPlayType = heart.FxPlayType;
+                    preview.Config.UseFxPrefab = heart.UseFxPrefab;
+                    preview.Config.IconPathReference = heart.IconPathReference;
                     await role.AddBuff(role, preview, showChangeTip: false);
                 }
                 catch (Exception error)

@@ -9,6 +9,9 @@ namespace ValennaBattle
 {
     internal sealed class StrikeResolution
     {
+        // 切斩刀的层数加成已在分段掷骰后处理，原生武器回调只需处理其它攻击。
+        internal sealed class SegmentHit : DamageAdditionalData { }
+
         private static readonly int[][] Dice = {
             new[] { 4, 4 }, new[] { 3, 4 }, new[] { 3, 4 }, new[] { 6, 6, 6 },
             new[] { 4, 4, 6 }, new[] { 4, 4, 6, 6 }, new[] { 0, 0, 0, 0, 0 }
@@ -86,10 +89,16 @@ namespace ValennaBattle
 
             DamageData damage = _skill.Config.CustomDamage?.Clone();
             if (damage == null) return;
+            // 武器身份供原生词缀和命中效果识别。基础伤害使用本段骰，DB 系数固定为零。
             damage.Value = amount.ToString();
-            var additional = new DamageAdditionalData
+            damage.DB_Bonus = 0f;
+            var weapon = _skill.CurrentWeapon ?? _actor.Data.Weapons?.Find(item =>
+                item?.Config?.Weapon?.AttackType == EAttackType.Melee);
+            var additional = new SegmentHit
             {
                 SourceType = EDamageSourceType.BattleSkill,
+                Weapon = weapon,
+                IsWeaponDamage = weapon != null,
                 DiceResult = Result,
                 EnableChangeDamageValue = true
             };

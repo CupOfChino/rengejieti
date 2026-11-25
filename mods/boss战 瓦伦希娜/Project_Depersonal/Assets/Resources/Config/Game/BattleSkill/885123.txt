@@ -16,7 +16,7 @@
       "Description": {
         "TarKey": "",
         "SheetKey": "",
-        "InputText": "交叉双斩后，以枪刃闪光收招。 命中 3⁠次，每次基础伤害 1。",
+        "InputText": "交叉双斩后，以枪刃闪光收招。 命中⁣3次⁤，每次基础伤害1。",
         "Characteristic": null
       },
       "EffectDesc": {

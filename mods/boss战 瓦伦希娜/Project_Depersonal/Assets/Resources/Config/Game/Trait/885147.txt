@@ -16,7 +16,7 @@
       "Localization_Des": {
         "TarKey": "",
         "SheetKey": "",
-        "InputText": "侦察和感知各 +5。",
+        "InputText": "⁣侦察+5⁤，⁣感知+5⁤。",
         "Characteristic": null
       },
       "BuffsLink": [],

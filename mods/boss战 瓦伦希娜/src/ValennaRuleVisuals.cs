@@ -22,9 +22,12 @@ namespace ValennaBattle
         {
             if (label == null) return;
             var inline = label.GetComponent<ValennaInlineRules>();
-            bool styled = !string.IsNullOrEmpty(text) && (activeSkill || ValennaInlineRules.HasRuleMarkup(text));
-            if (styled && inline == null) inline = label.gameObject.AddComponent<ValennaInlineRules>();
-            if (inline != null) inline.Set(label, styled, activeSkill);
+            if (inline != null) text = inline.SourceFor(text);
+            bool quantities = ValennaRuleWrapping.IsMarked(text);
+            bool styled = !string.IsNullOrEmpty(text) && (activeSkill || ValennaInlineRules.HasRuleMarkup(text) ||
+                (quantities && text.Contains("<color=#")));
+            if ((styled || quantities) && inline == null) inline = label.gameObject.AddComponent<ValennaInlineRules>();
+            if (inline != null) inline.Set(label, styled, quantities);
 
             if (!styled || !text.Contains(EyeMarkup)) return;
             label.supportRichText = true;
@@ -124,6 +127,36 @@ namespace ValennaBattle
             private static void Postfix(Text __0, LocalizationKeyData __1) => Style(__0, __1?.InputText);
         }
 
+        // 原版状态悬浮框直接写 Text.text，绕过 SetLocalization。
+        [HarmonyPatch(typeof(UIDetailedTipPanel), nameof(UIDetailedTipPanel.Open),
+            new[] { typeof(LocalizationKeyData), typeof(Vector3), typeof(Vector3), typeof(LocalizationKeyData), typeof(ETipAlignmentType) })]
+        private static class OffsetTooltip
+        {
+            private static void Postfix(UIDetailedTipPanel __instance) => StyleTooltipText(__instance.Text_NameContent);
+        }
+
+        [HarmonyPatch(typeof(UIDetailedTipPanel), nameof(UIDetailedTipPanel.Open),
+            new[] { typeof(LocalizationKeyData), typeof(Vector3), typeof(LocalizationKeyData), typeof(ETipAlignmentType) })]
+        private static class Tooltip
+        {
+            private static void Postfix(UIDetailedTipPanel __instance) => StyleTooltipText(__instance.Text_NameContent);
+        }
+
+        [HarmonyPatch(typeof(UIDetailedTipPanel), nameof(UIDetailedTipPanel.Open),
+            new[] { typeof(LocalizationKeyData), typeof(Vector3), typeof(Vector3), typeof(LocalizationKeyData), typeof(ETipAlignmentType), typeof(bool), typeof(bool) })]
+        private static class ItemTooltip
+        {
+            private static void Postfix(List<Transform> ____itemDescElements) => StyleItemElements(____itemDescElements);
+        }
+
+        // 少数原版控件在帧末按字符插空格，会把数字、单位甚至颜色标签拆开。
+        [HarmonyPatch(typeof(TextAddSpace), "TryAddSpacesToText")]
+        private static class KeepRuleSpacing
+        {
+            private static bool Prefix(Text __0) => __0 == null ||
+                (!ValennaRuleWrapping.IsMarked(__0.text) && __0.GetComponent<ValennaInlineRules>()?.ShowsQuantities != true);
+        }
+
         [HarmonyPatch(typeof(UITraitDesElement), nameof(UITraitDesElement.Fresh))]
         private static class TraitDescription
         {
@@ -135,13 +168,28 @@ namespace ValennaBattle
         {
             private static void Postfix(MOD_Dynamic_Item __0, List<Transform> ____itemDescElements)
             {
-                if (__0?.Config == null || !IsOurs(__0.Config.ItemId) || ____itemDescElements == null) return;
-                foreach (Transform item in ____itemDescElements)
-                {
-                    Text text = item != null ? item.GetComponent<Text>() : null;
-                    if (text != null) Style(text, text.text);
-                }
+                StyleItemElements(____itemDescElements, __0?.Config != null && IsOurs(__0.Config.ItemId));
             }
+        }
+
+        private static void StyleItemElements(List<Transform> elements, bool ownItem = false)
+        {
+            if (elements == null) return;
+            foreach (Transform item in elements)
+            {
+                Text text = item != null ? item.GetComponent<Text>() : null;
+                if (ownItem && text != null) Style(text, text.text);
+                else StyleTooltipText(text);
+            }
+        }
+
+        private static void StyleTooltipText(Text text)
+        {
+            if (text == null) return;
+            var inline = text.GetComponent<ValennaInlineRules>();
+            string source = inline != null ? inline.SourceFor(text.text) : text.text;
+            if (ValennaRuleWrapping.IsMarked(source) || ValennaInlineRules.HasRuleMarkup(source)) Style(text, source);
+            else inline?.Set(text, false, false);
         }
 
         [HarmonyPatch(typeof(UIDetailTermDesElement), nameof(UIDetailTermDesElement.Fresh))]
@@ -259,12 +307,13 @@ namespace ValennaBattle
         }
     }
 
-    internal sealed class ValennaInlineRules : MonoBehaviour
+    internal sealed class ValennaInlineRules : MonoBehaviour, ILayoutElement
     {
         // Unity 的旧版 Text 没有 sprite 标签。透明 ASCII 字槽只在对应图标已加载后插入。
         private const string Slot = "<color=#FE02FD01>M</color>\u2060";
         private static readonly Color32 SlotColor = new Color32(254, 2, 253, 1);
         private static readonly Regex StyledWord = new Regex(
+            "(?m:^【(?<stage>I|II|III|IV|V)】)(?= )|" +
             "(?<overheat><color=#8CD6EB>预知眼</color><color=#E77167>·过热</color>)|" +
             "<color=#(?:E77167|F35D50|FFA15E|77D1DC|E76160|EABA6D|8CD6EB|EBC556|79CAD7|CBB1DD|D196C7|AAC4D2|EE827B|F9CA75)>(?<word>[^<]+)</color>",
             RegexOptions.Compiled);
@@ -277,7 +326,7 @@ namespace ValennaBattle
             { "加速的未来", StrikeProfiles.AcceleratedFutureId },
             { "加速弹", StrikeProfiles.AccelBulletId }, { "狩猎目标", StrikeProfiles.HuntingPreyId },
             { "伤害强化", ValennaKit.DamageUpId }, { "醉酒", StrikeProfiles.DrunkId },
-            { "恐惧", 128 }, { "「望」", StrikeProfiles.FocusId }
+            { "恐惧", 128 }, { "昏迷", StrikeProfiles.StunnedId }, { "「望」", StrikeProfiles.FocusId }
         };
         private static readonly Dictionary<int, Task<Sprite>> Icons = new Dictionary<int, Task<Sprite>>();
 
@@ -289,13 +338,38 @@ namespace ValennaBattle
         private VerticalWrapMode _wrap;
         private bool _richText;
         private string _source;
+        private string _withIcons;
         private string _rendered;
+        private string _naturalText;
+        private TextGenerationSettings _settings;
         private Vector2 _size;
         private float _pixels;
         private int _revision;
         private bool _needsLayout;
 
-        internal static bool HasRuleMarkup(string text) => !string.IsNullOrEmpty(text) && StyledWord.IsMatch(text);
+        internal static bool HasRuleMarkup(string text)
+        {
+            if (string.IsNullOrEmpty(text) || text.IndexOf("<color=#", StringComparison.Ordinal) < 0) return false;
+            for (Match match = StyledWord.Match(text); match.Success; match = match.NextMatch())
+                if (!match.Groups["stage"].Success) return true;
+            return false;
+        }
+        internal bool ShowsQuantities => isActiveAndEnabled && _label.text == _rendered && ValennaRuleWrapping.IsMarked(_source);
+        internal string SourceFor(string text) => _source != null && text == _rendered ? _source : text;
+
+        // 自适应悬浮框按原文请求宽度，按排版后的正文请求高度。
+        // 否则上帧插入的换行会缩窄父框，反过来再改写下一帧的正文。
+        public float preferredWidth => _naturalText != null && _label != null && _label.text == _rendered
+            ? _label.cachedTextGeneratorForLayout.GetPreferredWidth(_naturalText,
+                _label.GetGenerationSettings(Vector2.zero)) / _label.pixelsPerUnit : -1f;
+        public int layoutPriority => 0;
+        public float minWidth => -1f;
+        public float minHeight => -1f;
+        public float preferredHeight => -1f;
+        public float flexibleWidth => -1f;
+        public float flexibleHeight => -1f;
+        public void CalculateLayoutInputHorizontal() { }
+        public void CalculateLayoutInputVertical() { }
 
         private static bool TryBuff(Match match, out int id)
         {
@@ -307,7 +381,7 @@ namespace ValennaBattle
             return Buffs.TryGetValue(match.Groups["word"].Value, out id);
         }
 
-        internal void Set(Text label, bool styled, bool forceLayout)
+        internal void Set(Text label, bool styled, bool quantities)
         {
             if (_label == null)
             {
@@ -317,18 +391,10 @@ namespace ValennaBattle
                 _richText = label.supportRichText;
             }
 
-            bool active = styled || forceLayout;
-            _label.alignment = active ? TextAnchor.UpperLeft : _alignment;
-            _label.verticalOverflow = active ? VerticalWrapMode.Overflow : _wrap;
-            _label.supportRichText = active || _richText;
-            if (!active)
-            {
-                ++_revision;
-                _source = _rendered = null;
-                HideFrom(0);
-            }
-            enabled = active;
-            _needsLayout = true;
+            _label.alignment = styled ? TextAnchor.UpperLeft : _alignment;
+            _label.verticalOverflow = styled ? VerticalWrapMode.Overflow : _wrap;
+            _label.supportRichText = styled || _richText;
+            enabled = styled || quantities;
         }
 
         private void LateUpdate()
@@ -339,8 +405,8 @@ namespace ValennaBattle
             if (text != _source && text != _rendered)
             {
                 // 同一个 Text 会被原版菜单池复用。原文换掉时清理上次的图标。
-                _source = text;
-                _rendered = text;
+                _source = _withIcons = _rendered = text;
+                _needsLayout = true;
                 _run.Clear();
                 HideFrom(0);
                 if (HasRuleMarkup(text) && _label.font != null && _label.font.HasCharacter('M'))
@@ -348,15 +414,46 @@ namespace ValennaBattle
                 else ++_revision;
             }
 
-            Vector2 size = _label.rectTransform.rect.size;
-            float pixels = _label.pixelsPerUnit;
-            if (_needsLayout || size != _size || !Mathf.Approximately(pixels, _pixels))
+            _size = _label.rectTransform.rect.size;
+            _pixels = _label.pixelsPerUnit;
+            TextGenerationSettings settings = _label.GetGenerationSettings(_size);
+            if (_needsLayout || !_settings.Equals(settings) || text != _rendered)
             {
                 _needsLayout = false;
-                _size = size;
-                _pixels = pixels;
+                _settings = settings;
+                RenderRules();
                 LayoutIcons();
             }
+        }
+
+        private void RenderRules()
+        {
+            if (_withIcons == null) return;
+            string display = _withIcons;
+            _naturalText = null;
+            if (ValennaRuleWrapping.IsMarked(display))
+            {
+                _naturalText = ValennaRuleWrapping.Unmark(display);
+                var settings = _settings;
+                if (settings.font == null || _size.x <= 0 || settings.horizontalOverflow != HorizontalWrapMode.Wrap)
+                    display = _naturalText;
+                else
+                {
+                    // 按宽度预留整组数字。上帧排出的高度不参与本次断行选择。
+                    if (settings.resizeTextForBestFit)
+                    {
+                        settings.fontSize = settings.resizeTextMaxSize;
+                        settings.resizeTextForBestFit = false;
+                    }
+                    settings.verticalOverflow = VerticalWrapMode.Overflow;
+                    display = ValennaRuleWrapping.Wrap(display, probe =>
+                        _generator.Populate(probe, settings) ? _generator.lineCount : 0);
+                }
+            }
+            _rendered = display;
+            if (_label.text == display) return;
+            _label.text = display;
+            LayoutRebuilder.MarkLayoutForRebuild(_label.rectTransform);
         }
 
         private async Task SetIcons(string text, int revision)
@@ -372,22 +469,23 @@ namespace ValennaBattle
                     await load;
                 }
                 if (this == null || _label == null || revision != _revision ||
-                    !isActiveAndEnabled || _label.text != text) return;
+                    !isActiveAndEnabled || (_label.text != _source && _label.text != _rendered)) return;
 
                 _run.Clear();
-                _rendered = StyledWord.Replace(text, match =>
+                _withIcons = StyledWord.Replace(text, match =>
                 {
+                    if (match.Groups["stage"].Success)
+                    {
+                        _run.Add(ValennaWarningArt.GetSprite("stage_" + match.Groups["stage"].Value));
+                        int size = Mathf.Max(1, Mathf.RoundToInt(_label.fontSize * 1.35f));
+                        return "<size=" + size + ">" + Slot + "</size>";
+                    }
                     if (!TryBuff(match, out int id)) return match.Value;
                     Sprite sprite = Icons[id].Result;
                     if (sprite == null) return match.Value;
                     _run.Add(sprite);
                     return Slot + match.Value;
                 });
-                if (_label.text != _rendered)
-                {
-                    _label.text = _rendered;
-                    LayoutRebuilder.MarkLayoutForRebuild(_label.rectTransform);
-                }
                 _needsLayout = true;
             }
             catch (Exception error) { ValennaPlugin.Instance.Report(error); }
@@ -418,7 +516,8 @@ namespace ValennaBattle
                     Vector2 max = Vector2.Max(a.position, c.position) / _pixels;
                     if (max.x - min.x < 1f || max.y - min.y < 1f) continue;
                     Image image = GetImage(index);
-                    float edge = Mathf.Min(max.x - min.x, _label.fontSize * 0.9f);
+                    bool stage = _run[index].name.StartsWith("valenna_stage_", StringComparison.Ordinal);
+                    float edge = Mathf.Min(max.x - min.x, _label.fontSize * (stage ? 1.25f : 0.9f));
                     image.rectTransform.anchoredPosition = (min + max) * 0.5f;
                     image.rectTransform.sizeDelta = new Vector2(edge, edge);
                     image.sprite = _run[index++];
@@ -429,9 +528,8 @@ namespace ValennaBattle
             {
                 // 某些字体或旧渲染器不产生透明字槽的顶点。还原正文，避免空位。
                 _run.Clear();
-                _rendered = _source;
-                _label.text = _source;
-                LayoutRebuilder.MarkLayoutForRebuild(_label.rectTransform);
+                _withIcons = _source;
+                RenderRules();
                 index = 0;
             }
             HideFrom(index);
@@ -461,7 +559,10 @@ namespace ValennaBattle
         private void OnDisable()
         {
             ++_revision;
-            if (_run.Count == 0) _source = _rendered = null;
+            if (_label != null && _source != null && _label.text == _rendered && _rendered != _source)
+                _label.text = _source;
+            _source = _withIcons = _rendered = _naturalText = null;
+            _run.Clear();
             HideFrom(0);
         }
 

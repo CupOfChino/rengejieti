@@ -13,7 +13,7 @@
       "Des": {
         "TarKey": "",
         "SheetKey": "",
-        "InputText": "由<color=#FFA15E>震颤</color>转化，新增<color=#FFA15E>震颤</color>层数会并入。除了普通引爆效果，还会造成<color=#F35D50>燃烧</color>与<color=#FFA15E>震颤</color>层数之和的一半的爆炸伤害，并分别扣除二者原层数的三分之一（向下取整）。大行动轮结束后扣 1⁠层。",
+        "InputText": "由<color=#FFA15E>震颤</color>转化，保留已有层数。后续施加的<color=#FFA15E>震颤</color>并入此状态。\n<color=#FFA15E>[引爆时]</color> 结算普通<color=#FFA15E>震颤引爆</color>，再造成爆炸伤害。\n爆炸伤害为引爆前<color=#F35D50>燃烧</color>与<color=#FFA15E>震颤</color>总层数的一半，向下取整。\n<color=#F35D50>燃烧</color>与<color=#FFA15E>震颤</color>各额外减少原层数的三分之一，分别向下取整。\n<color=#55D8EF>[回合结束时]</color> 减少⁣1层⁤。",
         "Characteristic": null
       },
       "IconPathReference": {

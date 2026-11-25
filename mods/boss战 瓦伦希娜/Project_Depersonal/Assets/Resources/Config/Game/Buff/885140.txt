@@ -13,24 +13,31 @@
       "Des": {
         "TarKey": "",
         "SheetKey": "",
-        "InputText": "战斗期间的「心」特效展示。",
+        "InputText": "⁣速度+50⁤。\n<color=#55D8EF>[苏醒期间]</color> 战斗技能施加<color=#FFA15E>震颤</color>时，额外施加⁣1层⁤。\n<color=#55D8EF>[苏醒期间]</color> 通过战斗技能获得<color=#EBC556>呼吸法</color>时，额外获得⁣1层⁤。",
         "Characteristic": null
       },
       "IconPathReference": {
         "ReferenceType": 1007,
-        "Key": "icon_buff_meihuo"
+        "Key": "xin_icon"
       },
       "BuffType": 4,
       "BuffEffectType": 1,
       "OverlayType": 0,
       "IsShowUI": true,
       "IsDeathClear": true,
-      "FxPlayType": 0,
+      "FxPlayType": 1,
       "PlayFxInBattle": true,
       "PlayFxInExplore": false,
       "UseFxPrefab": {
-        "UseFrameEffect": false,
-        "FxPath": null
+        "FxPath": null,
+        "UseFrameEffect": true,
+        "FxRes": {
+          "ReferenceType": 0,
+          "Key": null
+        },
+        "EffectName": "xin_glow",
+        "EffectAnimName": "idle",
+        "PlayPoint": 2
       },
       "Arrts": [],
       "Events": []

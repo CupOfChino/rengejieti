@@ -16,7 +16,7 @@
       "Localization_Des": {
         "TarKey": "",
         "SheetKey": "",
-        "InputText": "隐匿 -10。攻击栏改为七项巴勒莫剑术专属招式。拥有狩猎时刻时可以指定<color=#E76160>狩猎目标</color>。",
+        "InputText": "⁣隐匿-10⁤。\n攻击栏使用七项巴勒莫剑术。\n同时拥有「<color=#E76160>狩猎时刻</color>」时，开战自动指定<color=#E76160>狩猎目标</color>。",
         "Characteristic": null
       },
       "BuffsLink": [

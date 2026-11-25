@@ -16,7 +16,7 @@
       "Description": {
         "TarKey": "",
         "SheetKey": "",
-        "InputText": "准备预知。完整闪避敌方一次攻击行动后，对攻击者发动一次解兔。",
+        "InputText": "准备预知。完整闪避敌方一次攻击行动后，对攻击者发动一次<color=#FFA15E>解兔</color>。",
         "Characteristic": null
       },
       "EffectDesc": {

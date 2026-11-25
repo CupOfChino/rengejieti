@@ -13,7 +13,7 @@
       "Des": {
         "TarKey": "",
         "SheetKey": "",
-        "InputText": "本次<color=#EE827B>处置</color>的第五段基⁠础⁠伤⁠害⁠+⁠2。",
+        "InputText": "本次<color=#EE827B>处置</color>的⁣第5段⁤⁣基础伤害+2⁤。",
         "Characteristic": null
       },
       "IconPathReference": {

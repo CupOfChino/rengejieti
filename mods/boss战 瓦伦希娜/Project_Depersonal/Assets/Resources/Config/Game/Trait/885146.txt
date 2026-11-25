@@ -16,7 +16,7 @@
       "Localization_Des": {
         "TarKey": "",
         "SheetKey": "",
-        "InputText": "斗殴、远程攻击与力量各 -5，体质和能工巧匠各 -10。",
+        "InputText": "⁣斗殴-5⁤，⁣远程攻击-5⁤，⁣力量-5⁤。\n⁣体质-10⁤，⁣能工巧匠-10⁤。",
         "Characteristic": null
       },
       "BuffsLink": [],

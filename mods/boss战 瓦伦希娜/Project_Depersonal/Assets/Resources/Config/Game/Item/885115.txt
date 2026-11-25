@@ -20,7 +20,7 @@
       "ItemEffectDes": {
         "TarKey": "",
         "SheetKey": "",
-        "InputText": "饮用后恢复 1D4 精神值，12 小时内检定获得 1⁠颗惩罚骰。",
+        "InputText": "携带⁣1瓶⁤。\n<color=#55D8EF>[饮用时]</color> 恢复⁣1D4点精神值⁤，进入<color=#CBB1DD>醉酒</color>。\n<color=#CBB1DD>醉酒</color>持续⁣12小时⁤，期间每次检定获得⁣1颗惩罚骰⁤。",
         "Characteristic": null
       },
       "IconPathReference": {
@@ -174,7 +174,7 @@
           "OverrideDesc": {
             "TarKey": "",
             "SheetKey": "",
-            "InputText": "饮用后恢复 1D4 精神值，12 小时内检定获得 1⁠颗惩罚骰。",
+            "InputText": "携带⁣1瓶⁤。\n<color=#55D8EF>[饮用时]</color> 恢复⁣1D4点精神值⁤，进入<color=#CBB1DD>醉酒</color>。\n<color=#CBB1DD>醉酒</color>持续⁣12小时⁤，期间每次检定获得⁣1颗惩罚骰⁤。",
             "Characteristic": null
           },
           "IgnoreInfoDesc": false

@@ -29,7 +29,7 @@
       "Localization_Effct": {
         "TarKey": "",
         "SheetKey": "",
-        "InputText": "辅助闪避，成功恢复1⁠点⁠精⁠神⁠值。\n未过热时获得<color=#77D1DC>加速的未来</color>。",
+        "InputText": "闪避成功时恢复⁣1点精神值⁤。\n开骰时未过热，另获得⁣1层<color=#77D1DC>加速的未来</color>⁤。",
         "Characteristic": null
       },
       "TriggerEven": {

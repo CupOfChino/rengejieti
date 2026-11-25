@@ -16,7 +16,7 @@
       "Localization_Des": {
         "TarKey": "",
         "SheetKey": "",
-        "InputText": "意志 +10，精神值上限 +15。",
+        "InputText": "⁣意志+10⁤。\n⁣精神值上限+15⁤。",
         "Characteristic": null
       },
       "BuffsLink": [],

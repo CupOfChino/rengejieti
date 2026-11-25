@@ -13,12 +13,12 @@
       "Des": {
         "TarKey": "",
         "SheetKey": "",
-        "InputText": "每层使造成的普通伤害 +10%。战斗结束时清除。",
+        "InputText": "每层使造成的⁣普通伤害+10%⁤。\n<color=#55D8EF>[战斗结束时]</color> 清除全部层数。",
         "Characteristic": null
       },
       "IconPathReference": {
         "ReferenceType": 1007,
-        "Key": "valenna_damage_up_icon"
+        "Key": "icon_domain_phys_up"
       },
       "BuffType": 4,
       "BuffEffectType": 1,
@@ -35,23 +35,7 @@
       "PlayFxInBattle": false,
       "PlayFxInExplore": false,
       "Arrts": [],
-      "Events": [
-        {
-          "EBuffTrigger": 1,
-          "Checks": [],
-          "Funcs": [
-            {
-              "__type": "MOD.Buff_ChangeAddOrReducePercentOption,Assembly-CSharp",
-              "TargetType": 0,
-              "ChangeType": 0,
-              "Percent": 0.1,
-              "DamageTypes": [
-                0
-              ]
-            }
-          ]
-        }
-      ]
+      "Events": []
     }
   }
 }

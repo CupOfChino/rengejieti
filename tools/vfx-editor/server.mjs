@@ -138,7 +138,7 @@ async function skillAudio(request,response,host,id) {
     }))},null,2)+'\n';
     if(Buffer.byteLength(body)>256*1024)return reply(413,{error:'音效配置过大'});
     await writeSkillAudio(filename,body);
-    const hosts=paths.workshop.map(directory=>path.join(directory,'3813306323'));
+    const hosts=paths.workshop.flatMap(directory=>['3845388588','3813306323'].map(id=>path.join(directory,id)));
     let synced=false;
     try{
       for(const root of hosts){

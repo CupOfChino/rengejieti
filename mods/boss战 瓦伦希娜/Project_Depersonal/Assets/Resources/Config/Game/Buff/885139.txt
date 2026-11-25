@@ -13,7 +13,7 @@
       "Des": {
         "TarKey": "",
         "SheetKey": "",
-        "InputText": "受到标记者的伤害 +20%，速⁠度⁠-⁠50，最多减至 10。只有被标记的目标可以成为<color=#EE827B>处置</color>的目标。",
+        "InputText": "受到标记者的⁣伤害+20%⁤。\n⁣速度高于10⁤时：\n⁣速度-50⁤，⁣最低降至10⁤。\n<color=#EE827B>处置</color>只能锁定<color=#E76160>狩猎目标</color>。",
         "Characteristic": null
       },
       "IconPathReference": {

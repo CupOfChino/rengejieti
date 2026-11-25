@@ -16,7 +16,7 @@
       "Description": {
         "TarKey": "",
         "SheetKey": "",
-        "InputText": "斗殴＋射击联合检定｜2 段\n<color=#F4C16B>[伤害加成]</color> 自身<color=#EBC556>呼吸法</color>达到 6⁠层时，每⁠段⁠伤⁠害⁠+⁠1。\n<b><color=#EBCB91>第 1 段</color></b>｜1d3\n消耗 1⁠发<color=#79CAD7>加速弹</color>。\n<color=#A8E96D>[命中时]</color> 已消耗<color=#79CAD7>加速弹</color>则施加 1⁠层<color=#F35D50>燃烧</color>。\n<b><color=#EBCB91>第 2 段</color></b>｜1d4\n消耗 1⁠发<color=#79CAD7>加速弹</color>。\n<color=#A8E96D>[命中时]</color> 施加 2⁠层<color=#FFA15E>震颤</color>。",
+        "InputText": "斗殴＋射击联合检定｜⁣2段⁤\n<color=#F4C16B>[伤害加成]</color> 自身<color=#EBC556>呼吸法</color>达到⁣6层⁤时，⁣每段伤害+1⁤。\n【I】 ⁣1d3⁤\n有弹时消耗⁣1发<color=#79CAD7>加速弹</color>⁤。\n<color=#A8E96D>[命中时]</color> 已消耗<color=#79CAD7>加速弹</color>则施加⁣1层<color=#F35D50>燃烧</color>⁤。\n【II】 ⁣1d4⁤\n有弹时消耗⁣1发<color=#79CAD7>加速弹</color>⁤。\n<color=#A8E96D>[命中时]</color> 施加⁣2层<color=#FFA15E>震颤</color>⁤。",
         "Characteristic": null
       },
       "EffectDesc": {
@@ -43,22 +43,22 @@
         885132
       ],
       "Terms": [],
-      "UseCustomIcon": false,
-      "BattleSkillIcon": "",
+      "UseCustomIcon": true,
+      "BattleSkillIcon": "UI/Textures/Icon/Skill/valenna_skill_131402",
       "BattleSkillIconReference": {
-        "ReferenceType": 0,
-        "Key": null
+        "ReferenceType": 1006,
+        "Key": "valenna_skill_131402"
       },
       "MonsterSkillIcon": null,
       "MonsterSkillIconReference": {
         "ReferenceType": 0,
         "Key": null
       },
-      "UseCustomSkillElementIcon": false,
-      "CustomSkillElementIconPath": "UI/Textures/Atlas/BattlePanel/NewBattlePanel/BattlePanel_actionLimit/battlePanel_actionUnlimit_knife",
+      "UseCustomSkillElementIcon": true,
+      "CustomSkillElementIconPath": "UI/Textures/Icon/Skill/valenna_skill_131402",
       "CustomSkillElementIconReference": {
         "ReferenceType": 1006,
-        "Key": "battlePanel_actionUnlimit_knife"
+        "Key": "valenna_skill_131402"
       },
       "ShowCheck": [
         {

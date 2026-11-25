@@ -20,7 +20,7 @@
       "ItemEffectDes": {
         "TarKey": "",
         "SheetKey": "",
-        "InputText": "",
+        "InputText": "<color=#55D8EF>[装备时]</color> ⁣交涉+5⁤。",
         "Characteristic": null
       },
       "IconPathReference": {
@@ -55,20 +55,68 @@
         "EquipType": 0,
         "ShowConfirmEquipPopup": false,
         "ConfirmEquipDesc": {
-          "TarKey": "e210c02eddaa3fe9c06df7030e55a1cb",
+          "TarKey": "",
           "SheetKey": "",
-          "InputText": "此道具装备后在模组结束前会无法卸下。是否确认装备？",
+          "InputText": "",
           "Characteristic": null
         },
         "InfoDatas": [],
         "EnableOverrideDesc": true,
         "OverrideDesc": {
-          "TarKey": "73388d71b112093988d85bd64a3c0537",
+          "TarKey": "",
           "SheetKey": "",
-          "InputText": "装备后不可卸下\n当装备时,使你当前的意志、智力与敏捷减半,体质与力量翻倍,同时增加体质与力量的上限50点",
+          "InputText": "<color=#55D8EF>[装备时]</color> ⁣交涉+5⁤。",
           "Characteristic": null
         },
-        "Arrts": [],
+        "Arrts": [
+          {
+            "IsTrackSource": true,
+            "RoleAttr": {
+              "Type": 0,
+              "Value": null,
+              "IsRatio": false,
+              "Ratio": 0
+            },
+            "RoleExAttr": {
+              "Type": 0,
+              "Value": null,
+              "IsRatio": false,
+              "Ratio": 0
+            },
+            "RoleSkill": {
+              "Type": 403,
+              "Value": "5",
+              "IsRatio": false,
+              "Ratio": 0
+            },
+            "RoleSystemAttr": {
+              "Type": 0,
+              "Value": null,
+              "IsRatio": false,
+              "Ratio": 0
+            },
+            "ExDiceData": {
+              "ExploreSkill": {
+                "Type": 0,
+                "ChangeAll": false,
+                "IsTemp": false,
+                "Value": 0
+              },
+              "HeroAttribute": {
+                "Type": 0,
+                "ChangeAll": false,
+                "IsTemp": false,
+                "Value": 0
+              },
+              "ExtraAttribute": {
+                "Type": 0,
+                "ChangeAll": false,
+                "IsTemp": false,
+                "Value": 0
+              }
+            }
+          }
+        ],
         "Skills": [],
         "Def": {
           "FxPath": null,

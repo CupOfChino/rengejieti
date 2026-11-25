@@ -60,10 +60,11 @@ namespace ValennaBattle
                 CheckValue = BattleHelper.GetDiceCheckValue(role, EExploreSkill.LongRange)
             };
             await BattleHelper.UpdateDiceResultData(new List<DiceResultData> { shot });
-            if (shot.Result.GetLevel() < EDiceResult.Success.GetLevel()) return false;
-
-            await ValennaTremor.AddLayers(role, role, StrikeProfiles.BreathId, count * 3, true, null);
-            return true;
+            int before = Layers(role, StrikeProfiles.BreathId);
+            if (shot.IsSuccess)
+                await ValennaTremor.AddLayers(role, role, StrikeProfiles.BreathId, count, true, null);
+            ValennaPlugin.Instance.Report($"加速弹：消耗{count}发，射击暗骰{shot.ResultValue}/{shot.CheckValue}（{shot.Result}），呼吸法{before}→{Layers(role, StrikeProfiles.BreathId)}");
+            return shot.IsSuccess;
         }
 
         private static bool Wields(BattleRole source, int id)
@@ -102,14 +103,7 @@ namespace ValennaBattle
             if (state == null || state.DamageUpGained >= 3) return;
             state.DamageUpGained++;
             await ValennaTremor.AddLayers(source, source, DamageUpId, 1, true, null);
-            BuffData bonus = source.GetBuff(DamageUpId);
-            if (bonus == null || bonus.DisableBuff) return;
 
-            // 与自定义领域的物理伤害强化写入同一个原版伤害倍率表。
-            var percentages = source.Data.CauseDamageChangePercentData;
-            percentages.Remove(bonus.SourceKey);
-            percentages.Add(bonus.SourceKey, false, bonus.CurLayer * 0.1f, 0, 0,
-                new List<EDamageType> { EDamageType.Ordinary });
         }
 
         internal static async Task RewardDodge(BattleRole role)
@@ -142,7 +136,7 @@ namespace ValennaBattle
         {
             private static void Postfix(BattleRole __1, BattleRole __2, DamageAdditionalData __3, ref int __result)
             {
-                if (!BattleHelper.IsInBattle || __1 == null || __2 == null ||
+                if (!BattleHelper.IsInBattle || __1 == null || __2 == null || __3 is StrikeResolution.SegmentHit ||
                     __3?.IsWeaponDamage != true || !IsItem(__3.Weapon, StrikeProfiles.CutlassId) ||
                     StrikeSequence.Clips.ContainsKey(__1.CurrentBehaviourData?.BattleSkillData?.Id ?? 0)) return;
                 __result = BoostBlade(__1, __2, __result);

@@ -569,6 +569,8 @@ namespace ValennaBattle
                 out CriticalDamageNumbers.Scope __state)
             {
                 __state = CriticalDamageNumbers.Current;
+                // 原版扣血前会等待受击前效果，期间可能有独立的嵌套伤害。
+                CriticalDamageNumbers.Current = null;
                 BattleRole attacker = __3?.Attacker;
                 if (attacker == null || attacker == __instance) return;
 
@@ -626,6 +628,12 @@ namespace ValennaBattle
                 for (HitContext hit = ActiveHit.Value; hit != null; hit = hit.Previous)
                     if (hit.Target == __instance && hit.Attacker == attacker) return;
                 __result = DrainAfterHit(__result, __instance);
+            }
+
+            private static void Finalizer(Exception __exception, CriticalDamageNumbers.Scope __state)
+            {
+                if (__exception != null)
+                    CriticalDamageNumbers.Current = __state;
             }
         }
 

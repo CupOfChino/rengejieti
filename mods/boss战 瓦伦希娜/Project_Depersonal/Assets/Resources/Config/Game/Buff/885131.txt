@@ -13,7 +13,7 @@
       "Des": {
         "TarKey": "",
         "SheetKey": "",
-        "InputText": "每层使每段攻击命中有 5% 的概率暴击，最高 100%。暴击按该段最终伤害的 1.2 倍结算并扣 1⁠层。大行动轮结束后扣 1⁠层。",
+        "InputText": "<color=#A8E96D>[命中时]</color> 各段独立判定暴击。每层提供⁣5%⁤暴击率，上限⁣100%⁤。\n<color=#B3F26E>[暴击时]</color> 本段伤害按⁣1.2倍⁤结算，消耗⁣1层⁤。\n<color=#55D8EF>[回合结束时]</color> 减少⁣1层⁤。",
         "Characteristic": null
       },
       "IconPathReference": {

@@ -155,6 +155,7 @@ namespace ValennaBattle
         public const int DrinkerTraitId = 885146;
         public const int GoldenTicketTraitId = 885147;
         public const int HeartTraitId = 885155;
+        public const int HeartSpeed = 50;
         public const int CigarId = 885114;
         public const int VodkaId = 885115;
         public const int HatId = 885116;

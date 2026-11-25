@@ -13,7 +13,7 @@
       "Des": {
         "TarKey": "",
         "SheetKey": "",
-        "InputText": "引爆目标身上的<color=#FFA15E>震颤</color>或<color=#F35D50>震颤·灼热</color>。",
+        "InputText": "引爆目标的<color=#FFA15E>震颤</color>，每次分别结算。若已转为<color=#F35D50>震颤·灼热</color>，同时结算其爆炸效果。",
         "Characteristic": null
       },
       "IconPathReference": {

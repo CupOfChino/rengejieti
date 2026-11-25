@@ -13,7 +13,7 @@
       "Des": {
         "TarKey": "",
         "SheetKey": "",
-        "InputText": "过热期间闪避获得 1⁠颗惩罚骰。战斗或探索回合开始积累 10⁠层，达到 30⁠层转回<color=#8CD6EB>预知眼</color>。",
+        "InputText": "<color=#E77167>[过热期间]</color> 闪避检定获得⁣1颗惩罚骰⁤。\n<color=#55D8EF>[回合开始时]</color> 战斗与探索均积累⁣10层⁤。\n达到⁣30层⁤时转回<color=#8CD6EB>预知眼</color>。",
         "Characteristic": null
       },
       "IconPathReference": {

@@ -13,7 +13,7 @@
       "Des": {
         "TarKey": "",
         "SheetKey": "",
-        "InputText": "闪避成功且<color=#8CD6EB>预知眼</color>未过热时获得1⁠层，上限5⁠层。每层使斗殴、运动各+2，下次主动攻击伤害+5%，攻击后清空。满5⁠层时，非法术行动的检定获得1⁠颗奖励骰。解兔保留层数，不享受增伤。",
+        "InputText": "<color=#A8E96D>[闪避成功时]</color> 若开骰时<color=#8CD6EB>预知眼</color>未过热，获得⁣1层⁤，上限⁣5层⁤。\n每层提供⁣斗殴+2⁤、⁣运动+2⁤。\n满⁣5层⁤时，非法术行动的检定获得⁣1颗奖励骰⁤。\n<color=#55D8EF>[攻击时]</color> 每层使下次主动⁣攻击伤害+5%⁤，攻击后清空。\n<color=#FFA15E>解兔</color>保留层数，也不触发这项增伤。",
         "Characteristic": null
       },
       "IconPathReference": {

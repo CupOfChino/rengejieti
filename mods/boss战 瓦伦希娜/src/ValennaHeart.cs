@@ -4,14 +4,94 @@ using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using BattleSkillEvent;
 using Game;
 using HarmonyLib;
+using MOD;
+using UnityEngine;
 
 namespace ValennaBattle
 {
     internal static class ValennaHeart
     {
+        internal static bool IsPreset(RoleData role) => role?.ConfigId == ValennaPlugin.PartnerId &&
+            (role is PartnerRoleData || role.ConfigData is PartnerData);
+
+        internal static void RefreshSpeed(RoleData role, MOD_Dynamic_Trait heart)
+        {
+            if (role.ExtraSpeed == null || string.IsNullOrEmpty(heart?.SourceKey)) return;
+            var values = role.ExtraSpeed._sources.FindAll(entry => entry.Key == heart.SourceKey);
+            if (values.Count == 1 && values[0].Value == StrikeProfiles.HeartSpeed) return;
+            if (values.Count != 0) role.ExtraSpeed.Remove(heart.SourceKey);
+            role.ExtraSpeed.Add(heart.SourceKey, StrikeProfiles.HeartSpeed);
+        }
+
+        private static void ExplainPreset() => PrefabSingleton<UIMsgHintPanel>.Instance.ShowPopup(
+            new LocalizationKeyData { InputText = "瓦伦希娜已固定装备专属「心」。" }, false);
+
+        [HarmonyPatch(typeof(UIInterludePanel), "_onClickVacationMode")]
+        private static class FixedHeartMenu
+        {
+            [HarmonyPriority(Priority.First), HarmonyBefore("codex.depersonal.xineditor")]
+            private static bool Prefix(InterludeVacationConfig vacatConfig, HeroRoleData tarRole, ref Task __result)
+            {
+                if (vacatConfig?.VacatId is not (880901 or 880902 or 880903) || !IsPreset(tarRole)) return true;
+                __result = Task.CompletedTask;
+                ExplainPreset();
+                return false;
+            }
+        }
+
+        [HarmonyPatch]
+        private static class FixedHeartEditor
+        {
+            private static IEnumerable<MethodBase> TargetMethods()
+            {
+                foreach (string entry in new[] { "XinEditor.HeartEditorWindow:Open", "XinEditor.HeartVisualEditor:Open",
+                    "XinEditor.HeartMenu:AddHeartTrait", "XinEditor.HeartMenu:RemoveHeartTrait" })
+                    yield return AccessTools.Method(entry, new[] { typeof(HeroRoleData) });
+            }
+
+            private static bool Prefix(HeroRoleData __0)
+            {
+                if (!IsPreset(__0)) return true;
+                ExplainPreset();
+                return false;
+            }
+        }
+
+        // 旧档即使曾添加通用心，也只激活伙伴的预设，不操作自定义心保存的定义。
+        [HarmonyPatch(typeof(MOD.TraitEvent.ActiveBuffOption), "Active")]
+        private static class IgnoreLegacyHeart
+        {
+            [HarmonyPriority(Priority.First), HarmonyBefore("codex.depersonal.xineditor")]
+            private static bool Prefix(MOD.TraitEvent.ActiveBuffOption __instance, RoleData role, ref Task __result)
+            {
+                if (__instance.BuffId != 880901 || !IsPreset(role)) return true;
+                __result = Task.CompletedTask;
+                return false;
+            }
+        }
+
+        [HarmonyPatch]
+        private static class FixedHeartActivation
+        {
+            private static MethodBase TargetMethod() => AccessTools.Method("XinEditor.HeartBattleSkill:AddSkill");
+            private static bool Prefix(BattleRole __0) => !IsPreset(__0?.Data);
+        }
+
+        [HarmonyPatch]
+        private static class PresetVisualOrigin
+        {
+            private static MethodBase TargetMethod() => AccessTools.Method("XinEditor.HeartVisualPlacement:LateUpdate");
+            private static void Postfix(MonoBehaviour __instance, RoleModel ____model)
+            {
+                if (____model != null && IsPreset(____model.Role?.Data))
+                    __instance.transform.localPosition = Vector3.zero;
+            }
+        }
+
         internal static int SkillLayers(BattleRole source, int layers)
         {
             if (layers <= 0 || layers == int.MaxValue || !BattleHelper.IsInBattle || source?.Data == null)

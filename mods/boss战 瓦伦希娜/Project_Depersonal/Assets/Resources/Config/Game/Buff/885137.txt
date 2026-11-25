@@ -5,13 +5,13 @@
       "__type": "MOD.BuffTableData,Assembly-CSharp",
       "Id": 885137,
       "Name": {
-        "TarKey": "",
+        "TarKey": "valenna.Buff.885137.Name",
         "SheetKey": "",
         "InputText": "加速弹",
         "Characteristic": null
       },
       "Des": {
-        "TarKey": "",
+        "TarKey": "valenna.Buff.885137.Des",
         "SheetKey": "",
         "InputText": "最多储存⁣10发⁤。\n<color=#55D8EF>[消耗时]</color> 每段只进行⁣1次⁤暗中射击检定，失败也会扣弹。\n<color=#A8E96D>[检定成功时]</color> 本段⁣伤害+10%⁤。每消耗⁣1发⁤，获得⁣1层<color=#EBC556>呼吸法</color>⁤。",
         "Characteristic": null

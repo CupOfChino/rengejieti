@@ -132,17 +132,15 @@ namespace ValennaBattle
             InputText = OldPartnerName
         }.TargetKey;
 
-        private static bool IsPartnerNameOwner(RoleData data) =>
+        private static readonly string PreviousNameKey = new LocalizationKeyData { InputText = PartnerName }.TargetKey;
+        private static readonly LocalizationKeyData PartnerDisplayName =
+            ValennaText.Key("PartnerData.885101.CharacterName", PartnerName);
+
+        private static bool IsPartnerNameOwner(RoleData data) => ValennaHeart.IsPreset(data) ||
             data is PartnerRoleData partner && partner.PartnerId == ValennaPlugin.PartnerId;
 
         private static bool IsOldPartnerName(string value) =>
-            value == OldPartnerName || value == OldPartnerNameKey;
-
-        private static LocalizationKeyData GetPartnerName(RoleData data)
-        {
-            var name = data.ConfigData?.CharacterName;
-            return name?.InputText == PartnerName ? name : new LocalizationKeyData { InputText = PartnerName };
-        }
+            value == OldPartnerName || value == OldPartnerNameKey || value == PartnerName || value == PreviousNameKey;
 
         // 伙伴库与入队后的角色卡都会读取这两个结果。旧 RoleData 会保留建档时的本地化键。
         [HarmonyPatch(typeof(RoleData), nameof(RoleData.Name), MethodType.Getter)]
@@ -151,7 +149,7 @@ namespace ValennaBattle
             private static void Postfix(RoleData __instance, ref string __result)
             {
                 if (IsPartnerNameOwner(__instance) && IsOldPartnerName(__result))
-                    __result = PartnerName;
+                    __result = PartnerDisplayName.GetValue();
             }
         }
 
@@ -162,7 +160,7 @@ namespace ValennaBattle
             {
                 if (IsPartnerNameOwner(__instance) && __result != null &&
                     (IsOldPartnerName(__result.InputText) || IsOldPartnerName(__result.TargetKey)))
-                    __result = GetPartnerName(__instance);
+                    __result = PartnerDisplayName;
             }
         }
 

@@ -6,7 +6,7 @@
       "Id": 885123,
       "IsCover": false,
       "Name": {
-        "TarKey": "",
+        "TarKey": "valenna.BattleSkill.885123.Name",
         "SheetKey": "",
         "InputText": "裂光追击",
         "Characteristic": null
@@ -14,7 +14,7 @@
       "IsOverrideName": false,
       "OverrideNames": [],
       "Description": {
-        "TarKey": "",
+        "TarKey": "valenna.BattleSkill.885123.Description",
         "SheetKey": "",
         "InputText": "交叉双斩后，以枪刃闪光收招。 命中⁣3次⁤，每次基础伤害1。",
         "Characteristic": null

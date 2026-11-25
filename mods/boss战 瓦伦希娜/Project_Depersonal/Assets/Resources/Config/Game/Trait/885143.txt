@@ -8,13 +8,13 @@
       "CanRepeate": false,
       "IsCanCreateGet": false,
       "Localization_Name": {
-        "TarKey": "",
+        "TarKey": "valenna.Trait.885143.Localization_Name",
         "SheetKey": "",
         "InputText": "狩猎时刻",
         "Characteristic": null
       },
       "Localization_Des": {
-        "TarKey": "",
+        "TarKey": "valenna.Trait.885143.Localization_Des",
         "SheetKey": "",
         "InputText": "<color=#55D8EF>[战斗开始时]</color> 随机标记一名敌人为<color=#E76160>狩猎目标</color>。\n对猎物造成的⁣伤害+20%⁤。\n猎物⁣速度高于10⁤时，⁣速度-50⁤，⁣最低降至10⁤。\n<color=#EE827B>处置</color>锁定猎物，攻击后解除标记。若<color=#EE827B>处置</color>击杀猎物，下轮标记另一名敌人。\n每⁣3个行动轮⁤结束时，若场上没有标记，下轮重新指定猎物。\n<color=#A8E96D>[击杀猎物时]</color> 其余人类敌人进行意志检定，失败则陷入<color=#D196C7>恐惧</color>。",
         "Characteristic": null

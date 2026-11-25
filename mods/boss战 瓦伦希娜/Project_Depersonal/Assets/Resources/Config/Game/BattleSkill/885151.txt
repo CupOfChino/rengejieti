@@ -6,7 +6,7 @@
       "Id": 885151,
       "IsCover": false,
       "Name": {
-        "TarKey": "",
+        "TarKey": "valenna.BattleSkill.885151.Name",
         "SheetKey": "",
         "InputText": "子弹装填",
         "Characteristic": null
@@ -14,7 +14,7 @@
       "IsOverrideName": false,
       "OverrideNames": [],
       "Description": {
-        "TarKey": "",
+        "TarKey": "valenna.BattleSkill.885151.Description",
         "SheetKey": "",
         "InputText": "<color=#55D8EF>[使用时]</color> 补满<color=#79CAD7>加速弹</color>。",
         "Characteristic": null

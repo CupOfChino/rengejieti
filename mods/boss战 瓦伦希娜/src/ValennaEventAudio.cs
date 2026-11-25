@@ -24,7 +24,7 @@ namespace ValennaBattle
         private static readonly System.Random Random = new System.Random();
         private static ValennaEventAudio _current;
         private readonly BattleFightContent _fight;
-        private readonly Dictionary<string, string> _subtitles;
+        private readonly Dictionary<string, StrikeAudio.SubtitleLine> _subtitles;
         private readonly Dictionary<string, Task<AudioClip>> _files = new Dictionary<string, Task<AudioClip>>();
         private readonly Dictionary<int, AudioClip> _bursts = new Dictionary<int, AudioClip>();
         private readonly List<AudioClip> _owned = new List<AudioClip>();
@@ -78,7 +78,7 @@ namespace ValennaBattle
                 if (playable.Length == 0) return;
                 string chosen = playable[Random.Next(playable.Length)];
                 AudioClip clip = _files[chosen].Result;
-                if (Play(clip)) StrikeVoiceCaption.Show(role, _subtitles[chosen], clip.length);
+                if (Play(clip)) StrikeVoiceCaption.Show(role, _subtitles[chosen].ForLanguage(), clip.length);
             }
             catch (Exception error) { ValennaPlugin.Instance.Warn($"预知眼语音播放失败。{error.Message}"); }
         }

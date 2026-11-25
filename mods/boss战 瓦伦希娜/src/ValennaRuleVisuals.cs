@@ -14,6 +14,7 @@ namespace ValennaBattle
     internal static class ValennaRuleVisuals
     {
         private const string EyeMarkup = "<color=#8CD6EB>预知眼</color>";
+        private const string EnglishEyeMarkup = "<color=#8CD6EB>Eye of Precognition</color>";
         private static List<int> _shownBuffs;
 
         private static bool IsOurs(int id) => id >= 885101 && id <= 885155;
@@ -29,7 +30,7 @@ namespace ValennaBattle
             if ((styled || quantities) && inline == null) inline = label.gameObject.AddComponent<ValennaInlineRules>();
             if (inline != null) inline.Set(label, styled, quantities);
 
-            if (!styled || !text.Contains(EyeMarkup)) return;
+            if (!styled || (!text.Contains(EyeMarkup) && !text.Contains(EnglishEyeMarkup))) return;
             label.supportRichText = true;
             EnsureRuleLine(label, strike: false);
         }
@@ -124,7 +125,8 @@ namespace ValennaBattle
             new[] { typeof(Text), typeof(LocalizationKeyData), typeof(object[]) })]
         private static class LocalizedRule
         {
-            private static void Postfix(Text __0, LocalizationKeyData __1) => Style(__0, __1?.InputText);
+            [HarmonyPriority(Priority.Last)]
+            private static void Postfix(Text __0) => Style(__0, __0?.text);
         }
 
         // 原版状态悬浮框直接写 Text.text，绕过 SetLocalization。
@@ -160,7 +162,7 @@ namespace ValennaBattle
         [HarmonyPatch(typeof(UITraitDesElement), nameof(UITraitDesElement.Fresh))]
         private static class TraitDescription
         {
-            private static void Postfix(UITraitDesElement __instance, string __0) => Style(__instance.Text_Des, __0);
+            private static void Postfix(UITraitDesElement __instance) => Style(__instance.Text_Des, __instance.Text_Des?.text);
         }
 
         [HarmonyPatch(typeof(UIDetailedTipPanel), nameof(UIDetailedTipPanel.SetItemDescription))]
@@ -195,7 +197,7 @@ namespace ValennaBattle
         [HarmonyPatch(typeof(UIDetailTermDesElement), nameof(UIDetailTermDesElement.Fresh))]
         private static class ItemDescription
         {
-            private static void Postfix(UIDetailTermDesElement __instance, string __0) => Style(__instance.Text_Des, __0);
+            private static void Postfix(UIDetailTermDesElement __instance) => Style(__instance.Text_Des, __instance.Text_Des?.text);
         }
 
         [HarmonyPatch(typeof(UIBattlePanel), "_ShowSelectSkillInfo")]
@@ -237,7 +239,7 @@ namespace ValennaBattle
                 }
 
                 Text label = __instance.Text_Desc;
-                Style(label, __0?.Config?.Localization_Des?.InputText, active);
+                Style(label, label?.text, active);
                 if (!layout.Set(__instance.Trans_NormalDesc, active) && !active) return;
                 if (__instance.Trans_ContentScrollView is RectTransform scroll)
                 {
@@ -267,21 +269,21 @@ namespace ValennaBattle
         private static class SkillTitle
         {
             private static void Postfix(UIBattleTermTitleElement __instance, LocalizationKeyData __0) =>
-                SetTitleIcon(__instance.Text_Title, __0, null);
+                SetTitleIcon(__instance.Text_Title, __0, __instance.Text_Title?.text);
         }
 
         [HarmonyPatch(typeof(UITraitTitleElement), nameof(UITraitTitleElement.Fresh))]
         private static class TraitTitle
         {
-            private static void Postfix(UITraitTitleElement __instance, string __0) =>
-                SetTitleIcon(__instance.Text_Title, null, __0);
+            private static void Postfix(UITraitTitleElement __instance) =>
+                SetTitleIcon(__instance.Text_Title, null, __instance.Text_Title?.text);
         }
 
         [HarmonyPatch(typeof(UIDetailTermTitleElement), nameof(UIDetailTermTitleElement.Fresh))]
         private static class ItemTitle
         {
-            private static void Postfix(UIDetailTermTitleElement __instance, string __0) =>
-                SetTitleIcon(__instance.Text_Title, null, __0);
+            private static void Postfix(UIDetailTermTitleElement __instance) =>
+                SetTitleIcon(__instance.Text_Title, null, __instance.Text_Title?.text);
         }
     }
 
@@ -313,8 +315,8 @@ namespace ValennaBattle
         private const string Slot = "<color=#FE02FD01>M</color>\u2060";
         private static readonly Color32 SlotColor = new Color32(254, 2, 253, 1);
         private static readonly Regex StyledWord = new Regex(
-            "(?m:^【(?<stage>I|II|III|IV|V)】)(?= )|" +
-            "(?<overheat><color=#8CD6EB>预知眼</color><color=#E77167>·过热</color>)|" +
+            "(?m:^(?:<b><color=#EBCB91>)?【(?<stage>I|II|III|IV|V)】(?:</color></b>)?)(?= )|" +
+            "(?<overheat><color=#8CD6EB>(?:预知眼</color><color=#E77167>·过热|Eye of Precognition</color><color=#E77167> - Overheat)</color>)|" +
             "<color=#(?:E77167|F35D50|FFA15E|77D1DC|E76160|EABA6D|8CD6EB|EBC556|79CAD7|CBB1DD|D196C7|AAC4D2|EE827B|F9CA75)>(?<word>[^<]+)</color>",
             RegexOptions.Compiled);
         private static readonly Dictionary<string, int> Buffs = new Dictionary<string, int>
@@ -326,7 +328,16 @@ namespace ValennaBattle
             { "加速的未来", StrikeProfiles.AcceleratedFutureId },
             { "加速弹", StrikeProfiles.AccelBulletId }, { "狩猎目标", StrikeProfiles.HuntingPreyId },
             { "伤害强化", ValennaKit.DamageUpId }, { "醉酒", StrikeProfiles.DrunkId },
-            { "恐惧", 128 }, { "昏迷", StrikeProfiles.StunnedId }, { "「望」", StrikeProfiles.FocusId }
+            { "恐惧", 128 }, { "昏迷", StrikeProfiles.StunnedId }, { "「望」", StrikeProfiles.FocusId },
+            { "Burn", StrikeProfiles.BurnId }, { "Tremor", StrikeProfiles.TremorId },
+            { "Tremor - Scorch", StrikeProfiles.ScorchTremorId }, { "Tremor Burst", StrikeProfiles.TremorBurstId },
+            { "Poise", StrikeProfiles.BreathId }, { "Eye of Precognition", StrikeProfiles.EyeChargeId },
+            { "Eye of Precognition - Overheat", StrikeProfiles.EyeOverheatId },
+            { "Accelerating Future", StrikeProfiles.AcceleratedFutureId },
+            { "Acceleration Round", StrikeProfiles.AccelBulletId }, { "Acceleration Rounds", StrikeProfiles.AccelBulletId },
+            { "Game Target", StrikeProfiles.HuntingPreyId }, { "Damage Up", ValennaKit.DamageUpId },
+            { "Drunk", StrikeProfiles.DrunkId }, { "Fear", 128 },
+            { "Coma", StrikeProfiles.StunnedId }, { "Stunned", StrikeProfiles.StunnedId }, { "Mang", StrikeProfiles.FocusId }
         };
         private static readonly Dictionary<int, Task<Sprite>> Icons = new Dictionary<int, Task<Sprite>>();
 
@@ -409,7 +420,8 @@ namespace ValennaBattle
                 _needsLayout = true;
                 _run.Clear();
                 HideFrom(0);
-                if (HasRuleMarkup(text) && _label.font != null && _label.font.HasCharacter('M'))
+                if (!string.IsNullOrEmpty(text) && StyledWord.IsMatch(text) &&
+                    _label.font != null && _label.font.HasCharacter('M'))
                     _ = SetIcons(text, ++_revision);
                 else ++_revision;
             }
@@ -629,7 +641,9 @@ namespace ValennaBattle
             string first = matches[0].Groups[1].Value;
             string second = matches[1].Groups[1].Value;
             return (first == "二老板" && second == "七大家族") ||
-                (first == "七大家族" && second == "二老板");
+                (first == "七大家族" && second == "二老板") ||
+                (first == "Underboss" && second == "Seven Great Families") ||
+                (first == "Seven Great Families" && second == "Underboss");
         }
 
         internal void Bind(Text label, bool strike)

@@ -23,6 +23,7 @@ function Format-ValennaRules([System.Collections.IDictionary]$Tables) {
         '护甲' = @{ Color = 'AAC4D2' }
         '处置' = @{ Color = 'EE827B' }
         '解兔' = @{ Color = 'FFA15E' }
+        '[预知]' = @{ Color = '8CD6EB' }
         '「望」' = @{ Color = 'F9CA75'; Buff = [ValennaBattle.StrikeProfiles]::FocusId }
     }
 
@@ -41,7 +42,7 @@ function Format-ValennaRules([System.Collections.IDictionary]$Tables) {
     $groups = [regex]::new("<[^>]+>|(?<phrase>第${gap}[0-9、]+${gap}段|(?:最低降至|速度高于)${gap}$number|(?:$stat)${gap}[+＋−-]${gap}$number(?:[%％])?|[+＋−-]?${number}${gap}(?:$unit)|[+＋−-]$number|[0-9]+[dD][0-9]+)")
     $timingColors = @{
         '[使用时]' = '55D8EF'; '[装备时]' = '55D8EF'; '[命中时]' = 'A8E96D'; '[暴击命中时]' = 'B3F26E'
-        '[闪避成功时]' = 'A8E96D'; '[攻击后]' = 'A8E96D'; '[击杀时]' = 'A8E96D'; '[伤害加成]' = 'F4C16B'
+        '[闪避成功时]' = 'A8E96D'; '[攻击后]' = 'A8E96D'; '[击杀时]' = 'A8E96D'; '[回合开始]' = '55D8EF'
         '[战斗开始时]' = '55D8EF'; '[进入剧本时]' = '55D8EF'; '[击杀猎物时]' = 'A8E96D'; '[苏醒时]' = '55D8EF'
         '[苏醒期间]' = '55D8EF'; '[回合开始时]' = '55D8EF'; '[行动轮结束时]' = '55D8EF'; '[回合结束时]' = '55D8EF'; '[战斗结束时]' = '55D8EF'
         '[消耗时]' = '55D8EF'; '[品味雪茄]' = '55D8EF'; '[叼在嘴里]' = '55D8EF'; '[饮用时]' = '55D8EF'; '[辅助闪避]' = '55D8EF'

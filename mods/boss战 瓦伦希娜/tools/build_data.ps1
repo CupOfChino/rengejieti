@@ -132,7 +132,7 @@ $prescience = [ordered]@{}
 foreach ($entry in $trait.GetEnumerator()) { $prescience[$entry.Key] = $entry.Value }
 $prescience.Id = $prescienceId
 $prescience.Localization_Name = Text-Data '预知'
-$prescience.Localization_Des = Text-Data (('进入剧本或战斗时，自动装备专属神话物品预知眼。', '借助预知眼闪避敌方一次攻击的全部段数后，以「解兔」反击该敌人。') -join "`n")
+$prescience.Localization_Des = Text-Data (('进入剧本或战斗时，自动装备专属神话物品预知眼。', '预知眼未过热时，以[预知]替换闪避，斗殴检定获得1颗奖励骰。成功闪避敌方一次普通攻击的全部段数后，以「解兔」反击该敌人。') -join "`n")
 $prescience.CreateEvent = $null
 Add-Table "Trait/$prescienceId" 'BaseSheetData' $prescience
 $heartSpeed = [ValennaBattle.StrikeProfiles]::HeartSpeed
@@ -296,6 +296,8 @@ $eye.ItemName = Text-Data '预知眼'
 $eye.ItemDes = Text-Data '并非像魔法那样预测未来。这只眼睛更接近于通过分析进入视野的一切，预测即将到来的瞬间的计算机。被称为奥丁之眼的这件遗物，实际上是被分为三份的某件遗物的碎片。'
 $eyeText = @(
     '瓦伦希娜的专属护具，装备后锁定。'
+    '[回合开始] 未处于过热状态，则以[预知]替换你的闪避。'
+    '未处于过热状态时，斗殴检定获得1颗奖励骰。'
     '[回合开始时] 战斗与探索均恢复5层充能，上限30层。'
     '[受击时] 损失5层充能。发动辅助闪避也消耗5层。'
     '[辅助闪避] 发动前充能超过10层，获得2颗奖励骰；否则获得1颗。'
@@ -399,7 +401,7 @@ $skillRules = @{
     )
     885126 = @(
         '斗殴＋敏捷联合检定｜3 段'
-        '[伤害加成] 目标燃烧与震颤每合计 6 层，每段伤害+1，至多+2。'
+        '[使用时] 目标燃烧与震颤每合计 6 层，每段伤害+1，至多+2。'
         '[使用时] 获得 4 层呼吸法。'
         '【I】 1d6'
         '[命中时] 施加 2 层燃烧。'
@@ -411,7 +413,7 @@ $skillRules = @{
     )
     885127 = @(
         '斗殴＋射击联合检定｜3 段'
-        '[伤害加成] 目标燃烧与震颤合计至少 6 层时，每段伤害+1。'
+        '[使用时] 目标燃烧与震颤合计至少 6 层时，每段伤害+1。'
         '[使用时] 获得 2 层呼吸法。'
         '【I】 1d4'
         '有弹时消耗 1 发加速弹。'
@@ -424,7 +426,7 @@ $skillRules = @{
     )
     885128 = @(
         '斗殴＋敏捷联合检定｜4 段'
-        '[伤害加成] 目标燃烧与震颤每合计 6 层，每段伤害+1，至多+2。'
+        '[使用时] 目标燃烧与震颤每合计 6 层，每段伤害+1，至多+2。'
         '[使用时] 获得 3 层呼吸法。'
         '【I】 1d4'
         '有弹时消耗 1 发加速弹。'
@@ -446,8 +448,8 @@ $skillRules = @{
         '仅限狩猎目标，选择技能时自动选中。目标无法闪避。'
         '每段基础伤害为 1。预知眼不足 10 层时没有额外伤害骰。'
         '预知眼达到 10 层掷 1d2，20 层掷 1d4，30 层掷 1d6。'
-        '[伤害加成] 目标燃烧与震颤每合计 6 层，每段伤害+1，至多+2。'
-        '[伤害加成] 目标生命值不高于一半时，该段伤害翻倍。'
+        '[使用时] 目标燃烧与震颤每合计 6 层，每段伤害+1，至多+2。'
+        '[使用时] 目标生命值不高于一半时，该段伤害翻倍。'
         '[使用时] 获得 3 层呼吸法。'
         '[使用时] 至少有 2 点理智且未陷入精神衰弱或精神枯竭时，消耗 2 点理智并获得 1 层「望」。'
         '[攻击后] 加速弹补至 10 发。'
@@ -471,7 +473,7 @@ $skillRules = @{
 for ($index = 0; $index -lt $moves.Length; $index++) {
     $move = $moves[$index]
     $rules = $skillRules[[int]$move.Id]
-    $description = (@($rules[0], '[伤害加成] 自身呼吸法达到 6 层时，每段伤害+1。') + $rules[1..($rules.Length - 1)]) -join "`n"
+    $description = (@($rules[0], '[使用时] 自身呼吸法达到 6 层时，每段伤害+1（最多+1）。') + $rules[1..($rules.Length - 1)]) -join "`n"
     $skill = Read-Table 'BattleSkill/3'
     $skill.Id = $move.Id
     $skill.Name = Text-Data $move.Name
@@ -491,7 +493,6 @@ for ($index = 0; $index -lt $moves.Length; $index++) {
     })
     $skill.MaxSelectCount = 1
     if ($move.Id -eq [ValennaBattle.StrikeProfiles]::ExecutionId) {
-        $skill.TargetSelectDatas[0].Checks = @($traitCheck)
         $skill.BuffsLink += [ValennaBattle.StrikeProfiles]::FocusId
     }
     $skill.UseWeaponSelectCount = $false
@@ -526,7 +527,7 @@ for ($index = 0; $index -lt $moves.Length; $index++) {
 
 foreach ($technique in @(
     @{ Id = 885151; Name = '子弹装填'; Description = '[使用时] 补满加速弹。'; Priority = 10000 },
-    @{ Id = 885152; Name = '预知'; Description = (@('每层预知眼使检定成功区间 +1。', '[使用时] 补满加速弹，每行动轮限 1 次。', '[闪避成功时] 获得 1 层呼吸法，每行动轮最多 2 次。', '[闪避成功时] 恢复 1 点精神值，每场战斗最多 2 次。') -join "`n"); Priority = 9999 }
+    @{ Id = 885152; Name = '预知'; Description = (@('每层预知眼使检定成功区间 +1。', '可以闪避投掷物品、法术及自身攻击被敌人成功闪避后受到的回击等原本不可闪避的攻击。成功时，避开自己受到的该次效果。', '这些特殊闪避不会触发[解兔]。成功闪避敌方一次普通攻击的全部段数后，仍可用[解兔]反击。', '[使用时] 补满加速弹，每行动轮限 1 次。', '[闪避成功时] 获得 1 层呼吸法，每行动轮最多 2 次。', '[闪避成功时] 恢复 1 点精神值，每场战斗最多 2 次。') -join "`n"); Priority = 9999 }
 )) {
     $skill = Read-Table 'BattleSkill/3'
     $skill.Id = $technique.Id
@@ -579,7 +580,7 @@ foreach ($retiredId in 885122, 885123, 885130) {
 }
 
 $stockStatus = Read-Table 'Buff/113'
-$names = '呼吸法', '震颤', '烧伤', '震颤·灼热', '预知眼', '预知眼·过热', '加速弹', '加速的未来', '狩猎目标', '心'
+$names = '呼吸法', '震颤', '烧伤', '震颤·灼热', '预知眼', '预知眼·过热', '加速弹', '加速的未来', '狩猎目标', '心——瓦伦希娜'
 $stackedStatuses = @{
     885131 = @{ Icon = 'valenna_breath_icon'; Initial = 1; Maximum = 0 }
     885132 = @{ Icon = 'valenna_tremor_icon'; Initial = 1; Maximum = 0 }
@@ -609,7 +610,7 @@ for ($index = 0; $index -lt $names.Count; $index++) {
         885137 { ('最多储存10发。', '[消耗时] 每段只进行1次暗中射击检定，失败也会扣弹。', '[检定成功时] 本段伤害+10%。每消耗1发，获得1层呼吸法。' -join "`n") }
         885139 { ('受到标记者的伤害+20%。', '速度高于10时：', '速度-50，最低降至10。', '处置只能锁定狩猎目标。' -join "`n") }
         ([ValennaBattle.StrikeProfiles]::EyeChargeId) {
-            ('充能上限30层。拥有预知时，每层使检定成功区间+1。', '[回合开始时] 战斗与探索均恢复5层充能。', '发动辅助闪避或受到攻击命中时，消耗5层充能。耗尽后转为预知眼·过热。' -join "`n")
+            ('充能上限30层。拥有预知时，每层使检定成功区间+1。', '[回合开始] 未处于过热状态，则以[预知]替换你的闪避。', '未处于过热状态时，斗殴检定获得1颗奖励骰。', '[回合开始时] 战斗与探索均恢复5层充能。', '发动辅助闪避或受到攻击命中时，消耗5层充能。耗尽后转为预知眼·过热。' -join "`n")
         }
         ([ValennaBattle.StrikeProfiles]::EyeOverheatId) {
             ('[过热期间] 闪避检定获得1颗惩罚骰。', '[回合开始时] 战斗与探索均积累10层。', '达到30层时转回预知眼。' -join "`n")
@@ -623,7 +624,7 @@ for ($index = 0; $index -lt $names.Count; $index++) {
                 '解兔保留层数，也不触发这项增伤。'
             ) -join "`n")
         }
-        885140 { $heartRules }
+        885140 { $heartRules.Replace('[苏醒期间] ', '') }
         default { '效果待设定。' }
     }
     $buff = [ordered]@{
@@ -723,6 +724,20 @@ Add-Table "Buff/$([ValennaBattle.StrikeProfiles]::FocusId)" 'BaseSheetData' ([or
 $ruleFormatting = Format-ValennaRules $tables
 Write-Output ("规则说明 {0} 条，已格式化 {1} 条，补齐状态链接 {2} 个" -f $ruleFormatting.RuleFields, $ruleFormatting.StyledFields, $ruleFormatting.BuffLinks)
 
+. (Join-Path $mod 'tools/english.ps1')
+$lexicon = Add-ValennaTableLocalization $tables
+$localizationPath = Join-Path $mod 'resource/localization.json'
+$localizationBody = ($lexicon | ConvertTo-Json -Depth 4) + [Environment]::NewLine
+$parsedLocalization = $localizationBody | ConvertFrom-Json -AsHashtable
+if ($parsedLocalization.Count -ne $lexicon.Count) { throw '双语词条序列化数量不一致' }
+foreach ($entry in $lexicon.GetEnumerator()) {
+    foreach ($language in 'zh', 'en') {
+        if ($parsedLocalization[$entry.Key][$language] -cne $entry.Value[$language]) {
+            throw "双语词条序列化不一致 $($entry.Key) ($language)"
+        }
+    }
+}
+
 $scratch = Join-Path $mod ('temp/data-' + [guid]::NewGuid())
 $writes = [Collections.Generic.List[object]]::new()
 try {
@@ -747,6 +762,20 @@ try {
         [IO.File]::WriteAllText($target, $body, $utf8)
         if (![string]::Equals([IO.File]::ReadAllText($target), $body, [StringComparison]::Ordinal)) { throw "写入校验失败 $target" }
     }
+    if (![IO.File]::Exists($localizationPath) -or
+        ![string]::Equals([IO.File]::ReadAllText($localizationPath), $localizationBody, [StringComparison]::Ordinal)) {
+        $backup = Join-Path $scratch 'localization.json'
+        $existing = [IO.File]::Exists($localizationPath)
+        if ($existing) {
+            [void][IO.Directory]::CreateDirectory($scratch)
+            [IO.File]::Copy($localizationPath, $backup)
+        }
+        $writes.Add(@{ Target = $localizationPath; Backup = $backup; Existing = $existing })
+        [IO.File]::WriteAllText($localizationPath, $localizationBody, $utf8)
+        if (![string]::Equals([IO.File]::ReadAllText($localizationPath), $localizationBody, [StringComparison]::Ordinal)) {
+            throw "写入校验失败 $localizationPath"
+        }
+    }
     $meta = Join-Path $project 'Project.rtmeta'
     if (-not [IO.File]::Exists($meta)) {
         [IO.File]::WriteAllBytes($meta, [byte[]]@(0x10, 0x01, 0x22, 0x05, 0x33, 0x2e, 0x35, 0x2e, 0x33))
@@ -768,4 +797,4 @@ if ([IO.Directory]::Exists($scratch)) {
         ForEach-Object { [IO.Directory]::Delete($_.FullName) }
     [IO.Directory]::Delete($scratch)
 }
-Write-Output "已校验 $($tables.Count) 张配置表，更新 $($writes.Count) 张"
+Write-Output "已校验 $($tables.Count) 张配置表及 $($lexicon.Count) 条双语词条，更新 $($writes.Count) 个文件"

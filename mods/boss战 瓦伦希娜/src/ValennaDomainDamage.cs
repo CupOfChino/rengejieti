@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using CustomBattleBg;
 using Game;
@@ -16,6 +17,11 @@ namespace ValennaBattle
                 typeof(Func<DomainProfile, int, int, BuffTableData>),
                 AccessTools.DeclaredMethod(Builder, "Build", new[] { typeof(DomainProfile), typeof(int), typeof(int) }));
         private static readonly int AllyKind = (int)AccessTools.DeclaredField(Builder, "KindAlly").GetRawConstantValue();
+        private static readonly ConditionalWeakTable<LocalizationKeyData, DamageTotal> Totals =
+            new ConditionalWeakTable<LocalizationKeyData, DamageTotal>();
+        private sealed class DamageTotal { internal int Percent; }
+        private static readonly LocalizationKeyData TotalText =
+            ValennaText.Key("damageUp.total", "当前普通伤害加成：+{0}%。");
 
         internal static BuffTableData Create(int layers)
         {
@@ -26,16 +32,27 @@ namespace ValennaBattle
                 AllyEffectValue = layers
             };
             BuffTableData config = BuildPreset(profile, AllyKind, ValennaKit.DamageUpId);
-            var rules = Singleton<ResManager>.Instance.BuffFactory.GetConfig(ValennaKit.DamageUpId)?.Des;
+            var definition = Singleton<ResManager>.Instance.BuffFactory.GetConfig(ValennaKit.DamageUpId);
+            var rules = definition?.Des;
             if (!string.IsNullOrEmpty(rules?.InputText))
             {
-                // 总百分比由领域预设给出；实例叠层与读档重建时一起更新。
-                string total = config.Des.InputText.Replace(" ", "");
-                config.Des.InputText = rules.InputText + "\n当前：\u2063" + total + "\u2064";
+                config.Name = definition.Name;
+                config.Des = new LocalizationBuffKeyData { TarKey = rules.TargetKey, InputText = rules.InputText };
+                Totals.Add(config.Des, new DamageTotal { Percent = layers * 10 });
             }
             // 领域每轮重新发放；铳剑的层数则留到战斗结束。每个角色持有独立的配置实例。
             config.Events.RemoveAll(effect => effect.EBuffTrigger == EBuffTriggerType.RoundEnd);
             return config;
+        }
+
+        [HarmonyPatch(typeof(LocalizationKeyData), nameof(LocalizationKeyData.GetValueByChinese))]
+        private static class ShowDamageTotal
+        {
+            private static void Postfix(LocalizationKeyData __instance, ref string __result)
+            {
+                if (__instance.TarKey == "valenna.Buff.885153.Des" && Totals.TryGetValue(__instance, out var total))
+                    __result += "\n" + string.Format(TotalText.GetValue(), total.Percent);
+            }
         }
 
         [HarmonyPatch(typeof(BuffData), nameof(BuffData.AddBuff))]

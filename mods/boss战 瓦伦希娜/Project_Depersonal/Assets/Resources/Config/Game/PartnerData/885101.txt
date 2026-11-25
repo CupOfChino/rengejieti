@@ -20,14 +20,14 @@
       "CharacterId": 0,
       "UseNamePool": false,
       "CharacterName": {
-        "TarKey": "",
+        "TarKey": "valenna.PartnerData.885101.CharacterName",
         "SheetKey": "",
         "InputText": "瓦伦希娜",
         "Characteristic": null
       },
       "CharacterNamePool": [],
       "CharacterDes": {
-        "TarKey": "",
+        "TarKey": "valenna.PartnerData.885101.CharacterDes",
         "SheetKey": "",
         "InputText": "<color=#FF4040>二老板</color> · 手指 · 拇指 · 蜘蛛巢 · 战争英雄 · <color=#FF4040>七大家族</color> · 烟霾战争",
         "Characteristic": null

@@ -12,7 +12,7 @@ using UnityEngine;
 
 namespace ValennaBattle
 {
-    internal static class ValennaPrescience
+    internal static partial class ValennaPrescience
     {
         private static readonly Dictionary<BattleActiveBehaviorData, IncomingAttack> Attacks =
             new Dictionary<BattleActiveBehaviorData, IncomingAttack>();
@@ -177,8 +177,7 @@ namespace ValennaBattle
 
                 ValennaHunt.BeginAttack(__instance.Self);
                 AcceleratedFuture.AttackUse future = AcceleratedFuture.BeginAttack(__instance);
-                if (future == null && !__instance.IsAttackAction && __instance.BattleSkillData?.Config?.NeedDamage != true &&
-                    __instance.MagicData?.Config?.NeedDamage != true) return;
+                if (future == null && !IsHostileAction(__instance)) return;
 
                 __state = new IncomingAttack(__instance, future);
                 Attacks.Add(__instance, __state);
@@ -218,6 +217,9 @@ namespace ValennaBattle
                 {
                     if (watch.AttackExecuted && watch.Future != null)
                         await watch.Future.Consume(action.Self);
+
+                    if (IsThrowAction(action) || action.MagicData != null ||
+                        action.BattleSkillData?.Id == StrikeProfiles.ExecutionId) return;
 
                     foreach (var entry in watch.Defenders)
                     {
@@ -710,7 +712,16 @@ namespace ValennaBattle
             private static void Postfix(BattleRole __0, EDiceValueType __1, int __2,
                 CheckDetailAdditionalData __4, List<CheckDetailData> __result)
             {
-                if (!_previewAction.HasValue || __0?.Data == null || __result == null) return;
+                if (__0?.Data == null || __result == null) return;
+                // 选招预览、战斗实掷、探索检定都从这里取骰子来源。
+                bool combat = __1 == EDiceValueType.Skill && __2 == (int)EExploreSkill.Combat ||
+                    __1 == EDiceValueType.Unite && (__2 == (int)EExploreSkill.Combat || __4?.UniteSkill == EExploreSkill.Combat);
+                if (combat && ValennaEyeEquipment.IsWorn(__0) && __0.Data.BuffList != null && !IsOverheated(__0) &&
+                    __0.GetBuff(StrikeProfiles.EyeChargeId) is { DisableBuff: false, CurLayer: > 0 } &&
+                    !__0.Data.CheckDisableRewardDice(__1, __2))
+                    __result.Add(BuffDetail(__0, StrikeProfiles.EyeChargeId, 1));
+
+                if (!_previewAction.HasValue) return;
                 bool magic = _previewAction == EBattleActionType.Magic || __4?.MagicSkillData != null;
                 int reward = AcceleratedFuture.RewardDice(__0, magic);
                 if (reward > 0 && !__0.Data.CheckDisableRewardDice(__1, __2))

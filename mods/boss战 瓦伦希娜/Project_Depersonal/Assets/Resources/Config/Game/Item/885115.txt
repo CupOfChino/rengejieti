@@ -6,19 +6,19 @@
       "ItemId": 885115,
       "UniqueKey": "valenna_vodka",
       "ItemName": {
-        "TarKey": "",
+        "TarKey": "valenna.Item.885115.ItemName",
         "SheetKey": "",
         "InputText": "高浓度伏特加",
         "Characteristic": null
       },
       "ItemDes": {
-        "TarKey": "",
+        "TarKey": "valenna.Item.885115.ItemDes",
         "SheetKey": "",
         "InputText": "酒鬼的最爱。瓦伦希娜总会为自己留上一瓶。",
         "Characteristic": null
       },
       "ItemEffectDes": {
-        "TarKey": "",
+        "TarKey": "valenna.Item.885115.ItemEffectDes",
         "SheetKey": "",
         "InputText": "携带⁣1瓶⁤。\n<color=#55D8EF>[饮用时]</color> 恢复⁣1D4点精神值⁤，进入<color=#CBB1DD>醉酒</color>。\n<color=#CBB1DD>醉酒</color>持续⁣12小时⁤，期间每次检定获得⁣1颗惩罚骰⁤。",
         "Characteristic": null
@@ -172,7 +172,7 @@
           },
           "EnableOverrideDesc": true,
           "OverrideDesc": {
-            "TarKey": "",
+            "TarKey": "valenna.Item.885115.ConfigData.0.OverrideDesc",
             "SheetKey": "",
             "InputText": "携带⁣1瓶⁤。\n<color=#55D8EF>[饮用时]</color> 恢复⁣1D4点精神值⁤，进入<color=#CBB1DD>醉酒</color>。\n<color=#CBB1DD>醉酒</color>持续⁣12小时⁤，期间每次检定获得⁣1颗惩罚骰⁤。",
             "Characteristic": null

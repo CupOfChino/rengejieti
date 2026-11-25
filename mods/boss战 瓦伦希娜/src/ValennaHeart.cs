@@ -28,7 +28,7 @@ namespace ValennaBattle
         }
 
         private static void ExplainPreset() => PrefabSingleton<UIMsgHintPanel>.Instance.ShowPopup(
-            new LocalizationKeyData { InputText = "瓦伦希娜已固定装备专属「心」。" }, false);
+            ValennaText.Key("fixedHeart", "瓦伦希娜已固定装备专属「心」。"), false);
 
         [HarmonyPatch(typeof(UIInterludePanel), "_onClickVacationMode")]
         private static class FixedHeartMenu

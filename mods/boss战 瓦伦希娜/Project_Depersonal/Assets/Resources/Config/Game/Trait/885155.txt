@@ -8,13 +8,13 @@
       "CanRepeate": false,
       "IsCanCreateGet": false,
       "Localization_Name": {
-        "TarKey": "",
+        "TarKey": "valenna.Trait.885155.Localization_Name",
         "SheetKey": "",
         "InputText": "心——瓦伦希娜",
         "Characteristic": null
       },
       "Localization_Des": {
-        "TarKey": "",
+        "TarKey": "valenna.Trait.885155.Localization_Des",
         "SheetKey": "",
         "InputText": "⁣速度+50⁤。\n<color=#55D8EF>[苏醒期间]</color> 战斗技能施加<color=#FFA15E>震颤</color>时，额外施加⁣1层⁤。\n<color=#55D8EF>[苏醒期间]</color> 通过战斗技能获得<color=#EBC556>呼吸法</color>时，额外获得⁣1层⁤。",
         "Characteristic": null

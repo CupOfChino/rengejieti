@@ -59,10 +59,10 @@ namespace ValennaBattle
 
                 bool holding = HeldCigars.TryGetValue(role, out MOD_Dynamic_Item held) &&
                     ReferenceEquals(held, cigar);
-                __0[useIndex].ButtonLocKey = "品味雪茄";
+                __0[useIndex].ButtonLocKey = "valenna.cigar.savor";
                 __0.Insert(useIndex + 1, new SubMenuSelectionViewData
                 {
-                    ButtonLocKey = holding ? "取下雪茄" : "叼在嘴里",
+                    ButtonLocKey = holding ? "valenna.cigar.remove" : "valenna.cigar.hold",
                     Callback = () =>
                     {
                         HeldCigars.Remove(role);

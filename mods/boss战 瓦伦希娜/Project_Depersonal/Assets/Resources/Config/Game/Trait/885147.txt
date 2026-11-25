@@ -8,13 +8,13 @@
       "CanRepeate": false,
       "IsCanCreateGet": false,
       "Localization_Name": {
-        "TarKey": "",
+        "TarKey": "valenna.Trait.885147.Localization_Name",
         "SheetKey": "",
         "InputText": "梦中的黄金票券",
         "Characteristic": null
       },
       "Localization_Des": {
-        "TarKey": "",
+        "TarKey": "valenna.Trait.885147.Localization_Des",
         "SheetKey": "",
         "InputText": "⁣侦察+5⁤，⁣感知+5⁤。",
         "Characteristic": null

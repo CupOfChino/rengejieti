@@ -6,19 +6,19 @@
       "ItemId": 885114,
       "UniqueKey": "valenna_cigars",
       "ItemName": {
-        "TarKey": "",
+        "TarKey": "valenna.Item.885114.ItemName",
         "SheetKey": "",
         "InputText": "上等雪茄",
         "Characteristic": null
       },
       "ItemDes": {
-        "TarKey": "",
+        "TarKey": "valenna.Item.885114.ItemDes",
         "SheetKey": "",
         "InputText": "烟鬼的最爱。「这个烟鬼哪里的钱用定制的子弹和名贵雪茄？」",
         "Characteristic": null
       },
       "ItemEffectDes": {
-        "TarKey": "",
+        "TarKey": "valenna.Item.885114.ItemEffectDes",
         "SheetKey": "",
         "InputText": "满装⁣3支⁤。\n<color=#55D8EF>[品味雪茄]</color> 消耗⁣1支⁤，花费⁣1小时⁤，恢复⁣1D2点精神值⁤。\n<color=#55D8EF>[叼在嘴里]</color> 保留雪茄，精神值不变。",
         "Characteristic": null
@@ -157,7 +157,7 @@
           },
           "EnableOverrideDesc": true,
           "OverrideDesc": {
-            "TarKey": "",
+            "TarKey": "valenna.Item.885114.ConfigData.0.OverrideDesc",
             "SheetKey": "",
             "InputText": "满装⁣3支⁤。\n<color=#55D8EF>[品味雪茄]</color> 消耗⁣1支⁤，花费⁣1小时⁤，恢复⁣1D2点精神值⁤。\n<color=#55D8EF>[叼在嘴里]</color> 保留雪茄，精神值不变。",
             "Characteristic": null

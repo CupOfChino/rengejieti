@@ -1,0 +1,438 @@
+{
+  "valenna.cigar.savor": {
+    "zh": "品味雪茄",
+    "en": "Savor the Cigar"
+  },
+  "valenna.cigar.remove": {
+    "zh": "取下雪茄",
+    "en": "Put the Cigar Away"
+  },
+  "valenna.cigar.hold": {
+    "zh": "叼在嘴里",
+    "en": "Hold It in Your Mouth"
+  },
+  "valenna.damageUp.total": {
+    "zh": "当前普通伤害加成：+{0}%。",
+    "en": "Current normal damage bonus: +{0}%."
+  },
+  "valenna.profession": {
+    "zh": "蜘蛛巢 拇指父辈",
+    "en": "House of Spiders · The Thumb Nursefather"
+  },
+  "valenna.fixedHeart": {
+    "zh": "瓦伦希娜已固定装备专属「心」。",
+    "en": "Valencina has her exclusive Shin permanently equipped."
+  },
+  "valenna.BattleSkill.885121.Description": {
+    "zh": "斗殴检定｜⁣2段⁤\n<color=#55D8EF>[使用时]</color> 自身<color=#EBC556>呼吸法</color>达到⁣6层⁤时，⁣每段伤害+1⁤（最多⁣+1⁤）。\n【I】 ⁣1d4⁤\n<color=#A8E96D>[命中时]</color> 施加⁣1层<color=#F35D50>燃烧</color>⁤。\n【II】 ⁣1d4⁤\n<color=#A8E96D>[命中时]</color> 立即结算目标的<color=#F35D50>燃烧</color>⁣1次⁤。",
+    "en": "Brawl check | 2 hits\n<color=#55D8EF>[On Use]</color> At 6 or more <color=#EBC556>Poise</color>, each hit deals +1 damage (max +1).\n<b><color=#EBCB91>【I】</color></b> 1d4\n<color=#A8E96D>[On Hit]</color> Inflict 1 <color=#F35D50>Burn</color>.\n<b><color=#EBCB91>【II】</color></b> 1d4\n<color=#A8E96D>[On Hit]</color> Immediately resolve the target's <color=#F35D50>Burn</color> once."
+  },
+  "valenna.BattleSkill.885121.Name": {
+    "zh": "切割攻击",
+    "en": "Colpi di Taglio"
+  },
+  "valenna.BattleSkill.885122.Description": {
+    "zh": "近身挑斩后顺势回斩。 命中⁣2次⁤，每次基础伤害1。",
+    "en": "Follow a close-range rising slash with a backswing. Hits twice for 1 base damage each."
+  },
+  "valenna.BattleSkill.885122.Name": {
+    "zh": "回焰",
+    "en": "Returning Flame"
+  },
+  "valenna.BattleSkill.885123.Description": {
+    "zh": "交叉双斩后，以枪刃闪光收招。 命中⁣3次⁤，每次基础伤害1。",
+    "en": "Follow two crossing slashes with a flash of the gunblade. Hits 3 times for 1 base damage each."
+  },
+  "valenna.BattleSkill.885123.Name": {
+    "zh": "裂光追击",
+    "en": "Crossflash Pursuit"
+  },
+  "valenna.BattleSkill.885124.Description": {
+    "zh": "斗殴＋射击联合检定｜⁣2段⁤\n<color=#55D8EF>[使用时]</color> 自身<color=#EBC556>呼吸法</color>达到⁣6层⁤时，⁣每段伤害+1⁤（最多⁣+1⁤）。\n【I】 ⁣1d3⁤\n有弹时消耗⁣1发<color=#79CAD7>加速弹</color>⁤。\n<color=#A8E96D>[命中时]</color> 已消耗<color=#79CAD7>加速弹</color>则施加⁣1层<color=#F35D50>燃烧</color>⁤。\n【II】 ⁣1d4⁤\n有弹时消耗⁣1发<color=#79CAD7>加速弹</color>⁤。\n<color=#A8E96D>[命中时]</color> 施加⁣2层<color=#FFA15E>震颤</color>⁤。",
+    "en": "Combined Brawl and Shoot check | 2 hits\n<color=#55D8EF>[On Use]</color> At 6 or more <color=#EBC556>Poise</color>, each hit deals +1 damage (max +1).\n<b><color=#EBCB91>【I】</color></b> 1d3\nSpend 1 <color=#79CAD7>Acceleration Round</color> if available.\n<color=#A8E96D>[On Hit]</color> Inflict 1 <color=#F35D50>Burn</color> if a round was spent.\n<b><color=#EBCB91>【II】</color></b> 1d4\nSpend 1 <color=#79CAD7>Acceleration Round</color> if available.\n<color=#A8E96D>[On Hit]</color> Inflict 2 <color=#FFA15E>Tremor</color>."
+  },
+  "valenna.BattleSkill.885124.Name": {
+    "zh": "尖端打击",
+    "en": "Colpo di Punta"
+  },
+  "valenna.BattleSkill.885125.Description": {
+    "zh": "斗殴检定｜⁣2段⁤\n<color=#55D8EF>[使用时]</color> 自身<color=#EBC556>呼吸法</color>达到⁣6层⁤时，⁣每段伤害+1⁤（最多⁣+1⁤）。\n【I】 ⁣1d3⁤\n<color=#A8E96D>[命中时]</color> 施加⁣1层<color=#FFA15E>震颤</color>⁤。\n【II】 ⁣1d4⁤\n<color=#A8E96D>[命中时]</color> 将<color=#FFA15E>震颤</color>转为<color=#F35D50>震颤·灼热</color>。\n<color=#A8E96D>[命中时]</color> 引爆<color=#FFA15E>震颤</color>⁣1次⁤。",
+    "en": "Brawl check | 2 hits\n<color=#55D8EF>[On Use]</color> At 6 or more <color=#EBC556>Poise</color>, each hit deals +1 damage (max +1).\n<b><color=#EBCB91>【I】</color></b> 1d3\n<color=#A8E96D>[On Hit]</color> Inflict 1 <color=#FFA15E>Tremor</color>.\n<b><color=#EBCB91>【II】</color></b> 1d4\n<color=#A8E96D>[On Hit]</color> Convert <color=#FFA15E>Tremor</color> to <color=#F35D50>Tremor - Scorch</color>.\n<color=#A8E96D>[On Hit]</color> Trigger <color=#FFA15E>Tremor Burst</color> once."
+  },
+  "valenna.BattleSkill.885125.Name": {
+    "zh": "解兔",
+    "en": "Sezionatura di Coniglio"
+  },
+  "valenna.BattleSkill.885126.Description": {
+    "zh": "斗殴＋敏捷联合检定｜⁣3段⁤\n<color=#55D8EF>[使用时]</color> 自身<color=#EBC556>呼吸法</color>达到⁣6层⁤时，⁣每段伤害+1⁤（最多⁣+1⁤）。\n<color=#55D8EF>[使用时]</color> 目标<color=#F35D50>燃烧</color>与<color=#FFA15E>震颤</color>每合计⁣6层⁤，⁣每段伤害+1⁤，至多⁣+2⁤。\n<color=#55D8EF>[使用时]</color> 获得⁣4层<color=#EBC556>呼吸法</color>⁤。\n【I】 ⁣1d6⁤\n<color=#A8E96D>[命中时]</color> 施加⁣2层<color=#F35D50>燃烧</color>⁤。\n【II】 ⁣1d6⁤\n<color=#A8E96D>[命中时]</color> 施加⁣2层<color=#FFA15E>震颤</color>⁤。\n【III】 ⁣1d6⁤\n<color=#A8E96D>[命中时]</color> 将<color=#FFA15E>震颤</color>转为<color=#F35D50>震颤·灼热</color>。\n<color=#A8E96D>[命中时]</color> 引爆<color=#FFA15E>震颤</color>⁣2次⁤。",
+    "en": "Combined Brawl and Dexterity check | 3 hits\n<color=#55D8EF>[On Use]</color> At 6 or more <color=#EBC556>Poise</color>, each hit deals +1 damage (max +1).\n<color=#55D8EF>[On Use]</color> Each hit deals +1 damage per 6 combined stacks of <color=#F35D50>Burn</color> and <color=#FFA15E>Tremor</color> on the target (max +2).\n<color=#55D8EF>[On Use]</color> Gain 4 <color=#EBC556>Poise</color>.\n<b><color=#EBCB91>【I】</color></b> 1d6\n<color=#A8E96D>[On Hit]</color> Inflict 2 <color=#F35D50>Burn</color>.\n<b><color=#EBCB91>【II】</color></b> 1d6\n<color=#A8E96D>[On Hit]</color> Inflict 2 <color=#FFA15E>Tremor</color>.\n<b><color=#EBCB91>【III】</color></b> 1d6\n<color=#A8E96D>[On Hit]</color> Convert <color=#FFA15E>Tremor</color> to <color=#F35D50>Tremor - Scorch</color>.\n<color=#A8E96D>[On Hit]</color> Trigger <color=#FFA15E>Tremor Burst</color> twice."
+  },
+  "valenna.BattleSkill.885126.Name": {
+    "zh": "解鹿",
+    "en": "Sezionatura di Cervo"
+  },
+  "valenna.BattleSkill.885127.Description": {
+    "zh": "斗殴＋射击联合检定｜⁣3段⁤\n<color=#55D8EF>[使用时]</color> 自身<color=#EBC556>呼吸法</color>达到⁣6层⁤时，⁣每段伤害+1⁤（最多⁣+1⁤）。\n<color=#55D8EF>[使用时]</color> 目标<color=#F35D50>燃烧</color>与<color=#FFA15E>震颤</color>合计至少⁣6层⁤时，⁣每段伤害+1⁤。\n<color=#55D8EF>[使用时]</color> 获得⁣2层<color=#EBC556>呼吸法</color>⁤。\n【I】 ⁣1d4⁤\n有弹时消耗⁣1发<color=#79CAD7>加速弹</color>⁤。\n<color=#A8E96D>[命中时]</color> 已消耗<color=#79CAD7>加速弹</color>则施加⁣1层<color=#F35D50>燃烧</color>⁤。\n【II】 ⁣1d4⁤\n有弹时消耗⁣1发<color=#79CAD7>加速弹</color>⁤。\n<color=#A8E96D>[命中时]</color> 施加⁣2层<color=#FFA15E>震颤</color>⁤。\n【III】 ⁣1d6⁤\n<color=#A8E96D>[命中时]</color> 引爆<color=#FFA15E>震颤</color>⁣1次⁤。",
+    "en": "Combined Brawl and Shoot check | 3 hits\n<color=#55D8EF>[On Use]</color> At 6 or more <color=#EBC556>Poise</color>, each hit deals +1 damage (max +1).\n<color=#55D8EF>[On Use]</color> At 6 or more combined stacks of <color=#F35D50>Burn</color> and <color=#FFA15E>Tremor</color> on the target, each hit deals +1 damage.\n<color=#55D8EF>[On Use]</color> Gain 2 <color=#EBC556>Poise</color>.\n<b><color=#EBCB91>【I】</color></b> 1d4\nSpend 1 <color=#79CAD7>Acceleration Round</color> if available.\n<color=#A8E96D>[On Hit]</color> Inflict 1 <color=#F35D50>Burn</color> if a round was spent.\n<b><color=#EBCB91>【II】</color></b> 1d4\nSpend 1 <color=#79CAD7>Acceleration Round</color> if available.\n<color=#A8E96D>[On Hit]</color> Inflict 2 <color=#FFA15E>Tremor</color>.\n<b><color=#EBCB91>【III】</color></b> 1d6\n<color=#A8E96D>[On Hit]</color> Trigger <color=#FFA15E>Tremor Burst</color> once."
+  },
+  "valenna.BattleSkill.885127.Name": {
+    "zh": "我很乐意用这颗子弹把你贯穿",
+    "en": "I'll Gladly Blast a Hole Through You"
+  },
+  "valenna.BattleSkill.885128.Description": {
+    "zh": "斗殴＋敏捷联合检定｜⁣4段⁤\n<color=#55D8EF>[使用时]</color> 自身<color=#EBC556>呼吸法</color>达到⁣6层⁤时，⁣每段伤害+1⁤（最多⁣+1⁤）。\n<color=#55D8EF>[使用时]</color> 目标<color=#F35D50>燃烧</color>与<color=#FFA15E>震颤</color>每合计⁣6层⁤，⁣每段伤害+1⁤，至多⁣+2⁤。\n<color=#55D8EF>[使用时]</color> 获得⁣3层<color=#EBC556>呼吸法</color>⁤。\n【I】 ⁣1d4⁤\n有弹时消耗⁣1发<color=#79CAD7>加速弹</color>⁤。\n<color=#A8E96D>[命中时]</color> 施加⁣1层<color=#F35D50>燃烧</color>⁤。\n<color=#A8E96D>[命中时]</color> 施加⁣2层<color=#FFA15E>震颤</color>⁤。\n【II】 ⁣1d4⁤\n有弹时消耗⁣1发<color=#79CAD7>加速弹</color>⁤。\n<color=#A8E96D>[命中时]</color> 施加⁣1层<color=#F35D50>燃烧</color>⁤。\n<color=#A8E96D>[命中时]</color> 施加⁣2层<color=#FFA15E>震颤</color>⁤。\n【III】 ⁣1d6⁤\n有弹时消耗⁣1发<color=#79CAD7>加速弹</color>⁤。\n<color=#A8E96D>[命中时]</color> 将<color=#FFA15E>震颤</color>转为<color=#F35D50>震颤·灼热</color>。\n【IV】 ⁣1d6⁤\n<color=#A8E96D>[命中时]</color> 引爆<color=#FFA15E>震颤</color>⁣2次⁤。\n<color=#B3F26E>[暴击命中时]</color> 额外引爆⁣2次⁤。",
+    "en": "Combined Brawl and Dexterity check | 4 hits\n<color=#55D8EF>[On Use]</color> At 6 or more <color=#EBC556>Poise</color>, each hit deals +1 damage (max +1).\n<color=#55D8EF>[On Use]</color> Each hit deals +1 damage per 6 combined stacks of <color=#F35D50>Burn</color> and <color=#FFA15E>Tremor</color> on the target (max +2).\n<color=#55D8EF>[On Use]</color> Gain 3 <color=#EBC556>Poise</color>.\n<b><color=#EBCB91>【I】</color></b> 1d4\nSpend 1 <color=#79CAD7>Acceleration Round</color> if available.\n<color=#A8E96D>[On Hit]</color> Inflict 1 <color=#F35D50>Burn</color>.\n<color=#A8E96D>[On Hit]</color> Inflict 2 <color=#FFA15E>Tremor</color>.\n<b><color=#EBCB91>【II】</color></b> 1d4\nSpend 1 <color=#79CAD7>Acceleration Round</color> if available.\n<color=#A8E96D>[On Hit]</color> Inflict 1 <color=#F35D50>Burn</color>.\n<color=#A8E96D>[On Hit]</color> Inflict 2 <color=#FFA15E>Tremor</color>.\n<b><color=#EBCB91>【III】</color></b> 1d6\nSpend 1 <color=#79CAD7>Acceleration Round</color> if available.\n<color=#A8E96D>[On Hit]</color> Convert <color=#FFA15E>Tremor</color> to <color=#F35D50>Tremor - Scorch</color>.\n<b><color=#EBCB91>【IV】</color></b> 1d6\n<color=#A8E96D>[On Hit]</color> Trigger <color=#FFA15E>Tremor Burst</color> twice.\n<color=#B3F26E>[On Critical Hit]</color> Trigger 2 additional bursts."
+  },
+  "valenna.BattleSkill.885128.Name": {
+    "zh": "解象",
+    "en": "Sezionatura di Elefante"
+  },
+  "valenna.BattleSkill.885129.Description": {
+    "zh": "斗殴检定，至少成功｜⁣5段⁤\n<color=#55D8EF>[使用时]</color> 自身<color=#EBC556>呼吸法</color>达到⁣6层⁤时，⁣每段伤害+1⁤（最多⁣+1⁤）。\n仅限<color=#E76160>狩猎目标</color>，选择技能时自动选中。目标无法闪避。\n每段基础伤害为1。<color=#8CD6EB>预知眼</color>不足⁣10层⁤时没有额外伤害骰。\n<color=#8CD6EB>预知眼</color>达到⁣10层⁤掷⁣1d2⁤，⁣20层⁤掷⁣1d4⁤，⁣30层⁤掷⁣1d6⁤。\n<color=#55D8EF>[使用时]</color> 目标<color=#F35D50>燃烧</color>与<color=#FFA15E>震颤</color>每合计⁣6层⁤，⁣每段伤害+1⁤，至多⁣+2⁤。\n<color=#55D8EF>[使用时]</color> 目标生命值不高于一半时，该段伤害翻倍。\n<color=#55D8EF>[使用时]</color> 获得⁣3层<color=#EBC556>呼吸法</color>⁤。\n<color=#55D8EF>[使用时]</color> 至少有⁣2点理智⁤且未陷入精神衰弱或精神枯竭时，消耗⁣2点理智⁤并获得⁣1层<color=#F9CA75>「望」</color>⁤。\n<color=#A8E96D>[攻击后]</color> <color=#79CAD7>加速弹</color>补至⁣10发⁤。\n<color=#A8E96D>[攻击后]</color> 移除目标的<color=#E76160>狩猎目标</color>印记。\n<color=#A8E96D>[击杀时]</color> 下回合标记另一名敌人。\n【I】 1＋<color=#8CD6EB>预知眼</color>伤害骰\n<color=#A8E96D>[命中时]</color> 施加⁣1层<color=#FFA15E>震颤</color>⁤。\n【II】 1＋<color=#8CD6EB>预知眼</color>伤害骰\n<color=#A8E96D>[命中时]</color> 施加⁣1层<color=#F35D50>燃烧</color>⁤。\n【III】 1＋<color=#8CD6EB>预知眼</color>伤害骰\n<color=#A8E96D>[命中时]</color> 施加⁣1层<color=#F35D50>燃烧</color>⁤。\n【IV】 1＋<color=#8CD6EB>预知眼</color>伤害骰\n<color=#A8E96D>[命中时]</color> 将<color=#FFA15E>震颤</color>转为<color=#F35D50>震颤·灼热</color>。\n【V】 1＋<color=#8CD6EB>预知眼</color>伤害骰\n消耗至多⁣5发<color=#79CAD7>加速弹</color>⁤。\n消耗<color=#F9CA75>「望」</color>时，本段⁣基础伤害+2⁤。\n<color=#A8E96D>[命中时]</color> 引爆<color=#FFA15E>震颤</color>⁣3次⁤。\n<color=#B3F26E>[暴击命中时]</color> 额外引爆⁣2次⁤。",
+    "en": "Brawl check, requires a success or better | 5 hits\n<color=#55D8EF>[On Use]</color> At 6 or more <color=#EBC556>Poise</color>, each hit deals +1 damage (max +1).\nAutomatically selects the <color=#E76160>Game Target</color> when chosen. The target cannot dodge.\nEach hit deals 1 base damage. Below 10 <color=#8CD6EB>Eye of Precognition</color> stacks, roll no additional damage die.\nAt 10 <color=#8CD6EB>Eye of Precognition</color> stacks, roll 1d2. At 20, roll 1d4. At 30, roll 1d6.\n<color=#55D8EF>[On Use]</color> Each hit deals +1 damage per 6 combined stacks of <color=#F35D50>Burn</color> and <color=#FFA15E>Tremor</color> on the target (max +2).\n<color=#55D8EF>[On Use]</color> Double the damage of the hit if the target is at half HP or lower.\n<color=#55D8EF>[On Use]</color> Gain 3 <color=#EBC556>Poise</color>.\n<color=#55D8EF>[On Use]</color> With at least 2 SP and while free of Frail and Unhinged, spend 2 SP and gain 1 <color=#F9CA75>Mang</color>.\n<color=#A8E96D>[After Attack]</color> Refill <color=#79CAD7>Acceleration Rounds</color> to 10.\n<color=#A8E96D>[After Attack]</color> Remove the target's <color=#E76160>Game Target</color> mark.\n<color=#A8E96D>[On Kill]</color> Mark another enemy next round.\n<b><color=#EBCB91>【I】</color></b> 1 + <color=#8CD6EB>Eye of Precognition</color> damage die\n<color=#A8E96D>[On Hit]</color> Inflict 1 <color=#FFA15E>Tremor</color>.\n<b><color=#EBCB91>【II】</color></b> 1 + <color=#8CD6EB>Eye of Precognition</color> damage die\n<color=#A8E96D>[On Hit]</color> Inflict 1 <color=#F35D50>Burn</color>.\n<b><color=#EBCB91>【III】</color></b> 1 + <color=#8CD6EB>Eye of Precognition</color> damage die\n<color=#A8E96D>[On Hit]</color> Inflict 1 <color=#F35D50>Burn</color>.\n<b><color=#EBCB91>【IV】</color></b> 1 + <color=#8CD6EB>Eye of Precognition</color> damage die\n<color=#A8E96D>[On Hit]</color> Convert <color=#FFA15E>Tremor</color> to <color=#F35D50>Tremor - Scorch</color>.\n<b><color=#EBCB91>【V】</color></b> 1 + <color=#8CD6EB>Eye of Precognition</color> damage die\nSpend up to 5 <color=#79CAD7>Acceleration Rounds</color>.\nIf <color=#F9CA75>Mang</color> is spent, this hit gains +2 base damage.\n<color=#A8E96D>[On Hit]</color> Trigger <color=#FFA15E>Tremor Burst</color> 3 times.\n<color=#B3F26E>[On Critical Hit]</color> Trigger 2 additional bursts."
+  },
+  "valenna.BattleSkill.885129.Name": {
+    "zh": "处置",
+    "en": "Disposal"
+  },
+  "valenna.BattleSkill.885130.Description": {
+    "zh": "准备预知。完整闪避敌方一次攻击行动后，对攻击者发动一次<color=#FFA15E>解兔</color>。",
+    "en": "Prepare <color=#8CD6EB>Precognition</color>. After dodging every hit of one enemy attack, counter with <color=#FFA15E>Sezionatura di Coniglio</color>."
+  },
+  "valenna.BattleSkill.885130.Name": {
+    "zh": "预知",
+    "en": "Precognition"
+  },
+  "valenna.BattleSkill.885151.Description": {
+    "zh": "<color=#55D8EF>[使用时]</color> 补满<color=#79CAD7>加速弹</color>。",
+    "en": "<color=#55D8EF>[On Use]</color> Refill <color=#79CAD7>Acceleration Rounds</color>."
+  },
+  "valenna.BattleSkill.885151.Name": {
+    "zh": "子弹装填",
+    "en": "Reload"
+  },
+  "valenna.BattleSkill.885152.Description": {
+    "zh": "每层<color=#8CD6EB>预知眼</color>使⁣检定成功区间+1⁤。\n可以闪避投掷物品、法术及自身攻击被敌人成功闪避后受到的回击等原本不可闪避的攻击。成功时，避开自己受到的该次效果。\n这些特殊闪避不会触发[<color=#FFA15E>解兔</color>]。成功闪避敌方一次普通攻击的全部段数后，仍可用[<color=#FFA15E>解兔</color>]反击。\n<color=#55D8EF>[使用时]</color> 补满<color=#79CAD7>加速弹</color>，每行动轮限⁣1次⁤。\n<color=#A8E96D>[闪避成功时]</color> 获得⁣1层<color=#EBC556>呼吸法</color>⁤，每行动轮最多⁣2次⁤。\n<color=#A8E96D>[闪避成功时]</color> 恢复⁣1点精神值⁤，每场战斗最多⁣2次⁤。",
+    "en": "Each stack of <color=#8CD6EB>Eye of Precognition</color> increases the check success range by 1.\nYou can dodge normally undodgeable attacks, including thrown items, spells, and counterattacks after an enemy dodges your attack. On a success, you avoid the effect on yourself.\nThese special dodges do not trigger [<color=#FFA15E>Sezionatura di Coniglio</color>]. Dodging every hit of a normal attack still lets you counter with [<color=#FFA15E>Sezionatura di Coniglio</color>].\n<color=#55D8EF>[On Use]</color> Refill <color=#79CAD7>Acceleration Rounds</color>, once per action round.\n<color=#A8E96D>[On Dodge]</color> Gain 1 <color=#EBC556>Poise</color>, up to twice per action round.\n<color=#A8E96D>[On Dodge]</color> Restore 1 SP, up to twice per battle."
+  },
+  "valenna.BattleSkill.885152.Name": {
+    "zh": "预知",
+    "en": "Precognition"
+  },
+  "valenna.Buff.885131.Des": {
+    "zh": "<color=#A8E96D>[命中时]</color> 各段独立判定暴击。每层提供⁣5%⁤暴击率，上限⁣100%⁤。\n<color=#B3F26E>[暴击时]</color> 本段伤害按⁣1.2倍⁤结算，消耗⁣1层⁤。\n<color=#55D8EF>[回合结束时]</color> 减少⁣1层⁤。",
+    "en": "<color=#A8E96D>[On Hit]</color> Each hit rolls for a critical independently. Each stack adds 5% critical chance, up to 100%.\n<color=#B3F26E>[On Critical]</color> Deal 1.2 times damage for this hit and spend 1 stack.\n<color=#55D8EF>[Turn End]</color> Lose 1 stack."
+  },
+  "valenna.Buff.885131.Name": {
+    "zh": "呼吸法",
+    "en": "Poise"
+  },
+  "valenna.Buff.885132.Des": {
+    "zh": "<color=#FFA15E>[引爆时]</color> 混乱值增加<color=#FFA15E>震颤</color>层数的三分之一，向上取整，再消耗⁣1层<color=#FFA15E>震颤</color>⁤。\n单次增量上限为目标意志的三分之一，向下取整；意志大于零时，上限至少为⁣1点⁤。\n混乱条上限等于目标意志。填满后<color=#D196C7>昏迷</color>⁣1个行动轮⁤，解除后从零开始。\n<color=#D196C7>昏迷</color>期间暂停积累混乱值。\n<color=#55D8EF>[回合结束时]</color> 减少⁣1层⁤。",
+    "en": "<color=#FFA15E>[On Burst]</color> Increase the Stagger meter by one third of the <color=#FFA15E>Tremor</color> stacks, rounded up, then consume 1 <color=#FFA15E>Tremor</color>.\nEach increase is capped at one third of the target's Willpower, rounded down. If Willpower is positive, the cap is at least 1.\nThe Stagger meter fills at the target's Willpower. At full, the target falls into a <color=#D196C7>Coma</color> for 1 action round. Afterward, the meter resets to zero.\nThe meter cannot build while the target is in a <color=#D196C7>Coma</color>.\n<color=#55D8EF>[Turn End]</color> Lose 1 stack."
+  },
+  "valenna.Buff.885132.Name": {
+    "zh": "震颤",
+    "en": "Tremor"
+  },
+  "valenna.Buff.885133.Des": {
+    "zh": "<color=#F35D50>烧伤</color>按<color=#F35D50>燃烧</color>的规则结算。",
+    "en": "This status follows the standard <color=#F35D50>Burn</color> rules."
+  },
+  "valenna.Buff.885133.Name": {
+    "zh": "烧伤",
+    "en": "Burn"
+  },
+  "valenna.Buff.885134.Des": {
+    "zh": "由<color=#FFA15E>震颤</color>转化，保留已有层数。后续施加的<color=#FFA15E>震颤</color>并入此状态。\n<color=#FFA15E>[引爆时]</color> 结算普通<color=#FFA15E>震颤引爆</color>，再造成爆炸伤害。\n爆炸伤害为引爆前<color=#F35D50>燃烧</color>与<color=#FFA15E>震颤</color>总层数的一半，向下取整。\n<color=#F35D50>燃烧</color>与<color=#FFA15E>震颤</color>各额外减少原层数的三分之一，分别向下取整。\n<color=#55D8EF>[回合结束时]</color> 减少⁣1层⁤。",
+    "en": "Converted from <color=#FFA15E>Tremor</color>. Retains existing stacks and absorbs new <color=#FFA15E>Tremor</color> stacks.\n<color=#FFA15E>[On Burst]</color> Resolve a normal <color=#FFA15E>Tremor Burst</color>, then deal explosion damage.\nExplosion damage equals half of the combined <color=#F35D50>Burn</color> and <color=#FFA15E>Tremor</color> stacks before the burst, rounded down.\n<color=#F35D50>Burn</color> and <color=#FFA15E>Tremor</color> each lose an additional third of their original stacks, rounded down separately.\n<color=#55D8EF>[Turn End]</color> Lose 1 stack."
+  },
+  "valenna.Buff.885134.Name": {
+    "zh": "震颤·灼热",
+    "en": "Tremor - Scorch"
+  },
+  "valenna.Buff.885135.Des": {
+    "zh": "充能上限⁣30层⁤。拥有预知时，每层使⁣检定成功区间+1⁤。\n<color=#55D8EF>[回合开始]</color> 未处于过热状态，则以<color=#8CD6EB>[预知]</color>替换你的闪避。\n未处于过热状态时，斗殴检定获得⁣1颗奖励骰⁤。\n<color=#55D8EF>[回合开始时]</color> 战斗与探索均恢复⁣5层充能⁤。\n发动辅助闪避或受到攻击命中时，消耗⁣5层充能⁤。耗尽后转为<color=#8CD6EB>预知眼</color><color=#E77167>·过热</color>。",
+    "en": "Maximum charge is 30. With <color=#8CD6EB>Precognition</color>, each stack increases the check success range by 1.\n<color=#55D8EF>[Turn Start]</color> If the <color=#8CD6EB>Eye of Precognition</color> is not overheated, replace your Dodge with [<color=#8CD6EB>Precognition</color>].\nWhile the <color=#8CD6EB>Eye of Precognition</color> is not overheated, Brawl checks gain 1 bonus die.\n<color=#55D8EF>[Turn Start]</color> Recover 5 charge in combat and exploration.\nUsing assisted dodge or taking a hit costs 5 charge. At zero charge, enter <color=#8CD6EB>Eye of Precognition</color><color=#E77167> - Overheat</color>."
+  },
+  "valenna.Buff.885135.Name": {
+    "zh": "预知眼",
+    "en": "Eye of Precognition"
+  },
+  "valenna.Buff.885136.Des": {
+    "zh": "<color=#E77167>[过热期间]</color> 闪避检定获得⁣1颗惩罚骰⁤。\n<color=#55D8EF>[回合开始时]</color> 战斗与探索均积累⁣10层⁤。\n达到⁣30层⁤时转回<color=#8CD6EB>预知眼</color>。",
+    "en": "<color=#E77167>[While Overheated]</color> Dodge checks receive 1 penalty die.\n<color=#55D8EF>[Turn Start]</color> Build 10 stacks in combat and exploration.\nAt 30 stacks, return to <color=#8CD6EB>Eye of Precognition</color>."
+  },
+  "valenna.Buff.885136.Name": {
+    "zh": "预知眼·过热",
+    "en": "Eye of Precognition - Overheat"
+  },
+  "valenna.Buff.885137.Des": {
+    "zh": "最多储存⁣10发⁤。\n<color=#55D8EF>[消耗时]</color> 每段只进行⁣1次⁤暗中射击检定，失败也会扣弹。\n<color=#A8E96D>[检定成功时]</color> 本段⁣伤害+10%⁤。每消耗⁣1发⁤，获得⁣1层<color=#EBC556>呼吸法</color>⁤。",
+    "en": "Store up to 10 rounds.\n<color=#55D8EF>[On Spending]</color> Each hit makes only one hidden Shoot check. The round is spent even if the check fails.\n<color=#A8E96D>[On Successful Check]</color> This hit deals +10% damage. Gain 1 <color=#EBC556>Poise</color> per round spent."
+  },
+  "valenna.Buff.885137.Name": {
+    "zh": "加速弹",
+    "en": "Acceleration Round"
+  },
+  "valenna.Buff.885138.Des": {
+    "zh": "<color=#A8E96D>[闪避成功时]</color> 若开骰时<color=#8CD6EB>预知眼</color>未过热，获得⁣1层⁤，上限⁣5层⁤。\n每层提供⁣斗殴+2⁤、⁣运动+2⁤。\n满⁣5层⁤时，非法术行动的检定获得⁣1颗奖励骰⁤。\n<color=#55D8EF>[攻击时]</color> 每层使下次主动⁣攻击伤害+5%⁤，攻击后清空。\n<color=#FFA15E>解兔</color>保留层数，也不触发这项增伤。",
+    "en": "<color=#A8E96D>[On Dodge]</color> Gain 1 stack if the <color=#8CD6EB>Eye of Precognition</color> was not overheated when you rolled, up to 5.\nEach stack grants Brawl +2 and Sport +2.\nAt 5 stacks, gain 1 bonus die on checks for actions other than spells.\n<color=#55D8EF>[On Attack]</color> The next attack you initiate deals +5% damage per stack. Clear all stacks afterward.\n<color=#FFA15E>Sezionatura di Coniglio</color> neither consumes the stacks nor gains their damage bonus."
+  },
+  "valenna.Buff.885138.Name": {
+    "zh": "加速的未来",
+    "en": "Accelerating Future"
+  },
+  "valenna.Buff.885139.Des": {
+    "zh": "受到标记者的⁣伤害+20%⁤。\n⁣速度高于10⁤时：\n⁣速度-50⁤，⁣最低降至10⁤。\n<color=#EE827B>处置</color>只能锁定<color=#E76160>狩猎目标</color>。",
+    "en": "Take +20% damage from whoever marked you.\nIf your Speed is above 10, reduce it by 50 to a minimum of 10.\n<color=#EE827B>Disposal</color> can only select the <color=#E76160>Game Target</color>."
+  },
+  "valenna.Buff.885139.Name": {
+    "zh": "狩猎目标",
+    "en": "Game Target"
+  },
+  "valenna.Buff.885140.Des": {
+    "zh": "⁣速度+50⁤。\n战斗技能施加<color=#FFA15E>震颤</color>时，额外施加⁣1层⁤。\n通过战斗技能获得<color=#EBC556>呼吸法</color>时，额外获得⁣1层⁤。",
+    "en": "Speed +50.\nWhen a combat skill inflicts <color=#FFA15E>Tremor</color>, inflict 1 extra stack.\nWhen a combat skill grants <color=#EBC556>Poise</color>, gain 1 extra stack."
+  },
+  "valenna.Buff.885140.Name": {
+    "zh": "心——瓦伦希娜",
+    "en": "Shin (心) - Valencina"
+  },
+  "valenna.Buff.885148.Des": {
+    "zh": "引爆目标的<color=#FFA15E>震颤</color>，每次分别结算。若已转为<color=#F35D50>震颤·灼热</color>，同时结算其爆炸效果。",
+    "en": "Trigger the target's <color=#FFA15E>Tremor Burst</color> and resolve each burst separately. If the status has become <color=#F35D50>Tremor - Scorch</color>, also resolve its explosion."
+  },
+  "valenna.Buff.885148.Name": {
+    "zh": "震颤引爆",
+    "en": "Tremor Burst"
+  },
+  "valenna.Buff.885150.Des": {
+    "zh": "持续⁣12小时⁤。\n<color=#55D8EF>[检定时]</color> 战斗与探索均获得⁣1颗惩罚骰⁤。",
+    "en": "Lasts 12 hours.\n<color=#55D8EF>[On Check]</color> Receive 1 penalty die in combat and exploration."
+  },
+  "valenna.Buff.885150.Name": {
+    "zh": "醉酒",
+    "en": "Drunk"
+  },
+  "valenna.Buff.885153.Des": {
+    "zh": "每层使造成的⁣普通伤害+10%⁤。\n<color=#55D8EF>[战斗结束时]</color> 清除全部层数。",
+    "en": "Deal +10% normal damage per stack.\n<color=#55D8EF>[Battle End]</color> Clear all stacks."
+  },
+  "valenna.Buff.885153.Name": {
+    "zh": "伤害强化",
+    "en": "Damage Up"
+  },
+  "valenna.Buff.885154.Des": {
+    "zh": "本次<color=#EE827B>处置</color>的⁣第5段⁤⁣基础伤害+2⁤。",
+    "en": "The fifth hit of this <color=#EE827B>Disposal</color> gains +2 base damage."
+  },
+  "valenna.Buff.885154.Name": {
+    "zh": "望",
+    "en": "Mang"
+  },
+  "valenna.Item.885111.EquipmentConfigData.OverrideDesc": {
+    "zh": "武器面板伤害⁣1D6⁤。\n<color=#55D8EF>[战斗开始时]</color> <color=#79CAD7>加速弹</color>补至⁣10发⁤。\n<color=#A8E96D>[命中时]</color> 若本段消耗了<color=#79CAD7>加速弹</color>且射击检定成功，施加⁣1层<color=#F35D50>燃烧</color>⁤和⁣1层<color=#FFA15E>震颤</color>⁤。\n<color=#FFA15E>[引爆时]</color> 获得⁣1层<color=#EABA6D>伤害强化</color>⁤，每行动轮最多获得⁣3层⁤。",
+    "en": "Weapon damage: 1D6.\n<color=#55D8EF>[Battle Start]</color> Refill <color=#79CAD7>Acceleration Rounds</color> to 10.\n<color=#A8E96D>[On Hit]</color> If this hit spent an <color=#79CAD7>Acceleration Round</color> and passed the Shoot check, inflict 1 <color=#F35D50>Burn</color> and 1 <color=#FFA15E>Tremor</color>.\n<color=#FFA15E>[On Burst]</color> Gain 1 <color=#EABA6D>Damage Up</color>, up to 3 stacks per action round."
+  },
+  "valenna.Item.885111.ItemDes": {
+    "zh": "瓦伦希娜斜挎在背后的铳剑。伯纳特利家族的定制加速弹用在贴身出剑的一瞬。",
+    "en": "Valencina carries this gunblade slung across her back. Famiglia Bognatelli custom Acceleration Rounds fire the instant she strikes at close range."
+  },
+  "valenna.Item.885111.ItemEffectDes": {
+    "zh": "<color=#55D8EF>[战斗开始时]</color> <color=#79CAD7>加速弹</color>补至⁣10发⁤。\n<color=#A8E96D>[命中时]</color> 若本段消耗了<color=#79CAD7>加速弹</color>且射击检定成功，施加⁣1层<color=#F35D50>燃烧</color>⁤和⁣1层<color=#FFA15E>震颤</color>⁤。\n<color=#FFA15E>[引爆时]</color> 获得⁣1层<color=#EABA6D>伤害强化</color>⁤，每行动轮最多获得⁣3层⁤。",
+    "en": "<color=#55D8EF>[Battle Start]</color> Refill <color=#79CAD7>Acceleration Rounds</color> to 10.\n<color=#A8E96D>[On Hit]</color> If this hit spent an <color=#79CAD7>Acceleration Round</color> and passed the Shoot check, inflict 1 <color=#F35D50>Burn</color> and 1 <color=#FFA15E>Tremor</color>.\n<color=#FFA15E>[On Burst]</color> Gain 1 <color=#EABA6D>Damage Up</color>, up to 3 stacks per action round."
+  },
+  "valenna.Item.885111.ItemName": {
+    "zh": "巴勒莫——铳剑",
+    "en": "Palermo - Gunblade"
+  },
+  "valenna.Item.885112.EquipmentConfigData.OverrideDesc": {
+    "zh": "瓦伦希娜的专属护具，装备后锁定。\n<color=#55D8EF>[回合开始]</color> 未处于过热状态，则以<color=#8CD6EB>[预知]</color>替换你的闪避。\n未处于过热状态时，斗殴检定获得⁣1颗奖励骰⁤。\n<color=#55D8EF>[回合开始时]</color> 战斗与探索均恢复⁣5层充能⁤，上限⁣30层⁤。\n<color=#EE827B>[受击时]</color> 损失⁣5层充能⁤。发动辅助闪避也消耗⁣5层⁤。\n<color=#55D8EF>[辅助闪避]</color> 发动前充能超过⁣10层⁤，获得⁣2颗奖励骰⁤；否则获得⁣1颗⁤。\n同一次攻击中，闪避成功可继承奖励骰，失败后下一段可再次发动。\n<color=#A8E96D>[闪避成功时]</color> 恢复⁣1点精神值⁤。开骰时未过热，另获得⁣1层<color=#77D1DC>加速的未来</color>⁤。\n充能耗尽时转为<color=#8CD6EB>预知眼</color><color=#E77167>·过热</color>，闪避获得⁣1颗惩罚骰⁤。\n过热期间，每回合开始积累⁣10层⁤，满⁣30层⁤恢复。",
+    "en": "Valencina's exclusive <color=#AAC4D2>armor</color>. Cannot be removed once equipped.\n<color=#55D8EF>[Turn Start]</color> If the <color=#8CD6EB>Eye of Precognition</color> is not overheated, replace your Dodge with [<color=#8CD6EB>Precognition</color>].\nWhile the <color=#8CD6EB>Eye of Precognition</color> is not overheated, Brawl checks gain 1 bonus die.\n<color=#55D8EF>[Turn Start]</color> Recover 5 charge in combat and exploration, up to 30.\n<color=#EE827B>[When Hit]</color> Lose 5 charge. An assisted dodge also costs 5 charge.\n<color=#55D8EF>[Assisted Dodge]</color> Gain 2 bonus dice if you have more than 10 charge before activation. Otherwise, gain 1 bonus die.\nWithin one attack, a successful dodge carries the bonus dice to the next hit. After a failed dodge, assistance can activate again on the next hit.\n<color=#A8E96D>[On Dodge]</color> Restore 1 SP. If the eye was not overheated when you rolled, also gain 1 <color=#77D1DC>Accelerating Future</color>.\nAt zero charge, enter <color=#8CD6EB>Eye of Precognition</color><color=#E77167> - Overheat</color>. Dodge checks receive 1 penalty die.\nWhile overheated, build 10 stacks at the start of each turn. Recover at 30 stacks."
+  },
+  "valenna.Item.885112.ItemDes": {
+    "zh": "并非像魔法那样预测未来。这只眼睛更接近于通过分析进入视野的一切，预测即将到来的瞬间的计算机。被称为奥丁之眼的这件遗物，实际上是被分为三份的某件遗物的碎片。",
+    "en": "This eye does not see the future through magic. It works more like a computer, analyzing everything in its field of view to predict what will happen next. The relic known as Odin's Eye is one fragment of an artifact split into three pieces."
+  },
+  "valenna.Item.885112.ItemEffectDes": {
+    "zh": "瓦伦希娜的专属护具，装备后锁定。\n<color=#55D8EF>[回合开始]</color> 未处于过热状态，则以<color=#8CD6EB>[预知]</color>替换你的闪避。\n未处于过热状态时，斗殴检定获得⁣1颗奖励骰⁤。\n<color=#55D8EF>[回合开始时]</color> 战斗与探索均恢复⁣5层充能⁤，上限⁣30层⁤。\n<color=#EE827B>[受击时]</color> 损失⁣5层充能⁤。发动辅助闪避也消耗⁣5层⁤。\n<color=#55D8EF>[辅助闪避]</color> 发动前充能超过⁣10层⁤，获得⁣2颗奖励骰⁤；否则获得⁣1颗⁤。\n同一次攻击中，闪避成功可继承奖励骰，失败后下一段可再次发动。\n<color=#A8E96D>[闪避成功时]</color> 恢复⁣1点精神值⁤。开骰时未过热，另获得⁣1层<color=#77D1DC>加速的未来</color>⁤。\n充能耗尽时转为<color=#8CD6EB>预知眼</color><color=#E77167>·过热</color>，闪避获得⁣1颗惩罚骰⁤。\n过热期间，每回合开始积累⁣10层⁤，满⁣30层⁤恢复。",
+    "en": "Valencina's exclusive <color=#AAC4D2>armor</color>. Cannot be removed once equipped.\n<color=#55D8EF>[Turn Start]</color> If the <color=#8CD6EB>Eye of Precognition</color> is not overheated, replace your Dodge with [<color=#8CD6EB>Precognition</color>].\nWhile the <color=#8CD6EB>Eye of Precognition</color> is not overheated, Brawl checks gain 1 bonus die.\n<color=#55D8EF>[Turn Start]</color> Recover 5 charge in combat and exploration, up to 30.\n<color=#EE827B>[When Hit]</color> Lose 5 charge. An assisted dodge also costs 5 charge.\n<color=#55D8EF>[Assisted Dodge]</color> Gain 2 bonus dice if you have more than 10 charge before activation. Otherwise, gain 1 bonus die.\nWithin one attack, a successful dodge carries the bonus dice to the next hit. After a failed dodge, assistance can activate again on the next hit.\n<color=#A8E96D>[On Dodge]</color> Restore 1 SP. If the eye was not overheated when you rolled, also gain 1 <color=#77D1DC>Accelerating Future</color>.\nAt zero charge, enter <color=#8CD6EB>Eye of Precognition</color><color=#E77167> - Overheat</color>. Dodge checks receive 1 penalty die.\nWhile overheated, build 10 stacks at the start of each turn. Recover at 30 stacks."
+  },
+  "valenna.Item.885112.ItemName": {
+    "zh": "预知眼",
+    "en": "Eye of Precognition"
+  },
+  "valenna.Item.885113.EquipmentConfigData.OverrideDesc": {
+    "zh": "武器面板伤害⁣2D4⁤。\n<color=#55D8EF>[攻击时]</color> 合计目标的<color=#F35D50>燃烧</color>与<color=#FFA15E>震颤</color>层数。\n每层使⁣伤害+5%⁤，上限⁣100%⁤。\n目标尚有<color=#AAC4D2>护甲</color>时，每层改为⁣伤害+10%⁤，上限⁣200%⁤。",
+    "en": "Weapon damage: 2D4.\n<color=#55D8EF>[On Attack]</color> Count the target's combined <color=#F35D50>Burn</color> and <color=#FFA15E>Tremor</color> stacks.\nDeal +5% damage per stack, up to +100%.\nIf the target still has <color=#AAC4D2>armor</color>, deal +10% damage per stack instead, up to +200%."
+  },
+  "valenna.Item.885113.ItemDes": {
+    "zh": "巴勒莫的另一把刀，刀鞘系在瓦伦希娜腰侧。她以这把单手刀使出切割攻击。",
+    "en": "Valencina wears the other Palermo blade at her hip. She uses this one-handed sword for Colpi di Taglio."
+  },
+  "valenna.Item.885113.ItemEffectDes": {
+    "zh": "<color=#55D8EF>[攻击时]</color> 合计目标的<color=#F35D50>燃烧</color>与<color=#FFA15E>震颤</color>层数。\n每层使⁣伤害+5%⁤，上限⁣100%⁤。\n目标尚有<color=#AAC4D2>护甲</color>时，每层改为⁣伤害+10%⁤，上限⁣200%⁤。",
+    "en": "<color=#55D8EF>[On Attack]</color> Count the target's combined <color=#F35D50>Burn</color> and <color=#FFA15E>Tremor</color> stacks.\nDeal +5% damage per stack, up to +100%.\nIf the target still has <color=#AAC4D2>armor</color>, deal +10% damage per stack instead, up to +200%."
+  },
+  "valenna.Item.885113.ItemName": {
+    "zh": "巴勒莫——切斩刀",
+    "en": "Palermo - Cutlass"
+  },
+  "valenna.Item.885114.ConfigData.0.OverrideDesc": {
+    "zh": "满装⁣3支⁤。\n<color=#55D8EF>[品味雪茄]</color> 消耗⁣1支⁤，花费⁣1小时⁤，恢复⁣1D2点精神值⁤。\n<color=#55D8EF>[叼在嘴里]</color> 保留雪茄，精神值不变。",
+    "en": "Holds up to 3 cigars.\n<color=#55D8EF>[Savor the Cigar]</color> Spend 1 cigar and 1 hour to restore 1D2 SP.\n<color=#55D8EF>[Hold It in Your Mouth]</color> Keep the cigar. SP stays the same."
+  },
+  "valenna.Item.885114.ItemDes": {
+    "zh": "烟鬼的最爱。「这个烟鬼哪里的钱用定制的子弹和名贵雪茄？」",
+    "en": "A chain smoker's favorite. “Where does that chain smoker get the money for custom rounds and expensive cigars?”"
+  },
+  "valenna.Item.885114.ItemEffectDes": {
+    "zh": "满装⁣3支⁤。\n<color=#55D8EF>[品味雪茄]</color> 消耗⁣1支⁤，花费⁣1小时⁤，恢复⁣1D2点精神值⁤。\n<color=#55D8EF>[叼在嘴里]</color> 保留雪茄，精神值不变。",
+    "en": "Holds up to 3 cigars.\n<color=#55D8EF>[Savor the Cigar]</color> Spend 1 cigar and 1 hour to restore 1D2 SP.\n<color=#55D8EF>[Hold It in Your Mouth]</color> Keep the cigar. SP stays the same."
+  },
+  "valenna.Item.885114.ItemName": {
+    "zh": "上等雪茄",
+    "en": "Fine Cigars"
+  },
+  "valenna.Item.885115.ConfigData.0.OverrideDesc": {
+    "zh": "携带⁣1瓶⁤。\n<color=#55D8EF>[饮用时]</color> 恢复⁣1D4点精神值⁤，进入<color=#CBB1DD>醉酒</color>。\n<color=#CBB1DD>醉酒</color>持续⁣12小时⁤，期间每次检定获得⁣1颗惩罚骰⁤。",
+    "en": "Carries 1 bottle.\n<color=#55D8EF>[Drink]</color> Restore 1D4 SP and become <color=#CBB1DD>Drunk</color>.\n<color=#CBB1DD>Drunk</color> lasts 12 hours and adds 1 penalty die to every check."
+  },
+  "valenna.Item.885115.ItemDes": {
+    "zh": "酒鬼的最爱。瓦伦希娜总会为自己留上一瓶。",
+    "en": "A drunkard's favorite. Valencina always keeps a bottle for herself."
+  },
+  "valenna.Item.885115.ItemEffectDes": {
+    "zh": "携带⁣1瓶⁤。\n<color=#55D8EF>[饮用时]</color> 恢复⁣1D4点精神值⁤，进入<color=#CBB1DD>醉酒</color>。\n<color=#CBB1DD>醉酒</color>持续⁣12小时⁤，期间每次检定获得⁣1颗惩罚骰⁤。",
+    "en": "Carries 1 bottle.\n<color=#55D8EF>[Drink]</color> Restore 1D4 SP and become <color=#CBB1DD>Drunk</color>.\n<color=#CBB1DD>Drunk</color> lasts 12 hours and adds 1 penalty die to every check."
+  },
+  "valenna.Item.885115.ItemName": {
+    "zh": "高浓度伏特加",
+    "en": "High-Proof Vodka"
+  },
+  "valenna.Item.885116.EquipmentConfigData.OverrideDesc": {
+    "zh": "<color=#55D8EF>[装备时]</color> ⁣交涉+5⁤。",
+    "en": "<color=#55D8EF>[While Equipped]</color> Diplomacy +5."
+  },
+  "valenna.Item.885116.ItemDes": {
+    "zh": "深红宽檐，帽身和帽檐镶着金色饰带。家族二级指挥官的标配。",
+    "en": "A deep-red, wide-brimmed hat with gold trim on the crown and brim. Standard issue for the family's second-rank commanders."
+  },
+  "valenna.Item.885116.ItemEffectDes": {
+    "zh": "<color=#55D8EF>[装备时]</color> ⁣交涉+5⁤。",
+    "en": "<color=#55D8EF>[While Equipped]</color> Diplomacy +5."
+  },
+  "valenna.Item.885116.ItemName": {
+    "zh": "指挥官的帽子",
+    "en": "Commander's Hat"
+  },
+  "valenna.MythicalItem.885112.Localization_Des": {
+    "zh": "并非像魔法那样预测未来。这只眼睛更接近于通过分析进入视野的一切，预测即将到来的瞬间的计算机。被称为奥丁之眼的这件遗物，实际上是被分为三份的某件遗物的碎片。",
+    "en": "This eye does not see the future through magic. It works more like a computer, analyzing everything in its field of view to predict what will happen next. The relic known as Odin's Eye is one fragment of an artifact split into three pieces."
+  },
+  "valenna.MythicalItem.885112.Localization_Effct": {
+    "zh": "闪避成功时恢复⁣1点精神值⁤。\n开骰时未过热，另获得⁣1层<color=#77D1DC>加速的未来</color>⁤。",
+    "en": "Restore 1 SP after a successful dodge.\nIf the eye was not overheated when you rolled, also gain 1 <color=#77D1DC>Accelerating Future</color>."
+  },
+  "valenna.MythicalItem.885112.Localization_Name": {
+    "zh": "预知眼",
+    "en": "Eye of Precognition"
+  },
+  "valenna.PartnerData.885101.AI.CommonActions.0.Name": {
+    "zh": "切割攻击",
+    "en": "Colpi di Taglio"
+  },
+  "valenna.PartnerData.885101.CharacterDes": {
+    "zh": "<color=#FF4040>二老板</color> · 手指 · 拇指 · 蜘蛛巢 · 战争英雄 · <color=#FF4040>七大家族</color> · 烟霾战争",
+    "en": "<color=#FF4040>Underboss</color> · The Fingers · The Thumb · House of Spiders · War Hero · <color=#FF4040>Seven Great Families</color> · Smoke War"
+  },
+  "valenna.PartnerData.885101.CharacterName": {
+    "zh": "瓦伦希娜",
+    "en": "Valencina"
+  },
+  "valenna.PartnerData.885101.CustomTags.0": {
+    "zh": "手指",
+    "en": "The Fingers"
+  },
+  "valenna.PartnerData.885101.CustomTags.1": {
+    "zh": "拇指",
+    "en": "The Thumb"
+  },
+  "valenna.PartnerData.885101.CustomTags.2": {
+    "zh": "蜘蛛巢",
+    "en": "House of Spiders"
+  },
+  "valenna.PartnerData.885101.CustomTags.3": {
+    "zh": "战争英雄",
+    "en": "War Hero"
+  },
+  "valenna.PartnerData.885101.CustomTags.4": {
+    "zh": "烟霾战争",
+    "en": "Smoke War"
+  },
+  "valenna.Trait.885141.Localization_Des": {
+    "zh": "⁣隐匿-10⁤。\n攻击栏使用七项巴勒莫剑术。\n同时拥有「<color=#E76160>狩猎时刻</color>」时，开战自动指定<color=#E76160>狩猎目标</color>。",
+    "en": "Stealth -10.\nUse the seven Palermo sword techniques in the attack menu.\nWith <color=#E76160>Time to Hunt</color>, automatically designate a <color=#E76160>Game Target</color> at the start of battle."
+  },
+  "valenna.Trait.885141.Localization_Name": {
+    "zh": "巴勒莫之剑",
+    "en": "La Spada di Palermo"
+  },
+  "valenna.Trait.885142.Localization_Des": {
+    "zh": "进入剧本或战斗时，自动装备专属神话物品<color=#8CD6EB>预知眼</color>。\n<color=#8CD6EB>预知眼</color>未过热时，以<color=#8CD6EB>[预知]</color>替换闪避，斗殴检定获得⁣1颗奖励骰⁤。成功闪避敌方一次普通攻击的全部段数后，以「<color=#FFA15E>解兔</color>」反击该敌人。",
+    "en": "Automatically equip the exclusive <color=#8CD6EB>Eye of Precognition</color> when entering a scenario or battle.\nWhile the <color=#8CD6EB>Eye of Precognition</color> is active, [<color=#8CD6EB>Precognition</color>] replaces Dodge and Brawl checks gain 1 bonus die.\nAfter dodging every hit of a normal attack, counter with <color=#FFA15E>Sezionatura di Coniglio</color>."
+  },
+  "valenna.Trait.885142.Localization_Name": {
+    "zh": "预知",
+    "en": "Precognition"
+  },
+  "valenna.Trait.885143.Localization_Des": {
+    "zh": "<color=#55D8EF>[战斗开始时]</color> 随机标记一名敌人为<color=#E76160>狩猎目标</color>。\n对猎物造成的⁣伤害+20%⁤。\n猎物⁣速度高于10⁤时，⁣速度-50⁤，⁣最低降至10⁤。\n<color=#EE827B>处置</color>锁定猎物，攻击后解除标记。若<color=#EE827B>处置</color>击杀猎物，下轮标记另一名敌人。\n每⁣3个行动轮⁤结束时，若场上没有标记，下轮重新指定猎物。\n<color=#A8E96D>[击杀猎物时]</color> 其余人类敌人进行意志检定，失败则陷入<color=#D196C7>恐惧</color>。",
+    "en": "<color=#55D8EF>[Battle Start]</color> Randomly mark one enemy as the <color=#E76160>Game Target</color>.\nDeal +20% damage to the <color=#E76160>Game Target</color>.\nIf the <color=#E76160>Game Target</color> has more than 10 Speed, reduce its Speed by 50 to a minimum of 10.\n<color=#EE827B>Disposal</color> locks onto the <color=#E76160>Game Target</color> and clears the mark after attacking. If it kills the <color=#E76160>Game Target</color>, mark another enemy next round.\nAt the end of every third action round, if no mark remains, designate a new <color=#E76160>Game Target</color> next round.\n<color=#A8E96D>[On Killing the Game Target]</color> Other human enemies make a Willpower check. On failure, they gain <color=#D196C7>Fear</color>."
+  },
+  "valenna.Trait.885143.Localization_Name": {
+    "zh": "狩猎时刻",
+    "en": "Time to Hunt"
+  },
+  "valenna.Trait.885144.Localization_Des": {
+    "zh": "<color=#55D8EF>[进入剧本时]</color> 获得⁣1000资金⁤。\n进入剧本及通关时，将上等雪茄补至⁣3支⁤、高浓度伏特加补至⁣1瓶⁤，并补满<color=#79CAD7>加速弹</color>。\n<color=#55D8EF>[战斗开始时]</color> <color=#79CAD7>加速弹</color>补至⁣10发⁤。",
+    "en": "<color=#55D8EF>[On Entering a Scenario]</color> Gain 1,000 funds.\nOn entering or clearing a scenario, replenish your supply to 3 Fine Cigars and 1 bottle of High-Proof Vodka, and refill <color=#79CAD7>Acceleration Rounds</color>.\n<color=#55D8EF>[Battle Start]</color> Refill <color=#79CAD7>Acceleration Rounds</color> to 10."
+  },
+  "valenna.Trait.885144.Localization_Name": {
+    "zh": "伯纳特利家族之耻",
+    "en": "The Shame of Famiglia Bognatelli"
+  },
+  "valenna.Trait.885145.Localization_Des": {
+    "zh": "⁣意志+10⁤。\n⁣精神值上限+15⁤。",
+    "en": "Willpower +10.\nMaximum SP +15."
+  },
+  "valenna.Trait.885145.Localization_Name": {
+    "zh": "战争英雄——瓦伦希娜",
+    "en": "War Hero - Valencina"
+  },
+  "valenna.Trait.885146.Localization_Des": {
+    "zh": "⁣斗殴-5⁤，⁣远程攻击-5⁤，⁣力量-5⁤。\n⁣体质-10⁤，⁣能工巧匠-10⁤。",
+    "en": "Brawl -5, Ranged Attack -5, Strength -5.\nConstitution -10, Craft -10."
+  },
+  "valenna.Trait.885146.Localization_Name": {
+    "zh": "长期酗酒的酒鬼",
+    "en": "Chronic Drunkard"
+  },
+  "valenna.Trait.885147.Localization_Des": {
+    "zh": "⁣侦察+5⁤，⁣感知+5⁤。",
+    "en": "Observation +5, Perception +5."
+  },
+  "valenna.Trait.885147.Localization_Name": {
+    "zh": "梦中的黄金票券",
+    "en": "Golden Ticket from a Dream"
+  },
+  "valenna.Trait.885155.Localization_Des": {
+    "zh": "⁣速度+50⁤。\n<color=#55D8EF>[苏醒期间]</color> 战斗技能施加<color=#FFA15E>震颤</color>时，额外施加⁣1层⁤。\n<color=#55D8EF>[苏醒期间]</color> 通过战斗技能获得<color=#EBC556>呼吸法</color>时，额外获得⁣1层⁤。",
+    "en": "Speed +50.\n<color=#55D8EF>[While Awakened]</color> When a combat skill inflicts <color=#FFA15E>Tremor</color>, inflict 1 extra stack.\n<color=#55D8EF>[While Awakened]</color> When a combat skill grants <color=#EBC556>Poise</color>, gain 1 extra stack."
+  },
+  "valenna.Trait.885155.Localization_Name": {
+    "zh": "心——瓦伦希娜",
+    "en": "Shin (心) - Valencina"
+  }
+}

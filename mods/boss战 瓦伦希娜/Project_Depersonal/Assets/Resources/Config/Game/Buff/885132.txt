@@ -5,13 +5,13 @@
       "__type": "MOD.BuffTableData,Assembly-CSharp",
       "Id": 885132,
       "Name": {
-        "TarKey": "",
+        "TarKey": "valenna.Buff.885132.Name",
         "SheetKey": "",
         "InputText": "震颤",
         "Characteristic": null
       },
       "Des": {
-        "TarKey": "",
+        "TarKey": "valenna.Buff.885132.Des",
         "SheetKey": "",
         "InputText": "<color=#FFA15E>[引爆时]</color> 混乱值增加<color=#FFA15E>震颤</color>层数的三分之一，向上取整，再消耗⁣1层<color=#FFA15E>震颤</color>⁤。\n单次增量上限为目标意志的三分之一，向下取整；意志大于零时，上限至少为⁣1点⁤。\n混乱条上限等于目标意志。填满后<color=#D196C7>昏迷</color>⁣1个行动轮⁤，解除后从零开始。\n<color=#D196C7>昏迷</color>期间暂停积累混乱值。\n<color=#55D8EF>[回合结束时]</color> 减少⁣1层⁤。",
         "Characteristic": null

@@ -155,15 +155,14 @@ namespace ValennaBattle
         [HarmonyPatch(typeof(RoleData), nameof(RoleData.ProfessionName), MethodType.Getter)]
         private static class PartnerProfessionName
         {
-            private static readonly LocalizationKeyData Profession = new LocalizationKeyData
-            {
-                InputText = "蜘蛛巢 拇指父辈"
-            };
-
             private static void Postfix(RoleData __instance, ref LocalizationKeyData __result)
             {
-                if (__instance is PartnerRoleData partner && partner.PartnerId == ValennaPlugin.PartnerId)
-                    __result = Profession;
+                // 旧副本存档可能用通用角色数据保存伙伴，专用模型键仍可识别。
+                if (ValennaHeart.IsPreset(__instance) ||
+                    __instance.Custom_RoleModelName == ModelKey ||
+                    __instance.Custom_ModelReference?.Key == ModelKey ||
+                    __instance.ConfigData?.ModelPathReference?.Key == ModelKey)
+                    __result = ValennaText.Key("profession", "蜘蛛巢 拇指父辈");
             }
         }
     }

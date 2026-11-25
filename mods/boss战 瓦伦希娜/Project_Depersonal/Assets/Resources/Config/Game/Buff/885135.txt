@@ -5,15 +5,15 @@
       "__type": "MOD.BuffTableData,Assembly-CSharp",
       "Id": 885135,
       "Name": {
-        "TarKey": "",
+        "TarKey": "valenna.Buff.885135.Name",
         "SheetKey": "",
         "InputText": "预知眼",
         "Characteristic": null
       },
       "Des": {
-        "TarKey": "",
+        "TarKey": "valenna.Buff.885135.Des",
         "SheetKey": "",
-        "InputText": "充能上限⁣30层⁤。拥有预知时，每层使⁣检定成功区间+1⁤。\n<color=#55D8EF>[回合开始时]</color> 战斗与探索均恢复⁣5层充能⁤。\n发动辅助闪避或受到攻击命中时，消耗⁣5层充能⁤。耗尽后转为<color=#8CD6EB>预知眼</color><color=#E77167>·过热</color>。",
+        "InputText": "充能上限⁣30层⁤。拥有预知时，每层使⁣检定成功区间+1⁤。\n<color=#55D8EF>[回合开始]</color> 未处于过热状态，则以<color=#8CD6EB>[预知]</color>替换你的闪避。\n未处于过热状态时，斗殴检定获得⁣1颗奖励骰⁤。\n<color=#55D8EF>[回合开始时]</color> 战斗与探索均恢复⁣5层充能⁤。\n发动辅助闪避或受到攻击命中时，消耗⁣5层充能⁤。耗尽后转为<color=#8CD6EB>预知眼</color><color=#E77167>·过热</color>。",
         "Characteristic": null
       },
       "IconPathReference": {

@@ -5,13 +5,13 @@
       "__type": "MOD.BuffTableData,Assembly-CSharp",
       "Id": 885136,
       "Name": {
-        "TarKey": "",
+        "TarKey": "valenna.Buff.885136.Name",
         "SheetKey": "",
         "InputText": "预知眼·过热",
         "Characteristic": null
       },
       "Des": {
-        "TarKey": "",
+        "TarKey": "valenna.Buff.885136.Des",
         "SheetKey": "",
         "InputText": "<color=#E77167>[过热期间]</color> 闪避检定获得⁣1颗惩罚骰⁤。\n<color=#55D8EF>[回合开始时]</color> 战斗与探索均积累⁣10层⁤。\n达到⁣30层⁤时转回<color=#8CD6EB>预知眼</color>。",
         "Characteristic": null

@@ -5,13 +5,13 @@
       "__type": "MOD.BuffTableData,Assembly-CSharp",
       "Id": 885133,
       "Name": {
-        "TarKey": "",
+        "TarKey": "valenna.Buff.885133.Name",
         "SheetKey": "",
         "InputText": "烧伤",
         "Characteristic": null
       },
       "Des": {
-        "TarKey": "",
+        "TarKey": "valenna.Buff.885133.Des",
         "SheetKey": "",
         "InputText": "<color=#F35D50>烧伤</color>按<color=#F35D50>燃烧</color>的规则结算。",
         "Characteristic": null

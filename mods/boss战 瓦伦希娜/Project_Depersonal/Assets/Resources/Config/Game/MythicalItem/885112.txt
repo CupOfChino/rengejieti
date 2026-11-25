@@ -15,19 +15,19 @@
       "Index": 885112,
       "ItemId": 885112,
       "Localization_Name": {
-        "TarKey": "",
+        "TarKey": "valenna.MythicalItem.885112.Localization_Name",
         "SheetKey": "",
         "InputText": "预知眼",
         "Characteristic": null
       },
       "Localization_Des": {
-        "TarKey": "",
+        "TarKey": "valenna.MythicalItem.885112.Localization_Des",
         "SheetKey": "",
         "InputText": "并非像魔法那样预测未来。这只眼睛更接近于通过分析进入视野的一切，预测即将到来的瞬间的计算机。被称为奥丁之眼的这件遗物，实际上是被分为三份的某件遗物的碎片。",
         "Characteristic": null
       },
       "Localization_Effct": {
-        "TarKey": "",
+        "TarKey": "valenna.MythicalItem.885112.Localization_Effct",
         "SheetKey": "",
         "InputText": "闪避成功时恢复⁣1点精神值⁤。\n开骰时未过热，另获得⁣1层<color=#77D1DC>加速的未来</color>⁤。",
         "Characteristic": null

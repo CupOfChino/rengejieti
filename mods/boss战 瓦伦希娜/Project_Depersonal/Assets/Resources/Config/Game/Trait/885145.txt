@@ -8,13 +8,13 @@
       "CanRepeate": false,
       "IsCanCreateGet": false,
       "Localization_Name": {
-        "TarKey": "",
+        "TarKey": "valenna.Trait.885145.Localization_Name",
         "SheetKey": "",
         "InputText": "战争英雄——瓦伦希娜",
         "Characteristic": null
       },
       "Localization_Des": {
-        "TarKey": "",
+        "TarKey": "valenna.Trait.885145.Localization_Des",
         "SheetKey": "",
         "InputText": "⁣意志+10⁤。\n⁣精神值上限+15⁤。",
         "Characteristic": null

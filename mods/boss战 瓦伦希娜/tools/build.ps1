@@ -24,6 +24,8 @@ try {
     }
     $domain = (Get-Item -LiteralPath (Join-Path $repo 'mods/自定义播放战斗背景和BGM/plugins/CustomBattleBg.dll')).FullName
     $arguments += "-r:$domain"
+    $language = (Get-Item -LiteralPath (Join-Path $mod 'resource/localization.json')).FullName
+    $arguments += "-resource:$language,ValennaBattle.Localization.json"
     $arguments += @(Get-ChildItem -LiteralPath (Join-Path $mod 'src') -File -Filter '*.cs' | ForEach-Object FullName)
     $effectDir = Join-Path $mod 'Project_Depersonal/Assets/Resources/Texture/Effect'
     foreach ($key in 'danger_2','warning_2','danger_3','warning_3','stage_I','stage_II','stage_III','stage_IV','stage_V') {

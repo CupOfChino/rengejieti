@@ -5,13 +5,13 @@
       "__type": "MOD.BuffTableData,Assembly-CSharp",
       "Id": 885139,
       "Name": {
-        "TarKey": "",
+        "TarKey": "valenna.Buff.885139.Name",
         "SheetKey": "",
         "InputText": "狩猎目标",
         "Characteristic": null
       },
       "Des": {
-        "TarKey": "",
+        "TarKey": "valenna.Buff.885139.Des",
         "SheetKey": "",
         "InputText": "受到标记者的⁣伤害+20%⁤。\n⁣速度高于10⁤时：\n⁣速度-50⁤，⁣最低降至10⁤。\n<color=#EE827B>处置</color>只能锁定<color=#E76160>狩猎目标</color>。",
         "Characteristic": null

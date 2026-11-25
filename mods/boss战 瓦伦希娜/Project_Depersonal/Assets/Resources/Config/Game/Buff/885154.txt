@@ -5,13 +5,13 @@
       "__type": "MOD.BuffTableData,Assembly-CSharp",
       "Id": 885154,
       "Name": {
-        "TarKey": "",
+        "TarKey": "valenna.Buff.885154.Name",
         "SheetKey": "",
         "InputText": "望",
         "Characteristic": null
       },
       "Des": {
-        "TarKey": "",
+        "TarKey": "valenna.Buff.885154.Des",
         "SheetKey": "",
         "InputText": "本次<color=#EE827B>处置</color>的⁣第5段⁤⁣基础伤害+2⁤。",
         "Characteristic": null

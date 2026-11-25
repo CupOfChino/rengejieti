@@ -6,7 +6,7 @@
       "Id": 885122,
       "IsCover": false,
       "Name": {
-        "TarKey": "",
+        "TarKey": "valenna.BattleSkill.885122.Name",
         "SheetKey": "",
         "InputText": "回焰",
         "Characteristic": null
@@ -14,7 +14,7 @@
       "IsOverrideName": false,
       "OverrideNames": [],
       "Description": {
-        "TarKey": "",
+        "TarKey": "valenna.BattleSkill.885122.Description",
         "SheetKey": "",
         "InputText": "近身挑斩后顺势回斩。 命中⁣2次⁤，每次基础伤害1。",
         "Characteristic": null

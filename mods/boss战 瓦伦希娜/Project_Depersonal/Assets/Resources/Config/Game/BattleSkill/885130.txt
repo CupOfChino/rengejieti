@@ -6,7 +6,7 @@
       "Id": 885130,
       "IsCover": false,
       "Name": {
-        "TarKey": "",
+        "TarKey": "valenna.BattleSkill.885130.Name",
         "SheetKey": "",
         "InputText": "预知",
         "Characteristic": null
@@ -14,7 +14,7 @@
       "IsOverrideName": false,
       "OverrideNames": [],
       "Description": {
-        "TarKey": "",
+        "TarKey": "valenna.BattleSkill.885130.Description",
         "SheetKey": "",
         "InputText": "准备预知。完整闪避敌方一次攻击行动后，对攻击者发动一次<color=#FFA15E>解兔</color>。",
         "Characteristic": null

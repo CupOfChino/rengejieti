@@ -5,13 +5,13 @@
       "__type": "MOD.BuffTableData,Assembly-CSharp",
       "Id": 885148,
       "Name": {
-        "TarKey": "",
+        "TarKey": "valenna.Buff.885148.Name",
         "SheetKey": "",
         "InputText": "震颤引爆",
         "Characteristic": null
       },
       "Des": {
-        "TarKey": "",
+        "TarKey": "valenna.Buff.885148.Des",
         "SheetKey": "",
         "InputText": "引爆目标的<color=#FFA15E>震颤</color>，每次分别结算。若已转为<color=#F35D50>震颤·灼热</color>，同时结算其爆炸效果。",
         "Characteristic": null

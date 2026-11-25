@@ -6,19 +6,19 @@
       "ItemId": 885113,
       "UniqueKey": "valenna_cutlass",
       "ItemName": {
-        "TarKey": "",
+        "TarKey": "valenna.Item.885113.ItemName",
         "SheetKey": "",
         "InputText": "巴勒莫——切斩刀",
         "Characteristic": null
       },
       "ItemDes": {
-        "TarKey": "",
+        "TarKey": "valenna.Item.885113.ItemDes",
         "SheetKey": "",
         "InputText": "巴勒莫的另一把刀，刀鞘系在瓦伦希娜腰侧。她以这把单手刀使出切割攻击。",
         "Characteristic": null
       },
       "ItemEffectDes": {
-        "TarKey": "",
+        "TarKey": "valenna.Item.885113.ItemEffectDes",
         "SheetKey": "",
         "InputText": "<color=#55D8EF>[攻击时]</color> 合计目标的<color=#F35D50>燃烧</color>与<color=#FFA15E>震颤</color>层数。\n每层使⁣伤害+5%⁤，上限⁣100%⁤。\n目标尚有<color=#AAC4D2>护甲</color>时，每层改为⁣伤害+10%⁤，上限⁣200%⁤。",
         "Characteristic": null
@@ -98,7 +98,7 @@
         "InfoDatas": [],
         "EnableOverrideDesc": true,
         "OverrideDesc": {
-          "TarKey": "",
+          "TarKey": "valenna.Item.885113.EquipmentConfigData.OverrideDesc",
           "SheetKey": "",
           "InputText": "武器面板伤害⁣2D4⁤。\n<color=#55D8EF>[攻击时]</color> 合计目标的<color=#F35D50>燃烧</color>与<color=#FFA15E>震颤</color>层数。\n每层使⁣伤害+5%⁤，上限⁣100%⁤。\n目标尚有<color=#AAC4D2>护甲</color>时，每层改为⁣伤害+10%⁤，上限⁣200%⁤。",
           "Characteristic": null

@@ -8,13 +8,13 @@
       "CanRepeate": false,
       "IsCanCreateGet": false,
       "Localization_Name": {
-        "TarKey": "",
+        "TarKey": "valenna.Trait.885141.Localization_Name",
         "SheetKey": "",
         "InputText": "巴勒莫之剑",
         "Characteristic": null
       },
       "Localization_Des": {
-        "TarKey": "",
+        "TarKey": "valenna.Trait.885141.Localization_Des",
         "SheetKey": "",
         "InputText": "⁣隐匿-10⁤。\n攻击栏使用七项巴勒莫剑术。\n同时拥有「<color=#E76160>狩猎时刻</color>」时，开战自动指定<color=#E76160>狩猎目标</color>。",
         "Characteristic": null

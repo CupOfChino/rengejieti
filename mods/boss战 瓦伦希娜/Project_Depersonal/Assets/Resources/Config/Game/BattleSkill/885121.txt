@@ -6,7 +6,7 @@
       "Id": 885121,
       "IsCover": false,
       "Name": {
-        "TarKey": "",
+        "TarKey": "valenna.BattleSkill.885121.Name",
         "SheetKey": "",
         "InputText": "切割攻击",
         "Characteristic": null
@@ -14,9 +14,9 @@
       "IsOverrideName": false,
       "OverrideNames": [],
       "Description": {
-        "TarKey": "",
+        "TarKey": "valenna.BattleSkill.885121.Description",
         "SheetKey": "",
-        "InputText": "斗殴检定｜⁣2段⁤\n<color=#F4C16B>[伤害加成]</color> 自身<color=#EBC556>呼吸法</color>达到⁣6层⁤时，⁣每段伤害+1⁤。\n【I】 ⁣1d4⁤\n<color=#A8E96D>[命中时]</color> 施加⁣1层<color=#F35D50>燃烧</color>⁤。\n【II】 ⁣1d4⁤\n<color=#A8E96D>[命中时]</color> 立即结算目标的<color=#F35D50>燃烧</color>⁣1次⁤。",
+        "InputText": "斗殴检定｜⁣2段⁤\n<color=#55D8EF>[使用时]</color> 自身<color=#EBC556>呼吸法</color>达到⁣6层⁤时，⁣每段伤害+1⁤（最多⁣+1⁤）。\n【I】 ⁣1d4⁤\n<color=#A8E96D>[命中时]</color> 施加⁣1层<color=#F35D50>燃烧</color>⁤。\n【II】 ⁣1d4⁤\n<color=#A8E96D>[命中时]</color> 立即结算目标的<color=#F35D50>燃烧</color>⁣1次⁤。",
         "Characteristic": null
       },
       "EffectDesc": {

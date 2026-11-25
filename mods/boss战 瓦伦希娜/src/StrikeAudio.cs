@@ -27,10 +27,15 @@ namespace ValennaBattle
         }
 
         [Serializable]
-        private sealed class SubtitleLine
+        internal sealed class SubtitleLine
         {
             public string file = null;
             public string text = null;
+            public string en = null;
+
+            internal string ForLanguage(string custom = null) =>
+                custom != null && custom != text ? custom :
+                ValennaText.IsEnglish && !string.IsNullOrEmpty(en) ? en : text;
         }
 
         [Serializable]
@@ -78,8 +83,8 @@ namespace ValennaBattle
                         !(cue.volume > 0f && cue.volume <= 100f)) continue;
                     string file = GetSoundPath(soundRoot, cue.file);
                     if (file == null) continue;
-                    if (cue.subtitle == null)
-                        subtitles.TryGetValue(cue.file.Replace('\\', '/'), out cue.subtitle);
+                    if (subtitles.TryGetValue(cue.file.Replace('\\', '/'), out var line))
+                        cue.subtitle = line.ForLanguage(cue.subtitle);
                     cue.file = file;
                     if (!(cue.speed >= 0.5f && cue.speed <= 2f)) cue.speed = 1f;
                     if (cue.group < 0 || cue.group > 32) cue.group = 0;
@@ -135,9 +140,9 @@ namespace ValennaBattle
             }
         }
 
-        internal static Dictionary<string, string> ReadSubtitleDefaults(string resource)
+        internal static Dictionary<string, SubtitleLine> ReadSubtitleDefaults(string resource)
         {
-            var result = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            var result = new Dictionary<string, SubtitleLine>(StringComparer.OrdinalIgnoreCase);
             try
             {
                 var info = new FileInfo(Path.Combine(resource, "voice-subtitles.json"));
@@ -147,7 +152,7 @@ namespace ValennaBattle
                 foreach (var line in table?.lines ?? Array.Empty<SubtitleLine>())
                 {
                     if (!string.IsNullOrWhiteSpace(line?.file) && !string.IsNullOrWhiteSpace(line.text))
-                        result[line.file.Replace('\\', '/')] = line.text;
+                        result[line.file.Replace('\\', '/')] = line;
                 }
             }
             catch (Exception error)

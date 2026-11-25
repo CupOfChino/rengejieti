@@ -195,16 +195,32 @@ namespace ValennaBattle
             }
         }
 
-        [HarmonyPatch(typeof(BattleSkillData), nameof(BattleSkillData.UpdateValidTargetSelectData))]
+        [HarmonyPatch(typeof(UIBattlePanel), nameof(UIBattlePanel.ShowTargetSelectMenu))]
         private static class ExecutionTargets
         {
-            private static void Postfix(BattleSkillData __instance, BattleRole __0)
+            private static void Prefix(ref List<BattleRole> __4, BattleSkillData __7, bool ____selectItem)
             {
-                if (__instance.Id != StrikeProfiles.ExecutionId || !BattleHelper.IsInBattle) return;
+                if (____selectItem || __7?.Id != StrikeProfiles.ExecutionId) return;
+                BattleRole actor = BattleHelper.BattleHeroInfo;
+                if (!ReferenceEquals(actor?.CurrentBehaviourData?.BattleSkillData, __7)) return;
 
-                __instance.TargetSelectCheckFilterRole.Clear();
-                BattleRole target = TargetFor(__0);
-                if (target != null) __instance.TargetSelectCheckFilterRole.Add(target);
+                // 给本次目标菜单单独传入候选列表，避免改动技能或按钮保存的候选。
+                BattleRole target = TargetFor(actor);
+                __4 = target != null && __4?.Contains(target) == true
+                    ? new List<BattleRole> { target }
+                    : new List<BattleRole>();
+            }
+        }
+
+        [HarmonyPatch(typeof(UIBattlePanel), nameof(UIBattlePanel.AddTarget))]
+        private static class ExecutionTargetClick
+        {
+            private static bool Prefix(BattleRole __0, bool ____selectItem)
+            {
+                if (____selectItem) return true;
+                BattleRole actor = BattleHelper.BattleHeroInfo;
+                return actor?.CurrentBehaviourData?.BattleSkillData?.Id != StrikeProfiles.ExecutionId ||
+                    CanExecute(actor, __0);
             }
         }
 

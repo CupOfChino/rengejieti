@@ -6,19 +6,19 @@
       "ItemId": 885116,
       "UniqueKey": "valenna_captain_hat",
       "ItemName": {
-        "TarKey": "",
+        "TarKey": "valenna.Item.885116.ItemName",
         "SheetKey": "",
         "InputText": "指挥官的帽子",
         "Characteristic": null
       },
       "ItemDes": {
-        "TarKey": "",
+        "TarKey": "valenna.Item.885116.ItemDes",
         "SheetKey": "",
         "InputText": "深红宽檐，帽身和帽檐镶着金色饰带。家族二级指挥官的标配。",
         "Characteristic": null
       },
       "ItemEffectDes": {
-        "TarKey": "",
+        "TarKey": "valenna.Item.885116.ItemEffectDes",
         "SheetKey": "",
         "InputText": "<color=#55D8EF>[装备时]</color> ⁣交涉+5⁤。",
         "Characteristic": null
@@ -63,7 +63,7 @@
         "InfoDatas": [],
         "EnableOverrideDesc": true,
         "OverrideDesc": {
-          "TarKey": "",
+          "TarKey": "valenna.Item.885116.EquipmentConfigData.OverrideDesc",
           "SheetKey": "",
           "InputText": "<color=#55D8EF>[装备时]</color> ⁣交涉+5⁤。",
           "Characteristic": null

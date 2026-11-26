@@ -132,7 +132,7 @@ $prescience = [ordered]@{}
 foreach ($entry in $trait.GetEnumerator()) { $prescience[$entry.Key] = $entry.Value }
 $prescience.Id = $prescienceId
 $prescience.Localization_Name = Text-Data '预知'
-$prescience.Localization_Des = Text-Data (('进入剧本或战斗时，自动装备专属神话物品预知眼。', '预知眼未过热时，以[预知]替换闪避，斗殴检定获得1颗奖励骰。成功闪避敌方一次普通攻击的全部段数后，以「解兔」反击该敌人。') -join "`n")
+$prescience.Localization_Des = Text-Data (('进入剧本或战斗时，自动装备专属神话物品预知眼。', '预知眼未过热时，以[预知]替换闪避。使用预知闪避时，每层预知眼使本次检定成功区间额外+1。', '成功闪避敌方一次普通攻击的全部段数后，以「解兔」反击该敌人。') -join "`n")
 $prescience.CreateEvent = $null
 Add-Table "Trait/$prescienceId" 'BaseSheetData' $prescience
 $heartSpeed = [ValennaBattle.StrikeProfiles]::HeartSpeed
@@ -190,7 +190,7 @@ foreach ($weapon in @(
     @{ Id = 885111; Key = 'valenna_stage_blade'; Icon = 'valenna_gunblade_icon'; Name = '巴勒莫——铳剑'; Damage = '1D6'; Lore = '瓦伦希娜斜挎在背后的铳剑。伯纳特利家族的定制加速弹用在贴身出剑的一瞬。'; Extra = (@(
         '[战斗开始时] 加速弹补至10发。'
         '[命中时] 若本段消耗了加速弹且射击检定成功，施加1层燃烧和1层震颤。'
-        '[引爆时] 获得1层伤害强化，每行动轮最多获得3层。'
+        '[引爆时] 下回合开始时获得1层伤害强化，每行动轮最多为下回合累积3层。'
         '[回合结束时] 清除伤害强化。'
     ) -join "`n"); Buffs = @(885137) },
     @{ Id = 885113; Key = 'valenna_cutlass'; Icon = 'valenna_cutlass_icon'; Name = '巴勒莫——切斩刀'; Damage = '2D4'; Lore = '巴勒莫的另一把刀，刀鞘系在瓦伦希娜腰侧。她以这把单手刀使出切割攻击。'; Extra = (@(
@@ -294,14 +294,13 @@ $eye = Read-Table 'Item/10135'
 $eye.ItemId = [ValennaBattle.StrikeProfiles]::EyeItemId
 $eye.UniqueKey = 'valenna_precognition_eye'
 $eye.ItemName = Text-Data '预知眼'
-$eye.ItemDes = Text-Data '并非像魔法那样预测未来。这只眼睛更接近于通过分析进入视野的一切，预测即将到来的瞬间的计算机。被称为奥丁之眼的这件遗物，实际上是被分为三份的某件遗物的碎片。'
+$eye.ItemDes = Text-Data '并非像魔法那样预测未来。这只眼睛更接近于通过分析进入视野的一切，预测即将到来的瞬间的计算机。'
 $eyeText = @(
-    '瓦伦希娜的专属护具，装备后锁定。'
     '[回合开始] 未处于过热状态，则以[预知]替换你的闪避。'
-    '未处于过热状态时，斗殴检定获得1颗奖励骰。'
+    '每层充能使所有检定的成功区间+1。与[预知]的额外加成叠加。'
     '[回合开始时] 战斗与探索均恢复5层充能，上限30层。'
-    '[受击时] 损失5层充能。发动辅助闪避也消耗5层。'
-    '[辅助闪避] 发动前充能超过10层，获得2颗奖励骰；否则获得1颗。'
+    '[受击时] 损失5层充能。'
+    '[辅助闪避] 闪避时，消耗5层充能，获得1颗奖励骰。若扣费前预知眼至少10层，额外获得1颗。'
     '同一次攻击中，闪避成功可继承奖励骰，失败后下一段可再次发动。'
     '[闪避成功时] 恢复1点精神值。开骰时未过热，另获得1层加速的未来。'
     '充能耗尽时转为预知眼·过热，闪避获得1颗惩罚骰。'
@@ -343,8 +342,8 @@ $eyeMythical.ProjectionIcon = 'UI/Textures/Icon/MythologicalObj/valenna_eye_myth
 $eyeMythical.IconReference = [ordered]@{ ReferenceType = 1005; Key = 'valenna_eye_mythical_card' }
 $eyeMythical.ProjectionIconReference = [ordered]@{ ReferenceType = 1005; Key = 'valenna_eye_mythical_projection' }
 $eyeMythical.Localization_Name = $eye.ItemName
-$eyeMythical.Localization_Des = $eye.ItemDes
-$eyeMythical.Localization_Effct = Text-Data ("闪避成功时恢复1点精神值。`n开骰时未过热，另获得1层加速的未来。")
+$eyeMythical.Localization_Des = Text-Data '被称为奥丁之眼的这件遗物，实际上是被分为三份的某件遗物的碎片。'
+$eyeMythical.Localization_Effct = Text-Data ("每层充能使所有检定的成功区间+1。`n闪避成功时恢复1点精神值。`n开骰时未过热，另获得1层加速的未来。")
 $eyeMythical.DefaultUnLock = $false
 $eyeMythical.TriggerEven.Opts[0].ItemList = @($eye.ItemId)
 $eyeMythical.TriggerEven.Opts[0]._baseKey = [string]$eye.ItemId
@@ -382,6 +381,7 @@ $skillRules = @{
         '[命中时] 施加 1 层燃烧。'
         '【II】 1d4'
         '[命中时] 立即结算目标的燃烧 1 次。'
+        '[暴击命中时] 对目标施加 1 层震颤。'
     )
     885124 = @(
         '斗殴＋射击联合检定｜2 段'
@@ -527,8 +527,8 @@ for ($index = 0; $index -lt $moves.Length; $index++) {
 }
 
 foreach ($technique in @(
-    @{ Id = 885151; Name = '子弹装填'; Description = '[使用时] 补满加速弹。'; Priority = 10000 },
-    @{ Id = 885152; Name = '预知'; Description = (@('每层预知眼使检定成功区间 +1。', '可以闪避投掷物品、法术及自身攻击被敌人成功闪避后受到的回击等原本不可闪避的攻击。成功时，避开自己受到的该次效果。', '这些特殊闪避不会触发[解兔]。成功闪避敌方一次普通攻击的全部段数后，仍可用[解兔]反击。', '[使用时] 补满加速弹，每行动轮限 1 次。', '[闪避成功时] 获得 1 层呼吸法，每行动轮最多 2 次。', '[闪避成功时] 恢复 1 点精神值，每场战斗最多 2 次。') -join "`n"); Priority = 9999 }
+    @{ Id = 885151; Name = '装填子弹、切换背景'; Description = '[使用时] 补满加速弹，切换战斗背景和音乐。'; Priority = 10000 },
+    @{ Id = 885152; Name = '预知'; Description = (@('使用预知闪避时，每层预知眼使本次检定成功区间额外+1，与预知眼本身的加成叠加。', '可以闪避投掷物品、法术及自身攻击被敌人成功闪避后受到的回击等原本不可闪避的攻击。成功时，避开自己受到的该次效果。', '这些特殊闪避不会触发[解兔]。成功闪避敌方一次普通攻击的全部段数后，仍可用[解兔]反击。', '[使用时] 补满加速弹，每行动轮限 1 次。', '[闪避成功时] 获得 1 层呼吸法，每行动轮最多 2 次。', '[闪避成功时] 恢复 1 点精神值，每场战斗最多 2 次。') -join "`n"); Priority = 9999 }
 )) {
     $skill = Read-Table 'BattleSkill/3'
     $skill.Id = $technique.Id
@@ -592,7 +592,7 @@ $stackedStatuses = @{
 for ($index = 0; $index -lt $names.Count; $index++) {
     $id = 885131 + $index
     $description = switch ($id) {
-        885131 { ('[命中时] 各段独立判定暴击。每层提供5%暴击率，上限100%。', '[暴击时] 本段伤害按1.2倍结算，消耗1层。', '[回合结束时] 减少1层。' -join "`n") }
+        885131 { ('[命中时] 各段独立判定暴击。每层提供5%暴击率，上限100%。', '[暴击时] 本段伤害按1.2倍结算，消耗1层。', '若暴击判定时呼吸法超过10层，本段伤害改为1.4倍，额外消耗1层。', '[回合结束时] 减少1层。' -join "`n") }
         885132 { (@(
             '[引爆时] 混乱值增加震颤层数的三分之一，向上取整，再消耗1层震颤。'
             '单次增量上限为目标意志的三分之一，向下取整；意志大于零时，上限至少为1点。'
@@ -608,10 +608,10 @@ for ($index = 0; $index -lt $names.Count; $index++) {
             '燃烧与震颤各额外减少原层数的三分之一，分别向下取整。'
             '[回合结束时] 减少1层。'
         ) -join "`n") }
-        885137 { ('最多储存10发。', '[消耗时] 每段只进行1次暗中射击检定，失败也会扣弹。', '[检定成功时] 本段伤害+10%。每消耗1发，获得1层呼吸法。' -join "`n") }
+        885137 { ('最多储存10发。', '[消耗时] 每段只掷1次射击暗骰。', '检定失败也会扣弹。', '[检定成功时] 本段伤害+10%。', '每消耗1发，获得1层呼吸法。' -join "`n") }
         885139 { ('受到标记者的伤害+20%。', '速度高于10时：', '速度-50，最低降至10。', '处置只能锁定狩猎目标。' -join "`n") }
         ([ValennaBattle.StrikeProfiles]::EyeChargeId) {
-            ('充能上限30层。拥有预知时，每层使检定成功区间+1。', '[回合开始] 未处于过热状态，则以[预知]替换你的闪避。', '未处于过热状态时，斗殴检定获得1颗奖励骰。', '[回合开始时] 战斗与探索均恢复5层充能。', '发动辅助闪避或受到攻击命中时，消耗5层充能。耗尽后转为预知眼·过热。' -join "`n")
+            ('充能上限30层。', '每层使所有检定的成功区间+1。', '[回合开始] 未过热时，以[预知]替换闪避。', '[回合开始时] 战斗与探索均恢复5层充能。', '[受击时] 损失5层充能。', '[辅助闪避] 消耗5层充能。', '耗尽后转为预知眼·过热。' -join "`n")
         }
         ([ValennaBattle.StrikeProfiles]::EyeOverheatId) {
             ('[过热期间] 闪避检定获得1颗惩罚骰。', '[回合开始时] 战斗与探索均积累10层。', '达到30层时转回预知眼。' -join "`n")

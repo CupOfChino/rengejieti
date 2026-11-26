@@ -15,6 +15,10 @@
     "zh": "当前普通伤害加成：+{0}%。",
     "en": "Current normal damage bonus: +{0}%."
   },
+  "valenna.buff.nextRound": {
+    "zh": "下回合开始时生效。",
+    "en": "Activates at the start of the next round."
+  },
   "valenna.profession": {
     "zh": "蜘蛛巢 拇指父辈",
     "en": "House of Spiders · The Thumb Nursefather"
@@ -24,8 +28,8 @@
     "en": "Valencina has her exclusive Shin permanently equipped."
   },
   "valenna.BattleSkill.885121.Description": {
-    "zh": "斗殴检定｜⁣2段⁤\n<color=#55D8EF>[使用时]</color> 自身<color=#EBC556>呼吸法</color>达到⁣6层⁤时，⁣每段伤害+1⁤（最多⁣+1⁤）。\n【I】 ⁣1d4⁤\n<color=#A8E96D>[命中时]</color> 施加⁣1层<color=#F35D50>燃烧</color>⁤。\n【II】 ⁣1d4⁤\n<color=#A8E96D>[命中时]</color> 立即结算目标的<color=#F35D50>燃烧</color>⁣1次⁤。",
-    "en": "Brawl check | 2 hits\n<color=#55D8EF>[On Use]</color> At 6 or more <color=#EBC556>Poise</color>, each hit deals +1 damage (max +1).\n<b><color=#EBCB91>【I】</color></b> 1d4\n<color=#A8E96D>[On Hit]</color> Inflict 1 <color=#F35D50>Burn</color>.\n<b><color=#EBCB91>【II】</color></b> 1d4\n<color=#A8E96D>[On Hit]</color> Immediately resolve the target's <color=#F35D50>Burn</color> once."
+    "zh": "斗殴检定｜⁣2段⁤\n<color=#55D8EF>[使用时]</color> 自身<color=#EBC556>呼吸法</color>达到⁣6层⁤时，⁣每段伤害+1⁤（最多⁣+1⁤）。\n【I】 ⁣1d4⁤\n<color=#A8E96D>[命中时]</color> 施加⁣1层<color=#F35D50>燃烧</color>⁤。\n【II】 ⁣1d4⁤\n<color=#A8E96D>[命中时]</color> 立即结算目标的<color=#F35D50>燃烧</color>⁣1次⁤。\n<color=#B3F26E>[暴击命中时]</color> 对目标施加⁣1层<color=#FFA15E>震颤</color>⁤。",
+    "en": "Brawl check | 2 hits\n<color=#55D8EF>[On Use]</color> At 6 or more <color=#EBC556>Poise</color>, each hit deals +1 damage (max +1).\n<b><color=#EBCB91>【I】</color></b> 1d4\n<color=#A8E96D>[On Hit]</color> Inflict 1 <color=#F35D50>Burn</color>.\n<b><color=#EBCB91>【II】</color></b> 1d4\n<color=#A8E96D>[On Hit]</color> Immediately resolve the target's <color=#F35D50>Burn</color> once.\n<color=#B3F26E>[On Critical Hit]</color> Inflict 1 <color=#FFA15E>Tremor</color>."
   },
   "valenna.BattleSkill.885121.Name": {
     "zh": "切割攻击",
@@ -104,24 +108,24 @@
     "en": "Precognition"
   },
   "valenna.BattleSkill.885151.Description": {
-    "zh": "<color=#55D8EF>[使用时]</color> 补满<color=#79CAD7>加速弹</color>。",
-    "en": "<color=#55D8EF>[On Use]</color> Refill <color=#79CAD7>Acceleration Rounds</color>."
+    "zh": "<color=#55D8EF>[使用时]</color> 补满<color=#79CAD7>加速弹</color>，切换战斗背景和音乐。",
+    "en": "<color=#55D8EF>[On Use]</color> Refill <color=#79CAD7>Acceleration Rounds</color> and switch the battle background and music."
   },
   "valenna.BattleSkill.885151.Name": {
-    "zh": "子弹装填",
-    "en": "Reload"
+    "zh": "装填子弹、切换背景",
+    "en": "Reload and Change Background"
   },
   "valenna.BattleSkill.885152.Description": {
-    "zh": "每层<color=#8CD6EB>预知眼</color>使⁣检定成功区间+1⁤。\n可以闪避投掷物品、法术及自身攻击被敌人成功闪避后受到的回击等原本不可闪避的攻击。成功时，避开自己受到的该次效果。\n这些特殊闪避不会触发[<color=#FFA15E>解兔</color>]。成功闪避敌方一次普通攻击的全部段数后，仍可用[<color=#FFA15E>解兔</color>]反击。\n<color=#55D8EF>[使用时]</color> 补满<color=#79CAD7>加速弹</color>，每行动轮限⁣1次⁤。\n<color=#A8E96D>[闪避成功时]</color> 获得⁣1层<color=#EBC556>呼吸法</color>⁤，每行动轮最多⁣2次⁤。\n<color=#A8E96D>[闪避成功时]</color> 恢复⁣1点精神值⁤，每场战斗最多⁣2次⁤。",
-    "en": "Each stack of <color=#8CD6EB>Eye of Precognition</color> increases the check success range by 1.\nYou can dodge normally undodgeable attacks, including thrown items, spells, and counterattacks after an enemy dodges your attack. On a success, you avoid the effect on yourself.\nThese special dodges do not trigger [<color=#FFA15E>Sezionatura di Coniglio</color>]. Dodging every hit of a normal attack still lets you counter with [<color=#FFA15E>Sezionatura di Coniglio</color>].\n<color=#55D8EF>[On Use]</color> Refill <color=#79CAD7>Acceleration Rounds</color>, once per action round.\n<color=#A8E96D>[On Dodge]</color> Gain 1 <color=#EBC556>Poise</color>, up to twice per action round.\n<color=#A8E96D>[On Dodge]</color> Restore 1 SP, up to twice per battle."
+    "zh": "使用预知闪避时，每层<color=#8CD6EB>预知眼</color>使本次检定成功区间额外⁣+1⁤，与<color=#8CD6EB>预知眼</color>本身的加成叠加。\n可以闪避投掷物品、法术及自身攻击被敌人成功闪避后受到的回击等原本不可闪避的攻击。成功时，避开自己受到的该次效果。\n这些特殊闪避不会触发[<color=#FFA15E>解兔</color>]。成功闪避敌方一次普通攻击的全部段数后，仍可用[<color=#FFA15E>解兔</color>]反击。\n<color=#55D8EF>[使用时]</color> 补满<color=#79CAD7>加速弹</color>，每行动轮限⁣1次⁤。\n<color=#A8E96D>[闪避成功时]</color> 获得⁣1层<color=#EBC556>呼吸法</color>⁤，每行动轮最多⁣2次⁤。\n<color=#A8E96D>[闪避成功时]</color> 恢复⁣1点精神值⁤，每场战斗最多⁣2次⁤。",
+    "en": "When dodging with <color=#8CD6EB>Precognition</color>, each stack of <color=#8CD6EB>Eye of Precognition</color> adds 1 more to this check's success range, stacking with the eye's own bonus.\nYou can dodge normally undodgeable attacks, including thrown items, spells, and counterattacks after an enemy dodges your attack. On a success, you avoid the effect on yourself.\nThese special dodges do not trigger [<color=#FFA15E>Sezionatura di Coniglio</color>]. Dodging every hit of a normal attack still lets you counter with [<color=#FFA15E>Sezionatura di Coniglio</color>].\n<color=#55D8EF>[On Use]</color> Refill <color=#79CAD7>Acceleration Rounds</color>, once per action round.\n<color=#A8E96D>[On Dodge]</color> Gain 1 <color=#EBC556>Poise</color>, up to twice per action round.\n<color=#A8E96D>[On Dodge]</color> Restore 1 SP, up to twice per battle."
   },
   "valenna.BattleSkill.885152.Name": {
     "zh": "预知",
     "en": "Precognition"
   },
   "valenna.Buff.885131.Des": {
-    "zh": "<color=#A8E96D>[命中时]</color> 各段独立判定暴击。每层提供⁣5%⁤暴击率，上限⁣100%⁤。\n<color=#B3F26E>[暴击时]</color> 本段伤害按⁣1.2倍⁤结算，消耗⁣1层⁤。\n<color=#55D8EF>[回合结束时]</color> 减少⁣1层⁤。",
-    "en": "<color=#A8E96D>[On Hit]</color> Each hit rolls for a critical independently. Each stack adds 5% critical chance, up to 100%.\n<color=#B3F26E>[On Critical]</color> Deal 1.2 times damage for this hit and spend 1 stack.\n<color=#55D8EF>[Turn End]</color> Lose 1 stack."
+    "zh": "<color=#A8E96D>[命中时]</color> 各段独立判定暴击。每层提供⁣5%⁤暴击率，上限⁣100%⁤。\n<color=#B3F26E>[暴击时]</color> 本段伤害按⁣1.2倍⁤结算，消耗⁣1层⁤。\n若暴击判定时<color=#EBC556>呼吸法</color>超过⁣10层⁤，本段伤害改为⁣1.4倍⁤，额外消耗⁣1层⁤。\n<color=#55D8EF>[回合结束时]</color> 减少⁣1层⁤。",
+    "en": "<color=#A8E96D>[On Hit]</color> Each hit rolls for a critical independently. Each stack adds 5% critical chance, up to 100%.\n<color=#B3F26E>[On Critical]</color> Deal 1.2 times damage for this hit and spend 1 stack.\nWith more than 10 <color=#EBC556>Poise</color> when you roll for the critical, deal 1.4 times damage and spend 1 additional stack.\n<color=#55D8EF>[Turn End]</color> Lose 1 stack."
   },
   "valenna.Buff.885131.Name": {
     "zh": "呼吸法",
@@ -152,8 +156,8 @@
     "en": "Tremor - Scorch"
   },
   "valenna.Buff.885135.Des": {
-    "zh": "充能上限⁣30层⁤。拥有预知时，每层使⁣检定成功区间+1⁤。\n<color=#55D8EF>[回合开始]</color> 未处于过热状态，则以<color=#8CD6EB>[预知]</color>替换你的闪避。\n未处于过热状态时，斗殴检定获得⁣1颗奖励骰⁤。\n<color=#55D8EF>[回合开始时]</color> 战斗与探索均恢复⁣5层充能⁤。\n发动辅助闪避或受到攻击命中时，消耗⁣5层充能⁤。耗尽后转为<color=#8CD6EB>预知眼</color><color=#E77167>·过热</color>。",
-    "en": "Maximum charge is 30. With <color=#8CD6EB>Precognition</color>, each stack increases the check success range by 1.\n<color=#55D8EF>[Turn Start]</color> If the <color=#8CD6EB>Eye of Precognition</color> is not overheated, replace your Dodge with [<color=#8CD6EB>Precognition</color>].\nWhile the <color=#8CD6EB>Eye of Precognition</color> is not overheated, Brawl checks gain 1 bonus die.\n<color=#55D8EF>[Turn Start]</color> Recover 5 charge in combat and exploration.\nUsing assisted dodge or taking a hit costs 5 charge. At zero charge, enter <color=#8CD6EB>Eye of Precognition</color><color=#E77167> - Overheat</color>."
+    "zh": "⁣充能上限30层⁤。\n每层使所有检定的⁣成功区间+1⁤。\n<color=#55D8EF>[回合开始]</color> 未过热时，以<color=#8CD6EB>[预知]</color>替换闪避。\n<color=#55D8EF>[回合开始时]</color> 战斗与探索均⁣恢复5层充能⁤。\n<color=#EE827B>[受击时]</color> ⁣损失5层充能⁤。\n<color=#55D8EF>[辅助闪避]</color> ⁣消耗5层充能⁤。\n耗尽后转为<color=#8CD6EB>预知眼</color><color=#E77167>·过热</color>。",
+    "en": "Maximum charge is 30.\nEach stack of charge increases the success range of all checks by 1.\n<color=#55D8EF>[Turn Start]</color> If the <color=#8CD6EB>Eye of Precognition</color> is not overheated, replace your Dodge with [<color=#8CD6EB>Precognition</color>].\n<color=#55D8EF>[Turn Start]</color> Recover 5 charge in combat and exploration.\n<color=#EE827B>[When Hit]</color> Lose 5 charge.\n<color=#55D8EF>[Assisted Dodge]</color> Spend 5 charge.\nAt zero charge, enter <color=#8CD6EB>Eye of Precognition</color><color=#E77167> - Overheat</color>."
   },
   "valenna.Buff.885135.Name": {
     "zh": "预知眼",
@@ -168,8 +172,8 @@
     "en": "Eye of Precognition - Overheat"
   },
   "valenna.Buff.885137.Des": {
-    "zh": "最多储存⁣10发⁤。\n<color=#55D8EF>[消耗时]</color> 每段只进行⁣1次⁤暗中射击检定，失败也会扣弹。\n<color=#A8E96D>[检定成功时]</color> 本段⁣伤害+10%⁤。每消耗⁣1发⁤，获得⁣1层<color=#EBC556>呼吸法</color>⁤。",
-    "en": "Store up to 10 rounds.\n<color=#55D8EF>[On Spending]</color> Each hit makes only one hidden Shoot check. The round is spent even if the check fails.\n<color=#A8E96D>[On Successful Check]</color> This hit deals +10% damage. Gain 1 <color=#EBC556>Poise</color> per round spent."
+    "zh": "⁣最多储存10发⁤。\n<color=#55D8EF>[消耗时]</color> 每段只掷⁣1次射击暗骰⁤。\n检定失败也会扣弹。\n<color=#A8E96D>[检定成功时]</color> ⁣本段伤害+10%⁤。\n每消耗⁣1发⁤，获得⁣1层<color=#EBC556>呼吸法</color>⁤。",
+    "en": "Store up to 10 rounds.\n<color=#55D8EF>[On Spending]</color> Roll one hidden Shoot check per hit.\nThe round is spent even if the check fails.\n<color=#A8E96D>[On Successful Check]</color> This hit deals +10% damage.\nGain 1 <color=#EBC556>Poise</color> per round spent."
   },
   "valenna.Buff.885137.Name": {
     "zh": "加速弹",
@@ -232,32 +236,32 @@
     "en": "Mang"
   },
   "valenna.Item.885111.EquipmentConfigData.OverrideDesc": {
-    "zh": "武器面板伤害⁣1D6⁤。\n<color=#55D8EF>[战斗开始时]</color> <color=#79CAD7>加速弹</color>补至⁣10发⁤。\n<color=#A8E96D>[命中时]</color> 若本段消耗了<color=#79CAD7>加速弹</color>且射击检定成功，施加⁣1层<color=#F35D50>燃烧</color>⁤和⁣1层<color=#FFA15E>震颤</color>⁤。\n<color=#FFA15E>[引爆时]</color> 获得⁣1层<color=#EABA6D>伤害强化</color>⁤，每行动轮最多获得⁣3层⁤。\n<color=#55D8EF>[回合结束时]</color> 清除<color=#EABA6D>伤害强化</color>。",
-    "en": "Weapon damage: 1D6.\n<color=#55D8EF>[Battle Start]</color> Refill <color=#79CAD7>Acceleration Rounds</color> to 10.\n<color=#A8E96D>[On Hit]</color> If this hit spent an <color=#79CAD7>Acceleration Round</color> and passed the Shoot check, inflict 1 <color=#F35D50>Burn</color> and 1 <color=#FFA15E>Tremor</color>.\n<color=#FFA15E>[On Burst]</color> Gain 1 <color=#EABA6D>Damage Up</color>, up to 3 stacks per action round.\n<color=#55D8EF>[Turn End]</color> Clear all <color=#EABA6D>Damage Up</color> stacks."
+    "zh": "武器面板伤害⁣1D6⁤。\n<color=#55D8EF>[战斗开始时]</color> <color=#79CAD7>加速弹</color>补至⁣10发⁤。\n<color=#A8E96D>[命中时]</color> 若本段消耗了<color=#79CAD7>加速弹</color>且射击检定成功，施加⁣1层<color=#F35D50>燃烧</color>⁤和⁣1层<color=#FFA15E>震颤</color>⁤。\n<color=#FFA15E>[引爆时]</color> 下回合开始时获得⁣1层<color=#EABA6D>伤害强化</color>⁤，每行动轮最多为下回合累积⁣3层⁤。\n<color=#55D8EF>[回合结束时]</color> 清除<color=#EABA6D>伤害强化</color>。",
+    "en": "Weapon damage: 1D6.\n<color=#55D8EF>[Battle Start]</color> Refill <color=#79CAD7>Acceleration Rounds</color> to 10.\n<color=#A8E96D>[On Hit]</color> If this hit spent an <color=#79CAD7>Acceleration Round</color> and passed the Shoot check, inflict 1 <color=#F35D50>Burn</color> and 1 <color=#FFA15E>Tremor</color>.\n<color=#FFA15E>[On Burst]</color> Gain 1 <color=#EABA6D>Damage Up</color> at the start of the next round. Queue up to 3 stacks per action round.\n<color=#55D8EF>[Turn End]</color> Clear all <color=#EABA6D>Damage Up</color> stacks."
   },
   "valenna.Item.885111.ItemDes": {
     "zh": "瓦伦希娜斜挎在背后的铳剑。伯纳特利家族的定制加速弹用在贴身出剑的一瞬。",
     "en": "Valencina carries this gunblade slung across her back. Famiglia Bognatelli custom Acceleration Rounds fire the instant she strikes at close range."
   },
   "valenna.Item.885111.ItemEffectDes": {
-    "zh": "<color=#55D8EF>[战斗开始时]</color> <color=#79CAD7>加速弹</color>补至⁣10发⁤。\n<color=#A8E96D>[命中时]</color> 若本段消耗了<color=#79CAD7>加速弹</color>且射击检定成功，施加⁣1层<color=#F35D50>燃烧</color>⁤和⁣1层<color=#FFA15E>震颤</color>⁤。\n<color=#FFA15E>[引爆时]</color> 获得⁣1层<color=#EABA6D>伤害强化</color>⁤，每行动轮最多获得⁣3层⁤。\n<color=#55D8EF>[回合结束时]</color> 清除<color=#EABA6D>伤害强化</color>。",
-    "en": "<color=#55D8EF>[Battle Start]</color> Refill <color=#79CAD7>Acceleration Rounds</color> to 10.\n<color=#A8E96D>[On Hit]</color> If this hit spent an <color=#79CAD7>Acceleration Round</color> and passed the Shoot check, inflict 1 <color=#F35D50>Burn</color> and 1 <color=#FFA15E>Tremor</color>.\n<color=#FFA15E>[On Burst]</color> Gain 1 <color=#EABA6D>Damage Up</color>, up to 3 stacks per action round.\n<color=#55D8EF>[Turn End]</color> Clear all <color=#EABA6D>Damage Up</color> stacks."
+    "zh": "<color=#55D8EF>[战斗开始时]</color> <color=#79CAD7>加速弹</color>补至⁣10发⁤。\n<color=#A8E96D>[命中时]</color> 若本段消耗了<color=#79CAD7>加速弹</color>且射击检定成功，施加⁣1层<color=#F35D50>燃烧</color>⁤和⁣1层<color=#FFA15E>震颤</color>⁤。\n<color=#FFA15E>[引爆时]</color> 下回合开始时获得⁣1层<color=#EABA6D>伤害强化</color>⁤，每行动轮最多为下回合累积⁣3层⁤。\n<color=#55D8EF>[回合结束时]</color> 清除<color=#EABA6D>伤害强化</color>。",
+    "en": "<color=#55D8EF>[Battle Start]</color> Refill <color=#79CAD7>Acceleration Rounds</color> to 10.\n<color=#A8E96D>[On Hit]</color> If this hit spent an <color=#79CAD7>Acceleration Round</color> and passed the Shoot check, inflict 1 <color=#F35D50>Burn</color> and 1 <color=#FFA15E>Tremor</color>.\n<color=#FFA15E>[On Burst]</color> Gain 1 <color=#EABA6D>Damage Up</color> at the start of the next round. Queue up to 3 stacks per action round.\n<color=#55D8EF>[Turn End]</color> Clear all <color=#EABA6D>Damage Up</color> stacks."
   },
   "valenna.Item.885111.ItemName": {
     "zh": "巴勒莫——铳剑",
     "en": "Palermo - Gunblade"
   },
   "valenna.Item.885112.EquipmentConfigData.OverrideDesc": {
-    "zh": "瓦伦希娜的专属护具，装备后锁定。\n<color=#55D8EF>[回合开始]</color> 未处于过热状态，则以<color=#8CD6EB>[预知]</color>替换你的闪避。\n未处于过热状态时，斗殴检定获得⁣1颗奖励骰⁤。\n<color=#55D8EF>[回合开始时]</color> 战斗与探索均恢复⁣5层充能⁤，上限⁣30层⁤。\n<color=#EE827B>[受击时]</color> 损失⁣5层充能⁤。发动辅助闪避也消耗⁣5层⁤。\n<color=#55D8EF>[辅助闪避]</color> 发动前充能超过⁣10层⁤，获得⁣2颗奖励骰⁤；否则获得⁣1颗⁤。\n同一次攻击中，闪避成功可继承奖励骰，失败后下一段可再次发动。\n<color=#A8E96D>[闪避成功时]</color> 恢复⁣1点精神值⁤。开骰时未过热，另获得⁣1层<color=#77D1DC>加速的未来</color>⁤。\n充能耗尽时转为<color=#8CD6EB>预知眼</color><color=#E77167>·过热</color>，闪避获得⁣1颗惩罚骰⁤。\n过热期间，每回合开始积累⁣10层⁤，满⁣30层⁤恢复。",
-    "en": "Valencina's exclusive <color=#AAC4D2>armor</color>. Cannot be removed once equipped.\n<color=#55D8EF>[Turn Start]</color> If the <color=#8CD6EB>Eye of Precognition</color> is not overheated, replace your Dodge with [<color=#8CD6EB>Precognition</color>].\nWhile the <color=#8CD6EB>Eye of Precognition</color> is not overheated, Brawl checks gain 1 bonus die.\n<color=#55D8EF>[Turn Start]</color> Recover 5 charge in combat and exploration, up to 30.\n<color=#EE827B>[When Hit]</color> Lose 5 charge. An assisted dodge also costs 5 charge.\n<color=#55D8EF>[Assisted Dodge]</color> Gain 2 bonus dice if you have more than 10 charge before activation. Otherwise, gain 1 bonus die.\nWithin one attack, a successful dodge carries the bonus dice to the next hit. After a failed dodge, assistance can activate again on the next hit.\n<color=#A8E96D>[On Dodge]</color> Restore 1 SP. If the eye was not overheated when you rolled, also gain 1 <color=#77D1DC>Accelerating Future</color>.\nAt zero charge, enter <color=#8CD6EB>Eye of Precognition</color><color=#E77167> - Overheat</color>. Dodge checks receive 1 penalty die.\nWhile overheated, build 10 stacks at the start of each turn. Recover at 30 stacks."
+    "zh": "<color=#55D8EF>[回合开始]</color> 未处于过热状态，则以<color=#8CD6EB>[预知]</color>替换你的闪避。\n每层充能使所有检定的⁣成功区间+1⁤。与<color=#8CD6EB>[预知]</color>的额外加成叠加。\n<color=#55D8EF>[回合开始时]</color> 战斗与探索均⁣恢复5层充能⁤，上限⁣30层⁤。\n<color=#EE827B>[受击时]</color> ⁣损失5层充能⁤。\n<color=#55D8EF>[辅助闪避]</color> 闪避时，⁣消耗5层充能⁤，获得⁣1颗奖励骰⁤。若扣费前<color=#8CD6EB>预知眼</color>⁣至少10层⁤，额外获得⁣1颗⁤。\n同一次攻击中，闪避成功可继承奖励骰，失败后下一段可再次发动。\n<color=#A8E96D>[闪避成功时]</color> 恢复⁣1点精神值⁤。开骰时未过热，另获得⁣1层<color=#77D1DC>加速的未来</color>⁤。\n充能耗尽时转为<color=#8CD6EB>预知眼</color><color=#E77167>·过热</color>，闪避获得⁣1颗惩罚骰⁤。\n过热期间，每回合开始积累⁣10层⁤，满⁣30层⁤恢复。",
+    "en": "<color=#55D8EF>[Turn Start]</color> If the <color=#8CD6EB>Eye of Precognition</color> is not overheated, replace your Dodge with [<color=#8CD6EB>Precognition</color>].\nEach stack of charge increases the success range of all checks by 1. This stacks with the extra bonus from [<color=#8CD6EB>Precognition</color>].\n<color=#55D8EF>[Turn Start]</color> Recover 5 charge in combat and exploration, up to 30.\n<color=#EE827B>[When Hit]</color> Lose 5 charge.\n<color=#55D8EF>[Assisted Dodge]</color> Spend 5 charge to gain 1 bonus die. Gain 1 additional bonus die if you had at least 10 charge before spending it.\nWithin one attack, a successful dodge carries the bonus dice to the next hit. After a failed dodge, assistance can activate again on the next hit.\n<color=#A8E96D>[On Dodge]</color> Restore 1 SP. If the eye was not overheated when you rolled, also gain 1 <color=#77D1DC>Accelerating Future</color>.\nAt zero charge, enter <color=#8CD6EB>Eye of Precognition</color><color=#E77167> - Overheat</color>. Dodge checks receive 1 penalty die.\nWhile overheated, build 10 stacks at the start of each turn. Recover at 30 stacks."
   },
   "valenna.Item.885112.ItemDes": {
-    "zh": "并非像魔法那样预测未来。这只眼睛更接近于通过分析进入视野的一切，预测即将到来的瞬间的计算机。被称为奥丁之眼的这件遗物，实际上是被分为三份的某件遗物的碎片。",
-    "en": "This eye does not see the future through magic. It works more like a computer, analyzing everything in its field of view to predict what will happen next. The relic known as Odin's Eye is one fragment of an artifact split into three pieces."
+    "zh": "并非像魔法那样预测未来。这只眼睛更接近于通过分析进入视野的一切，预测即将到来的瞬间的计算机。",
+    "en": "This eye does not see the future through magic. It works more like a computer, analyzing everything in its field of view to predict what will happen next."
   },
   "valenna.Item.885112.ItemEffectDes": {
-    "zh": "瓦伦希娜的专属护具，装备后锁定。\n<color=#55D8EF>[回合开始]</color> 未处于过热状态，则以<color=#8CD6EB>[预知]</color>替换你的闪避。\n未处于过热状态时，斗殴检定获得⁣1颗奖励骰⁤。\n<color=#55D8EF>[回合开始时]</color> 战斗与探索均恢复⁣5层充能⁤，上限⁣30层⁤。\n<color=#EE827B>[受击时]</color> 损失⁣5层充能⁤。发动辅助闪避也消耗⁣5层⁤。\n<color=#55D8EF>[辅助闪避]</color> 发动前充能超过⁣10层⁤，获得⁣2颗奖励骰⁤；否则获得⁣1颗⁤。\n同一次攻击中，闪避成功可继承奖励骰，失败后下一段可再次发动。\n<color=#A8E96D>[闪避成功时]</color> 恢复⁣1点精神值⁤。开骰时未过热，另获得⁣1层<color=#77D1DC>加速的未来</color>⁤。\n充能耗尽时转为<color=#8CD6EB>预知眼</color><color=#E77167>·过热</color>，闪避获得⁣1颗惩罚骰⁤。\n过热期间，每回合开始积累⁣10层⁤，满⁣30层⁤恢复。",
-    "en": "Valencina's exclusive <color=#AAC4D2>armor</color>. Cannot be removed once equipped.\n<color=#55D8EF>[Turn Start]</color> If the <color=#8CD6EB>Eye of Precognition</color> is not overheated, replace your Dodge with [<color=#8CD6EB>Precognition</color>].\nWhile the <color=#8CD6EB>Eye of Precognition</color> is not overheated, Brawl checks gain 1 bonus die.\n<color=#55D8EF>[Turn Start]</color> Recover 5 charge in combat and exploration, up to 30.\n<color=#EE827B>[When Hit]</color> Lose 5 charge. An assisted dodge also costs 5 charge.\n<color=#55D8EF>[Assisted Dodge]</color> Gain 2 bonus dice if you have more than 10 charge before activation. Otherwise, gain 1 bonus die.\nWithin one attack, a successful dodge carries the bonus dice to the next hit. After a failed dodge, assistance can activate again on the next hit.\n<color=#A8E96D>[On Dodge]</color> Restore 1 SP. If the eye was not overheated when you rolled, also gain 1 <color=#77D1DC>Accelerating Future</color>.\nAt zero charge, enter <color=#8CD6EB>Eye of Precognition</color><color=#E77167> - Overheat</color>. Dodge checks receive 1 penalty die.\nWhile overheated, build 10 stacks at the start of each turn. Recover at 30 stacks."
+    "zh": "<color=#55D8EF>[回合开始]</color> 未处于过热状态，则以<color=#8CD6EB>[预知]</color>替换你的闪避。\n每层充能使所有检定的⁣成功区间+1⁤。与<color=#8CD6EB>[预知]</color>的额外加成叠加。\n<color=#55D8EF>[回合开始时]</color> 战斗与探索均⁣恢复5层充能⁤，上限⁣30层⁤。\n<color=#EE827B>[受击时]</color> ⁣损失5层充能⁤。\n<color=#55D8EF>[辅助闪避]</color> 闪避时，⁣消耗5层充能⁤，获得⁣1颗奖励骰⁤。若扣费前<color=#8CD6EB>预知眼</color>⁣至少10层⁤，额外获得⁣1颗⁤。\n同一次攻击中，闪避成功可继承奖励骰，失败后下一段可再次发动。\n<color=#A8E96D>[闪避成功时]</color> 恢复⁣1点精神值⁤。开骰时未过热，另获得⁣1层<color=#77D1DC>加速的未来</color>⁤。\n充能耗尽时转为<color=#8CD6EB>预知眼</color><color=#E77167>·过热</color>，闪避获得⁣1颗惩罚骰⁤。\n过热期间，每回合开始积累⁣10层⁤，满⁣30层⁤恢复。",
+    "en": "<color=#55D8EF>[Turn Start]</color> If the <color=#8CD6EB>Eye of Precognition</color> is not overheated, replace your Dodge with [<color=#8CD6EB>Precognition</color>].\nEach stack of charge increases the success range of all checks by 1. This stacks with the extra bonus from [<color=#8CD6EB>Precognition</color>].\n<color=#55D8EF>[Turn Start]</color> Recover 5 charge in combat and exploration, up to 30.\n<color=#EE827B>[When Hit]</color> Lose 5 charge.\n<color=#55D8EF>[Assisted Dodge]</color> Spend 5 charge to gain 1 bonus die. Gain 1 additional bonus die if you had at least 10 charge before spending it.\nWithin one attack, a successful dodge carries the bonus dice to the next hit. After a failed dodge, assistance can activate again on the next hit.\n<color=#A8E96D>[On Dodge]</color> Restore 1 SP. If the eye was not overheated when you rolled, also gain 1 <color=#77D1DC>Accelerating Future</color>.\nAt zero charge, enter <color=#8CD6EB>Eye of Precognition</color><color=#E77167> - Overheat</color>. Dodge checks receive 1 penalty die.\nWhile overheated, build 10 stacks at the start of each turn. Recover at 30 stacks."
   },
   "valenna.Item.885112.ItemName": {
     "zh": "预知眼",
@@ -328,12 +332,12 @@
     "en": "Commander's Hat"
   },
   "valenna.MythicalItem.885112.Localization_Des": {
-    "zh": "并非像魔法那样预测未来。这只眼睛更接近于通过分析进入视野的一切，预测即将到来的瞬间的计算机。被称为奥丁之眼的这件遗物，实际上是被分为三份的某件遗物的碎片。",
-    "en": "This eye does not see the future through magic. It works more like a computer, analyzing everything in its field of view to predict what will happen next. The relic known as Odin's Eye is one fragment of an artifact split into three pieces."
+    "zh": "被称为奥丁之眼的这件遗物，实际上是被分为三份的某件遗物的碎片。",
+    "en": "The relic known as Odin's Eye is one fragment of an artifact split into three pieces."
   },
   "valenna.MythicalItem.885112.Localization_Effct": {
-    "zh": "闪避成功时恢复⁣1点精神值⁤。\n开骰时未过热，另获得⁣1层<color=#77D1DC>加速的未来</color>⁤。",
-    "en": "Restore 1 SP after a successful dodge.\nIf the eye was not overheated when you rolled, also gain 1 <color=#77D1DC>Accelerating Future</color>."
+    "zh": "每层充能使所有检定的⁣成功区间+1⁤。\n闪避成功时恢复⁣1点精神值⁤。\n开骰时未过热，另获得⁣1层<color=#77D1DC>加速的未来</color>⁤。",
+    "en": "Each stack of charge increases the success range of all checks by 1.\nRestore 1 SP after a successful dodge.\nIf the eye was not overheated when you rolled, also gain 1 <color=#77D1DC>Accelerating Future</color>."
   },
   "valenna.MythicalItem.885112.Localization_Name": {
     "zh": "预知眼",
@@ -380,8 +384,8 @@
     "en": "La Spada di Palermo"
   },
   "valenna.Trait.885142.Localization_Des": {
-    "zh": "进入剧本或战斗时，自动装备专属神话物品<color=#8CD6EB>预知眼</color>。\n<color=#8CD6EB>预知眼</color>未过热时，以<color=#8CD6EB>[预知]</color>替换闪避，斗殴检定获得⁣1颗奖励骰⁤。成功闪避敌方一次普通攻击的全部段数后，以「<color=#FFA15E>解兔</color>」反击该敌人。",
-    "en": "Automatically equip the exclusive <color=#8CD6EB>Eye of Precognition</color> when entering a scenario or battle.\nWhile the <color=#8CD6EB>Eye of Precognition</color> is active, [<color=#8CD6EB>Precognition</color>] replaces Dodge and Brawl checks gain 1 bonus die.\nAfter dodging every hit of a normal attack, counter with <color=#FFA15E>Sezionatura di Coniglio</color>."
+    "zh": "进入剧本或战斗时，自动装备专属神话物品<color=#8CD6EB>预知眼</color>。\n<color=#8CD6EB>预知眼</color>未过热时，以<color=#8CD6EB>[预知]</color>替换闪避。使用预知闪避时，每层<color=#8CD6EB>预知眼</color>使本次检定成功区间额外⁣+1⁤。\n成功闪避敌方一次普通攻击的全部段数后，以「<color=#FFA15E>解兔</color>」反击该敌人。",
+    "en": "Automatically equip the exclusive <color=#8CD6EB>Eye of Precognition</color> when entering a scenario or battle.\nWhile the <color=#8CD6EB>Eye of Precognition</color> is active, [<color=#8CD6EB>Precognition</color>] replaces Dodge. When dodging with <color=#8CD6EB>Precognition</color>, each stack of <color=#8CD6EB>Eye of Precognition</color> adds 1 more to the check's success range.\nAfter dodging every hit of a normal attack, counter with <color=#FFA15E>Sezionatura di Coniglio</color>."
   },
   "valenna.Trait.885142.Localization_Name": {
     "zh": "预知",

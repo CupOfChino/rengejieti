@@ -88,6 +88,9 @@ $plugin = Join-Path $mod 'plugins/ValennaBattle.dll'
 $files = @((Get-Item -LiteralPath $plugin).FullName)
 if ($published) { $files += (Get-Item -LiteralPath (Join-Path $mod 'Project_Depersonal/Project.rtmeta')).FullName }
 $files += (Get-Item -LiteralPath (Join-Path $mod 'resource/voice-subtitles.json')).FullName
+foreach ($asset in 'battle_thumb.png', 'Battle_Cp9_Boss_1_2.ogg') {
+    $files += (Get-Item -LiteralPath (Join-Path $mod "resource/battle-scene/$asset")).FullName
+}
 $files += @(Get-ChildItem -LiteralPath $data -Recurse -File -Filter '*.txt' | ForEach-Object FullName)
 $files += @((Get-Item -LiteralPath (Join-Path $assets 'Config/InternalConfigure.txt')).FullName)
 $files += @(Get-ChildItem -LiteralPath (Join-Path $assets 'Texture') -Recurse -File |

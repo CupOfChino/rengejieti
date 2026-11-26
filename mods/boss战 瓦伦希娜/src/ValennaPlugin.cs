@@ -14,7 +14,7 @@ namespace ValennaBattle
 {
     [BepInDependency("codex.depersonal.xineditor", BepInDependency.DependencyFlags.HardDependency)]
     [BepInDependency("codex.depersonal.custombattlebg", BepInDependency.DependencyFlags.HardDependency)]
-    [BepInPlugin("ttrpg.valenna-battle", "boss战 瓦伦希娜", "0.5.10")]
+    [BepInPlugin("ttrpg.valenna-battle", "boss战 瓦伦希娜", "0.5.15")]
     [BepInDependency("codex.depersonal.duoactionslot", BepInDependency.DependencyFlags.SoftDependency)]
     public sealed class ValennaPlugin : BaseUnityPlugin
     {
@@ -30,6 +30,7 @@ namespace ValennaBattle
             Instance = this;
             StrikeArt.Load();
             new Harmony("ttrpg.valenna-battle").PatchAll(typeof(ValennaPlugin).Assembly);
+            ValennaBattleScene.Register(Info.Location);
             if (Singleton<LocalizationHandler>.HasInstance && Singleton<LocalizationHandler>.Instance.Data?.LocalizationMaps.Count > 0)
                 ValennaText.Register(Singleton<LocalizationHandler>.Instance);
             Logger.LogInfo($"boss战 瓦伦希娜 {Info.Metadata.Version} 已载入：" + Info.Location);

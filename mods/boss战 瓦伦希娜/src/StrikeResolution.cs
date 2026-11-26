@@ -132,6 +132,7 @@ namespace ValennaBattle
                 _ => 0
             };
             int tremor = (_skill.Id, segment) switch {
+                (885121, 1) when critical => 1,
                 (885124 or 885127 or 885126, 1) => 2,
                 (885128, 0 or 1) => 2,
                 (885125 or 885129, 0) => 1,

@@ -61,6 +61,10 @@ namespace ValennaBattle
             !IsOverheated(defender) && defender.GetBuff(StrikeProfiles.EyeChargeId) is BuffData eye &&
             !eye.DisableBuff && eye.CurLayer >= StrikeProfiles.EyeUseCost;
 
+        // 直接追加伤害时，原版传入 ignorePursueCheck。目标骰列表仍保留上一击的骰子。
+        private static bool HasNativeDodge(BattleRole target, List<DiceResultData> targetDices, bool directFollowUp) =>
+            !directFollowUp && targetDices?.Exists(dice => dice?.Role == target && IsDodge(dice)) == true;
+
         private static async Task<bool> RollSpecialDodge(BattleRole defender, BattleRole attacker)
         {
             if (!CanSpecialDodge(defender, attacker)) return false;
@@ -72,7 +76,7 @@ namespace ValennaBattle
                 CheckId = (int)ERoleExtraAttribute.Dodge,
                 OriginExtraAttr = ERoleExtraAttribute.Dodge
             };
-            var state = new Defence { RollEyeReady = true, RollCharge = CheckBonus(defender), PendingRoll = dice };
+            var state = new Defence { RollEyeReady = true, RollRangeBonus = CheckBonus(defender, withPrescience: true), PendingRoll = dice };
             var detail = new CheckDetailAdditionalData();
             dice.CheckValue = Mathf.Clamp(BattleHelper.GetFinalCheckValue(defender, dice.CheckType, dice.CheckId, detail),
                 dice.MinCheckValue, dice.MaxCheckValue);
@@ -80,7 +84,7 @@ namespace ValennaBattle
 
             BuffData eye = defender.GetBuff(StrikeProfiles.EyeChargeId);
             int before = eye.CurLayer;
-            state.RollReward = before <= StrikeProfiles.LowEyeCharge ? 1 : 2;
+            state.RollReward = AssistedDodgeReward(before);
             await SpendEye(defender, eye);
             ValennaPlugin.Instance.Report($"预知眼 {before}→{Math.Max(eye.CurLayer, 0)} 层，特殊闪避 +{state.RollReward} 奖励骰");
 
@@ -140,11 +144,11 @@ namespace ValennaBattle
                         (__instance.TargetSelectType == ETargetSelect.Enemy_Single &&
                             !target.CheckCanBeSelectedAsTarget(__instance.Self)) ||
                         (__instance.MagicData != null && target.HaveRoleTag(ERoleTag.MagicImmu)) ||
-                        ____targetDices?.Exists(dice => dice?.Role == target && IsDodge(dice)) == true) continue;
+                        HasNativeDodge(target, ____targetDices, __7)) continue;
                     candidates.Add(target);
                 }
 
-                if (candidates.Count == 0) return true;
+                if (candidates.Count == 0 && SpecialEffects.Value?.Action != __instance) return true;
                 __result = ResolveAction(watch, __0, __1, candidates, __2, __3, __4, __5, __6, __7);
                 return false;
             }
@@ -155,16 +159,22 @@ namespace ValennaBattle
             {
                 BattleActiveBehaviorData action = watch.Action;
                 var effects = new SpecialDodgeEffects { Action = action };
+                bool canCounter = action.IsAttackAction && CanCounterAction(action);
                 foreach (BattleRole defender in candidates)
                 {
-                    watch.For(defender).BreakChain();
-                    if (await RollSpecialDodge(defender, action.Self))
-                        effects.Evaded.Add(defender);
+                    Defence state = watch.For(defender);
+                    bool evaded = await RollSpecialDodge(defender, action.Self);
+                    if (evaded) effects.Evaded.Add(defender);
+                    if (canCounter && evaded) state.Evaded = true;
+                    else state.BreakChain();
+                    if (ignorePursue)
+                        ValennaPlugin.Instance.Report($"预知追加一击闪避，技能 {action.BattleSkillData?.Id ?? action.MagicData?.Id ?? 0}：" +
+                            (evaded ? "成功" : "失败"));
                 }
 
                 Task resolution;
                 SpecialDodgeEffects previous = SpecialEffects.Value;
-                if (effects.Evaded.Count > 0) SpecialEffects.Value = effects;
+                SpecialEffects.Value = effects.Evaded.Count > 0 ? effects : null;
                 _resume = action;
                 // 保留原版结算列表，发射扣弹、投掷消耗和施法者效果仍走原入口。
                 try { resolution = action.ActionEffectProcess(result, targets, offhand, aoe, callback, pursue, data, ignorePursue); }

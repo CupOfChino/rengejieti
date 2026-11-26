@@ -96,13 +96,12 @@ namespace ValennaBattle
             return (int)Math.Min(int.MaxValue, (damage * (100L + percent) + 50) / 100);
         }
 
-        internal static async Task RewardBurst(BattleRole source)
+        internal static void RewardBurst(BattleRole source)
         {
             if (!StrikeSequence.CanHit(source) || !Wields(source, StrikeProfiles.GunbladeId)) return;
             EquipmentRound state = EquipmentState(source);
             if (state == null || state.DamageUpGained >= 3) return;
-            state.DamageUpGained++;
-            await ValennaTremor.AddLayers(source, source, DamageUpId, 1, true, null);
+            if (ValennaNextRoundBuffs.Queue(source, source, DamageUpId)) state.DamageUpGained++;
 
         }
 
@@ -222,7 +221,10 @@ namespace ValennaBattle
 
             private static async Task Reload(Task original, BattleRole role, int id)
             {
+                BattleFightContent fight = BattleHelper.FightContent;
                 await original;
+                if (fight == null || !ReferenceEquals(fight, BattleHelper.FightContent) || BattleHelper.GameOptionIsBreak)
+                    return;
                 if (id == ReloadId)
                 {
                     if (!ValennaPlugin.IsValennaPartner(role)) return;
@@ -235,6 +237,9 @@ namespace ValennaBattle
                     state.PrescienceReloaded = true;
                 }
                 await ValennaBattleStatus.StartAmmo(role);
+                if (id == ReloadId && ReferenceEquals(fight, BattleHelper.FightContent) &&
+                    !fight.IsFightOver && !BattleHelper.GameOptionIsBreak)
+                    ValennaBattleScene.Play();
             }
         }
     }

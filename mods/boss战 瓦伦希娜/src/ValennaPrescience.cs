@@ -24,12 +24,13 @@ namespace ValennaBattle
             role?.Data?.BuffList != null && role.GetBuff(StrikeProfiles.EyeOverheatId) is BuffData status &&
             !status.DisableBuff;
 
-        private static int CheckBonus(BattleRole role)
+        private static int CheckBonus(BattleRole role, bool withPrescience = false)
         {
-            if (!ValennaEyeEquipment.IsWorn(role) || !ValennaEyeEquipment.HasPrescience(role) ||
-                role.Data.BuffList == null || IsOverheated(role)) return 0;
+            if (!ValennaEyeEquipment.IsWorn(role) || role.Data.BuffList == null || IsOverheated(role)) return 0;
             BuffData eye = role.GetBuff(StrikeProfiles.EyeChargeId);
-            return eye == null || eye.DisableBuff ? 0 : Math.Max(0, Math.Min(eye.CurLayer, StrikeProfiles.MaxEyeCharge));
+            if (eye == null || eye.DisableBuff || eye.CurLayer <= 0) return 0;
+            int layers = Math.Min(eye.CurLayer, StrikeProfiles.MaxEyeCharge);
+            return withPrescience && ValennaEyeEquipment.HasPrescience(role) ? 2 * layers : layers;
         }
 
         internal static async Task InstallEye(BattleRole role)
@@ -74,6 +75,9 @@ namespace ValennaBattle
                 await role.AddBuff(role, StrikeProfiles.EyeOverheatId, showChangeTip: false);
         }
 
+        private static int AssistedDodgeReward(int charge) =>
+            charge >= StrikeProfiles.DoubleDodgeRewardCharge ? 2 : 1;
+
         private static bool IsDodge(DiceResultData dice) => dice != null && !dice.IsNoRoll &&
             dice.CheckType == EDiceValueType.ExtraAttr && dice.CheckId == (int)ERoleExtraAttribute.Dodge;
 
@@ -82,6 +86,9 @@ namespace ValennaBattle
 
         private static bool AttackThreatens(int attackLevel, int requiredLevel, int successLevel, bool automatic) =>
             automatic || attackLevel >= Math.Max(successLevel, requiredLevel);
+
+        private static bool CanCounterAction(BattleActiveBehaviorData action) =>
+            !IsThrowAction(action) && action.MagicData == null && action.BattleSkillData?.Id != StrikeProfiles.ExecutionId;
 
         private sealed class Defence
         {
@@ -92,12 +99,14 @@ namespace ValennaBattle
             internal DiceResultData PendingRoll;
             internal bool RollOverheated;
             internal bool RollEyeReady;
-            internal int RollCharge;
+            internal int RollRangeBonus;
             internal int RollReward;
             internal bool VoiceEligible;
             internal EDiceResult VoiceAttackRoll;
             internal EDiceResult VoiceDodgeRoll;
             internal MarkLifetime Mark;
+
+            internal bool FullyEvaded => Evaded && !Incomplete;
 
             internal void BreakChain()
             {
@@ -218,15 +227,14 @@ namespace ValennaBattle
                     if (watch.AttackExecuted && watch.Future != null)
                         await watch.Future.Consume(action.Self);
 
-                    if (IsThrowAction(action) || action.MagicData != null ||
-                        action.BattleSkillData?.Id == StrikeProfiles.ExecutionId) return;
+                    if (!CanCounterAction(action)) return;
 
                     foreach (var entry in watch.Defenders)
                     {
                         BattleRole defender = entry.Key;
                         Defence result = entry.Value;
                         BattleRole attacker = action.Self;
-                        if (!result.Evaded || result.Incomplete || result.Bonus <= 0 || !CanDefend(defender) ||
+                        if (!result.FullyEvaded || !CanDefend(defender) ||
                             !ValennaEyeEquipment.HasPrescience(defender) ||
                             !StrikeSequence.CanHit(attacker) || !BattleHelper.IsInBattle)
                             continue;
@@ -286,7 +294,7 @@ namespace ValennaBattle
                     state.PendingRoll = dice;
                     state.RollOverheated = IsOverheated(defender);
                     state.RollEyeReady = ValennaEyeEquipment.IsWorn(defender) && !state.RollOverheated;
-                    state.RollCharge = CheckBonus(defender);
+                    state.RollRangeBonus = CheckBonus(defender, withPrescience: true);
                     state.RollReward = 0;
                     state.VoiceEligible = defence.DefenceType != EBattleDefenceType.None &&
                         ValennaEyeEquipment.IsWorn(defender) &&
@@ -302,7 +310,7 @@ namespace ValennaBattle
                         {
                             int before = eye.CurLayer;
                             await SpendEye(defender, eye);
-                            state.Bonus = before <= StrikeProfiles.LowEyeCharge ? 1 : 2;
+                            state.Bonus = AssistedDodgeReward(before);
                             ValennaPlugin.Instance.Report($"预知眼 {before}→{Math.Max(eye.CurLayer, 0)} 层，闪避 +{state.Bonus} 奖励骰");
                         }
                     }
@@ -404,6 +412,12 @@ namespace ValennaBattle
                 {
                     if (!CanTrackDodge(defender) || defender.IsAlly == __instance.Self.IsAlly) continue;
                     Defence state = watch.For(defender);
+                    SpecialDodgeEffects auxiliary = SpecialEffects.Value;
+                    if (auxiliary?.Action == __instance && auxiliary.Evaded.Contains(defender))
+                    {
+                        state.ClearRoll();
+                        continue;
+                    }
                     DiceResultData dodge = state.PendingRoll;
                     DiceResultData attack = __instance.RollDice;
                     int success = EDiceResult.Success.GetLevel();
@@ -504,6 +518,7 @@ namespace ValennaBattle
             internal int SkillId;
             internal bool HitPrey;
             internal bool Executing;
+            internal bool EnhancedCritical;
             internal bool CriticalApplied;
         }
 
@@ -528,7 +543,8 @@ namespace ValennaBattle
                 __state = new HitContext
                 {
                     Target = __instance, Attacker = __0, Previous = ActiveHit.Value,
-                    Breath = breath, HitPrey = hitPrey, Executing = executing, AddData = __3, SkillId = skillId
+                    Breath = breath, EnhancedCritical = breath?.CurLayer > 10,
+                    HitPrey = hitPrey, Executing = executing, AddData = __3, SkillId = skillId
                 };
                 ActiveHit.Value = __state;
             }
@@ -545,7 +561,7 @@ namespace ValennaBattle
         {
             await original;
             if (hit.CriticalApplied && ReferenceEquals(hit.Attacker.GetBuff(StrikeProfiles.BreathId), hit.Breath))
-                await hit.Breath.ChangeLayer(hit.Attacker, -1);
+                await hit.Breath.ChangeLayer(hit.Attacker, hit.EnhancedCritical ? -2 : -1);
             if (hit.HitPrey && role.IsDeath)
                 await ValennaHunt.PreyDefeated(hit.Attacker, role, hit.Executing);
             if (IsAttackContact(hit.AddData)) await DrainAfterHit(Task.CompletedTask, role);
@@ -576,7 +592,8 @@ namespace ValennaBattle
                 BattleRole attacker = __3?.Attacker;
                 if (attacker == null || attacker == __instance) return;
 
-                if (IsAttackContact(__3.AddData))
+                // 被敌方回击属于自己的行动，不计入敌方另一场主动攻击的完整闪避。
+                if (IsAttackContact(__3.AddData) && __3.AddData?.SourceType != EDamageSourceType.StrickBack)
                     foreach (var active in Attacks)
                         if (active.Key.Self == attacker &&
                             active.Value.Defenders.TryGetValue(__instance, out Defence state))
@@ -611,7 +628,8 @@ namespace ValennaBattle
 
                 if (matchingHit && hit.Breath != null && !hit.CriticalApplied)
                 {
-                    damage = (int)Math.Min(int.MaxValue, (12L * damage + 5) / 10);
+                    long multiplier = hit.EnhancedCritical ? 14L : 12L;
+                    damage = (int)Math.Min(int.MaxValue, (multiplier * damage + 5) / 10);
                     hit.CriticalApplied = true;
                     hit.AddData.IsCritical = true;
                     CriticalDamageNumbers.Current = new CriticalDamageNumbers.Scope(__instance.Model?.Hud);
@@ -700,9 +718,9 @@ namespace ValennaBattle
             new[] { typeof(BattleRole), typeof(VariableData<int>), typeof(int), typeof(List<CheckDetailData>), typeof(bool) })]
         private static class SkillPreviewRange
         {
-            private static void Postfix(BattleRole __0, ref int __result)
+            private static void Postfix(BattleRole __0, bool __4, ref int __result)
             {
-                if (_previewAction.HasValue) __result = CheckRange.Expand(__result, CheckBonus(__0));
+                if (_previewAction.HasValue) __result = CheckRange.Expand(__result, CheckBonus(__0, withPrescience: __4));
             }
         }
 
@@ -713,14 +731,6 @@ namespace ValennaBattle
                 CheckDetailAdditionalData __4, List<CheckDetailData> __result)
             {
                 if (__0?.Data == null || __result == null) return;
-                // 选招预览、战斗实掷、探索检定都从这里取骰子来源。
-                bool combat = __1 == EDiceValueType.Skill && __2 == (int)EExploreSkill.Combat ||
-                    __1 == EDiceValueType.Unite && (__2 == (int)EExploreSkill.Combat || __4?.UniteSkill == EExploreSkill.Combat);
-                if (combat && ValennaEyeEquipment.IsWorn(__0) && __0.Data.BuffList != null && !IsOverheated(__0) &&
-                    __0.GetBuff(StrikeProfiles.EyeChargeId) is { DisableBuff: false, CurLayer: > 0 } &&
-                    !__0.Data.CheckDisableRewardDice(__1, __2))
-                    __result.Add(BuffDetail(__0, StrikeProfiles.EyeChargeId, 1));
-
                 if (!_previewAction.HasValue) return;
                 bool magic = _previewAction == EBattleActionType.Magic || __4?.MagicSkillData != null;
                 int reward = AcceleratedFuture.RewardDice(__0, magic);
@@ -749,15 +759,15 @@ namespace ValennaBattle
                 foreach (DiceResultData dice in __0)
                 {
                     if (dice?.Role == null || dice.IsNoRoll || dice.CheckType == EDiceValueType.None) continue;
-                    int layers = DodgeRolls.TryGetValue(dice, out Defence defence)
-                        ? defence.RollCharge : CheckBonus(dice.Role);
+                    int bonus = DodgeRolls.TryGetValue(dice, out Defence defence)
+                        ? defence.RollRangeBonus : CheckBonus(dice.Role, withPrescience: IsDodge(dice) && BattleHelper.IsInBattle);
                     if (!BattleRanges.TryGetValue(dice, out CheckRange range))
                     {
-                        if (layers == 0) continue;
+                        if (bonus == 0) continue;
                         range = new CheckRange(dice.CheckValue);
                         BattleRanges.Add(dice, range);
                     }
-                    dice.CheckValue = range.Apply(dice.CheckValue, layers);
+                    dice.CheckValue = range.Apply(dice.CheckValue, bonus);
                 }
             }
         }
@@ -787,8 +797,7 @@ namespace ValennaBattle
 
             private static void Postfix(CheckDiceData __0)
             {
-                if (BattleHelper.IsInBattle || __0 == null || __0.UsShopConfig ||
-                    __0.RollType == EDiceValueType.None) return;
+                if (__0 == null || __0.RollType == EDiceValueType.None || (__0.UsShopConfig && __0.Source == null)) return;
                 BattleRole role = __0.Source ?? BattleHelper.SceneHeroInfo;
                 int layers = CheckBonus(role);
                 if (layers == 0) return;

@@ -165,7 +165,7 @@ namespace ValennaBattle
         public const int StunnedId = 101;
         public const float ForeseenMarkSize = 0.30f;
         public const int MaxEyeCharge = 30;
-        public const int LowEyeCharge = 10;
+        public const int DoubleDodgeRewardCharge = 10;
         public const int EyeUseCost = 5;
         public const int ChargeRecovery = 5;
         public const int OverheatRecovery = 10;

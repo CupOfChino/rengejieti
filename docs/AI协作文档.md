@@ -1156,6 +1156,12 @@ num += OffHandWeapon.ExtraContinuousAttackCount.Value + OffHandWeapon.ExtraConti
 
 - 0.4.0 将“大行动轮开始”对齐到选择行动前的原版 `BeforeRoundStart`，该事件在首轮 `LookStage` 和以后各轮 `PreprepareStage` 触发。原版 `RoundStart` 已在行动选择后。`ValennaHunt.cs` 在每第 3 轮的 `ResultStage` 完成后决定是否安排补标，下一大行动轮实际开始时施加。处置条件同时走按钮遮罩、目标过滤和提交后的再校验。七项招式配置与预知数值仍在 `StrikeProfiles.cs`。
 - 普通与灼热震颤的配置及代理入口见 `ValennaTremor.cs`。原生燃烧为 104，原生昏迷为 101。雷横默工坊号 `3587695213`，运行时查四张状态表 686122775、68612299、68614495、68612256 来决定是否调用它的状态。瓦伦希娜出战时对手模型右侧从开战起显示空的混乱条；引爆增长，满槽触发原生昏迷。联动模式跟踪本模组发起的引爆及其实际意志降幅。
+- 0.5.11 的下回合 Buff 用 `ValennaNextRoundBuffs.Queue` 按战斗、角色和 `fight.Round + 1` 排队。待生效对象只交给 `HUDElement.ShowRoleBuff`，正式 Buff 在 `BattleFightContent.EnterPhase` 分发 `BeforeRoundStart` 之前走原生 `AddBuff`。铳剑的普通和雷横默联动引爆共用 `ValennaKit.RewardBurst`，每行动轮最多安排 3 层 885153。其生效、增层和回合末清理继续调用 `ValennaDomainDamage` 使用的「自定义领域」物理伤害强化预设。
+- 0.5.12 将预知眼的每层 +1 成功区间接入所有角色检定入口。预知闪避按扣费前充能再每层 +1，普通和特殊闪避共用同一规则。装备的原斗殴奖励骰已移除。呼吸法在每段暴击判定时读取层数，超过 10 层记入该次命中的 1.4 倍倍率与 2 层消耗，在实际扣血以及命中结束时分别兑现。两项实现见 `ValennaPrescience.cs`，特殊闪避的开骰见 `ValennaPrescienceSpecialDodge.cs`。
+- 0.5.13 的辅助闪避在扣费前至少有 10 层充能时获得 2 颗奖励骰，普通与特殊闪避共用 `AssistedDodgeReward`。预知眼的装备风味和神话卡面分别取 `Item/885112.ItemDes`、`MythicalItem/885112.Localization_Des`。加速弹和预知眼状态的数字排版由 `format_rules.ps1` 将数值与关联词一起标记后交给原悬浮框测量。
+- 0.5.14 的「装填子弹、切换背景」沿用技能 885151，补弹后通过 `ValennaBattleScene` 调用自定义背景的 `DomainApi.PlayVisual`。`resource/battle-scene` 包含 2000×1200 的用户提供背景和 199.5 秒的长版 BGM。背景放大由本模组针对该路径覆盖铺图 UV 实现，战斗结束的恢复由依赖处理。发布或挂测试时同时带齐两份素材。
+- 原生 `Item_PursueAttack` 直接追加效果时传 `ignorePursueCheck`，其 `_targetDices` 可能保留首击的原生防御骰。`ValennaPrescienceSpecialDodge.cs` 在这条路径重新判断预知闪避，追加一击的结果与技能 ID 会写入日志。普通攻击的原生与补掷闪避都计入整次攻击的解兔判定，奖励骰独立于成功记录。敌人的闪避回击独立于它随后主动攻击的记录。
+- 0.5.15 的拇指大厅在原 2 倍放大的基础上下移可见高度的 10%，用背景模组的铺图范围和晃动幅度重算 UV，周期延长为背景配置的 2 倍。缩放、下移和半速摇晃只挂在这张图的 `RawImage` 上，换图时卸下。
 - 本机挂载以瓦伦希娜的工坊目录 `3845388588` 为准。编译并运行 `tools/test_install.ps1` 后，可核对正式目录、工程与待上传包的插件哈希。启动日志的「0.5.5 已载入」包含实际 DLL 路径。旧宿主 `3813306323` 的 `-Remove` 只处理旧哈希清单记录的文件。编辑器应用音轨时也会同步本机瓦伦希娜目录。
 - `ValennaPrescience.cs` 等全部分段的后处理完成才统计本次闪避和攻击。原版部分 `ActionEffectProcess` 调用按回调推进。攻击、呼吸法和狩猎伤害改在实际 `SetDamage` 取值，狩猎与未来累计小数，避免 1 点测试分段被逐段向上取整。暴击数字按命中范围定位 HUD，池化数字重置字号。其余装备、初始特质和旧伙伴升级见 `ValennaKit.cs` 与 `tools/build_data.ps1`。
 - 0.4.2 把扫刃、气流、碎屑与收势余风错开。最外侧暗红尖弧随原刀光向外卷，在亮刃消失后继续渐隐。`SweepFrames` 从 24 改为 26 时同步更新了浏览器素材 ID 和各层时长。浏览器大小输入上限为 650，长直刺用现有横纵比例保持实际尺寸。调参和修改前后关键帧见[招式演出分段](../mods/boss战%20瓦伦希娜/招式演出分段.md#042-逐帧复查)。

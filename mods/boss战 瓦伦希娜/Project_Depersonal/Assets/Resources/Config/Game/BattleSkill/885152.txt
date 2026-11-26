@@ -16,7 +16,7 @@
       "Description": {
         "TarKey": "valenna.BattleSkill.885152.Description",
         "SheetKey": "",
-        "InputText": "每层<color=#8CD6EB>预知眼</color>使⁣检定成功区间+1⁤。\n可以闪避投掷物品、法术及自身攻击被敌人成功闪避后受到的回击等原本不可闪避的攻击。成功时，避开自己受到的该次效果。\n这些特殊闪避不会触发[<color=#FFA15E>解兔</color>]。成功闪避敌方一次普通攻击的全部段数后，仍可用[<color=#FFA15E>解兔</color>]反击。\n<color=#55D8EF>[使用时]</color> 补满<color=#79CAD7>加速弹</color>，每行动轮限⁣1次⁤。\n<color=#A8E96D>[闪避成功时]</color> 获得⁣1层<color=#EBC556>呼吸法</color>⁤，每行动轮最多⁣2次⁤。\n<color=#A8E96D>[闪避成功时]</color> 恢复⁣1点精神值⁤，每场战斗最多⁣2次⁤。",
+        "InputText": "使用预知闪避时，每层<color=#8CD6EB>预知眼</color>使本次检定成功区间额外⁣+1⁤，与<color=#8CD6EB>预知眼</color>本身的加成叠加。\n可以闪避投掷物品、法术及自身攻击被敌人成功闪避后受到的回击等原本不可闪避的攻击。成功时，避开自己受到的该次效果。\n这些特殊闪避不会触发[<color=#FFA15E>解兔</color>]。成功闪避敌方一次普通攻击的全部段数后，仍可用[<color=#FFA15E>解兔</color>]反击。\n<color=#55D8EF>[使用时]</color> 补满<color=#79CAD7>加速弹</color>，每行动轮限⁣1次⁤。\n<color=#A8E96D>[闪避成功时]</color> 获得⁣1层<color=#EBC556>呼吸法</color>⁤，每行动轮最多⁣2次⁤。\n<color=#A8E96D>[闪避成功时]</color> 恢复⁣1点精神值⁤，每场战斗最多⁣2次⁤。",
         "Characteristic": null
       },
       "EffectDesc": {

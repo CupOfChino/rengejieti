@@ -13,7 +13,7 @@
       "Des": {
         "TarKey": "valenna.Buff.885131.Des",
         "SheetKey": "",
-        "InputText": "<color=#A8E96D>[命中时]</color> 各段独立判定暴击。每层提供⁣5%⁤暴击率，上限⁣100%⁤。\n<color=#B3F26E>[暴击时]</color> 本段伤害按⁣1.2倍⁤结算，消耗⁣1层⁤。\n<color=#55D8EF>[回合结束时]</color> 减少⁣1层⁤。",
+        "InputText": "<color=#A8E96D>[命中时]</color> 各段独立判定暴击。每层提供⁣5%⁤暴击率，上限⁣100%⁤。\n<color=#B3F26E>[暴击时]</color> 本段伤害按⁣1.2倍⁤结算，消耗⁣1层⁤。\n若暴击判定时<color=#EBC556>呼吸法</color>超过⁣10层⁤，本段伤害改为⁣1.4倍⁤，额外消耗⁣1层⁤。\n<color=#55D8EF>[回合结束时]</color> 减少⁣1层⁤。",
         "Characteristic": null
       },
       "IconPathReference": {

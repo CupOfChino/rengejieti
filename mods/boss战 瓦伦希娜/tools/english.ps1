@@ -13,7 +13,8 @@ $skillText = @{
     885121 = @('Colpi di Taglio', (
         'Brawl check | 2 hits', $poiseBonus,
         '【I】 1d4', '[On Hit] Inflict 1 Burn.',
-        '【II】 1d4', '[On Hit] Immediately resolve the target''s Burn once.' -join "`n"))
+        '【II】 1d4', '[On Hit] Immediately resolve the target''s Burn once.',
+        '[On Critical Hit] Inflict 1 Tremor.' -join "`n"))
     885124 = @('Colpo di Punta', (
         'Combined Brawl and Shoot check | 2 hits', $poiseBonus,
         '【I】 1d3', $spendRound, '[On Hit] Inflict 1 Burn if a round was spent.',
@@ -58,9 +59,9 @@ $skillText = @{
         '【V】 1 + Eye of Precognition damage die', 'Spend up to 5 Acceleration Rounds.',
         'If Mang is spent, this hit gains +2 base damage.',
         '[On Hit] Trigger Tremor Burst 3 times.', '[On Critical Hit] Trigger 2 additional bursts.' -join "`n"))
-    885151 = @('Reload', '[On Use] Refill Acceleration Rounds.')
+    885151 = @('Reload and Change Background', '[On Use] Refill Acceleration Rounds and switch the battle background and music.')
     885152 = @('Precognition', (
-        'Each stack of Eye of Precognition increases the check success range by 1.',
+        'When dodging with Precognition, each stack of Eye of Precognition adds 1 more to this check''s success range, stacking with the eye''s own bonus.',
         'You can dodge normally undodgeable attacks, including thrown items, spells, and counterattacks after an enemy dodges your attack. On a success, you avoid the effect on yourself.',
         'These special dodges do not trigger [Sezionatura di Coniglio]. Dodging every hit of a normal attack still lets you counter with [Sezionatura di Coniglio].',
         '[On Use] Refill Acceleration Rounds, once per action round.',
@@ -81,7 +82,7 @@ $ValennaEnglish['PartnerData/885101']['CustomTags'] = @('The Fingers', 'The Thum
 $traitText = @{
     885141 = @('La Spada di Palermo', "Stealth -10.`nUse the seven Palermo sword techniques in the attack menu.`nWith Time to Hunt, automatically designate a Game Target at the start of battle.")
     885142 = @('Precognition', ("Automatically equip the exclusive Eye of Precognition when entering a scenario or battle.",
-        'While the Eye of Precognition is active, [Precognition] replaces Dodge and Brawl checks gain 1 bonus die.',
+        'While the Eye of Precognition is active, [Precognition] replaces Dodge. When dodging with Precognition, each stack of Eye of Precognition adds 1 more to the check''s success range.',
         'After dodging every hit of a normal attack, counter with Sezionatura di Coniglio.' -join "`n"))
     885143 = @('Time to Hunt', (
         '[Battle Start] Randomly mark one enemy as the Game Target.',
@@ -107,20 +108,20 @@ foreach ($entry in $traitText.GetEnumerator()) {
 }
 
 $eyeName = 'Eye of Precognition'
-$eyeLore = 'This eye does not see the future through magic. It works more like a computer, analyzing everything in its field of view to predict what will happen next. The relic known as Odin''s Eye is one fragment of an artifact split into three pieces.'
-$eyeRules = (
-    '[Turn Start] If the Eye of Precognition is not overheated, replace your Dodge with [Precognition].',
-    'While the Eye of Precognition is not overheated, Brawl checks gain 1 bonus die.')
+$eyeLore = 'This eye does not see the future through magic. It works more like a computer, analyzing everything in its field of view to predict what will happen next.'
+$eyeDodgeRule = '[Turn Start] If the Eye of Precognition is not overheated, replace your Dodge with [Precognition].'
+$eyeRangeRule = 'Each stack of charge increases the success range of all checks by 1.'
 $itemText = @{
     885111 = @('Palermo - Gunblade', 'Valencina carries this gunblade slung across her back. Famiglia Bognatelli custom Acceleration Rounds fire the instant she strikes at close range.', (
         '[Battle Start] Refill Acceleration Rounds to 10.',
         '[On Hit] If this hit spent an Acceleration Round and passed the Shoot check, inflict 1 Burn and 1 Tremor.',
-        '[On Burst] Gain 1 Damage Up, up to 3 stacks per action round.',
+        '[On Burst] Gain 1 Damage Up at the start of the next round. Queue up to 3 stacks per action round.',
         '[Turn End] Clear all Damage Up stacks.' -join "`n"), '1D6')
-    885112 = @($eyeName, $eyeLore, ((@('Valencina''s exclusive armor. Cannot be removed once equipped.') + $eyeRules + @(
+    885112 = @($eyeName, $eyeLore, ((@($eyeDodgeRule,
+        "$eyeRangeRule This stacks with the extra bonus from [Precognition].") + @(
         '[Turn Start] Recover 5 charge in combat and exploration, up to 30.',
-        '[When Hit] Lose 5 charge. An assisted dodge also costs 5 charge.',
-        '[Assisted Dodge] Gain 2 bonus dice if you have more than 10 charge before activation. Otherwise, gain 1 bonus die.',
+        '[When Hit] Lose 5 charge.',
+        '[Assisted Dodge] Spend 5 charge to gain 1 bonus die. Gain 1 additional bonus die if you had at least 10 charge before spending it.',
         'Within one attack, a successful dodge carries the bonus dice to the next hit. After a failed dodge, assistance can activate again on the next hit.',
         '[On Dodge] Restore 1 SP. If the eye was not overheated when you rolled, also gain 1 Accelerating Future.',
         'At zero charge, enter Eye of Precognition - Overheat. Dodge checks receive 1 penalty die.',
@@ -152,13 +153,14 @@ foreach ($entry in $itemText.GetEnumerator()) {
 }
 $ValennaEnglish['MythicalItem/885112'] = @{
     Localization_Name = $eyeName
-    Localization_Des = $eyeLore
-    Localization_Effct = "Restore 1 SP after a successful dodge.`nIf the eye was not overheated when you rolled, also gain 1 Accelerating Future."
+    Localization_Des = 'The relic known as Odin''s Eye is one fragment of an artifact split into three pieces.'
+    Localization_Effct = "$eyeRangeRule`nRestore 1 SP after a successful dodge.`nIf the eye was not overheated when you rolled, also gain 1 Accelerating Future."
 }
 $buffText = @{
     885131 = @('Poise', (
         '[On Hit] Each hit rolls for a critical independently. Each stack adds 5% critical chance, up to 100%.',
         '[On Critical] Deal 1.2 times damage for this hit and spend 1 stack.',
+        'With more than 10 Poise when you roll for the critical, deal 1.4 times damage and spend 1 additional stack.',
         '[Turn End] Lose 1 stack.' -join "`n"))
     885132 = @('Tremor', (
         '[On Burst] Increase the Stagger meter by one third of the Tremor stacks, rounded up, then consume 1 Tremor.',
@@ -173,17 +175,21 @@ $buffText = @{
         'Explosion damage equals half of the combined Burn and Tremor stacks before the burst, rounded down.',
         'Burn and Tremor each lose an additional third of their original stacks, rounded down separately.',
         '[Turn End] Lose 1 stack.' -join "`n"))
-    885135 = @($eyeName, ((@('Maximum charge is 30. With Precognition, each stack increases the check success range by 1.') + $eyeRules + @(
+    885135 = @($eyeName, ((@('Maximum charge is 30.', $eyeRangeRule, $eyeDodgeRule) + @(
         '[Turn Start] Recover 5 charge in combat and exploration.',
-        'Using assisted dodge or taking a hit costs 5 charge. At zero charge, enter Eye of Precognition - Overheat.')) -join "`n"))
+        '[When Hit] Lose 5 charge.',
+        '[Assisted Dodge] Spend 5 charge.',
+        'At zero charge, enter Eye of Precognition - Overheat.')) -join "`n"))
     885136 = @('Eye of Precognition - Overheat', (
         '[While Overheated] Dodge checks receive 1 penalty die.',
         '[Turn Start] Build 10 stacks in combat and exploration.',
         'At 30 stacks, return to Eye of Precognition.' -join "`n"))
     885137 = @('Acceleration Round', (
         'Store up to 10 rounds.',
-        '[On Spending] Each hit makes only one hidden Shoot check. The round is spent even if the check fails.',
-        '[On Successful Check] This hit deals +10% damage. Gain 1 Poise per round spent.' -join "`n"))
+        '[On Spending] Roll one hidden Shoot check per hit.',
+        'The round is spent even if the check fails.',
+        '[On Successful Check] This hit deals +10% damage.',
+        'Gain 1 Poise per round spent.' -join "`n"))
     885138 = @('Accelerating Future', (
         '[On Dodge] Gain 1 stack if the Eye of Precognition was not overheated when you rolled, up to 5.',
         'Each stack grants Brawl +2 and Sport +2.',
@@ -246,6 +252,7 @@ function Add-ValennaTableLocalization([System.Collections.IDictionary]$Tables) {
         'valenna.cigar.remove' = [ordered]@{ zh = '取下雪茄'; en = 'Put the Cigar Away' }
         'valenna.cigar.hold' = [ordered]@{ zh = '叼在嘴里'; en = 'Hold It in Your Mouth' }
         'valenna.damageUp.total' = [ordered]@{ zh = '当前普通伤害加成：+{0}%。'; en = 'Current normal damage bonus: +{0}%.' }
+        'valenna.buff.nextRound' = [ordered]@{ zh = '下回合开始时生效。'; en = 'Activates at the start of the next round.' }
         'valenna.profession' = [ordered]@{ zh = '蜘蛛巢 拇指父辈'; en = 'House of Spiders · The Thumb Nursefather' }
         'valenna.fixedHeart' = [ordered]@{ zh = '瓦伦希娜已固定装备专属「心」。'; en = 'Valencina has her exclusive Shin permanently equipped.' }
     }

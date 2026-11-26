@@ -152,7 +152,7 @@ namespace ValennaBattle
             int increase = Accumulate(fight, target, gain, threshold, holdThreshold: false, out bool full);
             TremorBurstDisplay.Show(target, scorch != null, increase);
             if (full) await ApplyStun(fight, source, target, battle);
-            await ValennaKit.RewardBurst(source);
+            ValennaKit.RewardBurst(source);
 
             await tremor.ChangeLayer(target, -1 - (scorch == null ? 0 : layers / 3));
             if (burning >= 3 && ReferenceEquals(target.GetBuff(StrikeProfiles.BurnId), burn))
@@ -243,7 +243,7 @@ namespace ValennaBattle
                     // 这是雷横在后续伤害结算读取的原生标记。按具体实例绑定，防止把其他来源算入。
                     if (triggered && source != null) fight.LeiBursts.Add(mark, source);
                     await target.AddBuff(source, mark, showChangeTip, arguments);
-                    if (triggered) await ValennaKit.RewardBurst(source);
+                    if (triggered) ValennaKit.RewardBurst(source);
                     return;
                 }
 

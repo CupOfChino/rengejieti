@@ -16,7 +16,7 @@
       "Localization_Des": {
         "TarKey": "valenna.Trait.885142.Localization_Des",
         "SheetKey": "",
-        "InputText": "进入剧本或战斗时，自动装备专属神话物品<color=#8CD6EB>预知眼</color>。\n<color=#8CD6EB>预知眼</color>未过热时，以<color=#8CD6EB>[预知]</color>替换闪避，斗殴检定获得⁣1颗奖励骰⁤。成功闪避敌方一次普通攻击的全部段数后，以「<color=#FFA15E>解兔</color>」反击该敌人。",
+        "InputText": "进入剧本或战斗时，自动装备专属神话物品<color=#8CD6EB>预知眼</color>。\n<color=#8CD6EB>预知眼</color>未过热时，以<color=#8CD6EB>[预知]</color>替换闪避。使用预知闪避时，每层<color=#8CD6EB>预知眼</color>使本次检定成功区间额外⁣+1⁤。\n成功闪避敌方一次普通攻击的全部段数后，以「<color=#FFA15E>解兔</color>」反击该敌人。",
         "Characteristic": null
       },
       "BuffsLink": [

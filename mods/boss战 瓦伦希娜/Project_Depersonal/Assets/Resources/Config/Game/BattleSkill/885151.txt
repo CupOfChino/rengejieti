@@ -8,7 +8,7 @@
       "Name": {
         "TarKey": "valenna.BattleSkill.885151.Name",
         "SheetKey": "",
-        "InputText": "子弹装填",
+        "InputText": "装填子弹、切换背景",
         "Characteristic": null
       },
       "IsOverrideName": false,
@@ -16,7 +16,7 @@
       "Description": {
         "TarKey": "valenna.BattleSkill.885151.Description",
         "SheetKey": "",
-        "InputText": "<color=#55D8EF>[使用时]</color> 补满<color=#79CAD7>加速弹</color>。",
+        "InputText": "<color=#55D8EF>[使用时]</color> 补满<color=#79CAD7>加速弹</color>，切换战斗背景和音乐。",
         "Characteristic": null
       },
       "EffectDesc": {

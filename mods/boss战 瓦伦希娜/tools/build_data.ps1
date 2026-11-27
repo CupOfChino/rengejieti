@@ -295,6 +295,7 @@ $eye.ItemId = [ValennaBattle.StrikeProfiles]::EyeItemId
 $eye.UniqueKey = 'valenna_precognition_eye'
 $eye.ItemName = Text-Data '预知眼'
 $eye.ItemDes = Text-Data '并非像魔法那样预测未来。这只眼睛更接近于通过分析进入视野的一切，预测即将到来的瞬间的计算机。'
+$eyeFutureRule = '只要闪避成功，且未处于过热状态，获得1层[加速的未来]。'
 $eyeText = @(
     '[回合开始] 未处于过热状态，则以[预知]替换你的闪避。'
     '每层充能使所有检定的成功区间+1。与[预知]的额外加成叠加。'
@@ -302,7 +303,8 @@ $eyeText = @(
     '[受击时] 损失5层充能。'
     '[辅助闪避] 闪避时，消耗5层充能，获得1颗奖励骰。若扣费前预知眼至少10层，额外获得1颗。'
     '同一次攻击中，闪避成功可继承奖励骰，失败后下一段可再次发动。'
-    '[闪避成功时] 恢复1点精神值。开骰时未过热，另获得1层加速的未来。'
+    '[闪避成功时] 恢复1点精神值。'
+    $eyeFutureRule
     '充能耗尽时转为预知眼·过热，闪避获得1颗惩罚骰。'
     '过热期间，每回合开始积累10层，满30层恢复。'
 ) -join "`n"
@@ -343,7 +345,7 @@ $eyeMythical.IconReference = [ordered]@{ ReferenceType = 1005; Key = 'valenna_ey
 $eyeMythical.ProjectionIconReference = [ordered]@{ ReferenceType = 1005; Key = 'valenna_eye_mythical_projection' }
 $eyeMythical.Localization_Name = $eye.ItemName
 $eyeMythical.Localization_Des = Text-Data '被称为奥丁之眼的这件遗物，实际上是被分为三份的某件遗物的碎片。'
-$eyeMythical.Localization_Effct = Text-Data ("每层充能使所有检定的成功区间+1。`n闪避成功时恢复1点精神值。`n开骰时未过热，另获得1层加速的未来。")
+$eyeMythical.Localization_Effct = Text-Data ("每层充能使所有检定的成功区间+1。`n闪避成功时恢复1点精神值。`n$eyeFutureRule")
 $eyeMythical.DefaultUnLock = $false
 $eyeMythical.TriggerEven.Opts[0].ItemList = @($eye.ItemId)
 $eyeMythical.TriggerEven.Opts[0]._baseKey = [string]$eye.ItemId
@@ -374,6 +376,9 @@ function Set-ValennaSkillIcon($Skill) {
     $Skill.CustomSkillElementIconReference = [ordered]@{ ReferenceType = 1006; Key = $key }
 }
 
+$hitTremor = '[命中时] 震颤层数+1。'
+$hitBurnTremor = '[命中时] 施加1层燃烧，震颤层数+1。'
+$spentRoundBurn = '[消耗加速弹并命中时] 施加1层燃烧。'
 $skillRules = @{
     885121 = @(
         '斗殴检定｜2 段'
@@ -387,10 +392,12 @@ $skillRules = @{
         '斗殴＋射击联合检定｜2 段'
         '【I】 1d3'
         '有弹时消耗 1 发加速弹。'
-        '[命中时] 已消耗加速弹则施加 1 层燃烧。'
+        $hitTremor
+        $spentRoundBurn
         '【II】 1d4'
         '有弹时消耗 1 发加速弹。'
-        '[命中时] 施加 2 层震颤。'
+        $hitTremor
+        $spentRoundBurn
     )
     885125 = @(
         '斗殴检定｜2 段'
@@ -405,7 +412,7 @@ $skillRules = @{
         '[使用时] 目标燃烧与震颤每合计 6 层，每段伤害+1，至多+2。'
         '[使用时] 获得 4 层呼吸法。'
         '【I】 1d6'
-        '[命中时] 施加 2 层燃烧。'
+        $hitBurnTremor
         '【II】 1d6'
         '[命中时] 施加 2 层震颤。'
         '【III】 1d6'
@@ -418,10 +425,12 @@ $skillRules = @{
         '[使用时] 获得 2 层呼吸法。'
         '【I】 1d4'
         '有弹时消耗 1 发加速弹。'
-        '[命中时] 已消耗加速弹则施加 1 层燃烧。'
+        $hitTremor
+        $spentRoundBurn
         '【II】 1d4'
         '有弹时消耗 1 发加速弹。'
-        '[命中时] 施加 2 层震颤。'
+        $hitTremor
+        $spentRoundBurn
         '【III】 1d6'
         '[命中时] 引爆震颤 1 次。'
     )
@@ -429,6 +438,7 @@ $skillRules = @{
         '斗殴＋敏捷联合检定｜4 段'
         '[使用时] 目标燃烧与震颤每合计 6 层，每段伤害+1，至多+2。'
         '[使用时] 获得 3 层呼吸法。'
+        $spentRoundBurn
         '【I】 1d4'
         '有弹时消耗 1 发加速弹。'
         '[命中时] 施加 1 层燃烧。'
@@ -457,16 +467,18 @@ $skillRules = @{
         '[攻击后] 移除目标的狩猎目标印记。'
         '[击杀时] 下回合标记另一名敌人。'
         '【I】 1＋预知眼伤害骰'
-        '[命中时] 施加 1 层震颤。'
+        $hitBurnTremor
         '【II】 1＋预知眼伤害骰'
-        '[命中时] 施加 1 层燃烧。'
+        $hitBurnTremor
         '【III】 1＋预知眼伤害骰'
-        '[命中时] 施加 1 层燃烧。'
+        $hitBurnTremor
         '【IV】 1＋预知眼伤害骰'
+        $hitBurnTremor
         '[命中时] 将震颤转为震颤·灼热。'
         '【V】 1＋预知眼伤害骰'
         '消耗至多 5 发加速弹。'
         '消耗「望」时，本段基础伤害+2。'
+        $hitBurnTremor
         '[命中时] 引爆震颤 3 次。'
         '[暴击命中时] 额外引爆 2 次。'
     )
@@ -618,7 +630,7 @@ for ($index = 0; $index -lt $names.Count; $index++) {
         }
         ([ValennaBattle.StrikeProfiles]::AcceleratedFutureId) {
             (@(
-                '[闪避成功时] 若开骰时预知眼未过热，获得1层，上限5层。'
+                '[闪避成功时] 若预知眼未处于过热状态，获得1层，上限5层。'
                 '每层提供斗殴+2、运动+2。'
                 '满5层时，非法术行动的检定获得1颗奖励骰。'
                 '[攻击时] 每层使下次主动攻击伤害+5%，攻击后清空。'

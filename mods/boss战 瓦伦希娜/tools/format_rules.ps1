@@ -37,11 +37,12 @@ function Format-ValennaRules([System.Collections.IDictionary]$Tables) {
     $close = [string][char]0x2064
     $gap = '[\p{Zs}\t]*(?:\r?\n[\p{Zs}\t]*)?'
     $number = '[0-9]+(?:[dD][0-9]+|\.[0-9]+)?(?:[-~～][0-9]+)?'
-    $stat = '精神值上限|(?:检定)?成功区间|[本每]段伤害|基础伤害|普通伤害|攻击伤害|伤害|速度|意志|体质|暴击率|隐匿|远程攻击|斗殴|运动|力量|能工巧匠|侦察|感知|交涉'
-    $unit = "点(?:的?(?:爆炸|额外|普通)?伤害|(?:理智|精神|生命)值?|充能)?|层(?:${gap}(?:$keywords|充能))?|颗(?:${gap}(?:奖励骰|惩罚骰))?|发(?:${gap}加速弹)?|个行动轮|小时|回合|精神值|理智值|资金|支|瓶|次(?:${gap}射击暗骰)?|倍|面|段|[%％](?:${gap}伤害)?"
+    $stat = '精神值上限|(?:检定)?成功区间|震颤层数|[本每]段伤害|基础伤害|普通伤害|攻击伤害|伤害|速度|意志|体质|暴击率|隐匿|远程攻击|斗殴|运动|力量|能工巧匠|侦察|感知|交涉'
+    $unit = "点(?:的?(?:爆炸|额外|普通)?伤害|(?:理智|精神|生命)值?|充能)?|层(?:${gap}(?:\[加速的未来\]|$keywords|充能))?|颗(?:${gap}(?:奖励骰|惩罚骰))?|发(?:${gap}加速弹)?|个行动轮|小时|回合|精神值|理智值|资金|支|瓶|次(?:${gap}射击暗骰)?|倍|面|段|[%％](?:${gap}伤害)?"
     $groups = [regex]::new("<[^>]+>|(?<phrase>第${gap}[0-9、]+${gap}段|(?:充能上限|至少)${gap}${number}层|(?:恢复|损失|消耗)${gap}${number}层充能|最多储存${gap}${number}发|(?:最低降至|速度高于)${gap}$number|(?:$stat)${gap}[+＋−-]${gap}$number(?:[%％])?|[+＋−-]?${number}${gap}(?:$unit)|[+＋−-]$number|[0-9]+[dD][0-9]+)")
     $timingColors = @{
         '[使用时]' = '55D8EF'; '[装备时]' = '55D8EF'; '[命中时]' = 'A8E96D'; '[暴击命中时]' = 'B3F26E'
+        '[消耗加速弹并命中时]' = 'A8E96D'
         '[闪避成功时]' = 'A8E96D'; '[攻击后]' = 'A8E96D'; '[击杀时]' = 'A8E96D'; '[回合开始]' = '55D8EF'
         '[战斗开始时]' = '55D8EF'; '[进入剧本时]' = '55D8EF'; '[击杀猎物时]' = 'A8E96D'; '[苏醒时]' = '55D8EF'
         '[苏醒期间]' = '55D8EF'; '[回合开始时]' = '55D8EF'; '[行动轮结束时]' = '55D8EF'; '[回合结束时]' = '55D8EF'; '[战斗结束时]' = '55D8EF'
@@ -93,6 +94,10 @@ function Format-ValennaRules([System.Collections.IDictionary]$Tables) {
                 if (!$match.Groups['phrase'].Success) { return $match.Value }
                 return $open + ($match.Value -replace '\s', '') + $close
             })
+            $formatted = [regex]::Replace($formatted, $timingPattern, {
+                param($match)
+                "<color=#$($timingColors[$match.Value])>$($match.Value)</color>"
+            })
             $formatted = $markup.Replace($formatted, {
                 param($match)
                 if (!$match.Groups['keyword'].Success) { return $match.Value }
@@ -100,10 +105,6 @@ function Format-ValennaRules([System.Collections.IDictionary]$Tables) {
                 $style = $styles[$word]
                 if ($word -eq '预知眼·过热') { return "<color=#8CD6EB>预知眼</color><color=#$($style.Color)>·过热</color>" }
                 return "<color=#$($style.Color)>$word</color>"
-            })
-            $formatted = [regex]::Replace($formatted, $timingPattern, {
-                param($match)
-                "<color=#$($timingColors[$match.Value])>$($match.Value)</color>"
             })
             if ($category -in 'BattleSkill','Trait') {
                 $formatted = [regex]::Replace($formatted, "(?m)(?<=^$open)第[0-9、]+段", '<b><color=#EBCB91>$0</color></b>')

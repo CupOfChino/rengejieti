@@ -29,7 +29,7 @@
       "Localization_Effct": {
         "TarKey": "valenna.MythicalItem.885112.Localization_Effct",
         "SheetKey": "",
-        "InputText": "每层充能使所有检定的⁣成功区间+1⁤。\n闪避成功时恢复⁣1点精神值⁤。\n开骰时未过热，另获得⁣1层<color=#77D1DC>加速的未来</color>⁤。",
+        "InputText": "每层充能使所有检定的⁣成功区间+1⁤。\n闪避成功时恢复⁣1点精神值⁤。\n只要闪避成功，且未处于过热状态，获得⁣1层[<color=#77D1DC>加速的未来</color>]⁤。",
         "Characteristic": null
       },
       "TriggerEven": {

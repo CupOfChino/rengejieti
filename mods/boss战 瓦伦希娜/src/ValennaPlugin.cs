@@ -14,7 +14,7 @@ namespace ValennaBattle
 {
     [BepInDependency("codex.depersonal.xineditor", BepInDependency.DependencyFlags.HardDependency)]
     [BepInDependency("codex.depersonal.custombattlebg", BepInDependency.DependencyFlags.HardDependency)]
-    [BepInPlugin("ttrpg.valenna-battle", "boss战 瓦伦希娜", "0.5.15")]
+    [BepInPlugin("ttrpg.valenna-battle", "boss战 瓦伦希娜", "0.5.16")]
     [BepInDependency("codex.depersonal.duoactionslot", BepInDependency.DependencyFlags.SoftDependency)]
     public sealed class ValennaPlugin : BaseUnityPlugin
     {

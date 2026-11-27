@@ -20,7 +20,7 @@
       "ItemEffectDes": {
         "TarKey": "valenna.Item.885112.ItemEffectDes",
         "SheetKey": "",
-        "InputText": "<color=#55D8EF>[回合开始]</color> 未处于过热状态，则以<color=#8CD6EB>[预知]</color>替换你的闪避。\n每层充能使所有检定的⁣成功区间+1⁤。与<color=#8CD6EB>[预知]</color>的额外加成叠加。\n<color=#55D8EF>[回合开始时]</color> 战斗与探索均⁣恢复5层充能⁤，上限⁣30层⁤。\n<color=#EE827B>[受击时]</color> ⁣损失5层充能⁤。\n<color=#55D8EF>[辅助闪避]</color> 闪避时，⁣消耗5层充能⁤，获得⁣1颗奖励骰⁤。若扣费前<color=#8CD6EB>预知眼</color>⁣至少10层⁤，额外获得⁣1颗⁤。\n同一次攻击中，闪避成功可继承奖励骰，失败后下一段可再次发动。\n<color=#A8E96D>[闪避成功时]</color> 恢复⁣1点精神值⁤。开骰时未过热，另获得⁣1层<color=#77D1DC>加速的未来</color>⁤。\n充能耗尽时转为<color=#8CD6EB>预知眼</color><color=#E77167>·过热</color>，闪避获得⁣1颗惩罚骰⁤。\n过热期间，每回合开始积累⁣10层⁤，满⁣30层⁤恢复。",
+        "InputText": "<color=#55D8EF>[回合开始]</color> 未处于过热状态，则以<color=#8CD6EB>[预知]</color>替换你的闪避。\n每层充能使所有检定的⁣成功区间+1⁤。与<color=#8CD6EB>[预知]</color>的额外加成叠加。\n<color=#55D8EF>[回合开始时]</color> 战斗与探索均⁣恢复5层充能⁤，上限⁣30层⁤。\n<color=#EE827B>[受击时]</color> ⁣损失5层充能⁤。\n<color=#55D8EF>[辅助闪避]</color> 闪避时，⁣消耗5层充能⁤，获得⁣1颗奖励骰⁤。若扣费前<color=#8CD6EB>预知眼</color>⁣至少10层⁤，额外获得⁣1颗⁤。\n同一次攻击中，闪避成功可继承奖励骰，失败后下一段可再次发动。\n<color=#A8E96D>[闪避成功时]</color> 恢复⁣1点精神值⁤。\n只要闪避成功，且未处于过热状态，获得⁣1层[<color=#77D1DC>加速的未来</color>]⁤。\n充能耗尽时转为<color=#8CD6EB>预知眼</color><color=#E77167>·过热</color>，闪避获得⁣1颗惩罚骰⁤。\n过热期间，每回合开始积累⁣10层⁤，满⁣30层⁤恢复。",
         "Characteristic": null
       },
       "IconPathReference": {
@@ -72,7 +72,7 @@
         "OverrideDesc": {
           "TarKey": "valenna.Item.885112.EquipmentConfigData.OverrideDesc",
           "SheetKey": "",
-          "InputText": "<color=#55D8EF>[回合开始]</color> 未处于过热状态，则以<color=#8CD6EB>[预知]</color>替换你的闪避。\n每层充能使所有检定的⁣成功区间+1⁤。与<color=#8CD6EB>[预知]</color>的额外加成叠加。\n<color=#55D8EF>[回合开始时]</color> 战斗与探索均⁣恢复5层充能⁤，上限⁣30层⁤。\n<color=#EE827B>[受击时]</color> ⁣损失5层充能⁤。\n<color=#55D8EF>[辅助闪避]</color> 闪避时，⁣消耗5层充能⁤，获得⁣1颗奖励骰⁤。若扣费前<color=#8CD6EB>预知眼</color>⁣至少10层⁤，额外获得⁣1颗⁤。\n同一次攻击中，闪避成功可继承奖励骰，失败后下一段可再次发动。\n<color=#A8E96D>[闪避成功时]</color> 恢复⁣1点精神值⁤。开骰时未过热，另获得⁣1层<color=#77D1DC>加速的未来</color>⁤。\n充能耗尽时转为<color=#8CD6EB>预知眼</color><color=#E77167>·过热</color>，闪避获得⁣1颗惩罚骰⁤。\n过热期间，每回合开始积累⁣10层⁤，满⁣30层⁤恢复。",
+          "InputText": "<color=#55D8EF>[回合开始]</color> 未处于过热状态，则以<color=#8CD6EB>[预知]</color>替换你的闪避。\n每层充能使所有检定的⁣成功区间+1⁤。与<color=#8CD6EB>[预知]</color>的额外加成叠加。\n<color=#55D8EF>[回合开始时]</color> 战斗与探索均⁣恢复5层充能⁤，上限⁣30层⁤。\n<color=#EE827B>[受击时]</color> ⁣损失5层充能⁤。\n<color=#55D8EF>[辅助闪避]</color> 闪避时，⁣消耗5层充能⁤，获得⁣1颗奖励骰⁤。若扣费前<color=#8CD6EB>预知眼</color>⁣至少10层⁤，额外获得⁣1颗⁤。\n同一次攻击中，闪避成功可继承奖励骰，失败后下一段可再次发动。\n<color=#A8E96D>[闪避成功时]</color> 恢复⁣1点精神值⁤。\n只要闪避成功，且未处于过热状态，获得⁣1层[<color=#77D1DC>加速的未来</color>]⁤。\n充能耗尽时转为<color=#8CD6EB>预知眼</color><color=#E77167>·过热</color>，闪避获得⁣1颗惩罚骰⁤。\n过热期间，每回合开始积累⁣10层⁤，满⁣30层⁤恢复。",
           "Characteristic": null
         },
         "Arrts": [],

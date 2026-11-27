@@ -7,6 +7,9 @@ function Add-ValennaEnglish([string]$Path, [string]$NameField, [string]$Name, [s
 $poiseBonus = '[On Use] At 6 or more Poise, each hit deals +1 damage (max +1).'
 $stackBonus = '[On Use] Each hit deals +1 damage per 6 combined stacks of Burn and Tremor on the target (max +2).'
 $spendRound = 'Spend 1 Acceleration Round if available.'
+$hitTremor = '[On Hit] Inflict 1 Tremor.'
+$hitBurnTremor = '[On Hit] Inflict 1 Burn and 1 Tremor.'
+$spentRoundBurn = '[On Hit After Spending Ammo] Inflict 1 Burn.'
 $scorch = '[On Hit] Convert Tremor to Tremor - Scorch.'
 $burst = '[On Hit] Trigger Tremor Burst once.'
 $skillText = @{
@@ -17,26 +20,26 @@ $skillText = @{
         '[On Critical Hit] Inflict 1 Tremor.' -join "`n"))
     885124 = @('Colpo di Punta', (
         'Combined Brawl and Shoot check | 2 hits', $poiseBonus,
-        '【I】 1d3', $spendRound, '[On Hit] Inflict 1 Burn if a round was spent.',
-        '【II】 1d4', $spendRound, '[On Hit] Inflict 2 Tremor.' -join "`n"))
+        '【I】 1d3', $spendRound, $hitTremor, $spentRoundBurn,
+        '【II】 1d4', $spendRound, $hitTremor, $spentRoundBurn -join "`n"))
     885125 = @('Sezionatura di Coniglio', (
         'Brawl check | 2 hits', $poiseBonus,
         '【I】 1d3', '[On Hit] Inflict 1 Tremor.',
         '【II】 1d4', $scorch, $burst -join "`n"))
     885126 = @('Sezionatura di Cervo', (
         'Combined Brawl and Dexterity check | 3 hits', $poiseBonus, $stackBonus, '[On Use] Gain 4 Poise.',
-        '【I】 1d6', '[On Hit] Inflict 2 Burn.',
+        '【I】 1d6', $hitBurnTremor,
         '【II】 1d6', '[On Hit] Inflict 2 Tremor.',
         '【III】 1d6', $scorch, '[On Hit] Trigger Tremor Burst twice.' -join "`n"))
     885127 = @('I''ll Gladly Blast a Hole Through You', (
         'Combined Brawl and Shoot check | 3 hits', $poiseBonus,
         '[On Use] At 6 or more combined stacks of Burn and Tremor on the target, each hit deals +1 damage.',
         '[On Use] Gain 2 Poise.',
-        '【I】 1d4', $spendRound, '[On Hit] Inflict 1 Burn if a round was spent.',
-        '【II】 1d4', $spendRound, '[On Hit] Inflict 2 Tremor.',
+        '【I】 1d4', $spendRound, $hitTremor, $spentRoundBurn,
+        '【II】 1d4', $spendRound, $hitTremor, $spentRoundBurn,
         '【III】 1d6', $burst -join "`n"))
     885128 = @('Sezionatura di Elefante', (
-        'Combined Brawl and Dexterity check | 4 hits', $poiseBonus, $stackBonus, '[On Use] Gain 3 Poise.',
+        'Combined Brawl and Dexterity check | 4 hits', $poiseBonus, $stackBonus, '[On Use] Gain 3 Poise.', $spentRoundBurn,
         '【I】 1d4', $spendRound, '[On Hit] Inflict 1 Burn.', '[On Hit] Inflict 2 Tremor.',
         '【II】 1d4', $spendRound, '[On Hit] Inflict 1 Burn.', '[On Hit] Inflict 2 Tremor.',
         '【III】 1d6', $spendRound, $scorch,
@@ -52,12 +55,13 @@ $skillText = @{
         '[After Attack] Refill Acceleration Rounds to 10.',
         '[After Attack] Remove the target''s Game Target mark.',
         '[On Kill] Mark another enemy next round.',
-        '【I】 1 + Eye of Precognition damage die', '[On Hit] Inflict 1 Tremor.',
-        '【II】 1 + Eye of Precognition damage die', '[On Hit] Inflict 1 Burn.',
-        '【III】 1 + Eye of Precognition damage die', '[On Hit] Inflict 1 Burn.',
-        '【IV】 1 + Eye of Precognition damage die', $scorch,
+        '【I】 1 + Eye of Precognition damage die', $hitBurnTremor,
+        '【II】 1 + Eye of Precognition damage die', $hitBurnTremor,
+        '【III】 1 + Eye of Precognition damage die', $hitBurnTremor,
+        '【IV】 1 + Eye of Precognition damage die', $hitBurnTremor, $scorch,
         '【V】 1 + Eye of Precognition damage die', 'Spend up to 5 Acceleration Rounds.',
         'If Mang is spent, this hit gains +2 base damage.',
+        $hitBurnTremor,
         '[On Hit] Trigger Tremor Burst 3 times.', '[On Critical Hit] Trigger 2 additional bursts.' -join "`n"))
     885151 = @('Reload and Change Background', '[On Use] Refill Acceleration Rounds and switch the battle background and music.')
     885152 = @('Precognition', (
@@ -111,6 +115,7 @@ $eyeName = 'Eye of Precognition'
 $eyeLore = 'This eye does not see the future through magic. It works more like a computer, analyzing everything in its field of view to predict what will happen next.'
 $eyeDodgeRule = '[Turn Start] If the Eye of Precognition is not overheated, replace your Dodge with [Precognition].'
 $eyeRangeRule = 'Each stack of charge increases the success range of all checks by 1.'
+$eyeFutureRule = 'If you successfully dodge while not overheated, gain 1 [Accelerating Future].'
 $itemText = @{
     885111 = @('Palermo - Gunblade', 'Valencina carries this gunblade slung across her back. Famiglia Bognatelli custom Acceleration Rounds fire the instant she strikes at close range.', (
         '[Battle Start] Refill Acceleration Rounds to 10.',
@@ -123,7 +128,8 @@ $itemText = @{
         '[When Hit] Lose 5 charge.',
         '[Assisted Dodge] Spend 5 charge to gain 1 bonus die. Gain 1 additional bonus die if you had at least 10 charge before spending it.',
         'Within one attack, a successful dodge carries the bonus dice to the next hit. After a failed dodge, assistance can activate again on the next hit.',
-        '[On Dodge] Restore 1 SP. If the eye was not overheated when you rolled, also gain 1 Accelerating Future.',
+        '[On Dodge] Restore 1 SP.',
+        $eyeFutureRule,
         'At zero charge, enter Eye of Precognition - Overheat. Dodge checks receive 1 penalty die.',
         'While overheated, build 10 stacks at the start of each turn. Recover at 30 stacks.')) -join "`n"))
     885113 = @('Palermo - Cutlass', 'Valencina wears the other Palermo blade at her hip. She uses this one-handed sword for Colpi di Taglio.', (
@@ -154,7 +160,7 @@ foreach ($entry in $itemText.GetEnumerator()) {
 $ValennaEnglish['MythicalItem/885112'] = @{
     Localization_Name = $eyeName
     Localization_Des = 'The relic known as Odin''s Eye is one fragment of an artifact split into three pieces.'
-    Localization_Effct = "$eyeRangeRule`nRestore 1 SP after a successful dodge.`nIf the eye was not overheated when you rolled, also gain 1 Accelerating Future."
+    Localization_Effct = "$eyeRangeRule`nRestore 1 SP after a successful dodge.`n$eyeFutureRule"
 }
 $buffText = @{
     885131 = @('Poise', (
@@ -191,7 +197,7 @@ $buffText = @{
         '[On Successful Check] This hit deals +10% damage.',
         'Gain 1 Poise per round spent.' -join "`n"))
     885138 = @('Accelerating Future', (
-        '[On Dodge] Gain 1 stack if the Eye of Precognition was not overheated when you rolled, up to 5.',
+        '[On Dodge] Gain 1 stack if the Eye of Precognition is not overheated, up to 5.',
         'Each stack grants Brawl +2 and Sport +2.',
         'At 5 stacks, gain 1 bonus die on checks for actions other than spells.',
         '[On Attack] The next attack you initiate deals +5% damage per stack. Clear all stacks afterward.',
@@ -221,6 +227,7 @@ function Format-ValennaEnglishRule([string]$Text) {
     }
     $triggers = @{
         'On Use' = '55D8EF'; 'While Equipped' = '55D8EF'; 'On Hit' = 'A8E96D'; 'On Critical Hit' = 'B3F26E'
+        'On Hit After Spending Ammo' = 'A8E96D'
         'On Dodge' = 'A8E96D'; 'After Attack' = 'A8E96D'; 'On Kill' = 'A8E96D'; 'On Killing the Game Target' = 'A8E96D'
         'Battle Start' = '55D8EF'; 'On Entering a Scenario' = '55D8EF'; 'While Awakened' = '55D8EF'
         'Turn Start' = '55D8EF'; 'Turn End' = '55D8EF'; 'Battle End' = '55D8EF'

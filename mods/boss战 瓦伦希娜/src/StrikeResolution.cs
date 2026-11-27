@@ -124,18 +124,14 @@ namespace ValennaBattle
         private async Task ApplyEffects(int segment, bool consumed, bool critical)
         {
             int burn = (_skill.Id, segment) switch {
-                (885121, 0) => 1,
-                (885124 or 885127, 0) when consumed => 1,
-                (885126, 0) => 2,
-                (885128, 0 or 1) => 1,
-                (885129, 1 or 2) => 1,
+                (885121 or 885126, 0) or (885128, 0 or 1) or (885129, _) => 1,
                 _ => 0
             };
+            if (consumed && _skill.Id is 885124 or 885127 or 885128) burn++;
             int tremor = (_skill.Id, segment) switch {
                 (885121, 1) when critical => 1,
-                (885124 or 885127 or 885126, 1) => 2,
-                (885128, 0 or 1) => 2,
-                (885125 or 885129, 0) => 1,
+                (885124 or 885127, 0 or 1) or (885125 or 885126, 0) or (885129, _) => 1,
+                (885126, 1) or (885128, 0 or 1) => 2,
                 _ => 0
             };
             if (burn > 0) await Add(_target, StrikeProfiles.BurnId, burn);

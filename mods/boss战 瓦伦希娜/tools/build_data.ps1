@@ -376,8 +376,8 @@ function Set-ValennaSkillIcon($Skill) {
     $Skill.CustomSkillElementIconReference = [ordered]@{ ReferenceType = 1006; Key = $key }
 }
 
-$hitTremor = '[命中时] 震颤层数+1。'
-$hitBurnTremor = '[命中时] 施加1层燃烧，震颤层数+1。'
+$hitTremor = '[命中时] 施加1层震颤。'
+$hitBurnTremor = '[命中时] 施加1层燃烧和1层震颤。'
 $spentRoundBurn = '[消耗加速弹并命中时] 施加1层燃烧。'
 $skillRules = @{
     885121 = @(
@@ -438,17 +438,19 @@ $skillRules = @{
         '斗殴＋敏捷联合检定｜4 段'
         '[使用时] 目标燃烧与震颤每合计 6 层，每段伤害+1，至多+2。'
         '[使用时] 获得 3 层呼吸法。'
-        $spentRoundBurn
         '【I】 1d4'
         '有弹时消耗 1 发加速弹。'
         '[命中时] 施加 1 层燃烧。'
         '[命中时] 施加 2 层震颤。'
+        $spentRoundBurn
         '【II】 1d4'
         '有弹时消耗 1 发加速弹。'
         '[命中时] 施加 1 层燃烧。'
         '[命中时] 施加 2 层震颤。'
+        $spentRoundBurn
         '【III】 1d6'
         '有弹时消耗 1 发加速弹。'
+        $spentRoundBurn
         '[命中时] 将震颤转为震颤·灼热。'
         '【IV】 1d6'
         '[命中时] 引爆震颤 2 次。'

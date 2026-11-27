@@ -39,10 +39,10 @@ $skillText = @{
         '【II】 1d4', $spendRound, $hitTremor, $spentRoundBurn,
         '【III】 1d6', $burst -join "`n"))
     885128 = @('Sezionatura di Elefante', (
-        'Combined Brawl and Dexterity check | 4 hits', $poiseBonus, $stackBonus, '[On Use] Gain 3 Poise.', $spentRoundBurn,
-        '【I】 1d4', $spendRound, '[On Hit] Inflict 1 Burn.', '[On Hit] Inflict 2 Tremor.',
-        '【II】 1d4', $spendRound, '[On Hit] Inflict 1 Burn.', '[On Hit] Inflict 2 Tremor.',
-        '【III】 1d6', $spendRound, $scorch,
+        'Combined Brawl and Dexterity check | 4 hits', $poiseBonus, $stackBonus, '[On Use] Gain 3 Poise.',
+        '【I】 1d4', $spendRound, '[On Hit] Inflict 1 Burn.', '[On Hit] Inflict 2 Tremor.', $spentRoundBurn,
+        '【II】 1d4', $spendRound, '[On Hit] Inflict 1 Burn.', '[On Hit] Inflict 2 Tremor.', $spentRoundBurn,
+        '【III】 1d6', $spendRound, $spentRoundBurn, $scorch,
         '【IV】 1d6', '[On Hit] Trigger Tremor Burst twice.', '[On Critical Hit] Trigger 2 additional bursts.' -join "`n"))
     885129 = @('Disposal', (
         'Brawl check, requires a success or better | 5 hits', $poiseBonus,

@@ -1111,7 +1111,7 @@ num += OffHandWeapon.ExtraContinuousAttackCount.Value + OffHandWeapon.ExtraConti
 - 入本前的伙伴神话栏走 `PartnerData/885101 → MythicalItem/885112 → Item/885112`，玩家角色的候选列表是另一条入口。专属限制和旧档迁移在 `ValennaEyeEquipment.cs`。神话卡采用原生 1005 资源类型，128×194 大图和 166×54 横幅各自有单独资源键；工坊原版示例和本体「不死者吊坠」可供核对。角色卡的八项特质由 `build_data.ps1` 生成，其中「心——瓦伦希娜」885155 使用原生战斗速度 119；技能层数加成在 `ValennaHeart.cs`。
 - `ValennaEventAudio.cs` 独立处理闪避和引爆声音。以每次闪避开骰前的过热状态选取语音资格，未过热时的成功池 2 条、失败池 5 条；按原字幕表取词。对照引爆时，检查 `ValennaTremor.cs` 的真实增长、图标和数字，与 `BurstBatch` 传出的有效次数。五声的音频起点相隔 20 毫秒。
 - 排查攻击菜单常亮的感叹号时，用原版 `UIBattlePanel.UpdateNewSkillTips` 核对。它查询 `IsMachiningSkill`、角色绑定与 `ShowCheck`，不看 `HideInSkillSelectList`。退役表须同时隐藏并关闭新技提示资格。保留原版已读记录，玩家仍能正常发现其他新技能。
-- 技能说明先列整招规则，再用【I】至【V】逐段列骰和命中效果。`tools/build_data.ps1` 写规则，`tools/format_rules.ps1` 写颜色与状态链接，`ValennaRuleVisuals.cs` 显示段号徽章、词条图标与预知眼下划线。神话卡面由原生界面绘制标题与背景，投影只画右侧物品。
+- 技能说明先列整招规则，再用【I】至【V】逐段列骰和命中效果。用户用来交代数值的简写转成与现有技能一致的完整文案，如「施加1层震颤」。耗弹命中等局部效果写在对应骰段，中英文同步。有歧义时先向用户确认。`tools/build_data.ps1` 写规则，`tools/format_rules.ps1` 写颜色与状态链接，`ValennaRuleVisuals.cs` 显示段号徽章、词条图标与预知眼下划线。神话卡面由原生界面绘制标题与背景，投影只画右侧物品。
 - 处置与预知的技能框见 `ValennaSkillFrame.cs`。双侧警标和顶边滚动贴图取自 `resource/skill-ui`，由 `ValennaWarningArt.cs` 绘制。行动槽徽标在 `ValennaActionWarning.cs`，多行动槽按各格绑定的技能刷新。两个界面都复用对象，换技时须清除旧装饰。
 - 原版技能图取自桌面保存的灰机 Wiki「主线战斗9-42」页面，131401 至 131407 为七项攻击，131408 为预知。`tools/import_skill_icons.ps1` 注册 `Texture/SkillIcon` 下的八张 PNG。选技能列表与行动槽分别使用 `CustomSkillElementIconReference` 和 `BattleSkillIconReference`，均为 1006；发布时一起带上图片、边车、项目资源表和 `Project.rtmeta`。
 - 伙伴库会读取旧存档中 `PartnerRoleData` 的姓名。表里已写「瓦伦希娜」时仍要核对 `RoleData.Name` 和 `NameKeyData`。针对伙伴 885101 的旧名兼容见 `ValennaKit.cs`。
@@ -1163,7 +1163,7 @@ num += OffHandWeapon.ExtraContinuousAttackCount.Value + OffHandWeapon.ExtraConti
 - 原生 `Item_PursueAttack` 直接追加效果时传 `ignorePursueCheck`，其 `_targetDices` 可能保留首击的原生防御骰。`ValennaPrescienceSpecialDodge.cs` 在这条路径重新判断预知闪避，追加一击的结果与技能 ID 会写入日志。普通攻击的原生与补掷闪避都计入整次攻击的解兔判定，奖励骰独立于成功记录。敌人的闪避回击独立于它随后主动攻击的记录。
 - 0.5.15 的拇指大厅在原 2 倍放大的基础上下移可见高度的 10%，用背景模组的铺图范围和晃动幅度重算 UV，周期延长为背景配置的 2 倍。缩放、下移和半速摇晃只挂在这张图的 `RawImage` 上，换图时卸下。
 - 预知眼装备和神话物品效果共用「只要闪避成功，且未处于过热状态，获得1层[加速的未来]。」这条简写。结算仍取该次闪避扣费前的状态，因此用掉最后 5 层的闪避成功时仍可获得，加速的未来上限 5 层。
-- 0.5.16 的分段加状态在 `StrikeResolution.ApplyEffects`。尖端打击和子弹贯穿前两段各有基础震颤 1，实际耗弹后再加燃烧 1。解鹿第一段为燃烧、震颤各 1。解象前三段的耗弹燃烧与招式本身的燃烧相加，通用说明放在使用时词条之后。处置五段各施加燃烧、震颤各 1，第四段随后转灼热，第五段随后引爆。
+- 0.5.16 的分段加状态在 `StrikeResolution.ApplyEffects`。尖端打击和子弹贯穿前两段各有基础震颤 1，实际耗弹后再加燃烧 1。解鹿第一段为燃烧、震颤各 1。解象的耗弹燃烧与该段的基础燃烧相加。0.5.17 将耗弹命中词条分别放入解象第 I 至 III 段，并统一各招的震颤施加文案。处置五段各施加燃烧、震颤各 1，第四段随后转灼热，第五段随后引爆。
 - 本机挂载以瓦伦希娜的工坊目录 `3845388588` 为准。编译并运行 `tools/test_install.ps1` 后，可核对正式目录、工程与待上传包的插件哈希。启动日志的「0.5.5 已载入」包含实际 DLL 路径。旧宿主 `3813306323` 的 `-Remove` 只处理旧哈希清单记录的文件。编辑器应用音轨时也会同步本机瓦伦希娜目录。
 - `ValennaPrescience.cs` 等全部分段的后处理完成才统计本次闪避和攻击。原版部分 `ActionEffectProcess` 调用按回调推进。攻击、呼吸法和狩猎伤害改在实际 `SetDamage` 取值，狩猎与未来累计小数，避免 1 点测试分段被逐段向上取整。暴击数字按命中范围定位 HUD，池化数字重置字号。其余装备、初始特质和旧伙伴升级见 `ValennaKit.cs` 与 `tools/build_data.ps1`。
 - 0.4.2 把扫刃、气流、碎屑与收势余风错开。最外侧暗红尖弧随原刀光向外卷，在亮刃消失后继续渐隐。`SweepFrames` 从 24 改为 26 时同步更新了浏览器素材 ID 和各层时长。浏览器大小输入上限为 650，长直刺用现有横纵比例保持实际尺寸。调参和修改前后关键帧见[招式演出分段](../mods/boss战%20瓦伦希娜/招式演出分段.md#042-逐帧复查)。
